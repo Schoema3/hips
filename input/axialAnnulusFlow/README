@@ -1,0 +1,12 @@
+Curved channel flow case. The ODT line spans the radius. The flow is driven
+by an off-line pressure gradient interpreted as azimuthal (1/r dP/dTheta).
+
+TO DO:
+- check non-dimensionalization
+- check correspondence to Dean flow
+- reference DNS by Moser (1985) NASA TM-85974
+- Q: Is the ODT case any different from axial annulus flow?
+  A: Probably the prescribed momentum source is dP/dx = dP/dTheta = const.
+     Hence we need to implement the radius correction 1/r unless solving
+     for angular momentum. Check that in the implementation.
+
