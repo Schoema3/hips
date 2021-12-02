@@ -9,18 +9,6 @@
 #include "dv_dvisc.h"
 #include "dv_sca.h"
 #include "dv_aDL.h"
-#include "domaincase_odt_channel.h"
-#include "domaincase_odt_channelScalar.h"
-#include "domaincase_odt_isothermalWall.h"
-#include "domaincase_odt_jetMixlRxn.h"
-#include "domaincase_odt_jetFlame.h"
-#include "domaincase_odt_MFjetFlame.h"
-#include "domaincase_odt_coldPropaneJet.h"
-#include "domaincase_odt_coldJet.h"
-#include "domaincase_odt_RT.h"
-#include "domaincase_premixedFlame.h"
-#include "domaincase_flmlt.h"
-#include "domaincase_flmltX.h"
 #include "domaincase_hips.h"
 #include "domaincase_hips_comb.h"
 #include "domaincase_hips_simpleRxn.h"
@@ -97,43 +85,7 @@ void domain::init(inputoutput     *p_io,
     //---------------------- Continue setting up the case using the case_somecase class.
     // Adds to the above variable list, and initializes solution for the run
 
-     if(pram->probType == "CHANNEL")
-         domc = new domaincase_odt_channel();    // cold channel flow
-
-     else if(pram->probType == "CHANNEL_SCALAR")
-         domc = new domaincase_odt_channelScalar();  // cold channel flow with passive scalar
-
-     else if(pram->probType == "JETMIXL_RXN")
-         domc = new domaincase_odt_jetMixlRxn(); // jet, wake, mixing layer with gaseous reaction
-
-     else if(pram->probType == "COLDPROPANEJET")
-         domc = new domaincase_odt_coldPropaneJet(); // TNF jet
-
-     else if(pram->probType == "COLDJET")
-         domc = new domaincase_odt_coldJet(); // Hussein 1994
-
-     else if(pram->probType == "JETFLAME")
-         domc = new domaincase_odt_jetFlame(); // Shaddix jet, DLR jet, flameD
-
-     else if(pram->probType == "MF_JETFLAME")
-         domc = new domaincase_odt_MFjetFlame(); // jet flame w/ mixt frac density profile
-
-     else if(pram->probType == "ISOTHERMAL_WALL")
-         domc = new domaincase_odt_isothermalWall(); // isothermal wall
-
-     else if(pram->probType == "RT")
-         domc = new domaincase_odt_RT();      // simple Rayleigh Taylor flow
-
-     else if(pram->probType == "PREMIXEDFLAME")
-         domc = new domaincase_premixedFlame();      // laminar premixed flame 
-
-     else if(pram->probType == "FLMLT")
-         domc = new domaincase_flmlt(); // flamelet
-
-     else if(pram->probType == "FLMLTX")
-         domc = new domaincase_flmltX(); // flamelet
-
-     else if(pram->probType == "HIPS")
+     if(pram->probType == "HIPS")
          domc = new domaincase_hips(); // hips
 
      else if(pram->probType == "HIPS_COMB")

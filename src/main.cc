@@ -1,18 +1,9 @@
 
 #include "domain.h"
 #include "streams.h"
-#include "processor.h"
 #include "param.h"
-#include "probes.h"
 #include "micromixer.h"
-#include "micromixer_flmlt.h"
-#include "micromixer_hips.h"
-#include "micromixer_premix.h"
-#include "meshManager.h"
-#include "eddy.h"
 #include "solver.h"
-#include "solver_flmlt.h"
-#include "solver_premix.h"
 #include "solver_hips.h"
 #include "randomGenerator.h"
 
