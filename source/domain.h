@@ -11,11 +11,8 @@
 #include "param.h"
 #include "streams.h"
 #include "micromixer.h"
-#include "eddy.h"
-#include "meshManager.h"
-#include "solver.h"
 #include "randomGenerator.h"
-#include "probes.h"
+#include "solver.h"
 
 #ifdef DOCANTERA
 #include "cantera/thermo/IdealGasPhase.h"
@@ -54,7 +51,6 @@ class domain {
         dv*                     pos;       ///< pointers to gas properties
         dv*                     posf;      ///< access as: posf->d[i], or posf->var_name, etc.
         dv*                     rho;
-        dv*                     dvisc;
         dv*                     uvel;
         dv*                     vvel;
         dv*                     wvel;
@@ -78,8 +74,7 @@ class domain {
         streams                 *strm;       ///< pointer to gas stream properties
         inputoutput             *io;         ///< pointer to input/output object
         param                   *pram;       ///< pointer to the parameters object
-        micromixer              *mimx;       ///< pointer to micromixer for diffusion, reaction, domain evolution.
-        eddy                    *ed;         ///< pointer to object for eddy operations
+        micromixer              *mimx;       ///< pointer to micromixer for diffusion, reaction, domain evolution.s
         domain                  *eddl;       ///< pointer to eddyline object
         solver                  *solv;       ///< pointer to solver object
         meshManager             *mesher;     ///< pointer to mesh manager object
@@ -115,11 +110,9 @@ class domain {
                   IdealGasPhase   *p_gas,
                   Transport       *p_tran,
                   micromixer      *p_mimx,
-                  eddy            *p_ed,
                   domain          *p_eddl,
                   solver          *p_solv,
                   randomGenerator *p_rand,
-                  probes          *p_prb,
                   bool             LisEddyDomain=false);
         domain(domain *p_domn, param *p_pram);
         virtual ~domain() {

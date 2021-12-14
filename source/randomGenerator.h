@@ -8,7 +8,7 @@
 #pragma once
 
 #include "MersenneTwister.h"
-#include "processor.h"
+
 
 /** A random number generator class. This sets up and calls the Mersenne twister.
  */

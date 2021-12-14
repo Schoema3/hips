@@ -3,9 +3,7 @@
  * Header file for class solver
  */
 
-#pragma once
-
-#include "eddy.h"
+#pragma once"
 
 class domain;
 
@@ -26,9 +24,6 @@ class solver {
     public:
 
         domain         *domn;          ///< pointer to domain object
-
-        eddy           *ed3;           ///< pointer to eddy object for thirds
-        domain         *eddl3;         ///< pointer to eddy line object
 
         double         time;           ///< odt time (during sampling)
         double         t0;             ///< time of last eddy event; diffusion left off here.
@@ -72,11 +67,7 @@ class solver {
         void   diffusionCatchUpIfNeeded(bool Ldoit=false);
         void   raiseDtSmean();
         void   lowerDtSmean();
-        bool   testLES_elapsedTime(const double time, const double tauEddy);
-        bool   testLES_fracDomain( const double eSize);
-        bool   testLES_integralLength(const double time, const double eSize);
-        bool   testLES_thirds();
-
+       
 
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
 
