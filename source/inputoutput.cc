@@ -48,10 +48,6 @@ inputoutput::inputoutput(const string p_caseName, const int p_nShift){
     dumpTimesGen= inputFile["dumpTimesGen"];
     bcCond      = inputFile["bcCond"];
     scalarSc    = inputFile["scalarSc"];
-    pPos        = inputFile["probePos"];
-
-    for(int i=0; i<pPos.size(); i++)
-        probePos.push_back(pPos[i].as<double>());       ///< read in the probe positions  for local timseries output
 
     //--------- setup dumpTimes. Either set the dumpTimesGen parameters or the dumpTimes list directly
     //--------- if dumpTimesGen:dTimeStart is negative, then use the dumpTimes list (if present), otherwise
@@ -246,48 +242,9 @@ void inputoutput::outputHeader() {
         << setw(12) << "t-t0,"
         << setw(10) << "nEtry,"
         << setw(6)  << "ngrd,"
-        << setw(12) << "edSize,"
-        << setw(12) << "edPos,"
-        << setw(12) << "edPa,"
         << setw(12) << "nEposs,"
         << setw(12) << "PaAvg,"
-        << setw(12) << "invTauEddy"
         ;
-
-    *ostrm << endl << "#--------------------------------------------------"
-        << "--------------------------------------------------------------------";
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/**Output title of properties displayed to screen. */
-
-void inputoutput::outputFlmltHeader() {
-
-    *ostrm << endl << "#--------------------------------------------------"
-        << "--------------------------------------------------------------------";
-
-    *ostrm << scientific << setprecision(3) << endl;
-
-    *ostrm << setw(5) << "# time,";
-
-    double dxmixf = domn->pram->LisFlmltX ? domn->Ldomain()/6 : 1.0/6;
-    for(int i=1; i<=5; i++)
-          *ostrm << setw(12) << "XorZ=" << dxmixf*i;
-
-    *ostrm << endl << "#--------------------------------------------------"
-        << "--------------------------------------------------------------------";
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/**Output title of properties displayed to screen. */
-
-void inputoutput::outputPremixHeader() {
-
-    *ostrm << endl << "#--------------------------------------------------"
-        << "--------------------------------------------------------------------";
-
-    *ostrm << scientific << setprecision(3) << endl;
-    *ostrm << "Solving premixed flame" << endl;
 
     *ostrm << endl << "#--------------------------------------------------"
         << "--------------------------------------------------------------------";
@@ -311,44 +268,12 @@ void inputoutput::outputProgress() {
         << setw(12) << domn->solv->time-domn->solv->t0        //  3: t-t0
         << setw(10) << domn->solv->iEtrials                   //  4: nEtry
         << setw(6)  << domn->ngrd                             //  5: ngrd
-        << setw(12) << domn->ed->eddySize                     //  6: edSize
-        << setw(12) << dmb                                    //  7: edPos
-        << setw(12) << domn->ed->Pa                           //  8: edPa
         << setw(12) << domn->solv->nPaSumC                    //  9: nEposs
         << setw(12) << domn->solv->PaSumC/domn->solv->nPaSumC // 10: PaAvg
-        << setw(12) << domn->ed->invTauEddy                   // 11: invTauEddy
         ;
     ostrm->flush();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/** Output quantities during advancment if desired
- *  Currently only implementing flamelet output:
- *  \Delta = abs((sum_k h_k*dy_k/dt)/(sum_k h_k*mdot_k'''))
- *  Then average Delta over all cells (volume weighted).
- *  Or, take the max
- *  The denominator is -(heat release rate/rho).
- */
-void inputoutput::outputFlmltProgress(){
-
-    if(!(domn->pram->LisFlmlt || domn->pram->LisFlmltX))
-        return;
-
-    if(domn->mimx->nsteps % domn->pram->modDump != 0)
-        return;
-
-    double dxmixf = domn->pram->LisFlmltX ? domn->Ldomain()/6 : 1.0/6;
-    int ipt;
-
-    *ostrm << scientific << setprecision(3) << endl;
-
-    *ostrm << domn->mimx->time;
-    for(int i=1; i<=5; i++) {
-        ipt = domn->domainPositionToIndex(dxmixf*i, true, 98);
-        *ostrm << setw(12) << domn->temp->d.at(ipt);
-    }
-
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 /** Restart
@@ -450,15 +375,6 @@ void inputoutput::write_h_mixf_flmlt_profile(const vector<double> &hsens){
     ofile << setw(19) << domn->strm->h0;
     ofile << setw(19) << 0.0 << endl;
 
-    if(domn->pram->LisFlmltX) {
-        domn->mixf->setVar();
-
-        for(int i=0; i<domn->ngrd; i++){
-            ofile << setw(19) << domn->mixf->d[i];
-            ofile << setw(19) << domn->enth->d[i];
-            ofile << setw(19) << hsens[i] << endl;
-        }
-    }
     else {
         for(int i=0; i<domn->ngrd; i++){
             ofile << setw(19) << domn->pos->d[i];

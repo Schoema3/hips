@@ -43,9 +43,7 @@ class param {
 
         double  Z_param;         ///<  Viscous penalty parameter
         double  A_param;         ///<  Energy Distribution parameter alpha
-        double  C_param;         ///<  Eddy frequency parameter
         string  LES_type;        ///<  NONE, THIRDS, ELAPSEDTIME, FRACDOMAIN, INTEGRALSCALE
-        double  Z_LES;           ///<  large eddy suppression (nonpositive prevents les test)
         double  diffCFL;         ///<  multiplies min diffusion timestep
         double  cvode_atol;      ///<  absolute tolerace atol for cvode
         double  cvode_rtol;      ///<  relative tolerace rtol for cvode
@@ -60,12 +58,6 @@ class param {
         string  Lsolver;         ///<  EXPLICIT, SEMI-IMPLICIT, or STRANG
         bool    Lperiodic;       ///<  periodic if true
         bool    Lspatial;        ///<  spatial formulation if true
-        bool    Llem;            ///<  true if LEM
-        bool    LisFlmlt;        ///<  true if solving an unsteady flamelet
-        bool    LisFlmltX;       ///<  true if solving an unsteady flamelet in the physical domain (Pierce 2004)
-        bool    LletFlmltAdpt;   ///<  true if allowing mesh adaption during flmlt solution (other than the initial adapt)
-        double  chi0;            ///<  for flmlt cases (not flmltX); = chi at mixf=0.5
-        double  heatloss;        ///<  for flmlt or flmltX cases; heat loss as fraction of sensible enthalpy with Tmix as a reference
         bool    LTMA;            ///<  true for the triplet map TMA: 3 = vol segments; false for TMB: 3 equal length segments
         bool    LplanarTau;      ///<  true for computing cylindrical/spherical tau_eddy using a planar formulation. If accepted, a cylindrical eddy is implemented
         bool    Lignition;        ///<  true if starting with unreacted mixing profile to allow ignition
@@ -155,9 +147,6 @@ class param {
         bool    LsimpleMix;      ///< true for simple instantaneous mixing of parcel pairs
         int     forceHips;       ///< forcing function for statistically stationary: -1 = none, 1 = source term, 2 = direct profile
 
-        //----------------- Premix quantities
-
-        bool    LisPremix;         ///<  true if solving premix flame
 
     //////////////////// MEMBER FUNCTIONS /////////////////
 

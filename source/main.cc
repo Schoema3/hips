@@ -58,19 +58,10 @@ int main(int argc, char*argv[]) {
     streams       strm;
     IdealGasPhase gas("../input/gas_mechanisms/"+pram.chemMechFile);
     Transport    *tran = newTransportMgr("Mix", &gas);
-    eddy          ed;
-    meshManager   mesher;
     solver       *solv;
     micromixer   *mimx;
 
-    if(pram.LisFlmlt || pram.LisFlmltX) {
-        solv = new solver_flmlt();
-        mimx = new micromixer_flmlt();
-    }
-    else if(pram.LisPremix) {
-        solv = new solver_premix();
-        mimx = new micromixer_premix();
-    }
+    
     else if(pram.LisHips) {
         solv = new solver_hips();
         mimx = new micromixer_hips();
@@ -87,8 +78,8 @@ int main(int argc, char*argv[]) {
     if ( pram.seed >= 0 ) pram.seed += nShiftFileNumbers;
     randomGenerator rand(pram.seed);
 
-    domn.init(&io,  &mesher, &strm, &gas, tran, mimx, &ed, &eddl, solv, &rand, &prb);
-    eddl.init(NULL, NULL,    NULL,  NULL, NULL, NULL, NULL,NULL,  NULL, NULL,  NULL, true);
+    domn.init(&io, &strm, &gas, tran, mimx, solv, &rand, &prb);
+    eddl.init(NULL, NULL, NULL,  NULL, NULL, NULL, NULL, NULL,  NULL, NULL,  NULL, true);
     //
     //-------------------
 

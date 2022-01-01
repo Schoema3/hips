@@ -35,8 +35,6 @@ param::param(inputoutput *p_io) {
     Z_param        = io->params["Z_param"]        ? io->params["Z_param"].as<double>()       : 400.0;    //errMsg<double>("Z_param");
     A_param        = io->params["A_param"]        ? io->params["A_param"].as<double>()       : 0.666667; //errMsg<double>("A_param");
     C_param        = io->params["C_param"]        ? io->params["C_param"].as<double>()       : 5.0;      //errMsg<double>("C_param");
-    LES_type       = io->params["LES_type"]       ? io->params["LES_type"].as<string>()      : "NONE";   //errMsg<string>("LES_type");
-    Z_LES          = io->params["Z_LES"]          ? io->params["Z_LES"].as<double>()         : 0.0;
     x0virtual      = io->params["x0virtual"]      ? io->params["x0virtual"].as<double>()     : 0.0;
     diffCFL        = io->params["diffCFL"]        ? io->params["diffCFL"].as<double>()       : errMsg<double>("diffCFL");
     cvode_atol     = io->params["cvode_atol"]     ? io->params["cvode_atol"].as<double>()    : 1.0E-10;
@@ -50,10 +48,6 @@ param::param(inputoutput *p_io) {
     Lsolver        = io->params["Lsolver"]        ? io->params["Lsolver"].as<string>()       : errMsg<string>("Lsolver");
     Lperiodic      = io->params["Lperiodic"]      ? io->params["Lperiodic"].as<bool>()       : false;
     Lspatial       = io->params["Lspatial"]       ? io->params["Lspatial"].as<bool>()        : false;
-    Llem           = io->params["Llem"]           ? io->params["Llem"].as<bool>()            : false;
-    LisFlmlt       = io->params["LisFlmlt"]       ? io->params["LisFlmlt"].as<bool>()        : false;
-    LisFlmltX      = io->params["LisFlmltX"]      ? io->params["LisFlmltX"].as<bool>()       : false;
-    LletFlmltAdpt  = io->params["LletFlmltAdpt"]  ? io->params["LletFlmltAdpt"].as<bool>()   : true;
     chi0           = io->params["chi0"]           ? io->params["chi0"].as<double>()          : 500.0;   // error check below if not set
     heatloss       = io->params["heatloss"]       ? io->params["heatloss"].as<double>()      : 0.0;     // error check below if not set
     LTMA           = io->params["LTMA"]           ? io->params["LTMA"].as<bool>()            : false;
@@ -73,7 +67,6 @@ param::param(inputoutput *p_io) {
     Pav            = io->params["Pav"]            ? io->params["Pav"].as<double>()           : 0.02;   //errMsg<double>("Pav");
     dtfac          = io->params["dtfac"]          ? io->params["dtfac"].as<double>()         : 2.0;    //errMsg<double>("dtfac");
     nDtSmeanWait   = io->params["nDtSmeanWait"]   ? io->params["nDtSmeanWait"].as<int>()     : 100000; //errMsg<int>("nDtSmeanWait");
-    eddyMinCells   = io->params["eddyMinCells"]   ? io->params["eddyMinCells"].as<int>()     : 3;      //errMsg<int>("eddyMinCells");
     DAtimeFac      = io->params["DAtimeFac"]      ? io->params["DAtimeFac"].as<double>()     : 10.0;   //errMsg<double>("DAtimeFac");
     tdfac          = io->params["tdfac"]          ? io->params["tdfac"].as<double>()         : 1.0;
     sLastDA        = io->params["sLastDA"]        ? io->params["sLastDA"].as<int>()          : 100;    //errMsg<int>("sLastDA");
@@ -107,9 +100,6 @@ param::param(inputoutput *p_io) {
     LsimpleMix     = io->params["LsimpleMix"]     ? io->params["LsimpleMix"].as<bool>()      : false;
     forceHips      = io->params["forceHips"]      ? io->params["forceHips"].as<int>()        : -1;
 
-    // Premix variables ---------------------
-
-    LisPremix      = io->params["LisPremix"]      ? io->params["LisPremix"].as<bool>()       : false;
 
     // Radiation variables ---------------------
 
@@ -193,20 +183,6 @@ param::param(inputoutput *p_io) {
     if(LdoDL && Lsolver=="STRANG")
         cout << endl << "ERROR: STRANG solver is not set up with Darrieus Landau instability LdoDL" << endl;
 
-    if(LisFlmlt && (!io->params["chi0"] || !io->params["heatloss"]))
-        cout << endl << "ERROR: LisFlmlt requires chi0 and heatloss parameters" << endl;
-
-    if(LisFlmltX && !io->params["heatloss"])
-        cout << endl << "ERROR: LisFlmltX requires heatloss parameter" << endl;
-
-    if((LisFlmlt || LisFlmltX) && heatloss==0.0){
-        cout << endl << "MAKE SURE TO NAME YOUR CASE *_adia so other heatloss cases can find the adiabatic file";
-        cout << endl << "   Example: file test_L0.5_HL0.05 should have a corresponding adiabatic case named test_L0.5_adia";
-        cout << endl << "   That is, everything after the last _ is replaced with adia" << endl;
-    }
-
-    //if(LPeEddy)
-    //    cout << endl << "ERROR: LPeEddy flag is not tested. Verify and implement in eddy.cc" << endl;
 
 }
 

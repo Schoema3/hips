@@ -51,9 +51,6 @@ class domain {
         dv*                     pos;       ///< pointers to gas properties
         dv*                     posf;      ///< access as: posf->d[i], or posf->var_name, etc.
         dv*                     rho;
-        dv*                     uvel;
-        dv*                     vvel;
-        dv*                     wvel;
         dv*                     sdiff;
         dv*                     sca;
         dv*                     phase;
@@ -75,10 +72,7 @@ class domain {
         inputoutput             *io;         ///< pointer to input/output object
         param                   *pram;       ///< pointer to the parameters object
         micromixer              *mimx;       ///< pointer to micromixer for diffusion, reaction, domain evolution.s
-        domain                  *eddl;       ///< pointer to eddyline object
         solver                  *solv;       ///< pointer to solver object
-        meshManager             *mesher;     ///< pointer to mesh manager object
-        probes                  *prb;        ///< pointer to probes object
 
         randomGenerator         *rand;
 
@@ -97,7 +91,6 @@ class domain {
 
     private:
 
-        void initEddyDomain();
 
 
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
@@ -105,12 +98,10 @@ class domain {
     public:
 
         void init(inputoutput     *p_io,
-                  meshManager     *p_mesher,
                   streams         *p_strm,
                   IdealGasPhase   *p_gas,
                   Transport       *p_tran,
                   micromixer      *p_mimx,
-                  domain          *p_eddl,
                   solver          *p_solv,
                   randomGenerator *p_rand,
                   bool             LisEddyDomain=false);

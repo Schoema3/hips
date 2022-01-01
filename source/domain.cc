@@ -2,13 +2,8 @@
 #include "domain.h"
 #include "processor.h"
 #include "dv.h"
-#include "dv_uvw.h"
-#include "dv_pos.h"
-#include "dv_posf.h"
 #include "dv_rho.h"
 #include "dv_dvisc.h"
-#include "dv_sca.h"
-#include "dv_aDL.h"
 #include "solver.h"
 #include "domaincase_hips.h"
 #include "domaincase_hips_comb.h"
@@ -35,7 +30,6 @@ domain::domain(domain *p_domn, param *p_pram) {
  */
 
 void domain::init(inputoutput     *p_io,
-                  meshManager     *p_mesher,
                   streams         *p_strm,
                   IdealGasPhase   *p_gas,
                   Transport       *p_tran,
@@ -53,8 +47,6 @@ void domain::init(inputoutput     *p_io,
     tran   = p_tran;
     strm   = p_strm;
     mimx   = p_mimx;
-    ed     = p_ed;
-    eddl   = p_eddl;
     solv   = p_solv;
     rand   = p_rand;
     prb    = p_prb;
@@ -65,17 +57,9 @@ void domain::init(inputoutput     *p_io,
     ngrdf   = ngrd + 1;
 
     //----------------------
-
-    if(LisEddyDomain) {        // eddy domain needs less data
-        initEddyDomain();
-        return;
-    }
-
-    //----------------------
     io->init(this);
     pram->init(this);
     prb->init(this);
-    ed->init(this, eddl);
     solv->init(this);
     // mesher is init below in caseinit for phi
     // strm is init below in caseinit  (domc), (if needed)
@@ -142,20 +126,12 @@ void domain::initEddyDomain() {
 
     v.push_back(new dv_pos(  this, "pos",   false, true));
     v.push_back(new dv_posf( this, "posf",  false, true));
-    v.push_back(new dv_uvw(  this, "uvel",  true,  true));   // last are: L_transported, L_output
-    v.push_back(new dv_uvw(  this, "vvel",  true,  true));
-    v.push_back(new dv_uvw(  this, "wvel",  true,  true));
     v.push_back(new dv_rho(  this, "rho",   false, false));
     v.push_back(new dv_dvisc(this, "dvisc", false, false));
     if(domn->pram->LdoDL)
        v.push_back(new dv_aDL(this, "aDL",   false, false));
 
     int k = 0;
-    pos   = v.at(k++);
-    posf  = v.at(k++);
-    uvel  = v.at(k++);
-    vvel  = v.at(k++);
-    wvel  = v.at(k++);
     rho   = v.at(k++);
     dvisc = v.at(k++);
     if(domn->pram->LdoDL)

@@ -81,10 +81,6 @@ class dv {
 
         void           resetSourceFlags();
 
-        //---------- for flmlt interface (inherited)
-
-        virtual void set_hsens(vector<double> &hsens){}
-
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
 
     public:
