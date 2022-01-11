@@ -47,6 +47,7 @@ void dv_chi_hips::setVar(const double vtilde, const double vhat, const int ipt){
     
     double delta_t_chi = domn->solv->time - tLC[ipt];
     d[ipt] = 2*(vtilde - vhat)*(vtilde-vhat)/delta_t_chi;
+    cout<<"d-->  "<<d[ipt]<<endl;
     tLC[ipt] = domn->solv->time;
 
 }

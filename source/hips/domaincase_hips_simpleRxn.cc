@@ -56,7 +56,7 @@ void domaincase_hips_simpleRxn::init(domain *p_domn) {
     //------------------- set minimial mesher
 
     vector<dv*> phi;
-    domn->mesher->init(domn, phi);
+ 
 
 }
 

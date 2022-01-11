@@ -17,7 +17,6 @@ int dv_ygas_hips::nspc;
 ///////////////////////////////////////////////////////////////////////////////
 // Declare the global function prototype so it can be used in this source file
 
-void getProblemSpecificRR(double rho, double temp, double pres, double *yi, double *rr);
 
 ////////////////////////////////////////////////////////////////////////////////
 /** dv_ygas  constructor function
@@ -80,7 +79,7 @@ void dv_ygas_hips::getRhsSrc(const int ipt) {
             // rho and T should already be set (make sure).
             for(int k=0; k<nspc; k++)
                 yi.at(k) = domn->ysp[k]->d.at(i);
-            getProblemSpecificRR(domn->rho->d.at(i), domn->temp->d.at(i), domn->pram->pres, &yi.at(0), &rr.at(0));
+          //  getProblemSpecificRR(domn->rho->d.at(i), domn->temp->d.at(i), domn->pram->pres, &yi.at(0), &rr.at(0));
 #else
             domn->domc->setGasStateAtPt(i);
             domn->gas->getNetProductionRates(&rr.at(0));

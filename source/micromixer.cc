@@ -67,8 +67,7 @@ void micromixer::advanceOdt(const double p_tstart, const double p_tend, const in
 
 void micromixer::setGridDxcDx() {
 
-    domn->mesher->setGridDxc(domn, dxc, domn->pram->cCoord);
-    domn->mesher->setGridDx(domn, dx);
+
 
 }
 
@@ -89,7 +88,7 @@ void micromixer::setNominalStepSize() {
         }
     }
 
-    domn->mesher->setGridDx(domn, dx);
+   
 
     double coef = 0.0;
     double dmb;
@@ -156,9 +155,8 @@ void micromixer::advanceOdtSingleStep_Explicit(){
 
     updateGrid();            // update cell sizes due to rho or rho*v variations (continuity)
 
-    if(domn->pram->LdoDL) do_DL("set DL_2");
+  
 
-    domn->mesher->enforceDomainSize();     // chop the domain
 
 }
 
@@ -196,13 +194,7 @@ void micromixer::advanceOdtSingleStep_SemiImplicit() {
 
     //---------------
 
-    updateGrid();            // update cell sizes due to density variations (continuity)
-
-    if(domn->pram->LdoDL) do_DL("set DL_2");
-
-    domn->mesher->enforceDomainSize();     // chop the domain
-
-}
+  }
 
 ///////////////////////////////////////////////////////////////////////////////
 /** Advance ODT solution: diffusion and reaction; Some terms are implicit, others explicit.
@@ -277,7 +269,6 @@ void micromixer::advanceOdtSingleStep_StrangSplit() {
 
     //-------------------------
 
-    domn->mesher->enforceDomainSize();     // chop the domain (for strang, just at the final step)
 
 }
 
@@ -347,17 +338,15 @@ void micromixer::updateGrid() {
         domn->ngrd++;
         domn->ngrdf++;
 
-        domn->mesher->merge2cells(0, true);
+      
 
         if((domn->posf->d[1]-domn->posf->d[0]) > 2.0*(domn->posf->d[2]-domn->posf->d[1])){
             vector<double> faces{domn->posf->d[0], 0.5*(domn->posf->d[0]+domn->posf->d[1]), domn->posf->d[1]};
-            domn->mesher->splitCell(0,1,faces);
-        }
+                 }
 
         //---------- at the end of domain split cell and delete the overhang
 
-        domn->mesher->enforceDomainSize();     // chop the domain (for strang, just at the final step)
-
+     
         LforceSetNominalStepSize = true;       // we changed the grid, so indicate to recompute nominal timestep size
 
     }
@@ -377,7 +366,6 @@ void micromixer::updateGrid() {
 
         //-------------
 
-        domn->mesher->setGridFromDxc(dxc2);
     }
 
 
@@ -395,7 +383,7 @@ bool micromixer::adaptGridIfNeeded() {
 #ifndef SILENT
         *domn->io->ostrm << endl << "#------- ADAPTING DURING DIFFUSION" << " " << domn->ngrd;
 #endif
-        domn->mesher->adaptGrid(0, domn->ngrd-1);
+       
         return true;
     }
     return false;

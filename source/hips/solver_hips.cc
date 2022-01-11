@@ -6,7 +6,7 @@
 #include <sstream>
 #include <string>
 #include <iomanip>   // precision
-
+using namespace std;
 ///////////////////////////////////////////////////////////////////////////////
 
 bool sortFunc(const pair<double,int> &a, const pair<double,int> &b){
@@ -58,7 +58,8 @@ void solver_hips::init(domain *p_domn) {
                               pow(levelLengths[iEta]/domn->pram->domainLength, 2.0/3.0) /
                               domn->pram->C_param;
             levelRates[i]   = 1.0/levelTaus[i] * pow(2.0,i);
-        }
+            cout<<"just print<"<<i<<endl;
+                    }
     }
 
     //-------------------

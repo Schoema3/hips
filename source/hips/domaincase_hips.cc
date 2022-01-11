@@ -62,7 +62,7 @@ void domaincase_hips::init(domain *p_domn) {
     //------------------- set minimial mesher
 
     vector<dv*> phi;
-    domn->mesher->init(domn, phi);
+  
 
     //------------------- for variable Sc, set the Batchelor level and i_plus level for each scalar
 

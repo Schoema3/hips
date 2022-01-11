@@ -1,18 +1,13 @@
 
 #include "domain.h"
 #include "streams.h"
-#include "processor.h"
+
 #include "param.h"
 #include "probes.h"
 #include "micromixer.h"
-#include "micromixer_flmlt.h"
 #include "micromixer_hips.h"
-#include "micromixer_premix.h"
-#include "meshManager.h"
-#include "eddy.h"
+#include "processor.h"
 #include "solver.h"
-#include "solver_flmlt.h"
-#include "solver_premix.h"
 #include "solver_hips.h"
 #include "randomGenerator.h"
 
@@ -31,9 +26,9 @@
 using namespace std;
 using namespace Cantera;
 
-//////////////////////////////////////////////////////////////
 
 processor proc;
+//////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////
 
@@ -54,42 +49,34 @@ int main(int argc, char*argv[]) {
 
     inputoutput   io(caseName, nShiftFileNumbers);
     param         pram(&io);
-    probes        prb;
-    streams       strm;
+ probes        prb;
+ streams       strm;
     IdealGasPhase gas("../input/gas_mechanisms/"+pram.chemMechFile);
     Transport    *tran = newTransportMgr("Mix", &gas);
-    eddy          ed;
-    meshManager   mesher;
+   
     solver       *solv;
     micromixer   *mimx;
 
-    if(pram.LisFlmlt || pram.LisFlmltX) {
-        solv = new solver_flmlt();
-        mimx = new micromixer_flmlt();
-    }
-    else if(pram.LisPremix) {
-        solv = new solver_premix();
-        mimx = new micromixer_premix();
-    }
-    else if(pram.LisHips) {
+   if(pram.LisHips) {
         solv = new solver_hips();
         mimx = new micromixer_hips();
     }
-    else {
-        solv = new solver();
-        mimx = new micromixer();
-    }
+  // else  {
+  //      solv = new solver();
+  //      mimx = new micromixer();
+  //  }
 
     domain domn(NULL,  &pram);
-    domain eddl(&domn, &pram);
+
+ 
+  
 
     // we should increment the seed if we are starting MPI multiple times
     if ( pram.seed >= 0 ) pram.seed += nShiftFileNumbers;
     randomGenerator rand(pram.seed);
 
-    domn.init(&io,  &mesher, &strm, &gas, tran, mimx, &ed, &eddl, solv, &rand, &prb);
-    eddl.init(NULL, NULL,    NULL,  NULL, NULL, NULL, NULL,NULL,  NULL, NULL,  NULL, true);
-    //
+    domn.init(&io, &strm, &gas, tran, mimx, solv, &rand,&prb);
+        //
     //-------------------
 
     time_t mytimeStart, mytimeEnd;

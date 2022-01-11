@@ -39,6 +39,8 @@ class dv_ygas_hips : public dv {
         virtual void getRhsMix(const vector<double> &gf,
                                const vector<double> &dxc);
 
+void getProblemSpecificRR(double rho, double temp, double pres, double *yi, double *rr);
+
     private:
 
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////

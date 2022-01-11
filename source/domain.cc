@@ -1,34 +1,30 @@
 
 #include "domain.h"
-#include "processor.h"
+
 #include "dv.h"
-#include "dv_uvw.h"
-#include "dv_pos.h"
-#include "dv_posf.h"
+
+
+
 #include "dv_rho.h"
 #include "dv_dvisc.h"
-#include "dv_sca.h"
-#include "dv_aDL.h"
-#include "domaincase_odt_channel.h"
-#include "domaincase_odt_channelScalar.h"
-#include "domaincase_odt_isothermalWall.h"
-#include "domaincase_odt_jetMixlRxn.h"
-#include "domaincase_odt_jetFlame.h"
-#include "domaincase_odt_MFjetFlame.h"
-#include "domaincase_odt_coldPropaneJet.h"
-#include "domaincase_odt_coldJet.h"
-#include "domaincase_odt_RT.h"
-#include "domaincase_premixedFlame.h"
-#include "domaincase_flmlt.h"
-#include "domaincase_flmltX.h"
+
+
+
+
+
+
+
+
+
 #include "domaincase_hips.h"
 #include "domaincase_hips_comb.h"
 #include "domaincase_hips_simpleRxn.h"
 #include <cmath>
 #include <iomanip>
 
-extern processor proc;
 
+#include "processor.h"
+extern processor proc;
 /////////////////////////////////////////////////////////////////////
 /** Constructor
  */
@@ -46,31 +42,28 @@ domain::domain(domain *p_domn, param *p_pram) {
  */
 
 void domain::init(inputoutput     *p_io,
-                  meshManager     *p_mesher,
+     
                   streams         *p_strm,
                   IdealGasPhase   *p_gas,
                   Transport       *p_tran,
                   micromixer      *p_mimx,
-                  eddy            *p_ed,
-                  domain          *p_eddl,
                   solver          *p_solv,
                   randomGenerator *p_rand,
-                  probes          *p_prb,
+                   probes          *p_prb,               
                   bool             LisEddyDomain) {
 
     //----------------------
 
     io     = p_io;
-    mesher = p_mesher;
+ 
     gas    = p_gas;
     tran   = p_tran;
     strm   = p_strm;
     mimx   = p_mimx;
-    ed     = p_ed;
-    eddl   = p_eddl;
-    solv   = p_solv;
+
+        solv   = p_solv;
     rand   = p_rand;
-    prb    = p_prb;
+ 
 
     //----------------------
 
@@ -87,53 +80,20 @@ void domain::init(inputoutput     *p_io,
     //----------------------
     io->init(this);
     pram->init(this);
-    prb->init(this);
-    ed->init(this, eddl);
-    solv->init(this);
-    // mesher is init below in caseinit for phi
+
+           // mesher is init below in caseinit for phi
     // strm is init below in caseinit  (domc), (if needed)
     // mimx is init below since it needs v[] set for cvode
 
     //---------------------- Continue setting up the case using the case_somecase class.
     // Adds to the above variable list, and initializes solution for the run
 
-     if(pram->probType == "CHANNEL")
-         domc = new domaincase_odt_channel();    // cold channel flow
 
-     else if(pram->probType == "CHANNEL_SCALAR")
-         domc = new domaincase_odt_channelScalar();  // cold channel flow with passive scalar
 
-     else if(pram->probType == "JETMIXL_RXN")
-         domc = new domaincase_odt_jetMixlRxn(); // jet, wake, mixing layer with gaseous reaction
 
-     else if(pram->probType == "COLDPROPANEJET")
-         domc = new domaincase_odt_coldPropaneJet(); // TNF jet
 
-     else if(pram->probType == "COLDJET")
-         domc = new domaincase_odt_coldJet(); // Hussein 1994
 
-     else if(pram->probType == "JETFLAME")
-         domc = new domaincase_odt_jetFlame(); // Shaddix jet, DLR jet, flameD
-
-     else if(pram->probType == "MF_JETFLAME")
-         domc = new domaincase_odt_MFjetFlame(); // jet flame w/ mixt frac density profile
-
-     else if(pram->probType == "ISOTHERMAL_WALL")
-         domc = new domaincase_odt_isothermalWall(); // isothermal wall
-
-     else if(pram->probType == "RT")
-         domc = new domaincase_odt_RT();      // simple Rayleigh Taylor flow
-
-     else if(pram->probType == "PREMIXEDFLAME")
-         domc = new domaincase_premixedFlame();      // laminar premixed flame 
-
-     else if(pram->probType == "FLMLT")
-         domc = new domaincase_flmlt(); // flamelet
-
-     else if(pram->probType == "FLMLTX")
-         domc = new domaincase_flmltX(); // flamelet
-
-     else if(pram->probType == "HIPS")
+    if(pram->probType == "HIPS")
          domc = new domaincase_hips(); // hips
 
      else if(pram->probType == "HIPS_COMB")
@@ -189,26 +149,17 @@ double domain::Ldomain() {
 
 void domain::initEddyDomain() {
 
-    v.push_back(new dv_pos(  this, "pos",   false, true));
-    v.push_back(new dv_posf( this, "posf",  false, true));
-    v.push_back(new dv_uvw(  this, "uvel",  true,  true));   // last are: L_transported, L_output
-    v.push_back(new dv_uvw(  this, "vvel",  true,  true));
-    v.push_back(new dv_uvw(  this, "wvel",  true,  true));
+
     v.push_back(new dv_rho(  this, "rho",   false, false));
     v.push_back(new dv_dvisc(this, "dvisc", false, false));
-    if(domn->pram->LdoDL)
-       v.push_back(new dv_aDL(this, "aDL",   false, false));
+ 
 
     int k = 0;
-    pos   = v.at(k++);
-    posf  = v.at(k++);
-    uvel  = v.at(k++);
-    vvel  = v.at(k++);
-    wvel  = v.at(k++);
+  
+
     rho   = v.at(k++);
     dvisc = v.at(k++);
-    if(domn->pram->LdoDL)
-        aDL   = v.at(k++);
+ 
 
 }
 
@@ -270,11 +221,7 @@ int domain::domainPositionToIndex(double position, const bool LowSide, int dbg) 
        *io->ostrm << "\ndbg = " << dbg << endl; //doldb
        *io->ostrm << scientific;
        *io->ostrm << setprecision(14);
-       *io->ostrm << "\n ERROR odt_grid::domainPositionToIndex position < posf->d.at(0) or > posf->d.at(ngrd) \n"
-               " and at processor's id---> " << proc.myid
-               <<" Value of position is---> "<<position << " and values of posf->d.at(0) and posf->d.at(ngrd) are "
-               <<posf->d.at(0)<< " and "<<posf->d.at(ngrd) <<" respectively "<< endl;
-       //io->outputProperties("dbg.dat", 0.0); //doldb
+    
        exit(0);
     }
 
@@ -368,7 +315,7 @@ void domain::backCyclePeriodicDomain(const double backCycleDistance) {
         interPos.at(0) = posf->d.at(icycle);
         interPos.at(1) = xend;
         interPos.at(0) = posf->d.at(icycle+1);
-        mesher->splitCell(icycle, 1, interPos);
+      
         icycle++;
     }
 

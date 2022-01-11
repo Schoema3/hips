@@ -11,11 +11,11 @@
 #include "param.h"
 #include "streams.h"
 #include "micromixer.h"
-#include "eddy.h"
-#include "meshManager.h"
+
+#include "probes.h"
 #include "solver.h"
 #include "randomGenerator.h"
-#include "probes.h"
+
 
 #ifdef DOCANTERA
 #include "cantera/thermo/IdealGasPhase.h"
@@ -79,11 +79,10 @@ class domain {
         inputoutput             *io;         ///< pointer to input/output object
         param                   *pram;       ///< pointer to the parameters object
         micromixer              *mimx;       ///< pointer to micromixer for diffusion, reaction, domain evolution.
-        eddy                    *ed;         ///< pointer to object for eddy operations
         domain                  *eddl;       ///< pointer to eddyline object
         solver                  *solv;       ///< pointer to solver object
-        meshManager             *mesher;     ///< pointer to mesh manager object
-        probes                  *prb;        ///< pointer to probes object
+       
+         probes                  *prb;   
 
         randomGenerator         *rand;
 
@@ -110,16 +109,16 @@ class domain {
     public:
 
         void init(inputoutput     *p_io,
-                  meshManager     *p_mesher,
-                  streams         *p_strm,
+                 streams         *p_strm,
                   IdealGasPhase   *p_gas,
                   Transport       *p_tran,
                   micromixer      *p_mimx,
-                  eddy            *p_ed,
-                  domain          *p_eddl,
+                 // eddy            *p_ed,
+                 // domain          *p_eddl,
+ 
                   solver          *p_solv,
                   randomGenerator *p_rand,
-                  probes          *p_prb,
+                   probes          *p_prb,               
                   bool             LisEddyDomain=false);
         domain(domain *p_domn, param *p_pram);
         virtual ~domain() {

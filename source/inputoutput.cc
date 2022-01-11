@@ -1,7 +1,7 @@
 
 #include "inputoutput.h"
 #include "domain.h"
-#include "processor.h"
+//#include "processor.h"
 #include <sys/stat.h>             // for mkdir
 #include <iostream>
 #include <iomanip>
@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include <algorithm>               // max_element
 
-extern processor proc;
+//extern processor proc;
 
 ///////////////////////////////////////////////////////////////////////////////
 /** inputoutput initialization function
@@ -301,24 +301,24 @@ void inputoutput::outputPremixHeader() {
 
 void inputoutput::outputProgress() {
 
-    double dmb = 0.5*(domn->ed->leftEdge + domn->ed->rightEdge);
-    if(dmb > domn->posf->d.at(domn->ngrd))
-        dmb = dmb-domn->Ldomain();
+   // double dmb = 0.5*(domn->ed->leftEdge + domn->ed->rightEdge);
+   // if(dmb > domn->posf->d.at(domn->ngrd))
+   //     dmb = dmb-domn->Ldomain();
 
-    *ostrm << scientific << setprecision(3) << endl;
-    *ostrm << setw(5)  << domn->solv->neddies                    //  1: EE
-        << setw(12) << domn->solv->time                       //  2: time
-        << setw(12) << domn->solv->time-domn->solv->t0        //  3: t-t0
-        << setw(10) << domn->solv->iEtrials                   //  4: nEtry
-        << setw(6)  << domn->ngrd                             //  5: ngrd
-        << setw(12) << domn->ed->eddySize                     //  6: edSize
-        << setw(12) << dmb                                    //  7: edPos
-        << setw(12) << domn->ed->Pa                           //  8: edPa
-        << setw(12) << domn->solv->nPaSumC                    //  9: nEposs
-        << setw(12) << domn->solv->PaSumC/domn->solv->nPaSumC // 10: PaAvg
-        << setw(12) << domn->ed->invTauEddy                   // 11: invTauEddy
-        ;
-    ostrm->flush();
+   // *ostrm << scientific << setprecision(3) << endl;
+   // *ostrm << setw(5)  << domn->solv->neddies                    //  1: EE
+   //     << setw(12) << domn->solv->time                       //  2: time
+   //     << setw(12) << domn->solv->time-domn->solv->t0        //  3: t-t0
+   //     << setw(10) << domn->solv->iEtrials                   //  4: nEtry
+   //     << setw(6)  << domn->ngrd                             //  5: ngrd
+   //     //<< setw(12) << domn->ed->eddySize                     //  6: edSize
+   //     << setw(12) << dmb                                    //  7: edPos
+   //    // << setw(12) << domn->ed->Pa                           //  8: edPa
+   //     << setw(12) << domn->solv->nPaSumC                    //  9: nEposs
+   //     << setw(12) << domn->solv->PaSumC/domn->solv->nPaSumC // 10: PaAvg
+   //    // << setw(12) << domn->ed->invTauEddy                   // 11: invTauEddy
+   //     ;
+   // ostrm->flush();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

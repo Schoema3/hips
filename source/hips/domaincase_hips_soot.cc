@@ -12,8 +12,7 @@
 #include "dv_mixf_hips.h"
 #include "dv_enth_hips.h"
 #include "dv_ygas_hips.h"
-#include "dv_soot_hips_MONO.h"
-#include "dv_soot_hips_MOMIC.h"
+
 
 #include <string>
 #include <sstream>
@@ -50,19 +49,8 @@ void domaincase_hips_soot::init(domain *p_domn) {
         string PSD_method = domn->io->sootParams["PSD_method"].as<string>();
         stringstream ss;
 
-        if (PSD_method == "MONO") {
-            domn->pram->nsvar = 2;
-            for(int k=0; k<2; k++) {
-                ss.str(""); ss.clear(); ss << k;
-                domn->v.push_back(new dv_soot_hips_MONO(domn, "M"+ss.str(), true, true ));
-            }
-        }
-        else if (PSD_method == "MOMIC") {
-            for(int k=0; k<domn->pram->nsvar; k++) {
-                ss.str(""); ss.clear(); ss << k;
-                domn->v.push_back(new dv_soot_hips_MOMIC(domn, "M"+ss.str(), true, true ));
-            }
-        }
+     
+      
     }
 
     int ii = 0;
@@ -161,7 +149,7 @@ void domaincase_hips_soot::init(domain *p_domn) {
     //------------------- set minimial mesher
 
     vector<dv*> phi;
-    domn->mesher->init(domn, phi);
+    
 
     //------------------- for variable Sc, set the Batchelor level and i_plus level for each scalar
 

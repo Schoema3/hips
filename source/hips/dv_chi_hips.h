@@ -9,7 +9,7 @@
 #include <string>
 #include <vector>
 
-class domain;
+//class domain;
 
 using namespace std;
 

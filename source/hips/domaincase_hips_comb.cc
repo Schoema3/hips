@@ -105,7 +105,7 @@ void domaincase_hips_comb::init(domain *p_domn) {
     //------------------- set minimial mesher
 
     vector<dv*> phi;
-    domn->mesher->init(domn, phi);
+
 
 }
 
