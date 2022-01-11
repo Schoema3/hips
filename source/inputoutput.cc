@@ -227,6 +227,7 @@ void inputoutput::dumpDomainIfNeeded(){
 
 void inputoutput::writeDataFile(const string fnameRaw, const double time) {
 
+
     string fname = dataDir+fnameRaw;
     outputProperties(fname, time);
     gnufile << "plot '" << fnameRaw << "' us 1:3; pause -1;" << endl;

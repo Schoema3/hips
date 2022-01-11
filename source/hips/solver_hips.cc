@@ -302,9 +302,12 @@ void solver_hips::calculateSolution() {
     time = 0.0;                          // init time
     iLevel_p  = -1;                      // init init prev level
     sample_hips_eddy(dt, iLevel);        // init next EE
+    cout << endl << "made it 1" << endl; //doldb 
 
     while(time+dt <= domn->pram->tEnd) {
+        cout << endl << "made it a" << endl; //doldb 
         domn->mimx->advanceOdt(time, time+dt, iLevel_p);       //--- ADVANCE to sampled EE ---
+        cout << endl << "made it b" << endl; //doldb 
         selectAndSwapTwoSubtrees(iLevel, QS, RS, nPs);         //--- IMPLEMENT  sampled EE ---
 
         if(++iEE % 1000 == 0)

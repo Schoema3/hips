@@ -113,13 +113,9 @@ class domain {
                   IdealGasPhase   *p_gas,
                   Transport       *p_tran,
                   micromixer      *p_mimx,
-                 // eddy            *p_ed,
-                 // domain          *p_eddl,
- 
                   solver          *p_solv,
-                  randomGenerator *p_rand,
-                   probes          *p_prb,               
-                  bool             LisEddyDomain=false);
+                  randomGenerator *p_rand);
+
         domain(domain *p_domn, param *p_pram);
         virtual ~domain() {
             for(int k=0; k<v.size(); k++)

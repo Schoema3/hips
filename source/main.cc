@@ -3,7 +3,6 @@
 #include "streams.h"
 
 #include "param.h"
-#include "probes.h"
 #include "micromixer.h"
 #include "micromixer_hips.h"
 #include "processor.h"
@@ -47,15 +46,16 @@ int main(int argc, char*argv[]) {
     ss1.clear(); ss1 << argv[2];
     ss1 >> nShiftFileNumbers;
 
+
     inputoutput   io(caseName, nShiftFileNumbers);
     param         pram(&io);
- probes        prb;
  streams       strm;
     IdealGasPhase gas("../input/gas_mechanisms/"+pram.chemMechFile);
     Transport    *tran = newTransportMgr("Mix", &gas);
    
     solver       *solv;
     micromixer   *mimx;
+
 
    if(pram.LisHips) {
         solv = new solver_hips();
@@ -68,14 +68,13 @@ int main(int argc, char*argv[]) {
 
     domain domn(NULL,  &pram);
 
- 
   
 
     // we should increment the seed if we are starting MPI multiple times
     if ( pram.seed >= 0 ) pram.seed += nShiftFileNumbers;
     randomGenerator rand(pram.seed);
 
-    domn.init(&io, &strm, &gas, tran, mimx, solv, &rand,&prb);
+    domn.init(&io, &strm, &gas, tran, mimx, solv, &rand);
         //
     //-------------------
 

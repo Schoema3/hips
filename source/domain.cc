@@ -42,15 +42,12 @@ domain::domain(domain *p_domn, param *p_pram) {
  */
 
 void domain::init(inputoutput     *p_io,
-     
                   streams         *p_strm,
                   IdealGasPhase   *p_gas,
                   Transport       *p_tran,
                   micromixer      *p_mimx,
                   solver          *p_solv,
-                  randomGenerator *p_rand,
-                   probes          *p_prb,               
-                  bool             LisEddyDomain) {
+                  randomGenerator *p_rand) {
 
     //----------------------
 
@@ -61,7 +58,7 @@ void domain::init(inputoutput     *p_io,
     strm   = p_strm;
     mimx   = p_mimx;
 
-        solv   = p_solv;
+    solv   = p_solv;
     rand   = p_rand;
  
 
@@ -72,14 +69,9 @@ void domain::init(inputoutput     *p_io,
 
     //----------------------
 
-    if(LisEddyDomain) {        // eddy domain needs less data
-        initEddyDomain();
-        return;
-    }
-
-    //----------------------
     io->init(this);
     pram->init(this);
+    solv->init(this);
 
            // mesher is init below in caseinit for phi
     // strm is init below in caseinit  (domc), (if needed)

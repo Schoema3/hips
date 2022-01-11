@@ -106,12 +106,15 @@ void micromixer_hips::advanceOdt(const double p_tstart, const double p_tend, con
     tstart = p_tstart;
     tend   = p_tend;
 
+    cout << endl << "here 1" << endl; //doldb 
     if(domn->pram->forceHips==2 && iLevel==0)   // forcing for statistically stationary
         forceProfile();
+    cout << endl << "here 2" << endl; //doldb 
 //TODO: make sure forceProfile doesn't mess up how we are doing chi
 
     if(domn->pram->LsimpleMix){
         for(int k=0; k<domn->v.size(); k++){
+    cout << endl << "here 3 " << domn->v[k]->var_name << " " << domn->v.size() << " " << endl; //doldb 
             if(!domn->v[k]->L_transported)
                 continue;
             if(iLevel == domn->v[k]->i_plus-1 &&                                       // mix scalar across level i_minus
