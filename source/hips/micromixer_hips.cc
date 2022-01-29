@@ -70,6 +70,7 @@ void micromixer_hips::mixAcrossLevelTree(const int kVar, const int iLevel, const
             domn->chi->setVar(domn->v[kVar]->d[ime], s/nPmix, ime);
 
         domn->v[kVar]->d[ime] = s / nPmix;
+       
 
     }
 

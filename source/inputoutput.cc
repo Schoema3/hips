@@ -207,7 +207,7 @@ void inputoutput::dumpDomainIfNeeded(){
 
     if(!LdoDump) return;
 
-    domn->prb->outputProbes(dumpTimes.at(iNextDumpTime), true);   // probe output on dump time
+//    domn->prb->outputProbes(dumpTimes.at(iNextDumpTime), true);   // probe output on dump time
 
     stringstream ss;
     ss << setfill('0') << setw(5) << iNextDumpTime;
