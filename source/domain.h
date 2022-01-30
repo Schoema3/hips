@@ -12,7 +12,7 @@
 #include "streams.h"
 #include "micromixer.h"
 
-#include "probes.h"
+
 #include "solver.h"
 #include "randomGenerator.h"
 
@@ -82,9 +82,7 @@ class domain {
         domain                  *eddl;       ///< pointer to eddyline object
         solver                  *solv;       ///< pointer to solver object
        
-         probes                  *prb;   
-
-        randomGenerator         *rand;
+     randomGenerator         *rand;
 
         int                     nTrans;      ///< number of transported variables on the domain.
 
