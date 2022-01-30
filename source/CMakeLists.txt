@@ -118,7 +118,6 @@ target_sources(sec.x
         ${CMAKE_CURRENT_SOURCE_DIR}/solver.cc                  ${CMAKE_CURRENT_SOURCE_DIR}/solver.h
         ${CMAKE_CURRENT_SOURCE_DIR}/cvodeDriver.cc             ${CMAKE_CURRENT_SOURCE_DIR}/cvodeDriver.h
 
-       ${CMAKE_CURRENT_SOURCE_DIR}/probes.cc                  ${CMAKE_CURRENT_SOURCE_DIR}/probes.h
         ${CMAKE_CURRENT_SOURCE_DIR}/cantera_shell_functions.cc ${CMAKE_CURRENT_SOURCE_DIR}/cantera_shell_functions.h
                                                                ${CMAKE_CURRENT_SOURCE_DIR}/interp_linear.h
         ${CMAKE_CURRENT_SOURCE_DIR}/processor.cc               ${CMAKE_CURRENT_SOURCE_DIR}/processor.h
