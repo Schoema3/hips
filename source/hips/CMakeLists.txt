@@ -7,8 +7,6 @@ target_sources(sec.x
         ${CMAKE_CURRENT_SOURCE_DIR}/dv_chi_hips.cc               ${CMAKE_CURRENT_SOURCE_DIR}/dv_chi_hips.h
         ${CMAKE_CURRENT_SOURCE_DIR}/dv_ygas_hips.cc              ${CMAKE_CURRENT_SOURCE_DIR}/dv_ygas_hips.h
         ${CMAKE_CURRENT_SOURCE_DIR}/dv_ygas_cold_hips.cc         ${CMAKE_CURRENT_SOURCE_DIR}/dv_ygas_cold_hips.h 
-        ${CMAKE_CURRENT_SOURCE_DIR}/micromixer_hips.cc           ${CMAKE_CURRENT_SOURCE_DIR}/micromixer_hips.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/solver_hips.cc               ${CMAKE_CURRENT_SOURCE_DIR}/solver_hips.h
         ${CMAKE_CURRENT_SOURCE_DIR}/domaincase_hips.cc           ${CMAKE_CURRENT_SOURCE_DIR}/domaincase_hips.h
         ${CMAKE_CURRENT_SOURCE_DIR}/domaincase_hips_comb.cc      ${CMAKE_CURRENT_SOURCE_DIR}/domaincase_hips_comb.h
         ${CMAKE_CURRENT_SOURCE_DIR}/domaincase_hips_simpleRxn.cc ${CMAKE_CURRENT_SOURCE_DIR}/domaincase_hips_simpleRxn.h

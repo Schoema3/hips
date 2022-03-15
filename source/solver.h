@@ -59,6 +59,8 @@ class solver {
 
     public:
 
+ virtual void init(domain *p_domn);
+        virtual ~solver();    //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
         virtual void calculateSolution();
 
     private:
@@ -75,9 +77,20 @@ class solver {
         bool   testLES_fracDomain( const double eSize);
         bool   testLES_integralLength(const double time, const double eSize);
         bool   testLES_thirds();
-    public:
- virtual void init(domain *p_domn);
-        virtual ~solver();    //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
+
+//-----------------------------------------------------------------------------------
+        vector<double> levelRates;     ///< list of eddy event rates at each level
+        vector<pair<double,int> > eTL; ///< list of eddy times and levels
+        int iEta;                      ///< Kolmogorov level (needed for variable Sc scalars)
+        double eddyRate_total;         ///< total rate of all eddies 0 through nLevels-3
+        double eddyRate_inertial;      ///< tota    public:
+
+        void setEddyEventTimes();
+        void selectAndSwapTwoSubtrees(const int iLevel, int &Qstart, int &Rstart, int &nPswap);
+        void reset_rates_for_Sc(const vector<double> &levelTaus);
+        void sample_hips_eddy(double &dt, double &iLevel);
+//---------------------------------------------------------------------------------------
+    protected:
 };
 
 

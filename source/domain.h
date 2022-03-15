@@ -91,15 +91,9 @@ class domain {
 
     //////////////////// MEMBER FUNCTIONS /////////////////
 
-        int    domainPositionToIndex(double position, const bool LowSide, int dbg);
-        void   setDomainFromRegion(const int i1, const int i2);
-        double cyclePeriodicDomain(const int icycle);
-        void   backCyclePeriodicDomain(const double backCycleDistance);
-        double Ldomain();
+            
+       double Ldomain();
 
-    private:
-
-        void initEddyDomain();
 
 
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////

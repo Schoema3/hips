@@ -344,10 +344,10 @@ void inputoutput::outputFlmltProgress(){
     *ostrm << scientific << setprecision(3) << endl;
 
     *ostrm << domn->mimx->time;
-    for(int i=1; i<=5; i++) {
-        ipt = domn->domainPositionToIndex(dxmixf*i, true, 98);
-        *ostrm << setw(12) << domn->temp->d.at(ipt);
-    }
+    //for(int i=1; i<=5; i++) {
+    //    ipt = domn->domainPositionToIndex(dxmixf*i, true, 98);
+    //    *ostrm << setw(12) << domn->temp->d.at(ipt);
+    //}
 
 }
 

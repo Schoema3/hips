@@ -55,19 +55,15 @@ class micromixer {
 
         virtual void advanceOdt(const double p_tstart, const double p_tend, const int iLevel = -1);    // iLevel is for hips
 
-        void check_balance(int io);
+  
 
     protected:
-
-        virtual void setGf();                ///< sets the gf array
-        virtual void setGridDxcDx();         ///< sets the dxc array
-        virtual void set_oldrho_or_rhov();   ///< record old rho (or rho*u) for continuity
-        virtual bool adaptGridIfNeeded();   ///< expansion or contraction --> adapt
+       // virtual bool adaptGridIfNeeded();   ///< expansion or contraction --> adapt
         virtual void setNominalStepSize();   ///< sets a nominal dt for the whole period
 
-        virtual void updateGrid();           ///< enforce the continuity condition: (e.g., rho*dx = const).
+   
         void setStepSize();                  ///< set a local dt for interruptions (dump or tend)
-        void do_DL(string doWhat);
+       // void do_DL(string doWhat);
 
         void advanceOdtSingleStep_Explicit();
         void advanceOdtSingleStep_SemiImplicit();
@@ -77,7 +73,10 @@ class micromixer {
 
 
 
+    private:
 
+    void mixAcrossLevelTree(const int kVar, const int iMixLevel, const int iTree); //, const int iTree=-1);
+    void forceProfile();
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
 
     public:

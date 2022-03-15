@@ -4,10 +4,10 @@
 
 #include "param.h"
 #include "micromixer.h"
-#include "micromixer_hips.h"
+
 #include "processor.h"
 #include "solver.h"
-#include "solver_hips.h"
+
 #include "randomGenerator.h"
 
 #ifdef DOCANTERA
@@ -57,13 +57,16 @@ int main(int argc, char*argv[]) {
     micromixer   *mimx;
 
 
-   if(pram.LisHips) {
-        solv = new solver_hips();
-        mimx = new micromixer_hips();
-    }
+    solv = new solver();
+
+
+ mimx = new micromixer();
+//   if(pram.LisHips) {
+        //solv = new solver_hips();
+//        mimx = new micromixer_hips();
+//    }
   // else  {
-  //      solv = new solver();
-  //      mimx = new micromixer();
+  //       //      mimx = new micromixer();
   //  }
 
     domain domn(NULL,  &pram);
