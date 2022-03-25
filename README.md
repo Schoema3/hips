@@ -1,6 +1,6 @@
-# SEC (Stochastic Eddy Cascade)
+# HiPS (Hierarchical Parcel Swapping)
 
-This code implements the One-Dimensional Turbulence (ODT) model for turbulent reacting or nonreacting flows. 
+This code implements the Hierarchal Parcel Swapping (HiPS) model for turbulent reacting or nonreacting flows. 
 
 ## Documentation
 Detailed documentation is available [here](http://ignite.byu.edu/SEC). The following two papers discussing theory and application of the code are available. Additional papers are available [here](http://ignite.byu.edu/publications.html).
@@ -55,11 +55,3 @@ Two build systems are available: a standard GNU make, and cmake. We recommend th
   4. Navigate to `post/channelFlow`. 
   5. Run `python3 stats.py [caseName]`. With the default case name, this becomes `python3 stats.py channel`. This will generate two plots in `../data/[caseName]/post`. Navigate there to view them. 
   6. In `../data/[caseName]/post`, there should be two newly-generated PDFs. These two plots compare the mean and RMS velocity profiles of the channel flow case just run with SEC to previous DNS data of the same case. 
-### Reacting jet
-  1. As before, build the code using either Cmake or GNU make. In `user_config`, change the `CHEMISTRY` parameter to `SIMPLEDLR`. If the code was previously built with this parameter, it does not need to be rebuilt. 
-  2. Navigate to the `run` directory. 
-      * To run one realization, open `runOneRlz.sh` and change the parameters to `inputDir="../input/jetFlame/DLR_A"` and `caseName="reacting_jet"`. Then run `./runOneRlz.sh` to start the case. On average, this should take 15-20 minutes. The resulting data can be visualized, but it is not very useful on its own. Since ODT is a stochastic model, it works best when many realizations are averaged together. 
-      * To run multiple realizations, instead open `runManyRlzs.sh` and change the parameters to `nRlz=8`, `inputDir="../input/jetFlame/DLR_A"`, and `caseName="reacting_jet"`. Run `./runManyRlz.sh` to run the case. This will run eight individual realizations in series, where each will take 15-20 minutes to complete. Since we typically run several hundred realizations per simulation, this is more efficiently done in parallel using supercomputing resources, but small numbers of realizations are still instructive for test cases. 
-  3. Navigate to `post/jetFlame/DLR_A`. 
-  4. Run `python3 driver.py [caseName]`. For this case, the command becomes `python3 driver.py reacting_jet`. This will generate various data files and plots in `../data/[caseName]/post`. Navigate there to view them. 
-  5. In `../data/[caseName]/post`, there should be several newly-generated PDFs and text data files. For example, `cl_uvel_reacting_jet.pdf` will show the axial velocity and its RMS along the centerline at various heights in the jet, `cl_temp_reacting_jet.pdf`is the corresponding centerline gas temperature, and `cl_mixf_reacting_jet.pdf`the centerline mixture fraction. 

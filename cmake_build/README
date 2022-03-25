@@ -20,7 +20,7 @@ Step 1: run cmake
     If not found, yaml will be installed there.
 
 #--------------------------------------------------------------------------
-Step 2: build the SEC code
+Step 2: Build the HiPS code
     Run: make -j8
 
 #--------------------------------------------------------------------------
