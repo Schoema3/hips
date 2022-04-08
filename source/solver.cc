@@ -195,7 +195,6 @@ void solver::selectAndSwapTwoSubtrees(const int iLevel, int &Qstart, int &Rstart
 
 void solver::calculateSolution() {
 
-
     domn->io->writeDataFile("hips_init.dat", 0.0);
 
     //--------------------
@@ -210,12 +209,9 @@ void solver::calculateSolution() {
     time = 0.0;                          // init time
     iLevel_p  = -1;                      // init init prev level
     sample_hips_eddy(dt, iLevel);        // init next EE
-    //cout << endl << "made it 1" << endl; //doldb 
 
     while(time+dt <= domn->pram->tEnd) {
-     //   cout << endl << "made it a" << endl; //doldb 
         domn->mimx->advanceOdt(time, time+dt, iLevel_p);       //--- ADVANCE to sampled EE ---
-      //  cout << endl << "made it b" << endl; //doldb 
         selectAndSwapTwoSubtrees(iLevel, QS, RS, nPs);         //--- IMPLEMENT  sampled EE ---
 
         if(++iEE % 1000 == 0)
@@ -238,112 +234,6 @@ void solver::calculateSolution() {
     *domn->io->ostrm << endl;
     domn->io->writeDataFile("hips_final.dat", 0.0);
 
-
-
-
-
-    //-------------------------------------------------------------------------
-
-    double tLastDA         = 0.0;            ///< time of last diffusive mesh adaption
-    int    cLastDA         = 0;              ///< for adaption
-    bool   LeddyAccepted   = false;
-
-    stringstream ss1;
-    string       s1;
-
-    time     = domn->pram->trst;    // 0.0 unless you are restarting
-    t0       = domn->pram->trst;    // 0.0 unless you are restarting
-
-    PaSum    = 0.0;
-    nPaSum   = 0;
-    neddies  = 0;
-    PaSumC   = 0.0;
-    nPaSumC  = 0;
-
-    iEtrials = 0;
-
-    //-------------------------------------------------------------------------
-
-    computeDtSmean();
-    computeDtCUmax();
-
-
-    domn->io->writeDataFile("odt_init.dat", time);
-
-
-
-    domn->io->writeDataFile("odt_init_adpt.dat", time);
-
-    domn->io->outputHeader();
-
-    //-------------------------------------------------------------------------
-
-    while(time <= domn->pram->tEnd) {
-
-        diffusionCatchUpIfNeeded();
-
-
-        computeDtCUmax();
-
-        if(domn->pram->Llem)
-            LeddyAccepted = sampleAndImplementLEMeddy();
-        else
-            LeddyAccepted = sampleEddyAndImplementIfAccepted();  // ODT may reduce dtSmean; sets Pa
-
-        iEtrials++;
-
-        //----------------------
-
-        if(LeddyAccepted) {
-
-            if(++neddies % (domn->pram->modDisp*50) == 0)
-                domn->io->outputHeader();
-            if(neddies   % domn->pram->modDisp == 0)
-                domn->io->outputProgress();
-
-            //if (neddies % domn->pram->modDump == 0) {
-            //    ss1.clear();  ss1 << setfill('0') << setw(4) << neddies; ss1 >> s1;
-            //    domn->io->writeDataFile("odt_"+s1+"_eddy.dat", time);
-            //}
-
-            
-
-            //if (neddies % domn->pram->modDump == 0) {
-            //    ss1.clear();  ss1 << setfill('0') << setw(4) << neddies; ss1 >> s1;
-            //    domn->io->writeDataFile("odt_"+s1+"_adptEd.dat", time);
-            //}
-
-            diffusionCatchUpIfNeeded(true);
-
-            //if (neddies % domn->pram->modDump == 0) {
-            //    ss1.clear();  ss1 << setfill('0') << setw(4) << neddies; ss1 >> s1;
-            //    domn->io->writeDataFile("odt_"+s1+"_diffuse.dat", time);
-            //}
-
-
-
-            if (neddies % domn->pram->modDump == 0) {
-                ss1.clear();  ss1 << setfill('0') << setw(4) << neddies; ss1 >> s1;
-                domn->io->writeDataFile("odt_"+s1+"_adptDif.dat", time);
-            }
-
-        }
-
-        //----------------------
-
-        time += sampleDt();             // advance the time
-
-        raiseDtSmean();                 // may reset PaSum, nPaSum, dtSmean
-    }
-
-    time = domn->pram->tEnd;
-    if(t0 < time)
-        diffusionCatchUpIfNeeded(true);
-
-    //-------------------------------------------------------------------------
-
-
-    domn->io->writeDataFile("odt_end.dat", time);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

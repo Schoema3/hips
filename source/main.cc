@@ -1,22 +1,17 @@
 
 #include "domain.h"
 #include "streams.h"
-
 #include "param.h"
 #include "micromixer.h"
-
 #include "processor.h"
 #include "solver.h"
-
 #include "randomGenerator.h"
-
 #ifdef DOCANTERA
 #include "cantera/thermo/IdealGasPhase.h"
 #include "cantera/transport.h"
 #else
 #include "cantera_shell_functions.h"
 #endif
-
 #include <iostream>
 #include <string>
 #include <ctime>
@@ -49,7 +44,7 @@ int main(int argc, char*argv[]) {
 
     inputoutput   io(caseName, nShiftFileNumbers);
     param         pram(&io);
- streams       strm;
+    streams       strm;
     IdealGasPhase gas("../input/gas_mechanisms/"+pram.chemMechFile);
     Transport    *tran = newTransportMgr("Mix", &gas);
    
@@ -58,17 +53,7 @@ int main(int argc, char*argv[]) {
 
 
     solv = new solver();
-
-
- mimx = new micromixer();
-//   if(pram.LisHips) {
-        //solv = new solver_hips();
-//        mimx = new micromixer_hips();
-//    }
-  // else  {
-  //       //      mimx = new micromixer();
-  //  }
-
+    mimx = new micromixer();
     domain domn(NULL,  &pram);
 
   
@@ -91,14 +76,6 @@ int main(int argc, char*argv[]) {
     //-------------------
 
     domn.solv->calculateSolution();
-
-    //domn.io->outputProperties("../data/init.dat", 0.0); //doldb
-    //domn.mimx->advanceOdt(0.0, domn.pram->tEnd);        //doldb
-
-    //-------------------
-
-    //delete mimx;
-    //delete solv;
 
     mytimeEnd = time(0);
     *io.ostrm << endl << "#################################################################";
