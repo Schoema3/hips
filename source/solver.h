@@ -30,20 +30,6 @@ class solver {
         domain         *domn;          ///< pointer to domain object
 
         double         time;           ///< odt time (during sampling)
-        double         t0;             ///< time of last eddy event; diffusion left off here.
-        double         dtSmean;        ///< initial mean eddy sample time
-        double         dtCUmax;        ///< max time before catch up diff/eddy
-
-        bool           LeddyAccepted;  ///< flag for accepted eddy
-        int            iEtrials;       ///< number of eddy trials
-
-        double         PaSum;          ///< sum of Pa of eddies
-        int            nPaSum;         ///< number going into PaSum
-        int            neddies;        ///< number of eddies accepted
-        double         PaSumC;         ///< sum of Pa of eddies
-        int            nPaSumC;        ///< number going into PaSum
-
-        //---------- for hips interface (inherited)
 
         double         tMix;           ///< parcel mixing timescale
         vector<int>    pLoc;           ///< parcel index array for fast implementation of swaps
@@ -59,25 +45,11 @@ class solver {
 
     public:
 
- virtual void init(domain *p_domn);
+        virtual void init(domain *p_domn);
         virtual ~solver();    //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
         virtual void calculateSolution();
 
     private:
-
-        bool   sampleEddyAndImplementIfAccepted();
-        bool   sampleAndImplementLEMeddy();
-        void   computeDtSmean();
-        void   computeDtCUmax();
-        double sampleDt();
-        void   diffusionCatchUpIfNeeded(bool Ldoit=false);
-        void   raiseDtSmean();
-        void   lowerDtSmean();
-        bool   testLES_elapsedTime(const double time, const double tauEddy);
-        bool   testLES_fracDomain( const double eSize);
-        bool   testLES_integralLength(const double time, const double eSize);
-        bool   testLES_thirds();
-
 //-----------------------------------------------------------------------------------
         vector<double> levelRates;     ///< list of eddy event rates at each level
         vector<pair<double,int> > eTL; ///< list of eddy times and levels
@@ -90,8 +62,7 @@ class solver {
         void reset_rates_for_Sc(const vector<double> &levelTaus);
         void sample_hips_eddy(double &dt, double &iLevel);
 //---------------------------------------------------------------------------------------
-    protected:
-};
+ };
 
 
 ////////////////////////////////////////////////////////////////////////////////

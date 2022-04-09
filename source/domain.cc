@@ -1,20 +1,13 @@
 
 #include "domain.h"
-
 #include "dv.h"
-
-
-
 #include "dv_rho.h"
 #include "dv_dvisc.h"
-
 #include "domaincase_hips.h"
 #include "domaincase_hips_comb.h"
 #include "domaincase_hips_simpleRxn.h"
 #include <cmath>
 #include <iomanip>
-
-
 #include "processor.h"
 extern processor proc;
 /////////////////////////////////////////////////////////////////////

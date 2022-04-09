@@ -113,11 +113,11 @@ void micromixer::advanceOdt(const double p_tstart, const double p_tend, const in
                 continue;
             if(iLevel == domn->v[k]->i_plus-1 &&                                       // mix scalar across level i_minus
                domn->rand->getRand() <= domn->v[k]->i_plus-domn->v[k]->i_batchelor)    // with probability i_plus - i_batchelor
-               // for(int iTree=0; iTree<(1<<iLevel); iTree++) 
+                
                     mixAcrossLevelTree(k, iLevel,domn->solv-> iTree);  
             else if(iLevel >= domn->v[k]->i_plus ){                                    // scalars at or below i_plus are fully mixed
-               // for(int iTree=0; iTree<(1<<iLevel); iTree++)                           // note: the >= could be more efficient as == if 
-                    mixAcrossLevelTree(k, iLevel,domn->solv-> iTree);                              //    the initial condition has uniform mixing below Batchelor
+               
+                mixAcrossLevelTree(k, iLevel,domn->solv-> iTree);                              //    the initial condition has uniform mixing below Batchelor
             }
         }
     }
@@ -244,13 +244,6 @@ void micromixer::advanceOdtSingleStep_SemiImplicit() {
     if(domn->pram->Lsolver!="SEMI-IMPLICIT")
         return;
 
-   // setGridDxcDx();
-   // setGf();
-    domn->domc->setCaseSpecificVars();
-    //set_oldrho_or_rhov();
-    if(domn->pram->Lspatial) transform(oldrho_or_rhov.begin(), oldrho_or_rhov.end(), domn->uvel->d.begin(), oldrho_or_rhov.begin(), multiplies<double>());
-    //if(domn->pram->LdoDL) do_DL("set DL_1");
-
     //--------------- Set the explicit (mixing) terms
 
     for(int k=0; k<domn->v.size(); k++)
@@ -282,9 +275,9 @@ void micromixer::advanceOdtSingleStep_StrangSplit() {
 
     //--------------- First step: phi_1 = phi_0 + 0.5*dt*D(phi_0)
 
-    domn->domc->setCaseSpecificVars();
  
-    if(domn->pram->Lspatial) transform(oldrho_or_rhov.begin(), oldrho_or_rhov.end(), domn->uvel->d.begin(), oldrho_or_rhov.begin(), multiplies<double>());
+ 
+  
 
     for(int k=0; k<domn->v.size(); k++)
         if(domn->v.at(k)->L_transported)
@@ -295,13 +288,6 @@ void micromixer::advanceOdtSingleStep_StrangSplit() {
             for(int i=0; i < domn->ngrd; i++)
                 domn->v.at(k)->d.at(i) = domn->v.at(k)->d.at(i) + 0.5*dt*domn->v.at(k)->rhsMix.at(i);
 
- 
-
-  
-
-    domn->domc->setCaseSpecificVars();
-
-    if(domn->pram->Lspatial) transform(oldrho_or_rhov.begin(), oldrho_or_rhov.end(), domn->uvel->d.begin(), oldrho_or_rhov.begin(), multiplies<double>());
 
     domn->v[0]->resetSourceFlags();             // sets L_source_done = false for all transported vars
     for(int k=0; k<domn->v.size(); k++)
@@ -311,11 +297,9 @@ void micromixer::advanceOdtSingleStep_StrangSplit() {
     for(int i=0; i<domn->ngrd; i++)
         cvode->integrateCell(i, dt);
 
- 
-    domn->domc->setCaseSpecificVars();
 
-    if(domn->pram->Lspatial) transform(oldrho_or_rhov.begin(), oldrho_or_rhov.end(), domn->uvel->d.begin(), oldrho_or_rhov.begin(), multiplies<double>());
 
+  
     for(int k=0; k<domn->v.size(); k++)
         if(domn->v.at(k)->L_transported)
             domn->v.at(k)->getRhsMix(gf, dxc);
