@@ -12,7 +12,7 @@ include make.$(MACH)
 
 SRCDIR       = ../source/
 CVODE_SRCDIR = $(SRCDIR)cvode/
-PROG         = ../run/sec.x
+PROG         = ../run/hips-run
 
 ####################   COMPILATION   ##########################################
 
@@ -208,7 +208,7 @@ $(PROG) : $(OBJS) $(CVOBJS)
 
 clean :
 	rm -f $(OBJS) $(CVOBJS) ./*.mod ./.depend
-	rm -f ../run/sec.x
+	rm -f ../run/hips-run
 	rm -f ../run/*.log ../run/*.xml
 	rm -rf ../doc/doxygen/html/*
 	rm -f ../source/user_chemical_mechanisms/*.o

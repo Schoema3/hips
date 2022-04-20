@@ -62,14 +62,15 @@ Note, there is a video that goes through the installation, basic layout, and run
 
 @section layout Directory structure
 
-This ODT code is divided into 6 main directories:
-- \c doc/      - Documentation of the code.  The directory doc/doxygen has doxygen output.
-- \c build/    - Makefiles related to building the code
-- \c source/   - All source code for the ODT program
-- \c input/    - The input files for the code (see \ref inputfile "Input File" section below)
-- \c run/      - The executable
-- \c data/     - All data/post/runtime/input files produced by the ODT code
-- \c post/     - Post processing code.
+This HiPS code is divided into 8 main directories:
+- \c doc/         - Documentation of the code.  The directory doc/doxygen has doxygen output.
+- \c cmake_build/ - CMakefiles related to building the code.
+- \c build_make/  - Build make files also for buuilding the code.
+- \c source/      - All source code for the HiPS program
+- \c input/       - The input files for the code (see \ref inputfile "Input File" section below)
+- \c run/         - The executable
+- \c data/        - All data/post/runtime/input files produced by the HiPS code
+- \c post/        - Post processing code.
 
 <hr />
 
@@ -80,7 +81,7 @@ This ODT code is divided into 6 main directories:
 
 - To download the code, browse to the location you want to install the code and
   type <br>```git clone
-  https://github.com/BYUignite/SEC.git```
+  https://github.com/BYUignite/hips.git```
 
 <hr />
 
@@ -89,7 +90,7 @@ This ODT code is divided into 6 main directories:
 The code is written in c++. It has been built and
 run on many Mac and Linux machines including clusters.
 - Input files are written in a YAML format, so you need a YAML library. This is
-  included with the ODT code. You will need to have cmake installed. Go to the
+  included with the HiPS code. You will need to have cmake installed. Go to the
   build directory and type the following at the terminal:<br>```./build_yaml.sh```
 
 - The code requires a Cantera installation. Instructions for installation can
@@ -99,7 +100,7 @@ run on many Mac and Linux machines including clusters.
   [here](https://github.com/Cantera/cantera). Required software and
   installation instructions are listed on the linked pages.
 
-- ODT is built using a Makefile in the build directory. There are also files
+- HiPS is built using a Makefile in the build directory. There are also files
   like make.MYMACH where MYMACH is one of MAC, FSL, SPARK, etc. It is intended
   that the Makefile be generic to all machines, and machine-specific options be
   specified in the desired make.MYMACH file. Create and edit your own
@@ -140,18 +141,18 @@ run on many Mac and Linux machines including clusters.
 
 @section inputs Input files
 
-- All input files are in the input directory. Specific ODT cases have
+- All input files are in the input directory. Specific HiPS cases have
   individual subdirectories. For example ```input/channelFlow/```.
 - The three main input files are:
     - ```input.yaml```
         - This is a [standard yaml](https://en.wikipedia.org/wiki/YAML) file.
         - Yaml easily allows inputting of array quantities. The dumpTimes
           specification is an example.
-        - All ODT case parameters go in this file. See code odtparam.h and
-          odtparam.cc for parameters that can be set.
+        - All HiPS case parameters go in this file. See code param.h and
+          param.cc for parameters that can be set.
         - Most parameters have default values, and so are optional. See
-          odtparam.cc for the default parameters.
-        - Parameters used to specify a given ODT case, such as geometry
+          param.cc for the default parameters.
+        - Parameters used to specify a given HiPS case, such as geometry
           parameters should also go in this file. These parameters would
           normally be read from the specific domaincase_yourcase.cc file.
     - ```cantera_mechanism.xml```
@@ -165,15 +166,13 @@ run on many Mac and Linux machines including clusters.
 - The following is a brief description of the input file format and specific
   parameters of interest beyond the description given in the input file.
     - The ```params:``` section lists parameters that are only in the
-      odtparams.h file.
+      params.h file.
         - ```seed``` Positive values are useful for reproducibility. A negative
           value is basically a flag indicating to randomize the seed. This is
           useful for parallel runs where each realization should be unique.
           However, the default behavior is to add the processor id (MPI) to the
           positive seed, so that parallel realizations are both reproducible
-          and unique for positive seeds.
-        - ```tEnd``` is the end time for temporal flows, or the ending spatial
-          location for spatial flows.
+          and unique for positive seeds
         - ```rho0, kvisc0``` are average density and kinematic viscosity of the
           fluid. For flows without variable transport properties as specified
           by the user (usually using Cantera), these values are used. (Channel
@@ -247,7 +246,7 @@ run on many Mac and Linux machines including clusters.
 
 @section setup Case setup
 
-- Specific ODT cases (e.g., channelFlow) have their own input directories
+- Specific HiPS cases (e.g., channelFlow) have their own input directories
   containing input files as specified above.
     - Each case will correspond to one of the types indicated by the
       ```probType``` variable in the input file.
