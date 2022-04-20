@@ -28,7 +28,7 @@ runCase () {
 
     echo "*** RUNNING ***"
     echo "Output is being written to ../$caseName/runtime/runtime_* and ../$caseName/data"
-    ./sec.x $caseName 0          # 0 is the shift (realization # here)
+    ./hips-run $caseName 0          # 0 is the shift (realization # here)
 
 }
 

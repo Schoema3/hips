@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD 11)             # Set C++ language standard
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/run")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "../run")
 
 #------------ Executable targets --------------
 

@@ -34,7 +34,7 @@ while [ $it -lt $nRlz ] ; do
     echo ""
     echo "-------------------- REALIZATION  $it -----------------------"
     echo ""
-    ./sec.x $caseName $it
+    ./hips_run $caseName $it
     it=$(($it + 1))
 done
 
