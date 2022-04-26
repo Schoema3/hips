@@ -1,7 +1,7 @@
 using namespace std;
 /**
  * @file solver.h
- * Header file for class solver
+ * Header file for class \ref solver
  */
 
 #pragma once

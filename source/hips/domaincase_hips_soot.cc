@@ -1,6 +1,6 @@
 /**
  * @file domaincase_hips_soot.cc
- * Header file for class domaincase_hips_soot
+ * Source file for class domaincase_hips_soot
  */
 
 #include "domaincase_hips_soot.h"

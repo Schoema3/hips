@@ -1,6 +1,6 @@
 /**
  * @file dv_mixf.cc
- * Header file for class dv_mixf
+ * Source file for class dv_mixf
  */
 
 #include "dv_mixf_hips.h"

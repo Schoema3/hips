@@ -1,6 +1,6 @@
 /**
  * @file dv_chi.cc
- * Header file for class dv_chi
+ * Source file for class dv_chi
  */
 
 #include "dv_chi_hips.h"

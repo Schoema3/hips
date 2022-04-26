@@ -1,3 +1,7 @@
+/**
+ * @file solver.cc
+ * @brief Source file for class \ref solver
+ */
 
 #include "solver.h"
 

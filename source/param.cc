@@ -1,3 +1,8 @@
+/**
+ * @file param.cc
+ * @brief Source file for class \ref param
+ */
+
 #include "param.h"
 #include "domain.h"
 

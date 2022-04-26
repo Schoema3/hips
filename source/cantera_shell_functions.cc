@@ -1,6 +1,6 @@
 /**
  * @file cantera_shell_functions.cc
- * Source file for class cantera_shell_functions
+ * Source file for class \ref cantera_shell_functions
  */
 
 #ifndef DOCANTERA

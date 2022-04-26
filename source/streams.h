@@ -1,6 +1,6 @@
 /**
  * @file streams.h
- * Header file for classes streams
+ * Header file for classes \ref streams
  */
 
 #pragma once

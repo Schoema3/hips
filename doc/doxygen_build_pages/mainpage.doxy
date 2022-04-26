@@ -34,13 +34,9 @@ An example of an inline equation is \f$ ax^2 + bx + c = 0 \f$, and an example of
 
 @ref code_structure
 
-@ref style
+@ref style_guide
 
-@ref odt_theory
-
-@ref flmlt
-
-@ref hips
+@ref hips_theory
 
 <!--
 @ref example_anchor
@@ -76,8 +72,7 @@ This HiPS code is divided into 8 main directories:
 
 @section obtain Get the code
 
-- The code is hosted at [Bitbucket](https://bitbucket.org). Code access can be
-  requested from [odt@byu.edu](mailto:odt@byu.edu).
+- The code is hosted at [GitHub](https://github.com). The code is free for use.
 
 - To download the code, browse to the location you want to install the code and
   type <br>```git clone
@@ -87,14 +82,14 @@ This HiPS code is divided into 8 main directories:
 
 @section build Build the code
 
-The code is written in c++. It has been built and
+The code is written in C++. It has been built and
 run on many Mac and Linux machines including clusters.
 - Input files are written in a YAML format, so you need a YAML library. This is
   included with the HiPS code. You will need to have cmake installed. Go to the
   build directory and type the following at the terminal:<br>```./build_yaml.sh```
 
 - The code requires a Cantera installation. Instructions for installation can
-  be found [here](http://www.cantera.org/docs/sphinx/html/install.html). On
+  be found [here](https://cantera.org/install/index.html). On
   linux machines, especially clusters, it may be most convenient to build
   cantera from the source, available
   [here](https://github.com/Cantera/cantera). Required software and
@@ -134,7 +129,7 @@ run on many Mac and Linux machines including clusters.
         - Values are either ```YES``` or ```NO```
 
 
-- The executable is called sec.x and is placed in the run directory.
+- The executable is called hips-run and is placed in the run directory.
 
 <hr />
 
@@ -266,7 +261,7 @@ run on many Mac and Linux machines including clusters.
 
 @section running Running the code
 
-- The exectuable is called ```sec.x``` and is located in the ```run/```
+- The exectuable is called ```hips-run``` and is located in the ```run/```
   directory, where the cases are run from.
 - The code is run from run scripts for doing single and multiple realization
   runs.
@@ -276,7 +271,7 @@ run on many Mac and Linux machines including clusters.
         - This will create ```../data/myCase/input,
           ../data/myCase/runtime, ../data/myCase/data```, etc.
         - Files in ```../input/channelFlow/``` will be copied to
-          ```../data/channelFlow/input/``` and the ODT code will read input
+          ```../data/channelFlow/input/``` and the HiPS code will read input
           files from here.
     - ```./runSingleRlz.sh -r will rebuild the code, which is useful for debugging.```
     - Note, ```../data/myCase``` is first deleted if present.
@@ -288,7 +283,7 @@ run on many Mac and Linux machines including clusters.
     - The file structure is the same as for single realization runs.
     - The code needs to be built with the PARALLEL=YES flag.
 - Alternatively, non-mpi runs can be done with PARALLEL=NO, and using the slrmJob_array.sh script.
-    - This script simply calls ./sec.x caseName rlz#, where caseName is the name of the case (myCase),
+    - This script simply calls ./hips-run caseName rlz#, where caseName is the name of the case (myCase),
       and rlz# is the number of the realization, like 0, 1, 2, etc.
     - A non-slurm script could be easily created.
 
@@ -309,7 +304,7 @@ run on many Mac and Linux machines including clusters.
 
 @section code_structure General code structure
 
-The ODT code is structured with a collection of C++ classes.
+The HiPS code is structured with a collection of C++ classes.
 - Nearly all variables are public. This avoids excessive get and set functions
   and allows easy access to class members. (We are responsible adults here...)
 
@@ -347,12 +342,10 @@ The ODT code is structured with a collection of C++ classes.
           children as needed.
     - The child classes specialize functions and define variables that are only needed by themselves. For example, the ```dv_ygas``` class has ```nspc``` that holds the number of gas species (effectively the number of ```dv_ygas```), along with a ```kMe``` index so that each ```dv_ygas``` object knows its place. This is useful for allowing the first ```dv_ygas``` object to set properties for all the others to avoid redundancy. For example, normally all reaction rates for species are computed at once, but that needs special treatment when each species is its own domain variable and computes its own source term.
 - The ```solver``` class organizes the eddy sampling and diffusive advancement progression.
-    - The ```eddy``` class contains functions for performing triplet maps, eddy time scales, sampling eddy locations and sizes, and applying velocity kernels.
     - The ```micromixer``` class contains functions for performing the diffusive advancement. This includes the time (for temporal flows) or space (for spatial flows) integration of the governing PDEs, which is done using the method of domains with a finite volume scheme on an adaptive mesh. The micromixer calls the rate functions for all domain variable source and transport terms and performs explicit or semi-implicit time (or space) integration.
-    - the ```meshManager``` class performs mesh adaption, as described in the theory paper below.
 - Other supporting classes include the ```streams``` class for defining mixing streams, and performing mixture fraction calculations, the ```radiation``` class, which contributes to the enthalpy source term for combustion simulations, the ```randomGenerator``` class, the ```processor``` class for handling parallel MPI details, and the ```inputoutput``` class for I/O.
-- The ```odtparam``` class holds most of the ODT parameters that are read from input files and used throughout the code.
-- ODT case files were mentioned previously. These are in the ```domaincases/``` directory, for example ```domaincase_channel```. They inherit from a parent ```domaincase```.
+- The ```param``` class holds most of the HiPS parameters that are read from input files and used throughout the code.
+- HiPS case files were mentioned previously. These are in the ```domaincases/``` directory, for example ```domaincase_channel```. They inherit from a parent ```domaincase```.
     - These cases are used to specify the domain variables needed for a given case. Some are fairly common: ```pos, posf, rho, dvisc, uvel, vvel, wvel```, while others are more specific, such as ```chi, mixf, temp, hr```.
     - The parent class holds only a pointer to the ```domn``` object, but
       defines functions like those that set the gas state, or set case specific
@@ -372,10 +365,10 @@ The ODT code is structured with a collection of C++ classes.
 
 <hr />
 
-@section style Style guide
+@section style_guide Style guide
 
 When editing code, the following guide should be followed.
-- Use the existing code as your guide. Always ask yourself, "is this pretty, can I make it better, is there another way to organize this?""
+- Use the existing code as your guide. Always ask yourself, "is this pretty, can I make it better, is there another way to organize this?"
 - Use "camelCase" for variables and functions.
 - The pointer to the ```domn``` object is the primary communicator that allows passage of information between classes and functions. Avoid declaring global variables or passing values through function parameter lists unnecessarily.
 - Be minimally invasive to the code. Inherit from existing classes and use oaverloading. Do not clutter the code with ```if``` clauses.
@@ -399,28 +392,18 @@ When editing code, the following guide should be followed.
 - Put the initial opening curly brace of code blocks on the same line. Put the closing curly brace of code blocks on their own line.
 - Most class members are public on purpose. Lets keep it that way. Private variables can be useful for self-documenting that they are only ever needed in the given class, but we are not trying to "hide" variables in this code.
 
+
 <hr />
 
-@section odt_theory ODT Theory
+@section hips_theory HiPS Theory
 
-Documents containing information on the theory behind the ODT code.
+Documents containing information on the theory behind the HiPS code.
 - <a href="http://ignite.byu.edu/public/Lignell_2018.pdf" target="_blank">One-dimensional
      turbulence modeling for cylindrical and spherical flows: Model formulation and application</a> (pdf)
 - <a href="http://ignite.byu.edu/public/ODTmethod.pdf" target="_blank">Mesh
      adaption for efficient multiscale implemenation of One-Dimensional Turbulence</a> (pdf)
 - <a href="http://ignite.byu.edu/public/eddyEvents.pdf" target="_blank">ODT Eddy Events</a> (pdf)
 
-<hr />
-
-@section flmlt Laminar nonpremixed flamelet code
-
-The ODT code described above has also been extened to solve nonpremixed laminar flamelets in the mixture fraction coordinate. This was facilitated by the modular nature of the code and the one-dimensional domains in both cases. The code for this is in the ```/source/flmlt/``` directory. There is also a flmlt input case directory.
-
-<hr />
-
-@section hips HiPS Code
-
-The ODT code described above has also been extened to solve Heirarchical Parcel Swapping (HiPS). This was facilitated by the modular nature of the code and the one-dimensional domains in both cases. The code for this is in the ```/source/hips/``` directory. There is also a hips input case directory.
 
 */
 

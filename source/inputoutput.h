@@ -1,6 +1,6 @@
 /**
  * @file inputoutput.h
- * Header file for class inputoutput
+ * Header file for class \ref inputoutput
  */
 
 #pragma once
@@ -44,7 +44,7 @@ class inputoutput {
         YAML::Node               radParams;      ///< yaml sub node
         YAML::Node               dvParams;       ///< yaml sub node
         YAML::Node               dTimes;         ///< yaml sub node
-        YAML::Node               dumpTimesGen;  ///< yaml sub node
+        YAML::Node               dumpTimesGen;   ///< yaml sub node
         YAML::Node               bcCond;         ///< yaml sub node
         YAML::Node               scalarSc;       ///< yaml sub node: for hips
         YAML::Node               pPos;           ///< yaml sub node
@@ -63,12 +63,12 @@ class inputoutput {
 
     void outputProperties(const string fname,
                           const double time);    ///< actually write the data file
-    void dumpDomainIfNeeded();                     ///< calls outputProperties for dumpTimes
+    void dumpDomainIfNeeded();                   ///< calls outputProperties for dumpTimes
     void writeDataFile(const string fnameRaw,
                        const double time);       ///< writes the gnuplot file and calls outputProperties
     void outputHeader();                         ///< output header info during odt solution
     void outputFlmltHeader();                    ///< output header info during flmlt solution
-    void outputPremixHeader();                    ///< output header info during premix solution
+    void outputPremixHeader();                   ///< output header info during premix solution
     void outputProgress();                       ///< output data going with the header info
     void outputFlmltProgress();                  ///< output data going with the header info
 

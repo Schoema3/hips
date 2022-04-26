@@ -1,6 +1,6 @@
 /**
  * @file dv.cc
- * Header file for class dv
+ * Source file for class \ref dv
  */
 
 

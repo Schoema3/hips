@@ -1,6 +1,6 @@
 /**
  * @file dv_ygas_cold_hips.cc
- * Header file for class dv_ygas_cold_hips
+ * Source file for class dv_ygas_cold_hips
  */
 
 

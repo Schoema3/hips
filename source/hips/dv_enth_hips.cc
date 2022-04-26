@@ -1,6 +1,6 @@
 /**
  * @file dv_enth_hips.cc
- * Header file for class dv_enth_hips
+ * Source file for class dv_enth_hips
  */
 
 #include "dv_enth_hips.h"

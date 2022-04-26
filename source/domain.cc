@@ -1,3 +1,7 @@
+/**
+ * @file domain.cc
+ * Source file for class \ref domain
+ */
 
 #include "domain.h"
 #include "dv.h"

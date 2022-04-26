@@ -1,3 +1,7 @@
+/** 
+ * @file inputoutput.cc
+ * Source file for class \ref inputoutput
+ */
 
 #include "inputoutput.h"
 #include "domain.h"

@@ -1,6 +1,6 @@
 /**
  * @file dv_temp.cc
- * Header file for class dv_temp
+ * Source file for class \ref dv_temp
  */
 
 

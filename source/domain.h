@@ -1,6 +1,6 @@
 /**
  * @file domain.h
- * Header file for class domain
+ * Header file for class \ref domain
  */
 
 #pragma once

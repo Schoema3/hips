@@ -1,6 +1,6 @@
 /**
  * @file dv_dvisc.h
- * Header file for class dv_dvisc
+ * Header file for class \ref dv_dvisc
  */
 
 #pragma once

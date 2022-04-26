@@ -1,6 +1,6 @@
 /**
  * @file cvodeDriver.cc
- * Source file for class cvodeDriver
+ * Source file for class \ref cvodeDriver
  */
 
 #include <cstdlib>

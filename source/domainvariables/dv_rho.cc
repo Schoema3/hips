@@ -1,6 +1,6 @@
 /**
  * @file dv_rho.cc
- * Header file for class dv_rho
+ * Source file for class \ref dv_rho
  */
 
 

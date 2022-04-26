@@ -1,6 +1,6 @@
 /**
  * @file domaincase_hips_simpleRxn.cc
- * Header file for class domaincase_hips_simpleRxn
+ * Source file for class domaincase_hips_simpleRxn
  */
 
 #include "domaincase_hips_simpleRxn.h"

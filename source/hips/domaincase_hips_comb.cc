@@ -1,6 +1,6 @@
 /**
  * @file domaincase_hips_comb.cc
- * Header file for class domaincase_hips_comb
+ * Source file for class domaincase_hips_comb
  */
 
 #include "domaincase_hips_comb.h"

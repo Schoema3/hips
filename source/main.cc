@@ -1,3 +1,7 @@
+/**
+ * @file main.cc
+ * @brief main driver for HiPS 
+ */
 
 #include "domain.h"
 #include "streams.h"

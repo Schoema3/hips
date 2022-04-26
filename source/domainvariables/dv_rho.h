@@ -1,6 +1,6 @@
 /**
  * @file dv_rho.h
- * Header file for class dv_rho
+ * Header file for class \ref dv_rho
  */
 
 #pragma once
