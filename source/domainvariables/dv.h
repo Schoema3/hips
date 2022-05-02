@@ -15,7 +15,7 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 
 /** Class implementing base dv object.
- *  Derived dv will be u,v,w,Yi,etc.
+ *  Derived dv will be dvisc, rho, temp, etc.
  *
  *  @author David O. Lignell
  */
@@ -40,10 +40,6 @@ class dv {
         vector<double>                flux;
 
         bool                          L_source_done;          ///< flag set true when source updated: (for gas-soot sources)
-
-        //---------- for gas-soot coupling
-
-        static vector<vector<double> > gasSootSources;        ///< [nspc][ngrd] source terms for gas from soot rxns
 
         //---------- for hips interface (inherited)
 

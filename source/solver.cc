@@ -4,34 +4,29 @@
  */
 
 #include "solver.h"
-
 #include "domain.h"
 #include <cmath>     // pow, log, ceil
 #include <algorithm> // copy, sort
 #include <sstream>
 #include <string>
-#include <iomanip>   // precision///////////////////////////////////////////////////////////////////////////////
-/** solver initialization function
- *
- * @param p_domn  \input set domain pointer with.
- */
-
+#include <iomanip>   // precision
 
 ///////////////////////////////////////////////////////////////////////////////
-
-/** destructor
- */
 
 bool sortFunc(pair<double,int> &a, pair<double,int> &b){
     return a.first < b.first;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/** Initializer
+ *  @param p_domn \input pointer to domain object
+ */
 
 void solver::init(domain *p_domn) {
 
     domn    = p_domn;
 
-//------------------- Set number of parcels, and level lengthscales, timescales, and rates
+    //------------------- Set number of parcels, and level lengthscales, timescales, and rates
 
     iEta = domn->pram->nLevels - 3;
     if(domn->pram->LScHips){
@@ -68,7 +63,7 @@ void solver::init(domain *p_domn) {
                               domn->pram->C_param;
             levelRates[i]   = 1.0/levelTaus[i] * pow(2.0,i);
             cout<<"just print<"<<i<<endl;
-                    }
+        }
     }
 
     //-------------------
@@ -100,9 +95,22 @@ void solver::init(domain *p_domn) {
     if(domn->pram->LScHips && !domn->pram->LsimpleMix){
         cout << endl << "\nERROR: LScHips requires LsimpleMix\n" << endl;
         exit(0);
-    }}
+    }
+}
 
+///////////////////////////////////////////////////////////////////////////////
+
+/** destructor
+ */
 solver::~solver(){};
+
+///////////////////////////////////////////////////////////////////////////////
+/** Sets arrays s.eTimes and s.eLevels which hold the eddy event times and the corresponding tree base level.
+    First make an array of arrays for times at each level.
+    These are from a Poisson process with the given rate at each level.
+    Then collapse these into a single array.
+    Then sort these times, along with the corresponding level array.
+ */
 
 void solver::setEddyEventTimes(){
 
@@ -125,7 +133,11 @@ void solver::setEddyEventTimes(){
     sort(eTL.begin(), eTL.end(), sortFunc);
 
 }  
-
+/////////////////////////////////////////////////////////////////////////////
+/** Function samples stochastic eddy events on the hips tree
+*   @param dt     \input time to next eddy event (EE)
+*   @param iLevel \input current level of EE
+*/
 
 void solver::sample_hips_eddy(double &dt, double &iLevel) {
 
@@ -157,6 +169,54 @@ void solver::sample_hips_eddy(double &dt, double &iLevel) {
 
     return;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+/** Function performs eddy events: parcel swaps.
+    @param iLevel \input  level of the tree for the base of the swap.
+    @param Qstart \output starting index for the Q-tree.
+    @param Rstart \output starting index for the R-tree.
+    @param nPswap \output number of parcels swapped.
+    Randomly select a node on iLevel.
+    Go down two levels and select nodes 0q and 1r, where q, r are randomly 0 or 1
+    Find the starting index of the Q-tree and R-tree to swap and the number of parcels.
+    Then swap the cells.
+    For a 6 level tree: 0, 1, 2, 3, 4, 5:
+    If iLevel = 1, then suppose i=1, 0q = 00 and 1r = 11:
+    Then we are swaping 0100** with 0111** or (01|00|**) with 01|11|**)
+       or i0qs with i1rs, where i = 01; 0q = 00; 1r = 11; and s = **
+    We use bitwise shifts for easy powers of 2.
+    The swap is done by adding or subtracting a value (shift),
+        which should be equivalent to flipping the swapping the two 0q bits and 1r bits.
+                                                                                                              Level
+                                                                                                            ---------
+                                                    *                                                           0
+                                                 /     \
+                                              /           \
+                                           /                 \
+                                        /                       \
+                                     /                             \
+                                  /                                   \
+                               /                                         \
+                            /                                               \
+                           *                                                (*)  01|0000                        1
+                          / \                                               / \
+                        /     \                                           /     \
+                      /         \                                       /         \
+                    /             \                                   /             \
+                  /                 \                               /                 \
+                /                     \                           /                     \
+               *                       *                         *                       *                      2
+              / \                     / \                       / \                     / \
+            /     \                 /     \                   /     \                 /     \
+          /         \             /         \               /         \             /         \
+         *           *           *           *            [*] 00|**    *           *          [*] 11|**         3
+        / \         / \         / \         / \           / \         / \         / \         / \
+       /   \       /   \       /   \       /   \         /   \       /   \       /   \       /   \
+      *     *     *     *     *     *     *     *       *     *     *     *     *     *     *     *             4
+     / \   / \   / \   / \   / \   / \   / \   / \     / \   / \   / \   / \   / \   / \   / \   / \
+    00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15   16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31           5
+                                                      ^^^^^^^^^^^                         ^^^^^^^^^^^
+*/
 
 void solver::selectAndSwapTwoSubtrees(const int iLevel, int &Qstart, int &Rstart, int &nPswap){
 
@@ -239,17 +299,3 @@ void solver::calculateSolution() {
     domn->io->writeDataFile("hips_final.dat", 0.0);
 
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-/**Sample the eddy trial time step with mean dtSmean.
- * @return Poisson sampled timestep.
- */
-///////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-

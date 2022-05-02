@@ -41,6 +41,32 @@ void micromixer::init(domain *p_domn) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/** Mix parcels uniformly (using average) at given level
+  * Mixing at levels above the lowest enables low Sc variables.
+  * @param kVar   \input  variable index to mix (normally a transported var as determined by caller)
+  * @param iLevel \input  grandchildren of this iLevel will be mixed
+  * @param iTree  \input  at the given iLevel, mix only this subtree
+  *
+  * Example: For a 5 level tree, we have levels 0, 1, 2, 3, 4 (top to bottom).
+  *   
+  *          Let iLevel = 2, then nPmix = 2 and we are mixing pairs of parcels at the base of the tree.
+  *          iTree can be 0, 1, 2, or 3.
+  *          if iTree = 0 we will mix parcels (0,1) and (2,3) as the left subtree and right subtree:
+  *                (istart=1, iend=2) and (istart=2, iend=4)
+  *          if iTree = 1 we will mix parcels (4,5) and (6,7) with (istart=4,iend=6), (istart=6, iend=8)
+  *          if iTree = 2 we will mix parcels (8,9) and (10,11) with (istart=8,iend=10), (istart=10, iend=12)
+  *          if iTree = 3 we will mix parcels (12,13) and (14,15) with (istart=12,iend=14), (istart=14, iend=16)
+  *         
+  *          Let iLevel=1 then we will be mixing groups of four parcels.
+  *          iTree can be 0 or 1
+  *          if iTree = 0 we will mix parcels (0,1,2,3) and (4,5,6,7) with (istart=0,iend=4), (istart=4, iend=8)
+  *          if iTree = 1 we will mix parcels (8,9,10,11) and (12,13,14,15) with (istart=8,iend=12), (istart=12, iend=16)
+  *
+  * recall: 3 << 4 means 3*2^4 (or 3 = 000011 and 3<<4 = 110000 = 48), that is, we shift the bits left 4 places.
+  *          
+  * NOTE: BE CAREFUL WITH MIXING SOME SCALARS, LIKE MASS FRACTIONS; CURRENT CODE ASSUMES ALL PARCELS HAVE SAME DENSITY (mixing Yi directly)
+  */
+
 void micromixer::mixAcrossLevelTree(const int kVar, const int iLevel, const int iTree) {
 
     int istart;
@@ -98,7 +124,15 @@ void micromixer::mixAcrossLevelTree(const int kVar, const int iLevel, const int 
     }
 }
 
-//--------------------------------------------------------------------
+///////////////////////////////////////////////////////////////////////////////////////
+
+/** Advance ODT solution: diffusion and reaction
+  * @param tstart  \input start time for mixing
+  * @param tend    \input end   time for mixing
+  * @param iLevel  \input root node of the eddy (default value -1, see header file)
+  *                       in case of iLevel=-1, no simple mixing is done, only advancement
+  */
+
 void micromixer::advanceOdt(const double p_tstart, const double p_tend, const int iLevel) { // iLevel is for hips
 
  tstart = p_tstart;
@@ -158,6 +192,9 @@ void micromixer::advanceOdt(const double p_tstart, const double p_tend, const in
 
 
 ///////////////////////////////////////////////////////////////////////////////
+
+/** Force hips profile to get statistically stationary
+  */
 
 void micromixer::forceProfile() {
 

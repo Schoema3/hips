@@ -13,6 +13,7 @@
 #include <cmath>
 #include <iomanip>
 #include "processor.h"
+
 extern processor proc;
 /////////////////////////////////////////////////////////////////////
 /** Constructor
@@ -40,13 +41,11 @@ void domain::init(inputoutput     *p_io,
 
     //----------------------
 
-    io     = p_io;
- 
+    io     = p_io; 
     gas    = p_gas;
     tran   = p_tran;
     strm   = p_strm;
     mimx   = p_mimx;
-
     solv   = p_solv;
     rand   = p_rand;
  

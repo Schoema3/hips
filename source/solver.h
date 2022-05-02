@@ -28,13 +28,10 @@ class solver {
     public:
 
         domain         *domn;          ///< pointer to domain object
-
         double         time;           ///< odt time (during sampling)
-
         double         tMix;           ///< parcel mixing timescale
         vector<int>    pLoc;           ///< parcel index array for fast implementation of swaps
         int iSc;                       ///< for Sc < 1, tree level index at/below which all parcels are mixed
-
         int Nm1;                       ///< nLevels - 1
         int Nm2;                       ///< nLevels - 2
         int Nm3;                       ///< nLevels - 3

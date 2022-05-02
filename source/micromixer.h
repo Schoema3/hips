@@ -58,13 +58,12 @@ class micromixer {
   
 
     protected:
-       // virtual bool adaptGridIfNeeded();   ///< expansion or contraction --> adapt
         virtual void setNominalStepSize();   ///< sets a nominal dt for the whole period
-
-   
         void setStepSize();                  ///< set a local dt for interruptions (dump or tend)
-       // void do_DL(string doWhat);
 
+        //void do_DL(string doWhat);
+        //virtual bool adaptGridIfNeeded();   ///< expansion or contraction --> adapt
+        
         void advanceOdtSingleStep_Explicit();
         void advanceOdtSingleStep_SemiImplicit();
         void advanceOdtSingleStep_StrangSplit();

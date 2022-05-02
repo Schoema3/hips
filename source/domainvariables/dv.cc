@@ -7,8 +7,6 @@
 #include "dv.h"
 #include "domain.h"
 
-vector<vector<double> > dv::gasSootSources;    // define static member
-
 ////////////////////////////////////////////////////////////////////////////////
 /*! dv constructor function
  *

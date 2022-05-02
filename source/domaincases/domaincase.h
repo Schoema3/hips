@@ -32,7 +32,6 @@ class domaincase {
     //////////////////// MEMBER FUNCTIONS /////////////////
 
         virtual void setGasStateAtPt(const int &ipt){}
-      //  virtual void setCaseSpecificVars(){}
         virtual void setCaseSpecificVars_cvode(const int &ipt){}
         virtual void enforceMassFractions();
         virtual void enforceSootMom();

@@ -12,8 +12,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 /*! dv_temp  constructor function
  *
- * @param p_domn  \input set domain pointer with.
- * @param p_phi   \input set vector pointer with.
+ * @param line     \input set domain pointer with.
+ * @param s        \input set var_name with.
+ * @param Lt       \input set L_transported with.
+ * @param Lo       \input set L_output with.
  */
 
 dv_temp::dv_temp(domain  *line,

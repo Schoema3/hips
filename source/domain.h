@@ -52,10 +52,6 @@ class domain {
         dv*                     posf;      ///< access as: posf->d[i], or posf->var_name, etc.
         dv*                     rho;
         dv*                     dvisc;
-       // dv*                     uvel;
-       // dv*                     vvel;
-      //  dv*                     wvel;
-      //  dv*                     sdiff;
         dv*                     sca;
         dv*                     phase;
         dv*                     enth;
@@ -63,7 +59,6 @@ class domain {
         dv*                     mixf;
         dv*                     chi;
         dv*                     hr;
-        //dv*                     aDL;
         vector<dv*>::iterator   ysp;       ///< access as: ysp=v.begin(), (*ysp)->d[i] or (*(ysp+k))->d[i], or ysp[k]->d[i].
         vector<dv*>::iterator   svar;      ///< iterator for increment to go through moments (*(ysp+k))->d[i];)
         vector<dv*>::iterator   eta;       ///< iterator for increment to go through species etc. (*(ysp+k))->d[i];)
@@ -79,7 +74,7 @@ class domain {
         domain                  *eddl;       ///< pointer to eddyline object
         solver                  *solv;       ///< pointer to solver object
        
-       randomGenerator         *rand;
+        randomGenerator         *rand;
 
         int                     nTrans;      ///< number of transported variables on the domain.
 
@@ -90,7 +85,6 @@ class domain {
 
             
        double Ldomain();
-
 
 
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////

@@ -95,22 +95,25 @@ run on many Mac and Linux machines including clusters.
   [here](https://github.com/Cantera/cantera). Required software and
   installation instructions are listed on the linked pages.
 
-- HiPS is built using a Makefile in the build directory. There are also files
-  like make.MYMACH where MYMACH is one of MAC, FSL, SPARK, etc. It is intended
-  that the Makefile be generic to all machines, and machine-specific options be
-  specified in the desired make.MYMACH file. Create and edit your own
-  make.MYMACH file to suite your needs. Specifically, compiler commands,
-  options, external libraries, and preprocessor directives are set in the
-  make.MYMACH file. The paths to your Cantera include and library files are
+- HiPS is built using CMake in the ```cmake_build``` directory. It is intended
+  that the CMake file be generic to all machines. Create and edit your own CMake files to suite your needs. Specifically, compiler commands,
+  options, external libraries, and preprocessor directives are set in the CMakeLists.txt files. The paths to your Cantera include and library files are
   also specified.
 
-- To build the code, at the terminal, type:<br>```make MACH=MYMACH``` <br>where
-  MYMACH matches the extension of the file make.MYMACH.
-    - The make process can be sped up by including the ```-j8``` flag (run in
-      parallel on 8 cores):<br>```make -j8 MACH=MYMACH```
-    - Other commands include the following:<br>```make MACH=MYMACH
-      depend```<br>```make MACH=MYMACH documentation```<br>```make MACH=MYMACH
-      all```<br>```make MACH=MYMACH clean```
+- To build the code, at the terminal within the ```cmake_build``` directory:
+    - Step 1: Run CMake<br>
+      Run: ```cmake -C user_config ../source``` <br>
+      (where ```user_config``` has been modified to your needs.)
+    - Step 2: Build the code<br> 
+      Run: ```make``` <br>
+      The make process can be sped up by including the ```-j8``` flag (run in parallel on 8 cores):<br>
+      ```make -j8```
+    - Step 3 (OPTIONAL): Build the documentation <br>
+      Run: ```make doxygen```
+    - Step 4: Clean the build <br>
+      Run: ```make clean```<br>
+      OR (for a more thorough clean)<br>
+      Run: ```./clean_this_dir.sh```
 
 - The following preprocessor flags are used:
     - ```CHEMISTRY```
@@ -369,7 +372,6 @@ The HiPS code is structured with a collection of C++ classes.
 
 When editing code, the following guide should be followed.
 - Use the existing code as your guide. Always ask yourself, "is this pretty, can I make it better, is there another way to organize this?"
-- Use "camelCase" for variables and functions.
 - The pointer to the ```domn``` object is the primary communicator that allows passage of information between classes and functions. Avoid declaring global variables or passing values through function parameter lists unnecessarily.
 - Be minimally invasive to the code. Inherit from existing classes and use oaverloading. Do not clutter the code with ```if``` clauses.
     - The flamelet code (described below) is an example of inheriting off key classes.

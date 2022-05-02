@@ -31,6 +31,8 @@ const double GasConstant = 8314.46261815324;
  *  @author David O. Lignell
  */
 
+//-------------------------------------------------------------------------------
+
 class IdealGasPhase {
 
     public :
@@ -71,17 +73,7 @@ class IdealGasPhase {
 //-------------------------------------------------------------------------------
 
 
-/** Cantera shell functions when not compiling with Cantera.  
- *  When cantera is not needed, compile with these
- *  routines that have the same headers as those of Cantera.  Add new routines
- *  when new cantera functions are called.  This also provides a template for
- *  implementing user-defined functions instead of calling Cantera.  However,
- *  the routines are not meant to be called, and return errors if they are.
- *  
- *  @author David O. Lignell
- */
-
-class Transport {
+ class Transport {
 
     public :
 
