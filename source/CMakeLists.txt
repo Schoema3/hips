@@ -1,6 +1,6 @@
 #################### PREAMBLE #####################
 
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.12)
 
 project(HiPS VERSION 1.0.0
         LANGUAGES CXX C)
@@ -52,7 +52,7 @@ find_library(YAML yaml-cpp          HINTS ${CMAKE_CURRENT_SOURCE_DIR}/yaml/lib)
 find_path(YAML_INCLUDE_DIR yaml-cpp HINTS ${CMAKE_CURRENT_SOURCE_DIR}/yaml/include)
 if(NOT YAML OR NOT YAML_INCLUDE_DIR)
     message("\n*************************************************")
-    message("Yaml not found, building it in sec/source/yaml")
+    message("Yaml not found, building it in hips/source/yaml")
     message("*************************************************\n")
     find_package(Git)
     if(GIT_FOUND)
@@ -96,14 +96,6 @@ endif()
 
 #-------
 
-
-#
-#find_library(LAPACK lapack)
-#target_link_libraries(sec.x ${LAPACK})
-#
-#find_library(BLAS blas)
-#target_link_libraries(sec.x ${BLAS})
-
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     target_link_libraries(hips-run "-framework Accelerate")
 endif()
@@ -131,7 +123,6 @@ target_sources(hips-run PRIVATE main.cc
 
 add_subdirectory(domainvariables)
 add_subdirectory(cvode)
-add_subdirectory(hips)
 add_subdirectory(domaincases)
 add_subdirectory(user_chemical_mechanisms)
 #add_subdirectory(yaml)
