@@ -133,7 +133,7 @@ void micromixer::mixAcrossLevelTree(const int kVar, const int iLevel, const int 
   *                       in case of iLevel=-1, no simple mixing is done, only advancement
   */
 
-void micromixer::advanceOdt(const double p_tstart, const double p_tend, const int iLevel) { // iLevel is for hips
+void micromixer::advanceHips(const double p_tstart, const double p_tend, const int iLevel) {
 
  tstart = p_tstart;
     tend   = p_tend;
@@ -178,11 +178,11 @@ void micromixer::advanceOdt(const double p_tstart, const double p_tend, const in
 
         setStepSize();
         if(domn->pram->Lsolver=="EXPLICIT")
-            advanceOdtSingleStep_Explicit();
+            advanceHipsSingleStep_Explicit();
         else if(domn->pram->Lsolver=="SEMI-IMPLICIT")
-            advanceOdtSingleStep_SemiImplicit();
+            advanceHipsSingleStep_SemiImplicit();
         else if(domn->pram->Lsolver=="STRANG")
-            advanceOdtSingleStep_StrangSplit();
+            advanceHipsSingleStep_StrangSplit();
 
         domn->io->dumpDomainIfNeeded();
 
@@ -250,7 +250,7 @@ void micromixer::setStepSize() {
 /** Advance ODT solution: diffusion and reaction
  */
 
-void micromixer::advanceOdtSingleStep_Explicit(){
+void micromixer::advanceHipsSingleStep_Explicit(){
 
  
 
@@ -272,7 +272,7 @@ void micromixer::advanceOdtSingleStep_Explicit(){
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/** Advance ODT solution: diffusion and reaction; Some terms are implicit, others explicit.
+/** Advance HiPS solution: diffusion and reaction; Some terms are implicit, others explicit.
  *  Nominally the mixing terms are explicit. Calling the cvode driver.
  *  First order.
  *  dphi/dt =  D(phi_0) + S(phi) : solving from t0 to t1.
@@ -280,7 +280,7 @@ void micromixer::advanceOdtSingleStep_Explicit(){
  *  We solve the whole RHS implicitly, but the D(phi_0) is fixed at time 0.
  */
 
-void micromixer::advanceOdtSingleStep_SemiImplicit() {
+void micromixer::advanceHipsSingleStep_SemiImplicit() {
 
     if(domn->pram->Lsolver!="SEMI-IMPLICIT")
         return;
@@ -301,7 +301,7 @@ void micromixer::advanceOdtSingleStep_SemiImplicit() {
   }
 
 ///////////////////////////////////////////////////////////////////////////////
-/** Advance ODT solution: diffusion and reaction; Some terms are implicit, others explicit.
+/** Advance HiPS solution: diffusion and reaction; Some terms are implicit, others explicit.
  *  Nominally the mixing terms are explicit. Calling the cvode driver.
  *  First order.
  *  dphi/dt =  D(phi_0) + S(phi) : solving from t0 to t1.
@@ -309,7 +309,7 @@ void micromixer::advanceOdtSingleStep_SemiImplicit() {
  *  We solve the whole RHS implicitly, but the D(phi_0) is fixed at time 0.
  */
 
-void micromixer::advanceOdtSingleStep_StrangSplit() {
+void micromixer::advanceHipsSingleStep_StrangSplit() {
 
     if(domn->pram->Lsolver!="STRANG")
         return;

@@ -53,7 +53,7 @@ class micromixer {
 
     //////////////////// MEMBER FUNCTIONS /////////////////
 
-        virtual void advanceOdt(const double p_tstart, const double p_tend, const int iLevel = -1);    // iLevel is for hips
+        virtual void advanceHips(const double p_tstart, const double p_tend, const int iLevel = -1);    // iLevel is for hips
 
   
 
@@ -64,9 +64,9 @@ class micromixer {
         //void do_DL(string doWhat);
         //virtual bool adaptGridIfNeeded();   ///< expansion or contraction --> adapt
         
-        void advanceOdtSingleStep_Explicit();
-        void advanceOdtSingleStep_SemiImplicit();
-        void advanceOdtSingleStep_StrangSplit();
+        void advanceHipsSingleStep_Explicit();
+        void advanceHipsSingleStep_SemiImplicit();
+        void advanceHipsSingleStep_StrangSplit();
 
         bool LforceSetNominalStepSize;       ///< used in updateGrid when splitting cells to indicate to reset timestep size later
 

@@ -176,17 +176,17 @@ void solver::sample_hips_eddy(double &dt, double &iLevel) {
     @param Qstart \output starting index for the Q-tree.
     @param Rstart \output starting index for the R-tree.
     @param nPswap \output number of parcels swapped.
-    Randomly select a node on iLevel.
+    <code><pre> Randomly select a node on iLevel.
     Go down two levels and select nodes 0q and 1r, where q, r are randomly 0 or 1
     Find the starting index of the Q-tree and R-tree to swap and the number of parcels.
     Then swap the cells.
     For a 6 level tree: 0, 1, 2, 3, 4, 5:
     If iLevel = 1, then suppose i=1, 0q = 00 and 1r = 11:
     Then we are swaping 0100** with 0111** or (01|00|**) with 01|11|**)
-       or i0qs with i1rs, where i = 01; 0q = 00; 1r = 11; and s = **
+    or i0qs with i1rs, where i = 01; 0q = 00; 1r = 11; and s = **
     We use bitwise shifts for easy powers of 2.
     The swap is done by adding or subtracting a value (shift),
-        which should be equivalent to flipping the swapping the two 0q bits and 1r bits.
+    which should be equivalent to flipping the swapping the two 0q bits and 1r bits.
                                                                                                               Level
                                                                                                             ---------
                                                     *                                                           0
@@ -216,7 +216,7 @@ void solver::sample_hips_eddy(double &dt, double &iLevel) {
      / \   / \   / \   / \   / \   / \   / \   / \     / \   / \   / \   / \   / \   / \   / \   / \
     00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15   16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31           5
                                                       ^^^^^^^^^^^                         ^^^^^^^^^^^
-*/
+</pre></code>*/
 
 void solver::selectAndSwapTwoSubtrees(const int iLevel, int &Qstart, int &Rstart, int &nPswap){
 
@@ -275,7 +275,7 @@ void solver::calculateSolution() {
     sample_hips_eddy(dt, iLevel);        // init next EE
 
     while(time+dt <= domn->pram->tEnd) {
-        domn->mimx->advanceOdt(time, time+dt, iLevel_p);       //--- ADVANCE to sampled EE ---
+        domn->mimx->advanceHips(time, time+dt, iLevel_p);      //--- ADVANCE to sampled EE ---
         selectAndSwapTwoSubtrees(iLevel, QS, RS, nPs);         //--- IMPLEMENT  sampled EE ---
 
         if(++iEE % 1000 == 0)
@@ -291,7 +291,7 @@ void solver::calculateSolution() {
         sample_hips_eddy(dt, iLevel);    // init next EE
 
     }
-    domn->mimx->advanceOdt(time, domn->pram->tEnd, iLevel_p);    //--- ADVANCE ---
+    domn->mimx->advanceHips(time, domn->pram->tEnd, iLevel_p);    //--- ADVANCE ---
 
     //--------------------
 
