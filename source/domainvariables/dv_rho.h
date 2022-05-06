@@ -24,9 +24,6 @@ class dv_rho : public dv {
 
     public:
 
-    //////////////////// DATA MEMBERS //////////////////////
-
-
     //////////////////// MEMBER FUNCTIONS /////////////////
 
         virtual void setVar(const int ipt=-1);
@@ -35,9 +32,6 @@ class dv_rho : public dv {
                                    const double m2,
                                    const double m1,
                                    const bool   LconstVolume=false);
-
-    private:
-
 
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
 

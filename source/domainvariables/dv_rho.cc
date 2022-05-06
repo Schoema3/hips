@@ -36,7 +36,6 @@ dv_rho::dv_rho(domain    *line,
  * Merging conservatively: (rho*phi*dx)_merged = (rho*phi*dx)_1 + (rho*phi*dx)_2
  * Then solve for phi_merged.
  *
- * @param imrg    \input merge cells imrg and imrg+1
  * @param imrg \input merge cells imrg and imrg+1
  * @param m1   \input mass in cell imrg
  * @param m2   \input mass in cell imrg

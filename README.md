@@ -1,12 +1,11 @@
-# HiPS (Hierarchical Parcel Swapping)
+i# HiPS (Hierarchical Parcel Swapping)
 
 This code implements the Hierarchal Parcel Swapping (HiPS) model for turbulent reacting or nonreacting flows. 
 
 ## Documentation
-Detailed documentation is available [here](http://ignite.byu.edu/SEC). The following two papers discussing theory and application of the code are available. Additional papers are available [here](http://ignite.byu.edu/publications.html).
-   * [D. Lignell et al., One-dimensioanl turbulence modeling for cylindrical and spherical flows: model formulation and application, Theoretical and Computational Fluid Dynamics, 32:495-520](https://ignite.byu.edu/public/Lignell_2018.pdf)
-   * [D. Lignell et al., Mesh adaption for efficient multiscale implementation of one-dimensional turbulence, Theoretical and Computational Fluid Dynamics, 27:273-295 (2013)](https://ignite.byu.edu/public/ODTmethod.pdf)
-
+ * [A. Kerstein, Hierarchical Parcel-Swapping Representation of Turbulent Mixing. Part 1. Formulation and Scaling Properties, Journal of Statistical Physics, 153:142-161 (2013)](https://link.springer.com/content/pdf/10.1007/s10955-013-0811-z.pdf)
+ * [A. Kerstein, Hierarchical parcel-swapping representation of turbulent mixing. Part 2. Application to channel flow, Journal of Fluid Mechanics, 750:421-463 (2014)](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/hierarchical-parcelswapping-%20%20representation-of-turbulent-mixing-part-2-application-to-channel-flow/19D6D1CAC4D2FAFFC67A67925D7E527B)
+ * [A. Kerstein, Hierarchical parcel-swapping representation of turbulent mixing. III. Origins of correlation patterns observed in turbulent boundary layers, Physical Review Fluids, 6, 044611    (2021)](https://journals.aps.org/prfluids/abstract/10.1103/PhysRevFluids.6.044611)
 ## Directory structure
 * `build_make`: build the code using standard GNU make.
 * `cmake_build`: build the code using cmake.
@@ -18,7 +17,7 @@ Detailed documentation is available [here](http://ignite.byu.edu/SEC). The follo
     * Other input files are a Cantera mechanism file in `gas_mechanisms` and an optional `restart.yaml` file.
 * `post`: contains post-processing scripts and files for given cases. 
    * Output is placed in `data/caseName/post`. These are mostly Python files. Some cases also include experimental data files for comparison and plotting.
-* `run`: contains the code executable `sec.x` and several run scripts. These scripts are run by the user to execute the code.
+* `run`: contains the code executable `hips-run` and several run scripts. These scripts are run by the user to execute the code.
     * The user specifies inputDir as the path to the input file containing the case to run and specifies a case name for variable caseName. Files are created and copied into `data/caseName`, as noted above.
     * The user chooses one of the following run scripts to execute the code: 
       * `runOneRlz.sh` will run a single realization of the code. This is appropriate for some cases, like a statistically stationary channel flow. Many cases require running many realizations to gather turbulent statistics.
@@ -29,13 +28,13 @@ Detailed documentation is available [here](http://ignite.byu.edu/SEC). The follo
 * `source`: contains source code (including header files) and `CMakeLists.txt` files.
 
 ## Dependencies
-### SEC code
+### HiPS code
 * [Cantera](http://cantera.org): open-source suite of tools for problems involving chemical kinetics, thermodynamics, and transport.
-* Yaml: input file format. This installation is conveniently built into the SEC build process. 
+* Yaml: input file format. This installation is conveniently built into the HiPS build process. 
 * Cmake 3.12 or higher
 * (OPTIONAL) Doxygen: builds documentation. 
 ### Post-processing
-Post-processing data produced by SEC and ODT is processed via Python 3 scripts. We recommend Python 3.2 or higher. Scripts may not function properly using Python 2.x. The following packages are required and can be installed via pip3:
+Post-processing data produced by HiPS is processed via Python 3 scripts. We recommend Python 3.2 or higher. Scripts may not function properly using Python 2.x. The following packages are required and can be installed via pip3:
 * numpy
 * scipy
 * matplotlib
@@ -48,10 +47,10 @@ Post-processing data produced by SEC and ODT is processed via Python 3 scripts. 
 Two build systems are available: a standard GNU make, and cmake. We recommend the cmake version whenever possible. See the README files in the `build_make` and `cmake_build` folders for details.
 
 ## Test cases
-### Channel flow
+### HiPS Test
   1. Build the code using either Cmake or GNU make. We recommend Cmake whenever possible.
-  2. Navigate to the `run` directory. Open `runOneRlz.sh` and confirm that the input file path and case name are set properly. The defaults in `runOneRlz.sh` are `inputDir="../input/channelFlow"` and `caseName="channel"`.
+  2. Navigate to the `run` directory. Open `runOneRlz.sh` and confirm that the input file path and case name are set properly. The defaults in `runOneRlz.sh` are `inputDir="../input/hips"` and `caseName="hips_test"`.
   3. Run `./runOneRlz.sh` to run the case. It should take less than two minutes on an average system. 
   4. Navigate to `post/channelFlow`. 
   5. Run `python3 stats.py [caseName]`. With the default case name, this becomes `python3 stats.py channel`. This will generate two plots in `../data/[caseName]/post`. Navigate there to view them. 
-  6. In `../data/[caseName]/post`, there should be two newly-generated PDFs. These two plots compare the mean and RMS velocity profiles of the channel flow case just run with SEC to previous DNS data of the same case. 
+  6. In `../data/[caseName]/post`, there should be two newly-generated PDFs. These two plots compare the mean and RMS velocity profiles of the channel flow case just run with HiPS to previous DNS data of the same case. 

@@ -59,7 +59,7 @@ Note, there is a video that goes through the installation, basic layout, and run
 @section layout Directory structure
 
 This HiPS code is divided into 8 main directories:
-- \c doc/         - Documentation of the code.  The directory doc/doxygen has doxygen output.
+- \c doc/         - Documentation of the code.  The directory doc/doxygen has doxygen output. Also include a simplified, python version of HiPS.
 - \c cmake_build/ - CMakefiles related to building the code.
 - \c build_make/  - Build files for a standard GNU make.
 - \c source/      - All source code for the HiPS program
@@ -422,12 +422,12 @@ When editing code, the following guide should be followed.
 @section hips_theory HiPS Theory
 
 Documents containing information on the theory behind the HiPS code.
-- <a href="https://link.springer.com/content/pdf/10.1007/s10955-013-0811-z.pdf" target="_blank">Hierarchical
-  Parcel-Swapping Representation of Turbulent Mixing. Part 1. Formulation and Scaling Properties</a> (pdf)
+- <a href="https://link.springer.com/content/pdf/10.1007/s10955-013-0811-z.pdf" target="_blank">A. Kerstein, Hierarchical
+  Parcel-Swapping Representation of Turbulent Mixing. Part 1. Formulation and Scaling Properties, Journal of Statistical Physics, 153:142-161 (2013)</a> (pdf)
 - <a href="https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/hierarchical-parcelswapping-
   representation-of-turbulent-mixing-part-2-application-to-channel-flow/19D6D1CAC4D2FAFFC67A67925D7E527B"
-  target="_blank">Hierarchical Parcel-Swapping Representation Turbulent Mixing. Part 2. Application to Channel Flow</a>
-- <a href="https://journals.aps.org/prfluids/abstract/10.1103/PhysRevFluids.6.044611" target="_blank">Hierarchical
-  Parcel-swapping Representation of Turbulent Mixing. III. Origins of Correlation Patterns Observed in Turbulent Boundary Layers</a>
+  target="_blank">A. Kerstein, Hierarchical Parcel-Swapping Representation Turbulent Mixing. Part 2. Application to Channel Flow, ournal of Fluid Mechanics, 750:421-463 (2014)</a>
+- <a href="https://journals.aps.org/prfluids/abstract/10.1103/PhysRevFluids.6.044611" target="_blank">A. Kerstein, Hierarchical
+  Parcel-swapping Representation of Turbulent Mixing. III. Origins of Correlation Patterns Observed in Turbulent Boundary Layers, Physical Review Fluids, 6, 044611 (2021)</a>
 
 */
