@@ -1,4 +1,3 @@
-using namespace std;
 /**
  * @file solver.h
  * Header file for class \ref solver
