@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Submit this script with: sbatch thisFileName
-# This is a parallel (ODT MPI) version that runs a parallel job
+# This is a parallel (HiPS MPI) version that runs a parallel job
 
 #SBATCH --time=02:00:00                    # walltime
 #SBATCH --ntasks=256                       # number of processor cores (i.e. tasks) 288
@@ -20,7 +20,7 @@ date
 ###############################################################################
 
 nSetsToRun=1
-inputDir="../input/coldJet"
+inputDir="../input/hips"
 
 ###############################################################################
 
@@ -45,14 +45,14 @@ runCase () {
     echo "*** RUNNING ***"
     echo "Output is being written to ../$caseName/runtime/runtime_* and ../$caseName/data"
 
-    mpiexec -np $SLURM_NTASKS ./sec.x $caseName 0       # 0 is the realization shift
+    mpiexec -np $SLURM_NTASKS ./hips-run $caseName 0       # 0 is the realization shift
 
     nshift=0
     it=1
     while [ $it -lt $nSetsToRun ] ; do
         nshift=$(($nshift + $SLURM_NTASKS))
         it=$(($it + 1))
-        mpiexec -np $SLURM_NTASKS ./sec.x $caseName $nshift
+        mpiexec -np $SLURM_NTASKS ./hips-run $caseName $nshift
     done
 
     mkdir -p "../data/$caseName/slurm"
