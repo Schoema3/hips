@@ -5,7 +5,6 @@
 
 #include "inputoutput.h"
 #include "domain.h"
-//#include "processor.h"
 #include <sys/stat.h>             // for mkdir
 #include <iostream>
 #include <iomanip>

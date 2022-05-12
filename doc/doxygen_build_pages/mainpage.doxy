@@ -56,21 +56,20 @@ Note, there is a video that goes through the installation, basic layout, and run
 <hr />
 -->
 
-@section layout Directory structure
+@section layout Directory Structure
 
-This HiPS code is divided into 8 main directories:
+This HiPS code is divided into 7 main directories:
 - \c doc/         - Documentation of the code.  The directory doc/doxygen has doxygen output. Also include a simplified, python version of HiPS.
 - \c cmake_build/ - CMakefiles related to building the code.
-- \c build_make/  - Build files for a standard GNU make.
 - \c source/      - All source code for the HiPS program
 - \c input/       - The input files for the code (see \ref inputfile "Input File" section below)
-- \c run/         - The executable
+- \c run/         - The executable and run scripts
 - \c data/        - All data/post/runtime/input files produced by the HiPS code
 - \c post/        - Post processing code.
 
 <hr />
 
-@section obtain Get the code
+@section obtain Get the Code
 
 - The code is hosted at [GitHub](https://github.com). The code is free for use.
 
@@ -80,7 +79,7 @@ This HiPS code is divided into 8 main directories:
 
 <hr />
 
-@section build Build the code
+@section build Build the Code
 
 The code is written in C++. It has been built and
 run on many Mac and Linux machines including clusters.
@@ -102,8 +101,6 @@ run on many Mac and Linux machines including clusters.
 
 - Documentation is built using Doxygen. Instructions on installation can be found
   [here](https://www.doxygen.nl/manual/install.html).
-
-- Build the code using either Cmake or GNU make. We recommend Cmake whenever possible.
 
 - To build the code, at the terminal within the ```cmake_build``` directory:
     - Step 1: Run CMake<br>
@@ -142,7 +139,7 @@ run on many Mac and Linux machines including clusters.
 <hr />
 
 
-@section inputs Input files
+@section inputs Input Files
 
 - All input files are in the input directory. Specific HiPS cases have
   individual subdirectories. For example ```input/channelFlow/```.
@@ -185,16 +182,8 @@ run on many Mac and Linux machines including clusters.
           flow, these values should be some reasonable expected average.
         - ```probType``` this will determine which domainCase is used for solution
           (described below).
-        - ```Z_param, A_param, C_param, Z_LES``` are the viscous penalty, eddy
-          distribution, eddy rate, and large-eddy suppression parameters. These
-          are commonly tuned to experimental data for a given simulation. Note
-          the A_param is often not tuned but set to 2/3, which gives the
-          maximum redistribution of energy among the three velocity components.
-        - ```LES_type``` is a string indicating the large-eddy suppression
-          model to use. The ELAPSEDTIME model is common for open flows like
-          jets. For channel flow, NONE or FRACDOMAIN are common since the
-          domain enforces a given eddy size and the flow is statistically
-          stationary in either time ore space.
+        - ```C_param``` is the eddy rate parameters. This
+          is commonly tuned to experimental data for a given simulation.
         - ```diffCFL``` is a factor multiplying the timestep used for diffusive
           advancement. This should be less than one, which is the stability
           limit for purely diffusive (planar) flows. Due to the presence of
@@ -204,37 +193,9 @@ run on many Mac and Linux machines including clusters.
           place to start. Note, with stiff chemistry, an explicit solver
           requires this to be Very low, but one of the implicit approaches
           should be used with stiff chemistry.
-        - ```cCoord``` specifies whether the case is planar (1), cylindrical
-          (2), or spherical (3). The name relates to the power on terms like
-          x^c or r^c that are used to make the code generic to the
-          configuration using the value of c chosen.
-        - ```gDens``` controls the grid density for mesh refinement. This can
-          be increased to produce a finer grid resolution, but note that the
-          mesher normalizes the profiles so that the number of grid points is
-          roughly constant for a given profile "length." Hence, this value
-          rarely needs to be modified: 30 is a reasonable value.
-        - ```dxmin``` is the smallest cell size. But it is normalized by
-          domainLength, so if you double the size of your domain for the same
-          turbulence level, you will want to half dxmin to get the same
-          smallest grid size.
-            - A value of 0.001 implies a maximum number of grid cells of 1000
-              on the domain, (though the mesher will normally give fewer than
-              this).
-            - Its a good idea to check the resultant cell size distribution to
-              see how often dxmin is limiting the grid. This can be an
-              indication of poor resolution.
-        - ```Pmax, Pav, dtfac, nDtSmeanWait, eddyMinCells, DAtimeFac, tdfac,
-          sLastDA``` are all rarely modified.
-        - ```eddyMinCells``` is the minimum number of grid cells an eddy has to
-          span to be viable.
-        - ```Lmin``` is the minimum eddy size sampled (hence allowed). This
-          value should be consistent with ```dxmin``` and ```eddyMinCells```.
-          For example, if dxmin is 0.001 and ```eddyMinCells``` is 3, then
-          ```Lmin``` should be greater than or equal to 0.003. Otherwise eddies
-          may be sampled that cannot be accepted, which is inefficient.
-        - ```modDump``` is the number of eddies accepted before the ODT domain is
+        - ```modDump``` is the number of eddies accepted before the HiPS domain is
           dumped. Common values are 1, or 1000000 (something big, which
-          effectively turns off output of the ODT domain after eddies).
+          effectively turns off output of the HiPS domain after eddies).
             - A value of 1 is useful for visualizing the progression of eddies
               on the domain. Especially during preliminary investigation.
             - A large value is useful when the primary desired output is
@@ -247,7 +208,7 @@ run on many Mac and Linux machines including clusters.
 
 <hr />
 
-@section setup Case setup
+@section setup Case Setup
 
 - Specific HiPS cases have their own input directories
   containing input files as specified above.
@@ -265,7 +226,7 @@ run on many Mac and Linux machines including clusters.
 
 <hr />
 
-@section running Running the code
+@section running Running the Code
 
 - The exectuable is called ```hips-run``` and is located in the ```run/```
   directory, where the cases are run from.
@@ -308,7 +269,7 @@ run on many Mac and Linux machines including clusters.
 
 <hr />
 
-@section code_structure General code structure
+@section code_structure General Code Structure
 
 The HiPS code is structured with a collection of C++ classes.
 - Nearly all variables are public. This avoids excessive get and set functions
@@ -368,7 +329,7 @@ The HiPS code is structured with a collection of C++ classes.
 
 <hr />
 
-@section style_guide Style guide
+@section style_guide Style Guide
 
 When editing code, the following guide should be followed.
 - Use the existing code as your guide. Always ask yourself, "is this pretty, 
