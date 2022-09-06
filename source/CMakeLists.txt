@@ -117,7 +117,8 @@ target_sources(hips-run PRIVATE main.cc
         cantera_shell_functions.cc  cantera_shell_functions.h
                                     interp_linear.h
         processor.cc                processor.h
-)
+
+      )
 
 #################### Subdirectories
 

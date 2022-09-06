@@ -35,7 +35,6 @@ class param {
         int     ngrd0;           ///<  initial grid points
         double  rho0;            ///<  initial uniform density (kg/m^3)
         double  kvisc0;          ///<  initial uniform kinematic viscosity (m^2/s)
-        double  pres;            ///<  initial pressure (Pa)
         string  chemMechFile;    ///<  name of chemical mechanism file
         string  probType;        ///<  problem type: CHANNEL, CHANNEL_SCALAR, JETMIXL_RXN, COUETTE
 
@@ -43,25 +42,18 @@ class param {
         double  diffCFL;         ///<  multiplies min diffusion timestep
         double  cvode_atol;      ///<  absolute tolerace atol for cvode
         double  cvode_rtol;      ///<  relative tolerace rtol for cvode
+        string  Lsolver;         ///<  EXPLICIT, SEMI-IMPLICIT, or STRANG 
 
-        bool    LdoDL;           ///<  flag to do the DL energy from the DL instability
-        double  g;               ///<  gravity (default -9.81)
-        string  Lsolver;         ///<  EXPLICIT, SEMI-IMPLICIT, or STRANG
-        bool    Lperiodic;       ///<  periodic if true
-        bool    LisFlmlt;        ///<  true if solving an unsteady flamelet
-        bool    LisFlmltX;       ///<  true if solving an unsteady flamelet in the physical domain (Pierce 2004)
         int     modDump;         ///<  accepted eddies before output file
-        bool    Ltecplot;        ///<  set TRUE for tecplot friendly output
         bool    Lrestart;        ///<  true to restart from file, else false
         string  rstType;         ///<  "single" or "multiple"
+
         double  trst;            ///<  restart time (from restart file), default is 0.0;
+        double  pres;            ///<  initial pressure (Pa)
+        bool    Ltecplot;        ///<  set TRUE for tecplot friendly output
 
-        //----------------- Soot variables
 
-        bool           Lsoot;               ///< true for soot, false for no soot
-        int            nsvar;               ///< number of soot variables transported (# soot moments)
-        string         PSD_method;          ///< method name for soot PSD: MONO, QMOM, MOMIC
-
+       
         //----------------- HIPS quantities
 
         bool    LisHips;         ///<  true if solving hips

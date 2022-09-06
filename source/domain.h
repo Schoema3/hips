@@ -42,27 +42,16 @@ class domain {
     //////////////////// DATA MEMBERS //////////////////////
 
         domain                  *domn;     ///< (for one domain to point to another (eddl))
-
-        int                     ngrd;      ///< number of grid cells
-        int                     ngrdf;     ///< number of grid cell faces = ngrd+1
-
+        int                     ngrd;      ///< number of parcels
         vector<dv*>             v;         ///< All domain variables are stored in here.
-
-        dv*                     pos;       ///< pointers to gas properties
-        dv*                     posf;      ///< access as: posf->d[i], or posf->var_name, etc.
         dv*                     rho;
-        dv*                     dvisc;
-        dv*                     sca;
-        dv*                     phase;
         dv*                     enth;
         dv*                     temp;
         dv*                     mixf;
         dv*                     chi;
-        dv*                     hr;
         vector<dv*>::iterator   ysp;       ///< access as: ysp=v.begin(), (*ysp)->d[i] or (*(ysp+k))->d[i], or ysp[k]->d[i].
         vector<dv*>::iterator   svar;      ///< iterator for increment to go through moments (*(ysp+k))->d[i];)
-        vector<dv*>::iterator   eta;       ///< iterator for increment to go through species etc. (*(ysp+k))->d[i];)
-
+        
         map<string,dv*>         varMap;
 
         IdealGasPhase           *gas;        ///< pointer to cantera thermochemistry object (reaction rates, Cp, etc.)
@@ -71,7 +60,6 @@ class domain {
         inputoutput             *io;         ///< pointer to input/output object
         param                   *pram;       ///< pointer to the parameters object
         micromixer              *mimx;       ///< pointer to micromixer for diffusion, reaction, domain evolution.
-        domain                  *eddl;       ///< pointer to eddyline object
         solver                  *solv;       ///< pointer to solver object
        
         randomGenerator         *rand;
@@ -81,30 +69,33 @@ class domain {
         domaincase              *domc;       ///< domaincase class: set specific vars...
 
 
-    //////////////////// MEMBER FUNCTIONS /////////////////
 
-            
-       double Ldomain();
 
+
+
+        bool                    LdomcSet;    ///< flag indicating new domainCase --> allow deletion
+       // bool                    LstrmSet;    ///< flag indicating new streams    --> allow deletion
+        bool                    LmimxSet;    ///< flag indicating new micromixer --> allow deletion
+        bool                    LsolvSet;    ///< flag indicating new solver     --> allow deletion
+        bool                    LrandSet;    ///< flag indicating new randomGen  --> allow deletion
+        bool                    LioSet;      ///< flag indicating new inputoutput--> allow deletion
+        bool                    LpramSet;    ///< flag indicating new param      --> allow deletion
 
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
 
     public:
 
-        void init(inputoutput     *p_io,
-                  streams         *p_strm,
-                  IdealGasPhase   *p_gas,
-                  Transport       *p_tran,
-                  micromixer      *p_mimx,
-                  solver          *p_solv,
-                  randomGenerator *p_rand);
-
-        domain(domain *p_domn, param *p_pram);
-        virtual ~domain() {
-            for(int k=0; k<v.size(); k++)
-                delete v.at(k);
-            delete domc;     
-        }
+     
+              void init(
+                int   nShiftFileNumbers,
+                  string caseName); 
+        domain(domain *p_domn);
+        virtual ~domain();
+        //{
+        //    for(int k=0; k<v.size(); k++)
+        //        delete v.at(k);
+        //    delete domc;     
+        //}
 
 };
 

@@ -34,7 +34,7 @@ class domaincase {
         virtual void setGasStateAtPt(const int &ipt){}
         virtual void setCaseSpecificVars_cvode(const int &ipt){}
         virtual void enforceMassFractions();
-        virtual void enforceSootMom();
+
 
     private:
 

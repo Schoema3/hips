@@ -11,6 +11,7 @@
 #include <string>
 #include <iomanip>   // precision
 
+
 ///////////////////////////////////////////////////////////////////////////////
 
 bool sortFunc(pair<double,int> &a, pair<double,int> &b){
@@ -22,7 +23,7 @@ bool sortFunc(pair<double,int> &a, pair<double,int> &b){
  *  @param p_domn \input pointer to domain object
  */
 
-void solver::init(domain *p_domn) {
+ solver::solver(domain *p_domn, param *pram) {
 
     domn    = p_domn;
 

@@ -6,60 +6,95 @@
 #include "domain.h"
 #include "dv.h"
 #include "dv_rho.h"
-#include "dv_dvisc.h"
 #include "domaincase_hips.h"
 #include "domaincase_hips_comb.h"
 #include "domaincase_hips_simpleRxn.h"
 #include <cmath>
 #include <iomanip>
 #include "processor.h"
+#include "domaincase.h"
+#include "inputoutput.h"
+#include "param.h"
+#include "streams.h"
+#include "micromixer.h"
+#include "solver.h"
+#include "randomGenerator.h"
+
 
 extern processor proc;
 /////////////////////////////////////////////////////////////////////
 /** Constructor
  */
 
-domain::domain(domain *p_domn, param *p_pram) {
-
+domain::domain(domain *p_domn){
     domn = p_domn;
-    pram = p_pram;
-    domc = 0;               // initialize for destruction of eddy domains
-
- }
+    LdomcSet = false;
+    //LstrmSet = false;
+    LmimxSet = false;
+    LsolvSet = false;
+    LrandSet = false;
+ 
+    LioSet   = false;
+    LpramSet = false;
+}
 
 /////////////////////////////////////////////////////////////////////
-/** Initializer
+/** Destructor
  */
+domain::~domain(){
+    for(int k=0; k<v.size(); k++)
+        delete v.at(k);
+    if(LdomcSet) delete domc;
+    //if(LstrmSet) delete strm;
+    if(LmimxSet) delete mimx;
+    if(LsolvSet) delete solv;
+    if(LrandSet) delete rand;
 
-void domain::init(inputoutput     *p_io,
-                  streams         *p_strm,
-                  IdealGasPhase   *p_gas,
-                  Transport       *p_tran,
-                  micromixer      *p_mimx,
-                  solver          *p_solv,
-                  randomGenerator *p_rand) {
+    if(LioSet)   delete io;
+    if(LpramSet) delete pram;
+}
+
+
+///////////////////////////////////////////////////////////////////:q//
+/** Initializer
+ *  @param \input nShiftFileNumbers increment the seed if starting MPI multiple times (standalone ODT realizations)
+ */
+void domain::init(int   nShiftFileNumbers,
+                         string caseName
+                        ) {
+
+  
+
 
     //----------------------
 
-    io     = p_io; 
-    gas    = p_gas;
-    tran   = p_tran;
-    strm   = p_strm;
-    mimx   = p_mimx;
-    solv   = p_solv;
-    rand   = p_rand;
+   // gas    = p_gas;
+   // tran   = p_tran;
+    //strm   = p_strm;
  
-
     //----------------------
 
+     io   = new inputoutput(this, caseName, nShiftFileNumbers);
+     
+    pram = new param(io);
+
+   cout << endl << "here a" << endl; //doldb
     ngrd    = pram->ngrd0;
-    ngrdf   = ngrd + 1;
+   // ngrdf   = ngrd + 1;
 
+   cout << endl << "here b" << endl; //doldb
     //----------------------
+ rand = new randomGenerator(pram->seed + nShiftFileNumbers);
+    LrandSet = true;  
 
-    io->init(this);
-    pram->init(this);
-    solv->init(this);
+cout << endl << "here cm" << endl; //doldb
+
+solv= new solver(this, pram);
+
+ LsolvSet = true;
+
+cout << endl << "here ebbb" << endl; //doldb
+
 
 
 
@@ -68,9 +103,9 @@ void domain::init(inputoutput     *p_io,
 
 
     if(pram->probType == "HIPS")
-         domc = new domaincase_hips(); // hips
+        domc = new domaincase_hips(); // hips
 
-     else if(pram->probType == "HIPS_COMB")
+      else if(pram->probType == "HIPS_COMB")
          domc = new domaincase_hips_comb(); // hips_comb
 
      else if(pram->probType == "HIPS_SIMPLERXN")
@@ -80,23 +115,27 @@ void domain::init(inputoutput     *p_io,
          cout << endl << "ERROR, probType UNKNOWN" << endl;
          exit(0);
      }
+    cout << endl << "here ekkk" << endl; //doldb
 
+   LdomcSet   = true;
     domc->init(this);
 
+cout << endl << "here ejj" << endl; //doldb
     //----------------------
 
     for(int k=0; k<v.size(); k++)
         varMap[v.at(k)->var_name] = v.at(k);
-
     nTrans = 0;
     for(int k=0; k<v.size(); k++)
         if(v.at(k)->L_transported)
             nTrans++;
 
     //----------------------
-
+cout << endl << "here m " << endl; //doldb
+    mimx = new micromixer();
+    LmimxSet = true;
     mimx->init(this);
-
+ cout << endl << "here n" << endl; //doldb
     //----------------------
 
     if(pram->Lrestart) {
@@ -104,14 +143,6 @@ void domain::init(inputoutput     *p_io,
         io->set_iNextDumpTime(pram->trst);
     }
 
-}
-
-/////////////////////////////////////////////////////////////////////
-/** Compute size of domain based on faces.
- */
-
-double domain::Ldomain() {
-    return posf->d.at(ngrd) - posf->d.at(0);
 }
 
 

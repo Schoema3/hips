@@ -12,6 +12,7 @@
 
 #include "interp_linear.h"
 
+
 ///////////////////////////////////////////////////////////////////////////////
 /** micromixer constructor function
  */
@@ -24,6 +25,8 @@ void micromixer::setNominalStepSize() {
 micromixer::micromixer() {
     cvode = new cvodeDriver();
     nsteps = 0;
+   // if(LcvodeSet) delete cvode;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -84,6 +87,8 @@ void micromixer::mixAcrossLevelTree(const int kVar, const int iLevel, const int 
     // TODO: generalize this to compute chi for any scalar, not just mixf, mixf_0
 
     //--------- Mix left branch of iTree
+
+    //istart = iTree << (Nm1-iLevel);  // same thing
 
     istart = iTree << (domn->solv->Nm1-iLevel);  // same thing
     iend   = istart + nPmix;
@@ -330,7 +335,7 @@ void micromixer::advanceHipsSingleStep_StrangSplit() {
                 domn->v.at(k)->d.at(i) = domn->v.at(k)->d.at(i) + 0.5*dt*domn->v.at(k)->rhsMix.at(i);
 
 
-    domn->v[0]->resetSourceFlags();             // sets L_source_done = false for all transported vars
+
     for(int k=0; k<domn->v.size(); k++)
         if(domn->v.at(k)->L_transported)
             domn->v.at(k)->getRhsSrc();

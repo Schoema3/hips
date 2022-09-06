@@ -39,14 +39,9 @@ class micromixer {
         vector<double> dx;             ///< abs(\Delta(x))
         vector<double> gf;             ///< grid factor for derivatives: (df/dx) = gf * (f - f)
 
-        bool           LdoDump;        ///<
+        bool           LdoDump;        ///
 
-        vector<double> uDL_1;          ///< for DL instability: old velocity
-        vector<double> uDL_2;          ///< for DL instability: new velocity
-        vector<double> xDL_1;          ///< for DL instability: = "old" cell center positions
-        vector<double> xDL_2;          ///< for DL instability: = "new" cell center positions
-        vector<double> posDL_old;      ///< for DL instability: = "new" cell center positions
-
+       
         vector<double> oldrho_or_rhov; ///< store the old density for continuity
 
         int nsteps;                    ///< total number of timesteps taken during simulation
