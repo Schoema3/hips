@@ -73,29 +73,21 @@ class domain {
 
 
 
-        bool                    LdomcSet;    ///< flag indicating new domainCase --> allow deletion
-       // bool                    LstrmSet;    ///< flag indicating new streams    --> allow deletion
-        bool                    LmimxSet;    ///< flag indicating new micromixer --> allow deletion
+        bool                    LdomcSet;      ///< flag indicating new domainCase --> allow deletion
+        bool                    LmimxSet;     ///< flag indicating new micromixer --> allow deletion
         bool                    LsolvSet;    ///< flag indicating new solver     --> allow deletion
-        bool                    LrandSet;    ///< flag indicating new randomGen  --> allow deletion
-        bool                    LioSet;      ///< flag indicating new inputoutput--> allow deletion
-        bool                    LpramSet;    ///< flag indicating new param      --> allow deletion
+        bool                    LrandSet;   ///< flag indicating new randomGen  --> allow deletion
+        bool                    LioSet;    ///< flag indicating new inputoutput--> allow deletion
+        bool                    LpramSet; ///< flag indicating new param      --> allow deletion
 
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
 
     public:
 
-     
-              void init(
-                int   nShiftFileNumbers,
-                  string caseName); 
-        domain(domain *p_domn);
+        domain(domain *p_domn,   int   nShiftFileNumbers, string caseName);
+       void hips_advance(); 
         virtual ~domain();
-        //{
-        //    for(int k=0; k<v.size(); k++)
-        //        delete v.at(k);
-        //    delete domc;     
-        //}
+       
 
 };
 

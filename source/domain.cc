@@ -26,74 +26,33 @@ extern processor proc;
 /** Constructor
  */
 
-domain::domain(domain *p_domn){
+domain::domain(domain *p_domn,   int   nShiftFileNumbers, string caseName){
+
     domn = p_domn;
     LdomcSet = false;
-    //LstrmSet = false;
     LmimxSet = false;
     LsolvSet = false;
     LrandSet = false;
  
     LioSet   = false;
     LpramSet = false;
-}
-
-/////////////////////////////////////////////////////////////////////
-/** Destructor
- */
-domain::~domain(){
-    for(int k=0; k<v.size(); k++)
-        delete v.at(k);
-    if(LdomcSet) delete domc;
-    //if(LstrmSet) delete strm;
-    if(LmimxSet) delete mimx;
-    if(LsolvSet) delete solv;
-    if(LrandSet) delete rand;
-
-    if(LioSet)   delete io;
-    if(LpramSet) delete pram;
-}
 
 
-///////////////////////////////////////////////////////////////////:q//
-/** Initializer
- *  @param \input nShiftFileNumbers increment the seed if starting MPI multiple times (standalone ODT realizations)
- */
-void domain::init(int   nShiftFileNumbers,
-                         string caseName
-                        ) {
+  //----------------------
 
-  
-
-
-    //----------------------
-
-   // gas    = p_gas;
-   // tran   = p_tran;
-    //strm   = p_strm;
- 
-    //----------------------
-
-     io   = new inputoutput(this, caseName, nShiftFileNumbers);
+    io   = new inputoutput(this, caseName, nShiftFileNumbers);
      
     pram = new param(io);
-
-   cout << endl << "here a" << endl; //doldb
     ngrd    = pram->ngrd0;
-   // ngrdf   = ngrd + 1;
-
-   cout << endl << "here b" << endl; //doldb
-    //----------------------
- rand = new randomGenerator(pram->seed + nShiftFileNumbers);
+ 
+    rand = new randomGenerator(pram->seed + nShiftFileNumbers);
     LrandSet = true;  
 
-cout << endl << "here cm" << endl; //doldb
 
-solv= new solver(this, pram);
+    solv= new solver(this, pram);
 
- LsolvSet = true;
+    LsolvSet = true;
 
-cout << endl << "here ebbb" << endl; //doldb
 
 
 
@@ -115,12 +74,10 @@ cout << endl << "here ebbb" << endl; //doldb
          cout << endl << "ERROR, probType UNKNOWN" << endl;
          exit(0);
      }
-    cout << endl << "here ekkk" << endl; //doldb
 
    LdomcSet   = true;
     domc->init(this);
 
-cout << endl << "here ejj" << endl; //doldb
     //----------------------
 
     for(int k=0; k<v.size(); k++)
@@ -131,11 +88,9 @@ cout << endl << "here ejj" << endl; //doldb
             nTrans++;
 
     //----------------------
-cout << endl << "here m " << endl; //doldb
     mimx = new micromixer();
     LmimxSet = true;
     mimx->init(this);
- cout << endl << "here n" << endl; //doldb
     //----------------------
 
     if(pram->Lrestart) {
@@ -144,6 +99,33 @@ cout << endl << "here m " << endl; //doldb
     }
 
 }
+
+/////////////////////////////////////////////////////////////////////
+/** Destructor
+ */
+domain::~domain(){
+    for(int k=0; k<v.size(); k++)
+        delete v.at(k);
+    if(LdomcSet) delete domc; 
+    if(LmimxSet) delete mimx;
+    if(LsolvSet) delete solv;
+    if(LrandSet) delete rand;
+
+    if(LioSet)   delete io;
+    if(LpramSet) delete pram;
+
+
+
+
+
+}
+
+void domain::hips_advance(){
+
+    solv->calculateSolution();
+
+}
+
 
 
 
