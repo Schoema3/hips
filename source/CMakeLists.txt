@@ -19,11 +19,11 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "../run")
 
 #------------ Executable targets --------------
 
-add_executable(hips-run)
+add_library(hips)
 
 #------------ Target properties ---------------
 
-target_compile_features(hips-run PUBLIC cxx_std_11)
+target_compile_features(hips PUBLIC cxx_std_11)
 
 #################### preprocessor directives
 
@@ -72,8 +72,8 @@ if(NOT YAML OR NOT YAML_INCLUDE_DIR)
     find_path(YAML_INCLUDE_DIR yaml-cpp HINTS ${CMAKE_CURRENT_SOURCE_DIR}/yaml/include)
 endif()
 
-target_link_libraries(hips-run ${YAML})
-target_include_directories(hips-run PRIVATE ${YAML_INCLUDE_DIR})
+target_link_libraries(hips ${YAML})
+target_include_directories(hips PRIVATE ${YAML_INCLUDE_DIR})
 
 
 
@@ -82,11 +82,11 @@ target_include_directories(hips-run PRIVATE ${YAML_INCLUDE_DIR})
 find_library(CANTERA cantera HINTS ${CANTERA_LIB_DIR})
 if(CANTERA)
     message("**********CANTERA WAS FOUND*************")
-    target_include_directories(hips-run PRIVATE ${CANTERA_INCLUDE_DIR}) 
-    target_link_libraries(hips-run ${CANTERA})
+    target_include_directories(hips PRIVATE ${CANTERA_INCLUDE_DIR}) 
+    target_link_libraries(hips ${CANTERA})
     add_definitions(-DDOCANTERA)
     find_package(Boost REQUIRED COMPONENTS system)
-    target_include_directories(hips-run PRIVATE ${Boost_INCLUDE_DIRS})
+    target_include_directories(hips PRIVATE ${Boost_INCLUDE_DIRS})
 else()
     message("\n*************************************************")
     message("Building the code without Cantera")
@@ -97,16 +97,16 @@ endif()
 #-------
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    target_link_libraries(hips-run "-framework Accelerate")
+    target_link_libraries(hips "-framework Accelerate")
 endif()
 
-target_link_libraries(hips-run "pthread")
+target_link_libraries(hips "pthread")
 
 #################### Local source files
 
-target_include_directories(hips-run PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(hips PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_sources(hips-run PRIVATE main.cc
+target_sources(hips PRIVATE main.cc
         inputoutput.cc              inputoutput.h
         domain.cc                   domain.h
         streams.cc                  streams.h

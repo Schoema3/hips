@@ -1,6 +1,6 @@
-target_include_directories(hips-run PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(hips PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_sources(hips-run PRIVATE   
+target_sources(hips PRIVATE   
     ${CMAKE_CURRENT_SOURCE_DIR}/sundials_smalldense.c
     ${CMAKE_CURRENT_SOURCE_DIR}/sundials_nvector.c
     ${CMAKE_CURRENT_SOURCE_DIR}/sundials_math.c

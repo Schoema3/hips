@@ -1,6 +1,6 @@
-target_include_directories(hips-run PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(hips PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_sources(hips-run PRIVATE
+target_sources(hips PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/dv.cc                 ${CMAKE_CURRENT_SOURCE_DIR}/dv.h
         ${CMAKE_CURRENT_SOURCE_DIR}/dv_chi_hips.cc        ${CMAKE_CURRENT_SOURCE_DIR}/dv_chi_hips.h
         ${CMAKE_CURRENT_SOURCE_DIR}/dv_enth_hips.cc       ${CMAKE_CURRENT_SOURCE_DIR}/dv_enth_hips.h
