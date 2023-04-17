@@ -1,7 +1,10 @@
+/** 
+ * @file inputoutput.cc
+ * Source file for class \ref inputoutput
+ */
 
 #include "inputoutput.h"
 #include "domain.h"
-#include "processor.h"
 #include <sys/stat.h>             // for mkdir
 #include <iostream>
 #include <iomanip>
@@ -10,7 +13,7 @@
 #include <cstdlib>
 #include <algorithm>               // max_element
 
-extern processor proc;
+//extern processor proc;
 
 ///////////////////////////////////////////////////////////////////////////////
 /** inputoutput initialization function
@@ -18,10 +21,10 @@ extern processor proc;
  * @param p_domn  \input set domain pointer with.
  */
 
-void inputoutput::init(domain *p_domn) {
-    domn    = p_domn;
-    LdoDump = false;
-}
+//void inputoutput::init(domain *p_domn) {
+//    domn    = p_domn;
+//    LdoDump = false;
+//}
 
 ///////////////////////////////////////////////////////////////////////////////
 /** inputoutput constructor function
@@ -30,26 +33,31 @@ void inputoutput::init(domain *p_domn) {
  * @param p_nShift   \input shift the file numbers by this amount (used for multiple sets of parallel runs).
  */
 
-inputoutput::inputoutput(const string p_caseName, const int p_nShift){
-
+inputoutput::inputoutput(domain *p_domn, const string p_caseName, const int p_nShift){
+     domn    = p_domn;
+   
     caseName     = p_caseName;
     inputFileDir = "../data/"+caseName+"/input/";
 
-    nShift = p_nShift;
+     LdoDump = false;
+
+ nShift = p_nShift;
 
     inputFile   = YAML::LoadFile(inputFileDir+"input.yaml");     ///< use these "nodes" to access parameters as needed
     params      = inputFile["params"];
-    sootParams  = inputFile["sootParams"];
     streamProps = inputFile["streamProps"];
     initParams  = inputFile["initParams"];
-    radParams   = inputFile["radParams"];
     dvParams    = inputFile["dvParams"];
     dTimes      = inputFile["dumpTimes"];
     dumpTimesGen= inputFile["dumpTimesGen"];
-    bcCond      = inputFile["bcCond"];
+ 
     scalarSc    = inputFile["scalarSc"];
+<<<<<<< HEAD
 
     //--------- setup dumpTimes. Either set the dumpTimesGen parameters or the dumpTimes list directly
+=======
+       //--------- setup dumpTimes. Either set the dumpTimesGen parameters or the dumpTimes list directly
+>>>>>>> Edit_hips
     //--------- if dumpTimesGen:dTimeStart is negative, then use the dumpTimes list (if present), otherwise
     //--------- generate the list of dumptimes from the start, stop, and step parameters
 
@@ -147,12 +155,12 @@ void inputoutput::outputProperties(const string fname, const double time) {
 
     ofile << "\n# Grid points = "   << domn->ngrd;
 
-    if(!domn->pram->LisHips)
-        ofile << "\n# Domain Size = " << domn->Ldomain();
+    //if(!domn->pram->LisHips)
+      //  ofile << "\n# Domain Size = " << domn->Ldomain();
 
     ofile << "\n# Pressure (Pa) = " << domn->pram->pres << endl;
 
-    // HEWSON setting tecplot friendly output
+    //HEWSON setting tecplot friendly output
     if (domn->pram->Ltecplot)
         ofile << "VARIABLES =";
     else
@@ -160,8 +168,8 @@ void inputoutput::outputProperties(const string fname, const double time) {
     for(int i=0,j=1; i<domn->v.size(); i++){
         if(domn->v.at(i)->L_output){
             if (domn->pram->Ltecplot)
-                ofile << setw(14) << "\"" << j++ << "_" << domn->v.at(i)->var_name << "\"";
-            else
+               ofile << setw(14) << "\"" << j++ << "_" << domn->v.at(i)->var_name << "\"";
+           else
                 ofile << setw(14) << j++ << "_" << domn->v.at(i)->var_name;
         }
     }
@@ -203,7 +211,7 @@ void inputoutput::dumpDomainIfNeeded(){
 
     if(!LdoDump) return;
 
-    domn->prb->outputProbes(dumpTimes.at(iNextDumpTime), true);   // probe output on dump time
+//    domn->prb->outputProbes(dumpTimes.at(iNextDumpTime), true);   // probe output on dump time
 
     stringstream ss;
     ss << setfill('0') << setw(5) << iNextDumpTime;
@@ -222,6 +230,7 @@ void inputoutput::dumpDomainIfNeeded(){
  */
 
 void inputoutput::writeDataFile(const string fnameRaw, const double time) {
+
 
     string fname = dataDir+fnameRaw;
     outputProperties(fname, time);
@@ -250,6 +259,7 @@ void inputoutput::outputHeader() {
         << "--------------------------------------------------------------------";
 }
 
+<<<<<<< HEAD
 ///////////////////////////////////////////////////////////////////////////////
 /**Outputs the data corresponding to outputHeader.
  * After a given number of accepted eddies, output this info.
@@ -274,6 +284,8 @@ void inputoutput::outputProgress() {
     ostrm->flush();
 }
 
+=======
+>>>>>>> Edit_hips
 
 ///////////////////////////////////////////////////////////////////////////////
 /** Restart
@@ -296,10 +308,10 @@ void inputoutput::loadVarsFromRestartFile() {
 
     if(domn->pram->rstType == "multiple") {
         ss1.clear(); ss1 << setfill('0') << setw(5) << proc.myid;
-        fname = inputFileDir + "restart/restart_" + ss1.str() + ".dat";
+       fname = inputFileDir + "restart/restart_" + ss1.str() + ".dat";
     }
     else
-        fname = inputFileDir + "/restart.dat";
+       fname = inputFileDir + "/restart.dat";
 
     ifstream ifile(fname.c_str());
     if(!ifile) {
@@ -312,13 +324,13 @@ void inputoutput::loadVarsFromRestartFile() {
     getline(ifile, s1);                        // read line "# time = 1.1" (this is the restart time
     ss1.clear();
     ss1.str(s1);
-    ss1 >> s1 >> s1 >> s1 >> domn->pram->trst;
+ //   ss1 >> s1 >> s1 >> s1 >> domn->pram->trst;
 
     getline(ifile, s1);                        // read line "# Grid points = 100"
     ss1.clear();
     ss1.str(s1);
     ss1 >> s1 >> s1 >> s1 >> s1 >> domn->ngrd;
-    domn->ngrdf = domn->ngrd+1;
+    //domn->ngrdf = domn->ngrd+1;
 
     getline(ifile, s1);                        // read line "# Domain Size = 2" (don't use)
     getline(ifile, s1);                        // read line "# Pressure (Pa) = 101325
@@ -328,7 +340,6 @@ void inputoutput::loadVarsFromRestartFile() {
 
     for(int k=0; k<domn->v.size(); k++)
         domn->v[k]->d.resize(domn->ngrd);
-    domn->posf->d.resize(domn->ngrdf);
 
     for(int i=0; i<domn->ngrd; i++) {
         for(int k=0; k<domn->v.size(); k++) {
@@ -338,7 +349,6 @@ void inputoutput::loadVarsFromRestartFile() {
         }
     }
 
-    domn->posf->d[domn->ngrd] = domn->posf->d[0] + domn->pram->domainLength; 
 
     //------------- Set the variables
 
@@ -347,12 +357,8 @@ void inputoutput::loadVarsFromRestartFile() {
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/** 
- *  Write enthalpy versus mixture fraction profile for adiabatic flamelet cases
- *  for use in non-adiabatic flamelet cases.
- */
 
+<<<<<<< HEAD
 void inputoutput::write_h_mixf_flmlt_profile(const vector<double> &hsens){
 
     string fname = dataDir + "h_mixf_adiabatic.dat";
@@ -436,3 +442,5 @@ void inputoutput::read_h_mixf_flmlt_profile(vector<double> &mixf, vector<double>
     for(int i=0; i<npts; i++)
         ifile >> mixf[i] >> ha[i] >> hs[i];
 }
+=======
+>>>>>>> Edit_hips

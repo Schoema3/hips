@@ -20,7 +20,7 @@ date
 ###############################################################################
 
 nSetsToRun=1  
-inputDir="../input/channelFlow"
+inputDir="../input/hips"
 
 ###############################################################################
 
@@ -31,7 +31,7 @@ runCase () {
     mkdir -p "../data/$caseName/data"
     mkdir -p "../data/$caseName/input"
     mkdir -p "../data/$caseName/runtime"
-    if [ ! -f "../data/$caseName/input/odt_input.yaml" ]; then
+    if [ ! -f "../data/$caseName/input/input.yaml" ]; then
         cp     "$inputDir/"*        "../data/$caseName/input/" > /dev/null 2>&1
         cp -r  "$inputDir/restart"* "../data/$caseName/input/" > /dev/null 2>&1
         if [ "$#" -gt 1 ]; then
@@ -46,14 +46,14 @@ runCase () {
     echo "*** RUNNING ***"
     echo "Output is being written to ../$caseName/runtime/runtime_* and ../$caseName/data"
 
-    ./sec.x $caseName $SLURM_ARRAY_TASK_ID
+    ./hips-run $caseName $SLURM_ARRAY_TASK_ID
 
     nshift=0
     it=1
     while [ $it -lt $nSetsToRun ] ; do
         nshift=$(($nshift + $SLURM_ARRAY_TASK_COUNT))
         it=$(($it + 1))
-        ./sec.x $caseName $(($SLURM_ARRAY_TASK_ID + $nshift))
+        ./hips-run $caseName $(($SLURM_ARRAY_TASK_ID + $nshift))
     done
 
 }

@@ -1,6 +1,6 @@
 /**
  * @file inputoutput.h
- * Header file for class inputoutput
+ * Header file for class \ref inputoutput
  */
 
 #pragma once
@@ -38,17 +38,20 @@ class inputoutput {
 
         YAML::Node               inputFile;      ///< yaml input file object base node
         YAML::Node               params;         ///< yaml sub node
-        YAML::Node               sootParams;     ///< yaml sub node
         YAML::Node               streamProps;    ///< yaml sub node
         YAML::Node               initParams;     ///< yaml sub node
-        YAML::Node               radParams;      ///< yaml sub node
+
         YAML::Node               dvParams;       ///< yaml sub node
         YAML::Node               dTimes;         ///< yaml sub node
-        YAML::Node               dumpTimesGen;  ///< yaml sub node
-        YAML::Node               bcCond;         ///< yaml sub node
+        YAML::Node               dumpTimesGen;   ///< yaml sub node
+ 
         YAML::Node               scalarSc;       ///< yaml sub node: for hips
-        YAML::Node               pPos;           ///< yaml sub node
+      //  YAML::Node               pPos;           ///< yaml sub node
 
+<<<<<<< HEAD
+=======
+      //  vector<double>           probePos;       ///< vector of probe positions
+>>>>>>> Edit_hips
         vector<double>           dumpTimes;      ///< vector of dump times
         int                      iNextDumpTime;  ///< index of next dump time
         bool                     LdoDump;        ///< flag for whether we are dumping a file
@@ -62,10 +65,11 @@ class inputoutput {
 
     void outputProperties(const string fname,
                           const double time);    ///< actually write the data file
-    void dumpDomainIfNeeded();                     ///< calls outputProperties for dumpTimes
+    void dumpDomainIfNeeded();                   ///< calls outputProperties for dumpTimes
     void writeDataFile(const string fnameRaw,
                        const double time);       ///< writes the gnuplot file and calls outputProperties
     void outputHeader();                         ///< output header info during odt solution
+<<<<<<< HEAD
     void outputProgress();                       ///< output data going with the header info
     void outputFlmltProgress();                  ///< output data going with the header info
 
@@ -75,14 +79,22 @@ class inputoutput {
 
 
     private:
+=======
+       
+     void loadVarsFromRestartFile();
+
+    void set_iNextDumpTime(double time);
+
+        private:
+>>>>>>> Edit_hips
 
 
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
 
     public:
 
-        inputoutput(const string p_inputFileDir, const int nShift);
-        void init(domain *p_domn);
+        inputoutput(domain *p_domn, const string p_inputFileDir, const int nShift);
+        //void init(domain *p_domn);
         ~inputoutput();
 
 };

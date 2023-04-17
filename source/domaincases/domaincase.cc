@@ -1,6 +1,6 @@
 /**
  * @file domaincase.cc
- * Header file for class domaincase
+ * Header file for class \ref domaincase
  */
 
 #include "domaincase.h"
@@ -25,17 +25,4 @@ void domaincase::enforceMassFractions() {
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-/** Make sure mass fractions are normalized and bounded between 0 and 1
- */
-void domaincase::enforceSootMom() {
 
-    if (!domn->pram->Lsoot)
-        return;
-
-    double sum;
-    for(int i=0; i<domn->ngrd; i++) {
-        for(int k=0; k<domn->pram->nsvar; k++)
-            if(domn->svar[k]->d[i] < 0.0)
-                domn->svar[k]->d[i] = 0.0;
-    }
-}

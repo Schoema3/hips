@@ -1,6 +1,6 @@
 /**
  * @file cvodeDriver.cc
- * Source file for class cvodeDriver
+ * Source file for class \ref cvodeDriver
  */
 
 #include <cstdlib>
@@ -135,7 +135,7 @@ static int RHSF(double t, N_Vector y, N_Vector ydot, void* f_data) {
 
     cvd->domn->domc->setCaseSpecificVars_cvode(cvd->iC);
 
-    cvd->tVarMap[0]->resetSourceFlags();             // sets L_source_done = false for all transported vars
+ 
     for(int k=0; k<cvd->neq; k++)                    // set the transported var souce terms
         cvd->tVarMap[k]->getRhsSrc(cvd->iC);
 

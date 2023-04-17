@@ -1,14 +1,29 @@
-cmake_minimum_required(VERSION 3.10)
+#################### PREAMBLE #####################
 
-project(test LANGUAGES CXX C)
+cmake_minimum_required(VERSION 3.12)
+
+project(HiPS VERSION 1.0.0
+        LANGUAGES CXX C)
+
+############### PROJECT-WIDE SETUP ################
 
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)      # Release or Debug
 endif()
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../run)
+set(CMAKE_CXX_STANDARD 11)             # Set C++ language standard
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_EXTENSIONS NO)
 
-add_executable(sec.x "")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "../run")
+
+#------------ Executable targets --------------
+
+add_library(hips)
+
+#------------ Target properties ---------------
+
+target_compile_features(hips PUBLIC cxx_std_11)
 
 #################### preprocessor directives
 
@@ -28,14 +43,6 @@ endif()
 
 add_definitions(-D_USESTDVECTOR_)
 
-#################### Compile options
-
-target_compile_features(sec.x PUBLIC cxx_std_11)
-
-set(CMAKE_CXX_FLAGS_DEBUG   "-ggdb3")
-set(CMAKE_CXX_FLAGS_RELEASE "-O3")
-#set(CMAKE_CXX_FLAGS        "-Wall -Wextra")
-
 #################### Link: libraries and flags
 
 
@@ -45,7 +52,7 @@ find_library(YAML yaml-cpp          HINTS ${CMAKE_CURRENT_SOURCE_DIR}/yaml/lib)
 find_path(YAML_INCLUDE_DIR yaml-cpp HINTS ${CMAKE_CURRENT_SOURCE_DIR}/yaml/include)
 if(NOT YAML OR NOT YAML_INCLUDE_DIR)
     message("\n*************************************************")
-    message("Yaml not found, building it in sec/source/yaml")
+    message("Yaml not found, building it in hips/source/yaml")
     message("*************************************************\n")
     find_package(Git)
     if(GIT_FOUND)
@@ -65,8 +72,8 @@ if(NOT YAML OR NOT YAML_INCLUDE_DIR)
     find_path(YAML_INCLUDE_DIR yaml-cpp HINTS ${CMAKE_CURRENT_SOURCE_DIR}/yaml/include)
 endif()
 
-target_link_libraries(sec.x ${YAML})
-target_include_directories(sec.x PRIVATE ${YAML_INCLUDE_DIR})
+target_link_libraries(hips ${YAML})
+target_include_directories(hips PRIVATE ${YAML_INCLUDE_DIR})
 
 
 
@@ -75,11 +82,11 @@ target_include_directories(sec.x PRIVATE ${YAML_INCLUDE_DIR})
 find_library(CANTERA cantera HINTS ${CANTERA_LIB_DIR})
 if(CANTERA)
     message("**********CANTERA WAS FOUND*************")
-    target_include_directories(sec.x PRIVATE ${CANTERA_INCLUDE_DIR}) 
-    target_link_libraries(sec.x ${CANTERA})
+    target_include_directories(hips PRIVATE ${CANTERA_INCLUDE_DIR}) 
+    target_link_libraries(hips ${CANTERA})
     add_definitions(-DDOCANTERA)
     find_package(Boost REQUIRED COMPONENTS system)
-    target_include_directories(sec.x PRIVATE ${Boost_INCLUDE_DIRS})
+    target_include_directories(hips PRIVATE ${Boost_INCLUDE_DIRS})
 else()
     message("\n*************************************************")
     message("Building the code without Cantera")
@@ -89,47 +96,37 @@ endif()
 
 #-------
 
-
-#
-#find_library(LAPACK lapack)
-#target_link_libraries(sec.x ${LAPACK})
-#
-#find_library(BLAS blas)
-#target_link_libraries(sec.x ${BLAS})
-
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    target_link_libraries(sec.x "-framework Accelerate")
+    target_link_libraries(hips "-framework Accelerate")
 endif()
 
-target_link_libraries(sec.x "pthread")
+target_link_libraries(hips "pthread")
 
 #################### Local source files
 
-target_include_directories(sec.x PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(hips PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_sources(sec.x
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/main.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/inputoutput.cc             ${CMAKE_CURRENT_SOURCE_DIR}/inputoutput.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/domain.cc                  ${CMAKE_CURRENT_SOURCE_DIR}/domain.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/streams.cc                 ${CMAKE_CURRENT_SOURCE_DIR}/streams.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/param.cc                   ${CMAKE_CURRENT_SOURCE_DIR}/param.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/micromixer.cc              ${CMAKE_CURRENT_SOURCE_DIR}/micromixer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/solver.cc                  ${CMAKE_CURRENT_SOURCE_DIR}/solver.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/cvodeDriver.cc             ${CMAKE_CURRENT_SOURCE_DIR}/cvodeDriver.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/cantera_shell_functions.cc ${CMAKE_CURRENT_SOURCE_DIR}/cantera_shell_functions.h
-                                                               ${CMAKE_CURRENT_SOURCE_DIR}/interp_linear.h
+target_sources(hips PRIVATE main.cc
+        inputoutput.cc              inputoutput.h
+        domain.cc                   domain.h
+        streams.cc                  streams.h
+        param.cc                    param.h
+        micromixer.cc               micromixer.h
+        solver.cc                   solver.h
+        cvodeDriver.cc              cvodeDriver.h
+        cantera_shell_functions.cc  cantera_shell_functions.h
+                                    interp_linear.h
+        processor.cc                processor.h
 
-)
+      )
 
 #################### Subdirectories
 
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/cvode)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/domainvariables)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/hips)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/domaincases)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/user_chemical_mechanisms)
-#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/yaml)
+add_subdirectory(domainvariables)
+add_subdirectory(cvode)
+add_subdirectory(domaincases)
+add_subdirectory(user_chemical_mechanisms)
+#add_subdirectory(yaml)
 
 #################### Doxygen documentation
 

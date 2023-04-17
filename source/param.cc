@@ -1,3 +1,8 @@
+/**
+ * @file param.cc
+ * @brief Source file for class \ref param
+ */
+
 #include "param.h"
 #include "domain.h"
 
@@ -26,26 +31,19 @@ param::param(inputoutput *p_io) {
     ngrd0          = io->params["ngrd0"]          ? io->params["ngrd0"].as<int>()            : 1000;     //errMsg<int>("ngrd0");
     rho0           = io->params["rho0"]           ? io->params["rho0"].as<double>()          : 1.0;      //errMsg<double>("rho0");
     kvisc0         = io->params["kvisc0"]         ? io->params["kvisc0"].as<double>()        : 0.001694; //errMsg<double>("kvisc0");
-    sdiff0         = io->params["sdiff0"]         ? io->params["sdiff0"].as<double>()        : 0.001694; //errMsg<double>("sdiff0");
-    dPdx           = io->params["dPdx"]           ? io->params["dPdx"].as<double>()          : 0.0;
-    pres           = io->params["pres"]           ? io->params["pres"].as<double>()          : 101325.0;
     chemMechFile   = io->params["chemMechFile"]   ? io->params["chemMechFile"].as<string>()  : errMsg<string>("chemMechFile");
     probType       = io->params["probType"]       ? io->params["probType"].as<string>()      : errMsg<string>("probType");
 
-    Z_param        = io->params["Z_param"]        ? io->params["Z_param"].as<double>()       : 400.0;    //errMsg<double>("Z_param");
-    A_param        = io->params["A_param"]        ? io->params["A_param"].as<double>()       : 0.666667; //errMsg<double>("A_param");
     C_param        = io->params["C_param"]        ? io->params["C_param"].as<double>()       : 5.0;      //errMsg<double>("C_param");
+<<<<<<< HEAD
     x0virtual      = io->params["x0virtual"]      ? io->params["x0virtual"].as<double>()     : 0.0;
+=======
+>>>>>>> Edit_hips
     diffCFL        = io->params["diffCFL"]        ? io->params["diffCFL"].as<double>()       : errMsg<double>("diffCFL");
     cvode_atol     = io->params["cvode_atol"]     ? io->params["cvode_atol"].as<double>()    : 1.0E-10;
     cvode_rtol     = io->params["cvode_rtol"]     ? io->params["cvode_rtol"].as<double>()    : 1.0E-4;
-
-    Lbuoyant       = io->params["Lbuoyant"]       ? io->params["Lbuoyant"].as<bool>()        : false;
-    LPeEddy        = io->params["LPeEddy"]        ? io->params["LPeEddy"].as<bool>()         : false;
-    LplanarExpCent0= io->params["LplanarExpCent0"]? io->params["LplanarExpCent0"].as<bool>() : false;
-    g              = io->params["g"]              ? io->params["g"].as<double>()             : -9.81;
-    LdoDL          = io->params["LdoDL"]          ? io->params["LdoDL"].as<bool>()           : false;
     Lsolver        = io->params["Lsolver"]        ? io->params["Lsolver"].as<string>()       : errMsg<string>("Lsolver");
+<<<<<<< HEAD
     Lperiodic      = io->params["Lperiodic"]      ? io->params["Lperiodic"].as<bool>()       : false;
     Lspatial       = io->params["Lspatial"]       ? io->params["Lspatial"].as<bool>()        : false;
     chi0           = io->params["chi0"]           ? io->params["chi0"].as<double>()          : 500.0;   // error check below if not set
@@ -74,20 +72,21 @@ param::param(inputoutput *p_io) {
     Lmax           = io->params["Lmax"]           ? io->params["Lmax"].as<double>()          : 1.0;    //errMsg<double>("Lmax");
     Lmin           = io->params["Lmin"]           ? io->params["Lmin"].as<double>()          : dxmin*eddyMinCells; //errMsg<double>("Lmin");
 
+=======
+>>>>>>> Edit_hips
     modDump        = io->params["modDump"]        ? io->params["modDump"].as<int>()          : 1000000; //errMsg<int>("modDump");
-    modDisp        = io->params["modDisp"]        ? io->params["modDisp"].as<int>()          : 1;
-    modProbesCU    = io->params["modProbesCU"]    ? io->params["modProbesCU"].as<int>()          : 100;
+   
+    pres           = io->params["pres"]           ? io->params["pres"].as<double>()          : 101325.0;
 
     Ltecplot       = io->params["Ltecplot"]       ? io->params["Ltecplot"].as<bool>()        : false; //errMsg<int>("modDump");
 
-    LmultiPhase    = io->params["LmultiPhase"]    ? io->params["LmultiPhase"].as<bool>()     : false;
-    eSurfTens      = io->params["eSurfTens"]      ? io->params["eSurfTens"].as<double>()     : 0.0;
 
     Lrestart       = io->params["Lrestart"]       ? io->params["Lrestart"].as<bool>()        : false;
     rstType        = io->params["rstType"]        ? io->params["rstType"].as<string>()       : "single";    // "single" or "multiple"
     trst = 0.0; // (dont read this in, it comes from the restart file
 
-    umin_spatial   = io->params["umin_spatial"]   ? io->params["umin_spatial"].as<double>()  : 0.5;
+
+
 
     // HIPS variables ---------------------
 
@@ -100,6 +99,7 @@ param::param(inputoutput *p_io) {
     LsimpleMix     = io->params["LsimpleMix"]     ? io->params["LsimpleMix"].as<bool>()      : false;
     forceHips      = io->params["forceHips"]      ? io->params["forceHips"].as<int>()        : -1;
 
+<<<<<<< HEAD
 
     // Radiation variables ---------------------
 
@@ -184,5 +184,7 @@ param::param(inputoutput *p_io) {
         cout << endl << "ERROR: STRANG solver is not set up with Darrieus Landau instability LdoDL" << endl;
 
 
+=======
+>>>>>>> Edit_hips
 }
 

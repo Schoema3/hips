@@ -1,6 +1,6 @@
 /**
  * @file cvodeDriver.h
- * Header file for class cvodeDriver.h
+ * Header file for class \ref cvodeDriver.h
  */
 
 #pragma once

@@ -1,6 +1,6 @@
 /**
  * @file param.h
- * Header file for class param
+ * Header file for class \ref param
  */
 
 #pragma once
@@ -35,12 +35,10 @@ class param {
         int     ngrd0;           ///<  initial grid points
         double  rho0;            ///<  initial uniform density (kg/m^3)
         double  kvisc0;          ///<  initial uniform kinematic viscosity (m^2/s)
-        double  sdiff0;          ///<  initial uniform scalar diffusivity (m^2/s)
-        double  dPdx;            ///<  initial pressure gradient (Pa/m)
-        double  pres;            ///<  initial pressure (Pa)
         string  chemMechFile;    ///<  name of chemical mechanism file
         string  probType;        ///<  problem type: CHANNEL, CHANNEL_SCALAR, JETMIXL_RXN, COUETTE
 
+<<<<<<< HEAD
         double  Z_param;         ///<  Viscous penalty parameter
         double  A_param;         ///<  Energy Distribution parameter alpha
         string  LES_type;        ///<  NONE, THIRDS, ELAPSEDTIME, FRACDOMAIN, INTEGRALSCALE
@@ -81,60 +79,24 @@ class param {
         double  Lp;              ///<  Most probable eddy size frac of domainLength
         double  Lmax;            ///<  Max eddy size frac of domainLength
         double  Lmin;            ///<  Min eddy size frac of domainLength
+=======
+        double  C_param;         ///<  Eddy frequency parameter
+        double  diffCFL;         ///<  multiplies min diffusion timestep
+        double  cvode_atol;      ///<  absolute tolerace atol for cvode
+        double  cvode_rtol;      ///<  relative tolerace rtol for cvode
+        string  Lsolver;         ///<  EXPLICIT, SEMI-IMPLICIT, or STRANG 
+>>>>>>> Edit_hips
 
         int     modDump;         ///<  accepted eddies before output file
-        int     modDisp;         ///<  frequency to display results (# eddies)
-        int     modProbesCU;     ///<  frequency to dump probes (# catch-up steps)
-
-        bool    Ltecplot;        ///<  set TRUE for tecplot friendly output
-
-        bool    LmultiPhase;     ///<  true if domain has more than one phase (soot or particles don't count.)
-        double  eSurfTens;       ///<  surface tension, J/m2 for liquid phases
-
-        double  uBClo;           ///<  Dirichlet velocity boundary condition.
-        double  uBChi;           ///<  Dirichlet velocity boundary condition.
-        double  vBClo;           ///<  Dirichlet velocity boundary condition.
-        double  vBChi;           ///<  Dirichlet velocity boundary condition.
-        double  wBClo;           ///<  Dirichlet velocity boundary condition.
-        double  wBChi;           ///<  Dirichlet velocity boundary condition.
-        double  sBClo;           ///<  Dirichlet scalar boundary condition.
-        double  sBChi;           ///<  Dirichlet scalar boundary condition.
-        string  hWallBCtype;     ///<  ADIABATIC or ISOTHERMAL
-        double  TBClo;           ///<  Required if hWallBCtype = ISOTHERMAL
-        double  TBChi;           ///<  Required if hWallBCtype = ISOTHERMAL
-
         bool    Lrestart;        ///<  true to restart from file, else false
         string  rstType;         ///<  "single" or "multiple"
+
         double  trst;            ///<  restart time (from restart file), default is 0.0;
+        double  pres;            ///<  initial pressure (Pa)
+        bool    Ltecplot;        ///<  set TRUE for tecplot friendly output
 
-        double  umin_spatial;    ///< min u for spatial flows; used when kernels pull velocity
 
-        //----------------- Radiation variables
-
-        string                      radSolveType;   ///< OPTHIN, TWOFLUX, FVDOM
-        string                      radCoefType;    ///< PLANCKMEAN, WSGG, RCSLW
-        bool                        LradDoSoot;     ///< true of computing soot in radiation
-        int                         npsi;
-        int                         ntheta;
-
-        //----------------- Soot variables
-
-        bool           Lsoot;               ///< true for soot, false for no soot
-        int            nsvar;               ///< number of soot variables transported (# soot moments)
-        vector<string> PAH_species;         ///< soot list of pah species in mechanism
-
-        int            Cmin;                ///< minimum number of carbon atoms in a soot particle
-        double         rhoSoot;             ///< solid soot density
-        double         b_coag;              ///< coagulation rate parameter (see Lignell thesis page 58.)
-        string         nucleation_mech;     ///< soot nucleation chemistry flag
-        string         growth_mech;         ///< soot growth chemistry flag
-        string         oxidation_mech;      ///< soot oxidation chemistry flag
-        string         coagulation_mech;    ///< soot coagulation mechanism flag
-
-        string         PSD_method;          ///< method name for soot PSD: MONO, QMOM, MOMIC
-        int            nsvar_v;             ///< number of soot variables transported (v direction)
-        int            nsvar_s;             ///< number of soot variables transported (s direction)
-
+       
         //----------------- HIPS quantities
 
         bool    LisHips;         ///<  true if solving hips
@@ -147,7 +109,10 @@ class param {
         bool    LsimpleMix;      ///< true for simple instantaneous mixing of parcel pairs
         int     forceHips;       ///< forcing function for statistically stationary: -1 = none, 1 = source term, 2 = direct profile
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> Edit_hips
     //////////////////// MEMBER FUNCTIONS /////////////////
 
     private:

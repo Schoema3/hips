@@ -1,51 +1,32 @@
+/**
+ * @file main.cc
+ * @brief main driver for HiPS 
+ */
 
 #include "domain.h"
-#include "streams.h"
-#include "processor.h"
-#include "param.h"
-#include "probes.h"
-#include "micromixer.h"
-#include "micromixer_flmlt.h"
-#include "micromixer_hips.h"
-#include "micromixer_premix.h"
-#include "meshManager.h"
-#include "eddy.h"
-#include "solver.h"
-#include "solver_flmlt.h"
-#include "solver_premix.h"
-#include "solver_hips.h"
-#include "randomGenerator.h"
-
-#ifdef DOCANTERA
-#include "cantera/thermo/IdealGasPhase.h"
-#include "cantera/transport.h"
-#else
-#include "cantera_shell_functions.h"
-#endif
-
+#include "yaml-cpp/yaml.h"
 #include <iostream>
 #include <string>
 #include <ctime>
 #include <sstream>
 
 using namespace std;
-using namespace Cantera;
 
-//////////////////////////////////////////////////////////////
 
 processor proc;
+//////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////
 
 int main(int argc, char*argv[]) {
 
-
-    if(argc<3) {
+ if(argc<3) {
         cout << endl << "ERROR: code needs caseName and shift arguments" << endl;
         return 1;
     }
     string caseName= argv[1];            // example: temporalJet (../input/temporalJet, without the ../input/)
 
+<<<<<<< HEAD
     int nShiftFileNumbers = 0;
     stringstream ss1;
     string       s1;
@@ -81,33 +62,36 @@ int main(int argc, char*argv[]) {
     domn.init(&io, &strm, &gas, tran, mimx, solv, &rand, &prb);
     eddl.init(NULL, NULL, NULL,  NULL, NULL, NULL, NULL, NULL,  NULL, NULL,  NULL, true);
     //
+=======
+    int nShiftFileNumbers = 0;          // we should increment the seed if we are starting MPI multiple times
+    stringstream ss1; ss1.clear(); ss1 << argv[2]; ss1 >> nShiftFileNumbers;
+   
+    domain domn(NULL,nShiftFileNumbers, caseName);
+  
+>>>>>>> Edit_hips
     //-------------------
 
-    time_t mytimeStart, mytimeEnd;
-    mytimeStart = time(0);
-    *io.ostrm << endl << "#################################################################";
-    *io.ostrm << endl << "#  Start Time = " << ctime(&mytimeStart);
-    *io.ostrm << endl << "#################################################################";
+  time_t mytimeStart, mytimeEnd;
+   mytimeStart = time(0);
+  *domn.io->ostrm << endl << "#################################################################";
+   *domn.io->ostrm << endl << "#  Start Time = " << ctime(&mytimeStart);
+   *domn.io->ostrm << endl << "#################################################################";
 
-
-    //-------------------
-
-    domn.solv->calculateSolution();
-
-    //domn.io->outputProperties("../data/init.dat", 0.0); //doldb
-    //domn.mimx->advanceOdt(0.0, domn.pram->tEnd);        //doldb
+   cout << endl << "made it c" << endl; //doldb
 
     //-------------------
 
-    //delete mimx;
-    //delete solv;
+   cout << endl << "made it d" << endl; //doldb
 
-    mytimeEnd = time(0);
-    *io.ostrm << endl << "#################################################################";
-    *io.ostrm << endl << "#  Start Time = " << ctime(&mytimeStart);
-    *io.ostrm << endl << "#  End Time   = " << ctime(&mytimeEnd);
-    *io.ostrm << endl << "#################################################################";
-    *io.ostrm << endl;
+   domn.hips_advance();
+   cout << endl << "made it e" << endl; //doldb
+
+  mytimeEnd = time(0);
+  *domn.io->ostrm << endl << "#################################################################";
+  *domn.io->ostrm << endl << "#  Start Time = " << ctime(&mytimeStart);
+  *domn.io->ostrm << endl << "#  End Time   = " << ctime(&mytimeEnd);
+  *domn.io->ostrm << endl << "#################################################################";
+  *domn.io->ostrm << endl;
 
     return 0;
 

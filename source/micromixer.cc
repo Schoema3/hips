@@ -1,3 +1,7 @@
+/**
+ * @file micromixer.cc
+ * @brief Source file for class \ref micromixer
+ */
 
 #include "micromixer.h"
 #include "domain.h"
@@ -8,13 +12,21 @@
 
 #include "interp_linear.h"
 
+
 ///////////////////////////////////////////////////////////////////////////////
 /** micromixer constructor function
  */
 
+void micromixer::setNominalStepSize() {
+    dtStepNominal = domn->pram->diffCFL * domn->solv->tMix;
+}
+
+
 micromixer::micromixer() {
     cvode = new cvodeDriver();
     nsteps = 0;
+   // if(LcvodeSet) delete cvode;
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,81 +43,193 @@ void micromixer::init(domain *p_domn) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/** Advance ODT solution: diffusion and reaction
+
+/** Mix parcels uniformly (using average) at given level
+  * Mixing at levels above the lowest enables low Sc variables.
+  * @param kVar   \input  variable index to mix (normally a transported var as determined by caller)
+  * @param iLevel \input  grandchildren of this iLevel will be mixed
+  * @param iTree  \input  at the given iLevel, mix only this subtree
+  *
+  * Example: For a 5 level tree, we have levels 0, 1, 2, 3, 4 (top to bottom).
+  *   
+  *          Let iLevel = 2, then nPmix = 2 and we are mixing pairs of parcels at the base of the tree.
+  *          iTree can be 0, 1, 2, or 3.
+  *          if iTree = 0 we will mix parcels (0,1) and (2,3) as the left subtree and right subtree:
+  *                (istart=1, iend=2) and (istart=2, iend=4)
+  *          if iTree = 1 we will mix parcels (4,5) and (6,7) with (istart=4,iend=6), (istart=6, iend=8)
+  *          if iTree = 2 we will mix parcels (8,9) and (10,11) with (istart=8,iend=10), (istart=10, iend=12)
+  *          if iTree = 3 we will mix parcels (12,13) and (14,15) with (istart=12,iend=14), (istart=14, iend=16)
+  *         
+  *          Let iLevel=1 then we will be mixing groups of four parcels.
+  *          iTree can be 0 or 1
+  *          if iTree = 0 we will mix parcels (0,1,2,3) and (4,5,6,7) with (istart=0,iend=4), (istart=4, iend=8)
+  *          if iTree = 1 we will mix parcels (8,9,10,11) and (12,13,14,15) with (istart=8,iend=12), (istart=12, iend=16)
+  *
+  * recall: 3 << 4 means 3*2^4 (or 3 = 000011 and 3<<4 = 110000 = 48), that is, we shift the bits left 4 places.
+  *          
+  * NOTE: BE CAREFUL WITH MIXING SOME SCALARS, LIKE MASS FRACTIONS; CURRENT CODE ASSUMES ALL PARCELS HAVE SAME DENSITY (mixing Yi directly)
   */
 
-void micromixer::advanceOdt(const double p_tstart, const double p_tend, const int iLevel) { // iLevel is for hips
+void micromixer::mixAcrossLevelTree(const int kVar, const int iLevel, const int iTree) {
 
-    tstart = p_tstart;
-    tend   = p_tend;
+    int istart;
+    int iend;
 
-    setNominalStepSize();
-    if(domn->pram->LdoDL) do_DL("init");
+    int nPmix = 1<<(domn->pram->nLevels - iLevel - 2);     // number of parcels mixed together
+                                                           // also = # to skip in loop
+                                  
+    int ime;            // index of first cell (mapped to istart)
+    double s;           // initialize sum to 0
 
-    for(time=tstart; time<tend; time+=dt, nsteps++) {
+    bool LdoChi = (domn->v[kVar]->var_name == "mixf" || 
+                   domn->v[kVar]->var_name == "mixf_000") ? true : false;
 
-        if(adaptGridIfNeeded() || LforceSetNominalStepSize)
-           setNominalStepSize();                             // resets LforceSetNominalStepSize
-        setStepSize();
-        if(domn->pram->Lsolver=="EXPLICIT")
-            advanceOdtSingleStep_Explicit();
-        else if(domn->pram->Lsolver=="SEMI-IMPLICIT")
-            advanceOdtSingleStep_SemiImplicit();
-        else if(domn->pram->Lsolver=="STRANG")
-            advanceOdtSingleStep_StrangSplit();
+    // TODO: generalize this to compute chi for any scalar, not just mixf, mixf_0
 
-        domn->io->dumpDomainIfNeeded();
-        domn->io->outputFlmltProgress();
+    //--------- Mix left branch of iTree
+
+    //istart = iTree << (Nm1-iLevel);  // same thing
+
+    istart = iTree << (domn->solv->Nm1-iLevel);  // same thing
+    iend   = istart + nPmix;
+
+    s = 0;            // initialize sum to 0
+    for(int i=istart; i<iend; i++) {
+        ime = domn->solv->pLoc[i];
+        s += domn->v[kVar]->d[ime];
+    }
+    for(int i=istart; i<iend; i++) {
+        ime = domn->solv->pLoc[i];
+
+        if(LdoChi)
+            domn->chi->setVar(domn->v[kVar]->d[ime], s/nPmix, ime);
+
+        domn->v[kVar]->d[ime] = s / nPmix;
+       
 
     }
 
-    if(domn->pram->LdoDL) do_DL("calc a");
+    //--------- Mix right branch of iTree
 
+    istart = iend;        // same thing
+    iend   = istart + nPmix;
+
+    s = 0;            // initialize sum to 0
+    for(int i=istart; i<iend; i++) {
+        ime = domn->solv->pLoc[i];
+        s += domn->v[kVar]->d[ime];
+    }
+    for(int i=istart; i<iend; i++) {
+        ime = domn->solv->pLoc[i];
+
+        if(LdoChi)
+            domn->chi->setVar(domn->v[kVar]->d[ime], s/nPmix, ime);
+
+        domn->v[kVar]->d[ime] = s / nPmix;
+    }
 }
-///////////////////////////////////////////////////////////////////////////////
-/**Set the cell sizes vectors: dxc and dx */
 
-void micromixer::setGridDxcDx() {
+///////////////////////////////////////////////////////////////////////////////////////
 
-    domn->mesher->setGridDxc(domn, dxc, domn->pram->cCoord);
-    domn->mesher->setGridDx(domn, dx);
+/** Advance ODT solution: diffusion and reaction
+  * @param tstart  \input start time for mixing
+  * @param tend    \input end   time for mixing
+  * @param iLevel  \input root node of the eddy (default value -1, see header file)
+  *                       in case of iLevel=-1, no simple mixing is done, only advancement
+  */
 
-}
+void micromixer::advanceHips(const double p_tstart, const double p_tend, const int iLevel) {
 
-///////////////////////////////////////////////////////////////////////////////
-/** Set time step size.
- *  This is based on a diffusive (or other) timescale.
- *  This is a uniform step size for the given integration period.
- *  The actual step size will be rest based on a data dump or tend.
- */
+ tstart = p_tstart;
+    tend   = p_tend;
 
-void micromixer::setNominalStepSize() {
+    cout << endl << "here 1" << endl; //doldb 
+    if(domn->pram->forceHips==2 && iLevel==0)   // forcing for statistically stationary
+        forceProfile();
+    cout << endl << "here 2" << endl; //doldb 
 
-    if (domn->pram->Lspatial) {
-        double velMin = *min_element(domn->uvel->d.begin(), domn->uvel->d.end());
-        if (velMin <= 0.0) {
-            cout << "\nError micromixer::setNominalStepSize: velMin = " << velMin << ": neg or 0" << endl;
-            exit(0);
+
+    if(domn->pram->LsimpleMix){
+        for(int k=0; k<domn->v.size(); k++){
+    cout << endl << "here 3 " << domn->v[k]->var_name << " " << domn->v.size() << " " << endl; //doldb 
+            if(!domn->v[k]->L_transported)
+                continue;
+            if(iLevel == domn->v[k]->i_plus-1 &&                                       // mix scalar across level i_minus
+               domn->rand->getRand() <= domn->v[k]->i_plus-domn->v[k]->i_batchelor)    // with probability i_plus - i_batchelor
+                
+                    mixAcrossLevelTree(k, iLevel,domn->solv-> iTree);  
+            else if(iLevel >= domn->v[k]->i_plus ){                                    // scalars at or below i_plus are fully mixed
+               
+                mixAcrossLevelTree(k, iLevel,domn->solv-> iTree);                              //    the initial condition has uniform mixing below Batchelor
+            }
         }
     }
 
-    domn->mesher->setGridDx(domn, dx);
+    //if(domn->pram->LsimpleMix){{{
+    //    for(int k=0; k<domn->v.size(); k++)
+    //        if(domn->v.at(k)->L_transported){
+    //            for(int i=0; i<domn->ngrd; i+=2){
+    //                int ime = domn->solv->pLoc[i];
+    //                int inb = domn->solv->pLoc[i+1];
+    //                double val = (domn->v[k]->d[ime] + domn->v[k]->d[inb])/2.0;
+    //                domn->v[k]->d[ime] = val;
+    //                domn->v[k]->d[inb] = val;
+    //            }
+    //        }}}}
 
-    double coef = 0.0;
-    double dmb;
-    for (int i=0; i < domn->ngrd; i++) {
-        dmb = domn->dvisc->d.at(i) / domn->rho->d.at(i) / dx.at(i) / dx.at(i);
-        if (domn->pram->Lspatial)
-            dmb /= domn->uvel->d.at(i);
-        if (dmb > coef)
-            coef = dmb;
+    setNominalStepSize();
+
+    for(time=tstart; time<tend; time+=dt) {
+
+        setStepSize();
+        if(domn->pram->Lsolver=="EXPLICIT")
+            advanceHipsSingleStep_Explicit();
+        else if(domn->pram->Lsolver=="SEMI-IMPLICIT")
+            advanceHipsSingleStep_SemiImplicit();
+        else if(domn->pram->Lsolver=="STRANG")
+            advanceHipsSingleStep_StrangSplit();
+
+        domn->io->dumpDomainIfNeeded();
+
     }
-    dtStepNominal = domn->pram->diffCFL * 0.5 / coef;
-
-    LforceSetNominalStepSize = false;
+   
 }
 
+
 ///////////////////////////////////////////////////////////////////////////////
+
+/** Force hips profile to get statistically stationary
+  */
+
+void micromixer::forceProfile() {
+
+    for(int k=0; k<domn->v.size(); k++){
+        if(!domn->v[k]->L_transported)
+            continue;
+
+        double s;
+        //---------- force the left half of parcels to average 0
+
+        s=0.0;
+        for(int i=0; i<domn->ngrd>>1; i++)
+            s += domn->v[k]->d[domn->solv->pLoc[i]];
+        s /= (domn->ngrd>>1);
+        for(int i=0; i<domn->ngrd>>1; i++)
+            domn->v[k]->d[domn->solv->pLoc[i]] += (-s - 0.0);
+
+        //---------- force the right half of parcels to average 1
+
+        s=0.0;
+        for(int i=domn->ngrd>>1; i<domn->ngrd; i++)
+            s += domn->v[k]->d[domn->solv->pLoc[i]];
+        s /= (domn->ngrd>>1);
+        for(int i=domn->ngrd>>1; i<domn->ngrd; i++)
+            domn->v[k]->d[domn->solv->pLoc[i]] += (-s + 1.0);
+    }
+}
+
+
+////////////////////////////////////////////////////////////////////////////////
 /** Set time step size.
  *  This is based on a diffusive (or other) timescale.
  *  This is a uniform step size for the given integration period.
@@ -131,18 +255,11 @@ void micromixer::setStepSize() {
 /** Advance ODT solution: diffusion and reaction
  */
 
-void micromixer::advanceOdtSingleStep_Explicit(){
+void micromixer::advanceHipsSingleStep_Explicit(){
 
-    setGridDxcDx();
-    setGf();
-    if(domn->pram->LdoDL) do_DL("set DL_1");
+ 
 
-    domn->domc->setCaseSpecificVars();
 
-    set_oldrho_or_rhov();
-    if(domn->pram->Lspatial) transform(oldrho_or_rhov.begin(), oldrho_or_rhov.end(), domn->uvel->d.begin(), oldrho_or_rhov.begin(), multiplies<double>());
-
-    domn->v[0]->resetSourceFlags();             // sets L_source_done = false for all transported vars
     for(int k=0; k<domn->v.size(); k++)
         if(domn->v.at(k)->L_transported) {
             domn->v.at(k)->getRhsMix(gf, dxc);
@@ -154,16 +271,13 @@ void micromixer::advanceOdtSingleStep_Explicit(){
             for(int i=0; i < domn->ngrd; i++)
                 domn->v.at(k)->d.at(i) = domn->v.at(k)->d.at(i) + dt*( domn->v.at(k)->rhsMix.at(i) + domn->v.at(k)->rhsSrc.at(i));
 
-    updateGrid();            // update cell sizes due to rho or rho*v variations (continuity)
+  
 
-    if(domn->pram->LdoDL) do_DL("set DL_2");
-
-    domn->mesher->enforceDomainSize();     // chop the domain
 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/** Advance ODT solution: diffusion and reaction; Some terms are implicit, others explicit.
+/** Advance HiPS solution: diffusion and reaction; Some terms are implicit, others explicit.
  *  Nominally the mixing terms are explicit. Calling the cvode driver.
  *  First order.
  *  dphi/dt =  D(phi_0) + S(phi) : solving from t0 to t1.
@@ -171,17 +285,10 @@ void micromixer::advanceOdtSingleStep_Explicit(){
  *  We solve the whole RHS implicitly, but the D(phi_0) is fixed at time 0.
  */
 
-void micromixer::advanceOdtSingleStep_SemiImplicit() {
+void micromixer::advanceHipsSingleStep_SemiImplicit() {
 
     if(domn->pram->Lsolver!="SEMI-IMPLICIT")
         return;
-
-    setGridDxcDx();
-    setGf();
-    domn->domc->setCaseSpecificVars();
-    set_oldrho_or_rhov();
-    if(domn->pram->Lspatial) transform(oldrho_or_rhov.begin(), oldrho_or_rhov.end(), domn->uvel->d.begin(), oldrho_or_rhov.begin(), multiplies<double>());
-    if(domn->pram->LdoDL) do_DL("set DL_1");
 
     //--------------- Set the explicit (mixing) terms
 
@@ -196,16 +303,10 @@ void micromixer::advanceOdtSingleStep_SemiImplicit() {
 
     //---------------
 
-    updateGrid();            // update cell sizes due to density variations (continuity)
-
-    if(domn->pram->LdoDL) do_DL("set DL_2");
-
-    domn->mesher->enforceDomainSize();     // chop the domain
-
-}
+  }
 
 ///////////////////////////////////////////////////////////////////////////////
-/** Advance ODT solution: diffusion and reaction; Some terms are implicit, others explicit.
+/** Advance HiPS solution: diffusion and reaction; Some terms are implicit, others explicit.
  *  Nominally the mixing terms are explicit. Calling the cvode driver.
  *  First order.
  *  dphi/dt =  D(phi_0) + S(phi) : solving from t0 to t1.
@@ -213,18 +314,16 @@ void micromixer::advanceOdtSingleStep_SemiImplicit() {
  *  We solve the whole RHS implicitly, but the D(phi_0) is fixed at time 0.
  */
 
-void micromixer::advanceOdtSingleStep_StrangSplit() {
+void micromixer::advanceHipsSingleStep_StrangSplit() {
 
     if(domn->pram->Lsolver!="STRANG")
         return;
 
     //--------------- First step: phi_1 = phi_0 + 0.5*dt*D(phi_0)
 
-    setGridDxcDx();
-    setGf();
-    domn->domc->setCaseSpecificVars();
-    set_oldrho_or_rhov();
-    if(domn->pram->Lspatial) transform(oldrho_or_rhov.begin(), oldrho_or_rhov.end(), domn->uvel->d.begin(), oldrho_or_rhov.begin(), multiplies<double>());
+ 
+ 
+  
 
     for(int k=0; k<domn->v.size(); k++)
         if(domn->v.at(k)->L_transported)
@@ -235,18 +334,8 @@ void micromixer::advanceOdtSingleStep_StrangSplit() {
             for(int i=0; i < domn->ngrd; i++)
                 domn->v.at(k)->d.at(i) = domn->v.at(k)->d.at(i) + 0.5*dt*domn->v.at(k)->rhsMix.at(i);
 
-    updateGrid();            // update cell sizes due to density variations (continuity)
 
-    //--------------- Second step: phi_2 = phi_1 + dt*S(phi_2)
-    // (actually: dphi/dt = S(phi), with initial condition phi=phi_1. Implicit.)
 
-    setGridDxcDx();
-    //not needed: setGf();
-    domn->domc->setCaseSpecificVars();
-    set_oldrho_or_rhov();
-    if(domn->pram->Lspatial) transform(oldrho_or_rhov.begin(), oldrho_or_rhov.end(), domn->uvel->d.begin(), oldrho_or_rhov.begin(), multiplies<double>());
-
-    domn->v[0]->resetSourceFlags();             // sets L_source_done = false for all transported vars
     for(int k=0; k<domn->v.size(); k++)
         if(domn->v.at(k)->L_transported)
             domn->v.at(k)->getRhsSrc();
@@ -254,16 +343,9 @@ void micromixer::advanceOdtSingleStep_StrangSplit() {
     for(int i=0; i<domn->ngrd; i++)
         cvode->integrateCell(i, dt);
 
-    updateGrid();            // update cell sizes due to density variations (continuity)
 
-    //--------------- Third step: phi_3 = phi_2 + 0.5*dt*D(phi_2)
 
-    setGridDxcDx();
-    setGf();
-    domn->domc->setCaseSpecificVars();
-    set_oldrho_or_rhov();
-    if(domn->pram->Lspatial) transform(oldrho_or_rhov.begin(), oldrho_or_rhov.end(), domn->uvel->d.begin(), oldrho_or_rhov.begin(), multiplies<double>());
-
+  
     for(int k=0; k<domn->v.size(); k++)
         if(domn->v.at(k)->L_transported)
             domn->v.at(k)->getRhsMix(gf, dxc);
@@ -273,216 +355,11 @@ void micromixer::advanceOdtSingleStep_StrangSplit() {
             for(int i=0; i < domn->ngrd; i++)
                 domn->v.at(k)->d.at(i) = domn->v.at(k)->d.at(i) + 0.5*dt*domn->v.at(k)->rhsMix.at(i);
 
-    updateGrid();            // update cell sizes due to density variations (continuity)
 
     //-------------------------
 
-    domn->mesher->enforceDomainSize();     // chop the domain (for strang, just at the final step)
-
 }
-
-///////////////////////////////////////////////////////////////////////////////
-/** Set the grid factor array
-  * Consider a flux like heat flux defined at each face:
-  * q_i = -k_i * (T_i - T_{i-1}) / (x_i - x_{i-1})
-  *     = -k_i * (T_i - T_{i-1}) / ((dx_{i-1} + dx_i)/2)
-  * The grid factor array is defined at each grid point, and is the denominator:
-  * gf = 2/(dx_{i-1} + dx_i)
-  * For the left boundary, the flux would be:
-  * q0 = -k0 * (T0 - Tbc)/(x_i - posf_0)
-  *    = -k0 * (T0 - Tbc)/(dx_0/2)
-  * --> gf = 2/dx_0
-  * and similarly for the right boundary
- */
-
-void micromixer::setGf(){
-
-    gf.resize(domn->ngrdf, 0.0);
-
-    for (int i=1, im=0; i<domn->ngrd; i++, im++) // interior
-        gf.at(i) = 2.0 / (dx.at(im) + dx.at(i));
-
-    gf.at(0)          = 2.0 / dx.at(0);                // lo boundary
-    gf.at(domn->ngrd) = 2.0 / dx.at(domn->ngrd - 1);   // hi boundary
-    if (domn->pram->bcType == "PERIODIC") {            // periodic
-        gf.at(0)          = 2.0 / (dx.at(0) + dx.at(domn->ngrd - 1));
-        gf.at(domn->ngrd) = gf.at(0);
-    }
-
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/** Update grid for gas expansion
- */
-
-void micromixer::updateGrid() {
-
-    //-------------- return for fixed grid cases
-
-    if( (domn->pram->bcType=="WALL" && (domn->pram->vBClo==0 || domn->pram->vBChi==0)) ||
-        domn->pram->LisFlmlt || domn->pram->LisFlmltX ||
-        domn->pram->LisHips)
-        return;
-
-    //-------------- handle wall suction/blowing case
-
-    if(domn->pram->bcType=="WALL" && (domn->pram->vBClo !=0 || domn->pram->vBChi != 0)){
-
-        //---------- move all faces over (assuming vBClo > 0)
-
-        if(domn->pram->vBClo <=0) {
-            cout << "\nError micromixer::updateGrid: vBClo is <= 0.0 for suction/blowing case." << endl;
-            exit(0);
-        }
-
-        double dx = domn->pram->vBClo * dt;
-        for(int i=0; i<domn->ngrdf; i++)
-            domn->posf->d[i] += dx;
-
-        //---------- insert a cell at the beginning of domain
-
-        for(int k=0; k < domn->v.size(); k++)
-            domn->v[k]->d.insert(domn->v[k]->d.begin(), domn->domc->inlet_cell_dv_props[k]);
-        domn->pos->d[0] = 0.5*(domn->posf->d[0] + domn->posf->d[1] );
-        domn->ngrd++;
-        domn->ngrdf++;
-
-        domn->mesher->merge2cells(0, true);
-
-        if((domn->posf->d[1]-domn->posf->d[0]) > 2.0*(domn->posf->d[2]-domn->posf->d[1])){
-            vector<double> faces{domn->posf->d[0], 0.5*(domn->posf->d[0]+domn->posf->d[1]), domn->posf->d[1]};
-            domn->mesher->splitCell(0,1,faces);
-        }
-
-        //---------- at the end of domain split cell and delete the overhang
-
-        domn->mesher->enforceDomainSize();     // chop the domain (for strang, just at the final step)
-
-        LforceSetNominalStepSize = true;       // we changed the grid, so indicate to recompute nominal timestep size
-
-    }
-
-    //-------------- general variable density/outflow case
-
-    else {
-
-        domn->rho->setVar();
-
-        vector<double> dxc2(domn->ngrd);
-        for(int i=0; i<domn->ngrd; i++)
-            dxc2[i] = dxc.at(i)*(oldrho_or_rhov.at(i)/domn->rho->d.at(i));
-        if(domn->pram->Lspatial)
-            for(int i=0; i<domn->ngrd; i++)
-                dxc2[i] /= domn->uvel->d.at(i);
-
-        //-------------
-
-        domn->mesher->setGridFromDxc(dxc2);
-    }
+///////////////////////////////////////////////////////////////////////////////////
 
 
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-/** Adapt during diffusion for spatial cases for which grid contraction
- *  results in small grid cells
- */
-
-bool micromixer::adaptGridIfNeeded() {
-
-    if (domn->pram->Lspatial && *min_element(dx.begin(), dx.end()) < 0.9*domn->pram->dxmin) {
-#ifndef SILENT
-        *domn->io->ostrm << endl << "#------- ADAPTING DURING DIFFUSION" << " " << domn->ngrd;
-#endif
-        domn->mesher->adaptGrid(0, domn->ngrd-1);
-        return true;
-    }
-    return false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/** Processes the DL instability
- *  @param doWhat \input string that indicates what to do.
- * */
-
-void micromixer::do_DL(string doWhat) {
-
-    if(!domn->pram->LdoDL)
-        return;
-
-    //--------------------------------------------------
-    if(doWhat == "init") {
-
-        uDL_1     = vector<double>(domn->ngrd, 0.0);
-        uDL_2     = vector<double>(domn->ngrd, 0.0);
-        xDL_1     = domn->pos->d;
-        xDL_2     = domn->pos->d;
-        posDL_old = domn->pos->d;
-        domn->aDL->d = vector<double>(domn->ngrd, 0.0);
-    }
-    //--------------------------------------------------
-    else if(doWhat == "set DL_1") {
-
-        xDL_1 = xDL_2;
-        uDL_1 = uDL_2;
-        posDL_old = domn->pos->d;
-
-    }
-    //--------------------------------------------------
-    else if(doWhat == "set DL_2") {
-
-        xDL_2.resize(domn->ngrd);
-        uDL_2.resize(domn->ngrd);
-
-        for(int i=0; i<domn->ngrd; i++) {
-            uDL_2.at(i) = (domn->pos->d[i] - posDL_old.at(i)) / (domn->pram->Lspatial ? dt/domn->uvel->d[i] : dt);
-            xDL_2.at(i) = 0.5*(posDL_old.at(i) + domn->pos->d[i]);
-        }
-    }
-    //--------------------------------------------------
-    else if(doWhat == "calc a") {
-
-        vector<double> dmb;
-
-        dmb = uDL_1;
-        Linear_interp Linterp(xDL_1, dmb);
-        uDL_1.resize(domn->ngrd);
-        for(int i=0; i<domn->ngrd; i++)
-            uDL_1.at(i)= Linterp.interp(domn->pos->d[i]);
-
-        dmb = uDL_2;
-        Linterp = Linear_interp(xDL_2, dmb);
-        uDL_2.resize(domn->ngrd);
-        for(int i=0; i<domn->ngrd; i++)
-            uDL_2.at(i)= Linterp.interp(domn->pos->d[i]);
-
-        for(int i=0; i<domn->ngrd; i++)
-            domn->aDL->d.at(i) = (uDL_2.at(i) - uDL_1.at(i)) / (domn->pram->Lspatial ? dt/domn->uvel->d[i] : dt);
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/** Store the old density for continuity.
-  * This is a function for generality on inheritance.
-  */
-
-void micromixer::set_oldrho_or_rhov() {
-    oldrho_or_rhov = domn->rho->d;
-}
-
-
-#include <iomanip>
-void micromixer::check_balance(int io) {
-
-    setGridDxcDx();
-    double mom = 0.0;
-
-    for(int i=0; i<domn->ngrd; i++)
-        mom += domn->rho->d[i] * domn->uvel->d[i] * (domn->uvel->d[i]-0.0) * dxc[i];
-
-    cout << scientific;
-    cout << setprecision(13);
-    cout << endl << "check: " << io << " " << mom;
-}
 

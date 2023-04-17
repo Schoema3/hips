@@ -1,6 +1,6 @@
 /**
  * @file micromixer.h
- * Header file for class micromixer
+ * Header file for class \ref micromixer
  */
 
 #pragma once
@@ -39,45 +39,35 @@ class micromixer {
         vector<double> dx;             ///< abs(\Delta(x))
         vector<double> gf;             ///< grid factor for derivatives: (df/dx) = gf * (f - f)
 
-        bool           LdoDump;        ///<
+        bool           LdoDump;        ///
 
-        vector<double> uDL_1;          ///< for DL instability: old velocity
-        vector<double> uDL_2;          ///< for DL instability: new velocity
-        vector<double> xDL_1;          ///< for DL instability: = "old" cell center positions
-        vector<double> xDL_2;          ///< for DL instability: = "new" cell center positions
-        vector<double> posDL_old;      ///< for DL instability: = "new" cell center positions
-
+       
         vector<double> oldrho_or_rhov; ///< store the old density for continuity
 
         int nsteps;                    ///< total number of timesteps taken during simulation
 
     //////////////////// MEMBER FUNCTIONS /////////////////
 
-        virtual void advanceOdt(const double p_tstart, const double p_tend, const int iLevel = -1);    // iLevel is for hips
+        virtual void advanceHips(const double p_tstart, const double p_tend, const int iLevel = -1);    // iLevel is for hips
 
-        void check_balance(int io);
+  
 
     protected:
-
-        virtual void setGf();                ///< sets the gf array
-        virtual void setGridDxcDx();         ///< sets the dxc array
-        virtual void set_oldrho_or_rhov();   ///< record old rho (or rho*u) for continuity
-        virtual bool adaptGridIfNeeded();   ///< expansion or contraction --> adapt
         virtual void setNominalStepSize();   ///< sets a nominal dt for the whole period
-
-        virtual void updateGrid();           ///< enforce the continuity condition: (e.g., rho*dx = const).
         void setStepSize();                  ///< set a local dt for interruptions (dump or tend)
-        void do_DL(string doWhat);
-
-        void advanceOdtSingleStep_Explicit();
-        void advanceOdtSingleStep_SemiImplicit();
-        void advanceOdtSingleStep_StrangSplit();
+        
+        void advanceHipsSingleStep_Explicit();
+        void advanceHipsSingleStep_SemiImplicit();
+        void advanceHipsSingleStep_StrangSplit();
 
         bool LforceSetNominalStepSize;       ///< used in updateGrid when splitting cells to indicate to reset timestep size later
 
 
 
+    private:
 
+    void mixAcrossLevelTree(const int kVar, const int iMixLevel, const int iTree); //, const int iTree=-1);
+    void forceProfile();
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
 
     public:

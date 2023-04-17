@@ -1,6 +1,6 @@
 /**
  * @file domain.h
- * Header file for class domain
+ * Header file for class \ref domain
  */
 
 #pragma once
@@ -11,8 +11,13 @@
 #include "param.h"
 #include "streams.h"
 #include "micromixer.h"
+<<<<<<< HEAD
 #include "randomGenerator.h"
 #include "solver.h"
+=======
+#include "solver.h"
+#include "randomGenerator.h"
+>>>>>>> Edit_hips
 
 #ifdef DOCANTERA
 #include "cantera/thermo/IdealGasPhase.h"
@@ -42,28 +47,22 @@ class domain {
     //////////////////// DATA MEMBERS //////////////////////
 
         domain                  *domn;     ///< (for one domain to point to another (eddl))
-
-        int                     ngrd;      ///< number of grid cells
-        int                     ngrdf;     ///< number of grid cell faces = ngrd+1
-
+        int                     ngrd;      ///< number of parcels
         vector<dv*>             v;         ///< All domain variables are stored in here.
-
-        dv*                     pos;       ///< pointers to gas properties
-        dv*                     posf;      ///< access as: posf->d[i], or posf->var_name, etc.
         dv*                     rho;
+<<<<<<< HEAD
         dv*                     sdiff;
         dv*                     sca;
         dv*                     phase;
+=======
+>>>>>>> Edit_hips
         dv*                     enth;
         dv*                     temp;
         dv*                     mixf;
         dv*                     chi;
-        dv*                     hr;
-        dv*                     aDL;
         vector<dv*>::iterator   ysp;       ///< access as: ysp=v.begin(), (*ysp)->d[i] or (*(ysp+k))->d[i], or ysp[k]->d[i].
         vector<dv*>::iterator   svar;      ///< iterator for increment to go through moments (*(ysp+k))->d[i];)
-        vector<dv*>::iterator   eta;       ///< iterator for increment to go through species etc. (*(ysp+k))->d[i];)
-
+        
         map<string,dv*>         varMap;
 
         IdealGasPhase           *gas;        ///< pointer to cantera thermochemistry object (reaction rates, Cp, etc.)
@@ -71,9 +70,15 @@ class domain {
         streams                 *strm;       ///< pointer to gas stream properties
         inputoutput             *io;         ///< pointer to input/output object
         param                   *pram;       ///< pointer to the parameters object
+<<<<<<< HEAD
         micromixer              *mimx;       ///< pointer to micromixer for diffusion, reaction, domain evolution.s
         solver                  *solv;       ///< pointer to solver object
 
+=======
+        micromixer              *mimx;       ///< pointer to micromixer for diffusion, reaction, domain evolution.
+        solver                  *solv;       ///< pointer to solver object
+       
+>>>>>>> Edit_hips
         randomGenerator         *rand;
 
         int                     nTrans;      ///< number of transported variables on the domain.
@@ -81,22 +86,22 @@ class domain {
         domaincase              *domc;       ///< domaincase class: set specific vars...
 
 
-    //////////////////// MEMBER FUNCTIONS /////////////////
-
-        int    domainPositionToIndex(double position, const bool LowSide, int dbg);
-        void   setDomainFromRegion(const int i1, const int i2);
-        double cyclePeriodicDomain(const int icycle);
-        void   backCyclePeriodicDomain(const double backCycleDistance);
-        double Ldomain();
-
-    private:
 
 
+
+
+        bool                    LdomcSet;      ///< flag indicating new domainCase --> allow deletion
+        bool                    LmimxSet;     ///< flag indicating new micromixer --> allow deletion
+        bool                    LsolvSet;    ///< flag indicating new solver     --> allow deletion
+        bool                    LrandSet;   ///< flag indicating new randomGen  --> allow deletion
+        bool                    LioSet;    ///< flag indicating new inputoutput--> allow deletion
+        bool                    LpramSet; ///< flag indicating new param      --> allow deletion
 
     //////////////////// CONSTRUCTOR FUNCTIONS /////////////////
 
     public:
 
+<<<<<<< HEAD
         void init(inputoutput     *p_io,
                   streams         *p_strm,
                   IdealGasPhase   *p_gas,
@@ -111,6 +116,12 @@ class domain {
                 delete v.at(k);
             delete domc;     
         }
+=======
+        domain(domain *p_domn,   int   nShiftFileNumbers, string caseName);
+       void hips_advance(); 
+        virtual ~domain();
+       
+>>>>>>> Edit_hips
 
 };
 

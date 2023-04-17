@@ -1,6 +1,6 @@
 /**
  * @file dv_rho.cc
- * Header file for class dv_rho
+ * Source file for class \ref dv_rho
  */
 
 
@@ -10,8 +10,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 /*! dv_rho  constructor function
  *
- * @param p_domn  \input set domain pointer with.
- * @param p_phi   \input set vector pointer with.
+ * @param line     \input set domain pointer with.
+ * @param s        \input set var_name with.
+ * @param Lt       \input set L_transported with.
+ * @param Lo       \input set L_output with.
  */
 
 dv_rho::dv_rho(domain    *line,
@@ -34,7 +36,6 @@ dv_rho::dv_rho(domain    *line,
  * Merging conservatively: (rho*phi*dx)_merged = (rho*phi*dx)_1 + (rho*phi*dx)_2
  * Then solve for phi_merged.
  *
- * @param imrg    \input merge cells imrg and imrg+1
  * @param imrg \input merge cells imrg and imrg+1
  * @param m1   \input mass in cell imrg
  * @param m2   \input mass in cell imrg

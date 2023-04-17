@@ -1,6 +1,6 @@
 /**
  * @file domaincase.h
- * Header file for class domaincase
+ * Header file for class \ref domaincase
  */
 
 #pragma once
@@ -32,10 +32,9 @@ class domaincase {
     //////////////////// MEMBER FUNCTIONS /////////////////
 
         virtual void setGasStateAtPt(const int &ipt){}
-        virtual void setCaseSpecificVars(){}
         virtual void setCaseSpecificVars_cvode(const int &ipt){}
         virtual void enforceMassFractions();
-        virtual void enforceSootMom();
+
 
     private:
 

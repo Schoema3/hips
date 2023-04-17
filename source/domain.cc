@@ -1,30 +1,49 @@
+/**
+ * @file domain.cc
+ * Source file for class \ref domain
+ */
 
 #include "domain.h"
-#include "processor.h"
 #include "dv.h"
 #include "dv_rho.h"
+<<<<<<< HEAD
 #include "dv_dvisc.h"
 #include "solver.h"
+=======
+>>>>>>> Edit_hips
 #include "domaincase_hips.h"
 #include "domaincase_hips_comb.h"
 #include "domaincase_hips_simpleRxn.h"
 #include <cmath>
 #include <iomanip>
+#include "processor.h"
+#include "domaincase.h"
+#include "inputoutput.h"
+#include "param.h"
+#include "streams.h"
+#include "micromixer.h"
+#include "solver.h"
+#include "randomGenerator.h"
+
 
 extern processor proc;
-
 /////////////////////////////////////////////////////////////////////
 /** Constructor
  */
 
-domain::domain(domain *p_domn, param *p_pram) {
+domain::domain(domain *p_domn,   int   nShiftFileNumbers, string caseName){
 
     domn = p_domn;
-    pram = p_pram;
-    domc = 0;               // initialize for destruction of eddy domains
+    LdomcSet = false;
+    LmimxSet = false;
+    LsolvSet = false;
+    LrandSet = false;
+ 
+    LioSet   = false;
+    LpramSet = false;
 
- }
 
+<<<<<<< HEAD
 /////////////////////////////////////////////////////////////////////
 /** Initializer
  */
@@ -52,10 +71,25 @@ void domain::init(inputoutput     *p_io,
     prb    = p_prb;
 
     //----------------------
+=======
+  //----------------------
+>>>>>>> Edit_hips
 
+    io   = new inputoutput(this, caseName, nShiftFileNumbers);
+     
+    pram = new param(io);
     ngrd    = pram->ngrd0;
-    ngrdf   = ngrd + 1;
+ 
+    rand = new randomGenerator(pram->seed + nShiftFileNumbers);
+    LrandSet = true;  
 
+
+    solv= new solver(this, pram);
+
+    LsolvSet = true;
+
+
+<<<<<<< HEAD
     //----------------------
     io->init(this);
     pram->init(this);
@@ -64,14 +98,26 @@ void domain::init(inputoutput     *p_io,
     // mesher is init below in caseinit for phi
     // strm is init below in caseinit  (domc), (if needed)
     // mimx is init below since it needs v[] set for cvode
+=======
+
+
+>>>>>>> Edit_hips
 
     //---------------------- Continue setting up the case using the case_somecase class.
     // Adds to the above variable list, and initializes solution for the run
 
+<<<<<<< HEAD
      else if(pram->probType == "HIPS")
          domc = new domaincase_hips(); // hips
 
      else if(pram->probType == "HIPS_COMB")
+=======
+
+    if(pram->probType == "HIPS")
+        domc = new domaincase_hips(); // hips
+
+      else if(pram->probType == "HIPS_COMB")
+>>>>>>> Edit_hips
          domc = new domaincase_hips_comb(); // hips_comb
 
      else if(pram->probType == "HIPS_SIMPLERXN")
@@ -82,22 +128,22 @@ void domain::init(inputoutput     *p_io,
          exit(0);
      }
 
+   LdomcSet   = true;
     domc->init(this);
 
     //----------------------
 
     for(int k=0; k<v.size(); k++)
         varMap[v.at(k)->var_name] = v.at(k);
-
     nTrans = 0;
     for(int k=0; k<v.size(); k++)
         if(v.at(k)->L_transported)
             nTrans++;
 
     //----------------------
-
+    mimx = new micromixer();
+    LmimxSet = true;
     mimx->init(this);
-
     //----------------------
 
     if(pram->Lrestart) {
@@ -108,8 +154,9 @@ void domain::init(inputoutput     *p_io,
 }
 
 /////////////////////////////////////////////////////////////////////
-/** Compute size of domain based on faces.
+/** Destructor
  */
+<<<<<<< HEAD
 
 double domain::Ldomain() {
      return posf->d.at(ngrd) - posf->d.at(0);
@@ -159,169 +206,32 @@ void domain::setDomainFromRegion(const int i1, const int i2) {
     ngrd  = i2-i1+1;
     ngrdf = ngrd+1;
 
+=======
+domain::~domain(){
+>>>>>>> Edit_hips
     for(int k=0; k<v.size(); k++)
-        v.at(k)->setDvFromRegion(i1,i2);
+        delete v.at(k);
+    if(LdomcSet) delete domc; 
+    if(LmimxSet) delete mimx;
+    if(LsolvSet) delete solv;
+    if(LrandSet) delete rand;
+
+    if(LioSet)   delete io;
+    if(LpramSet) delete pram;
+
+
+
+
+
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/** Find index of cell for given position (residing in cell).
- *  Start search assuming a uniform grid,
- *  then search forward or back till hit the cell index.
- *  If position is on cell face j, then if LowSide true, return j, else j-1.         \n
- * For start of eddy region, set LowSide to true                                     \n
- * For end of eddy region, set LowSide to false                                      \n
- * (This is so triplet maps don't overlap cells)
- *                                                                                   <pre><code>
- * e.g., usual:   | { | | | | } |    5 pts, eddy pos between cell faces
- *       okay:    {   | | | |   }    5 pts, eddy pos on cell faces (1 or both)
- *       bad:     |   { | | }   |    5 pts, eddy pos on internal faces (1 or both)
- *                                                                                   </code></pre>
- * @param position \input position to find corresponding index.
- * @param LowSide  \input flag true, then return j if position is on cell face j, else j-1.
- * @return index of position.
- */
+void domain::hips_advance(){
 
-int domain::domainPositionToIndex(double position, const bool LowSide, int dbg) {
+    solv->calculateSolution();
 
-    if(abs(position-posf->d.at(0)) < 1.0E-14)
-        return 0;
-    if(abs(position-posf->d.at(ngrd)) < 1.0E-14)
-        return ngrd-1;
-
-    //if(position < posf->d.at(0))         // for periodic (from eddies only)
-    //    position += Ldomain();
-    //if(position > posf->d.at(ngrd))
-    //    position -= Ldomain();
-
-    if(position < posf->d.at(0) || position > posf->d.at(ngrd)) {
-       *io->ostrm << "\ndbg = " << dbg << endl; //doldb
-       *io->ostrm << scientific;
-       *io->ostrm << setprecision(14);
-       *io->ostrm << "\n ERROR odt_grid::domainPositionToIndex position < posf->d.at(0) or > posf->d.at(ngrd) \n"
-               " and at processor's id---> " << proc.myid
-               <<" Value of position is---> "<<position << " and values of posf->d.at(0) and posf->d.at(ngrd) are "
-               <<posf->d.at(0)<< " and "<<posf->d.at(ngrd) <<" respectively "<< endl;
-       //io->outputProperties("dbg.dat", 0.0); //doldb
-       exit(0);
-    }
-
-    int i;
-    int ipos = static_cast<int>((position-posf->d.at(0))/Ldomain()*ngrd);
-
-    if(posf->d.at(ipos+1) > position) {      // case 1: grd skewed more pts on right half
-        for(i=ipos+1; i>=0; i--)  {
-            if(posf->d.at(i) <= position) {
-                if(position == posf->d.at(i)) {
-                    if(LowSide)
-                        return i;
-                    else
-                        return i-1;
-                }
-                else
-                    return i;
-            }
-        }
-    }
-
-    else  {                           // case 2: grd skewed more pts on left half
-        for(i=ipos+1; i<=ngrdf; i++) {
-            if(posf->d.at(i) >= position) {
-                if(position == posf->d.at(i)) {
-                    if(LowSide)
-                        return i;
-                    else
-                        return i-1;
-                }
-                else
-                    return i-1;
-            }
-        }
-    }
-
-    *io->ostrm << "\n\n******** ERROR IN odt_grid::domainPositionToIndex "
-         << position << '\t' << posf->d.at(0) << '\t' << posf->d.at(ngrd) << '\t' << endl << endl;
-
-    return -1;
 }
 
-/////////////////////////////////////////////////////////////////////
-/** Cycle domain for periodic flows.
- *  @param icycle \input move all cells before and including this one
- *   to the end of the domain.
- *  @return the cycle distance (used for backcycling).
- */
 
-double domain::cyclePeriodicDomain(const int icycle) {
 
-    double cycleDistance = posf->d.at(icycle+1)-posf->d.at(0);
 
-    for(int k=0; k<v.size(); k++) {
-        if (v.at(k)->var_name=="pos" || v.at(k)->var_name=="posf")
-            continue;
-        v.at(k)->d.insert(v.at(k)->d.end(),   v.at(k)->d.begin(), v.at(k)->d.begin()+icycle+1);
-        v.at(k)->d.erase( v.at(k)->d.begin(), v.at(k)->d.begin()+icycle+1);
-    }
-
-    //---------- now do posf, and pos
-
-    double xend = posf->d.at(ngrd);
-    for(int i=1; i<=icycle+1; i++)
-        posf->d.push_back(xend+(posf->d.at(i)-posf->d.at(0)));
-    posf->d.erase(posf->d.begin(), posf->d.begin()+icycle+1);
-
-    pos->setVar();     // does a little extra work (whole domain) but doesn't happen that often
-                       //    only when periodic eddies are accepted.
-
-    return cycleDistance;
-}
-
-/////////////////////////////////////////////////////////////////////
-/** Back cycle domain for periodic flows. Intended to be called some time
- *  after cyclePeriodicDomain is called.
- *  Splits the cell at posf.at(ngrd) - backCycleDistace, then moves end cells
- *     after the split to the beginning of the domain.
- *  @param \input distance from the end to split and move the domain.
- */
-
-void domain::backCyclePeriodicDomain(const double backCycleDistance) {
-
-    double xend = posf->d.at(ngrd) - backCycleDistance;     // end loc.
-    double icycle = domainPositionToIndex(xend, true, 1);  // cycle cells greater than this to beginning
-
-    //------------ split the cell where the back cycle happens
-
-    vector<double> interPos(3);
-    if(abs(posf->d.at(icycle) - xend) > 1.0e-15) {
-        interPos.at(0) = posf->d.at(icycle);
-        interPos.at(1) = xend;
-        interPos.at(0) = posf->d.at(icycle+1);
-        mesher->splitCell(icycle, 1, interPos);
-        icycle++;
-    }
-
-    //------------ now move the cells
-
-    int nmove = ngrd-icycle+1;
-
-    for(int k=0; k<v.size(); k++) {
-        if (v.at(k)->var_name=="pos" || v.at(k)->var_name=="posf")
-            continue;
-        v.at(k)->d.insert(v.at(k)->d.begin(), v.at(k)->d.begin()+icycle, v.at(k)->d.end());
-        v.at(k)->d.erase( v.at(k)->d.begin()+icycle+nmove, v.at(k)->d.end() );
-    }
-
-    //---------- now do posf, and pos
-
-    double xstart_orig = posf->d.at(0);
-
-    posf->d.insert(posf->d.begin(), nmove, 0.0);
-    icycle += nmove;
-    for(int i=0; i<nmove; i++)
-        posf->d.at(i) = xstart_orig - (posf->d.at(posf->d.size()-1-i) - xend);
-
-    posf->d.erase(posf->d.begin()+icycle+1, posf->d.end());
-
-    pos->setVar();     // does a little extra work (whole domain) but doesn't happen that often
-                       //    only when periodic eddies are accepted.
-}
 

@@ -8,15 +8,20 @@
 #pragma once
 
 #include "MersenneTwister.h"
+<<<<<<< HEAD
 
 
+=======
+#include "processor.h"
+extern processor proc;
+>>>>>>> Edit_hips
 /** A random number generator class. This sets up and calls the Mersenne twister.
  */
 
 ///////////////////////////////////////////////////////////////////////////////////////
 //
 
-extern processor proc;
+
 
 class randomGenerator {
 
@@ -33,7 +38,8 @@ class randomGenerator {
         return mtwist.randInt(n);
     }
 
-    randomGenerator(const int aseed) : mtwist(proc.myid + aseed) {
+
+randomGenerator(const int aseed) : mtwist(proc.myid + aseed) {
     //randomGenerator(const int aseed) : mtwist(aseed) {
         if(aseed < 0)                // randomize the seed
             mtwist.seed();
