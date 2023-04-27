@@ -1,76 +1,46 @@
-/**
- * @file cvodeDriver.h
- * Header file for class \ref cvodeDriver.h
- */
-
-#pragma once
-
-#include "dv.h"
-
-class domain;
-
-#include "cvode/cvode.h"
-#include "cvode/nvector_serial.h"
-#include "cvode/cvode_dense.h"
-#include "cvode/sundials_dense.h"
-#include "cvode/sundials_types.h"
-
-#include <map>
+#include "cantera/thermo.h"
+#include "cantera/kinetics.h"
+#include "cantera/base/Solution.h"
+#include "cantera/numerics/Integrator.h"
+#include <memory>
 #include <vector>
-#include <string>
 
-using namespace std;
+////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////
+class cvodeDriver : public Cantera::FuncEval {
 
-/** Class integrates a single cell at a time.
- *  Intended for stiff systems (e.g. combustion chemistry).
- *
- *  @author David O. Lignell
- */
+    ////////////////////// DATA MEMBERS /////////////////////
 
-class cvodeDriver {
+    private:
 
-    public :
+    std::shared_ptr<Cantera::ThermoPhase> gas;        // Cantera thermo object
+    std::shared_ptr<Cantera::Kinetics>    kin;        // Cantera kinetics object
+    int                                   Neq;        // # equations being solved
+    double                                h_fixed;    // adiabatic h during integrate
+    double                                P_fixed;    // pressure during integrate
+    std::vector<double>                   rr;         // reaction rate (kmol/m3*s)
 
-        ////////////////////// DATA MEMBERS /////////////////////
+    std::unique_ptr<Cantera::Integrator>  integrator; // Cantera cvode wrapper
 
-        domain              *domn;           ///< pointer to main domain object
-        int                 neq;             ///< number of eqns solved
-        N_Vector            var;             ///< vector of variables being solved for CVode
-        map<int,dv*>        tVarMap;         ///< map to transported variables. (Domain vars in any order, but here, solve transported).
-        int                 iC;              ///< which cell are we integrating
-        double              atol;            ///< CVODE tol
-        double              rtol;            ///< CVODE tol
+    ////////////////////// MEMBER FUNCTIONS /////////////////
 
-        bool                LincludeRhsMix;  ///< if true, mixing term is included in integration
+    public: 
 
-    private :
+    void integrate(double dt);            // integrate to dt; gas holds soln
 
-        void                *cvode_mem;      ///< CVode memory
-        bool                Ldestruct;       ///< true if we setup cvode and can therefore destruct
-        vector<double>      vard;            ///< variable array dummy
-        vector<double>      Sd;              ///< variable source dummy
+    void eval(double  t,                  // rhsf: dy/dt = rhsf
+              double *y, 
+              double *ydot, 
+              double *not_used);
 
+    size_t neq() { return Neq; }          // called by Cantera
 
-        ////////////////////// MEMBER FUNCTIONS  /////////////////////
+    void getState(double* y) {            // called by cantera to set y
+        gas->getMassFractions(y);
+    }
 
-    public :
+    ////////////////////// CONSTRUCTOR FUNCTION /////////////
 
-        void integrateCell(int p_iC, double tres);
-
-    private :
-
-        void testCVflag(int flag, string func);
-
-    public :
-
-        ////////////////////// CONSTRUCTOR FUNCTIONS  /////////////////////
-
-        cvodeDriver(){Ldestruct = false;}                         // constructor
-        void init(domain *p_domn, const bool p_LincludeRhsMix);  // initializer
-        ~cvodeDriver();                                           // destructor
+    cvodeDriver(std::shared_ptr<Cantera::Solution> sol);
 
 };
-
-
