@@ -27,7 +27,7 @@ option(HIPS_BUILD_DOCS       "Build hips documentation"   ON)
 
 ################### MAIN PROJECT TARGETS #####################
 
-add_subdirectory(source)
+add_subdirectory(src)
 
 ################### OPTIONAL PROJECT TARGETS #################
 
