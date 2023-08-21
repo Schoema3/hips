@@ -20,10 +20,11 @@ hips::hips(int     nLevels_,
            int     forceTurb_,
            int     nVar_,
            vector<double> &ScHips_,
-           shared_ptr<Cantera::Solution> cantSol) : 
+           shared_ptr<Cantera::Solution> cantSol,
+           bool   performReaction ) : 
     nLevels(nLevels_), domainLength(domainLength_), tau0(tau0_),
     C_param(C_param_), forceTurb(forceTurb_),       ScHips(ScHips_),   
-    nVar(nVar_),       LrandSet(true),              cvodeD(cantSol) { 
+    nVar(nVar_),       LrandSet(true),              cvodeD(cantSol), performReaction(performReaction) { 
 
     varData = vector<vector<double> * > (nVar);                  // or varData.resize(nVar)
    
@@ -145,6 +146,7 @@ void hips::calculateSolution(const double tRun) {
     }
     time = tRun;
     iLevel = 0; iTree  = 0;
+    if(performReaction)
     reactParcels_LevelTree(iLevel, iTree);      // react all parcels up to end time
 }
 
@@ -272,7 +274,7 @@ void hips::advanceHips(const int iLevel, const int iTree) {
     for (int k=0; k<nVar; k++) {                //   upon finding first variable needing micromixing
         if ( (iLevel >= i_plus[k]) || 
              (iLevel==i_plus[k]-1 && rand->getRand() <= i_plus[k]-i_batchelor[k]) ) {
-                if(!rxnDone) {
+                if(!rxnDone && performReaction) {
                    reactParcels_LevelTree(iLevel, iTree);
                    rxnDone = true;
              }

@@ -55,6 +55,7 @@ class hips {
         std::vector<double> ScHips; 
         cvodeDriver         cvodeD;     
 
+        bool                performReaction; 
         bool                LrandSet;            ///< flag indicating new randomGen  --> allow deletion
         randomGenerator     *rand;
 
@@ -72,7 +73,8 @@ class hips {
              int             forceTurb_,
              int             nVar_,
              std::vector<double> &ScHips_,
-             std::shared_ptr<Cantera::Solution> cantSol);
+             std::shared_ptr<Cantera::Solution> cantSol,
+             bool            performReaction);
 
         virtual ~hips() { if(LrandSet) delete rand; }
 
