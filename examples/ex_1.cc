@@ -18,11 +18,11 @@ int main() {
   
     //---------- setting  HiPS tree and constructor
 
-    int            nLevels      = 9;           // # HiPS tree levels
+    int            nLevels      = 5;           // # HiPS tree levels
     double         domainLength = 1.0;         // HiPS tree lengthscale
     double         tau0         = 1.0;         // HiPS tree timescale
     double         C_param      = 0.5;         // HiPS eddy rate multiplier
-    double         tRun         = 400.0;       // tree evolution time
+    double         tRun         = 4.0;       // tree evolution time
     int            forceTurb    = 0;           // Force turbulent profile
     vector<double> ScHips(7,1);
 
@@ -41,7 +41,8 @@ int main() {
               forceTurb,
               nVar,
               ScHips,
-              cantSol);
+              cantSol,
+              false);
 
     int nparcels = HiPS.nparcels;
 
