@@ -142,7 +142,7 @@ void hips::calculateSolution(const double tRun) {
 
         nEddies++;
 
-        if(nEddies %200 == 0) writeData(++fileCounter, time);
+        if(nEddies %1000000 == 0) writeData(++fileCounter, time);
     }
     time = tRun;
     iLevel = 0; iTree  = 0;

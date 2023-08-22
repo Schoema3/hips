@@ -1,108 +1,51 @@
 #include "hips.h"
-
 #include "cantera/thermo.h"
 #include "cantera/base/Solution.h"
 #include "cantera/numerics/Integrator.h"
-
 #include <vector>
 #include <string>
-#include <fstream>
-#include <sstream>
 #include <iostream>
 
 using namespace std;
 
-///////////////////////////////////////////////////////////////////////////////
+// Function to initialize mixing fractions
+vector<double> initializeMixingFractions(int numParcels) {
+    vector<double> mixingFractions;
+    for (int i = 0; i < numParcels; i++) {
+        mixingFractions.push_back(i < numParcels / 2 ? 0.0 : 1.0);
+    }
+    return mixingFractions;
+}
 
 int main() {
-  
-    //---------- setting  HiPS tree and constructor
+    // HiPS tree and constructor parameters
+    int numLevels = 16;
+    double domainLength = 1.0;
+    double tau0 = 1.0;
+    double C_param = 0.5;
+    double tRun = 700.0;
+    int forceTurb = 2;
+    vector<double> ScHips(1, 1);
 
-    int            nLevels      = 5;           // # HiPS tree levels
-    double         domainLength = 1.0;         // HiPS tree lengthscale
-    double         tau0         = 1.0;         // HiPS tree timescale
-    double         C_param      = 0.5;         // HiPS eddy rate multiplier
-    double         tRun         = 4.0;       // tree evolution time
-    int            forceTurb    = 0;           // Force turbulent profile
-    vector<double> ScHips(7,1);
+    // Gas solution setup
+    auto cantSol = Cantera::newSolution("gri30.yaml");
+    auto gas = cantSol->thermo();
+    size_t numSpecies = gas->nSpecies();
+    int numVariables = 1;  
 
-    //---------- setting gas solution
+    // HiPS tree creation
+    hips HiPS(numLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips, cantSol, false);
+    int numParcels = HiPS.nparcels;
 
-    //auto   cantSol = Cantera::newSolution("2S_CH4_BFER.yaml", "2S_CH4_BFER", "None");
-    auto   cantSol = Cantera::newSolution("gri30.yaml");
-    auto   gas = cantSol->thermo();
-    size_t nsp = gas->nSpecies();
-    int    nVar = nsp+1;           // 1 + nsp: h, y 
+    // Initialize mixing fractions
+    vector<double> initialMixingFractions = initializeMixingFractions(numParcels);
 
-    hips HiPS(nLevels,
-              domainLength,
-              tau0, 
-              C_param,
-              forceTurb,
-              nVar,
-              ScHips,
-              cantSol,
-              false);
+    // Set state vectors in each parcel
+    HiPS.set_varData(initialMixingFractions, 0);
 
-    int nparcels = HiPS.nparcels;
-
-    //------------- declaring state vectors
-
-    vector<vector <double > > ysp(nsp, vector<double> (nparcels, 0));
-    vector<double>            h(nparcels); 
-
-    vector<double>            y0(nsp);
-    double                    T0;
-    double                    h0;
-
-    vector<double>            y1(nsp);
-    double                    T1;
-    double                    h1;
-
-    //-------------- set state vectors in each parcel
-
-    T0 = 300.0;
-    gas->setState_TPX(T0, Cantera::OneAtm, "CH4:1");
-    gas->getMassFractions(&y0[0]);
-    h0 = gas->enthalpy_mass();
-
-    T1 = 300;
-    gas->setState_TPX(T1, Cantera::OneAtm, "O2:2, N2:7.52");
-    gas->getMassFractions(&y1[0]);
-    h1 = gas->enthalpy_mass();
-
-    double mixf = 16/(16+29*9.52);  // stoichiometric
-    vector<double> ymix(nsp);
-    for(int k=0; k<nsp; k++)
-        ymix[k] = y0[k]*(1-mixf) + y1[k]*mixf;
-    double hmix = h0*(1-mixf) + h1*mixf;
-    vector<double> yeq(nsp);
-    gas->setMassFractions(&ymix[0]);
-    gas->setState_HP(hmix, gas->pressure());
-    gas->equilibrate("HP");
-
-    double fracBurn = 0.5;
-    for(int i=0; i<fracBurn*nparcels; i++) {
-        h[i] = hmix;
-        for (int k=0; k<nsp; k++)
-            ysp[k][i] = gas->massFraction(k);
-    }
-    for(int i=fracBurn*nparcels; i<nparcels; i++) {
-        h[i] = hmix;
-        for (int k=0; k<nsp; k++)
-            ysp[k][i] = ymix[k];
-    }
-
-    //----------------- set array of hips variables from state variables
-
-    HiPS.set_varData(h, 0);
-    for (int k=0; k<ysp.size(); k++) 
-        HiPS.set_varData(ysp[k],k+1);
-
-    //----------------- advancing HiPS to do rxn and mixing
-
+    // Advance HiPS for  mixing 
     HiPS.calculateSolution(tRun);
 
     return 0;
+}
 
-}  
