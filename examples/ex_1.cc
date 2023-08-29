@@ -1,4 +1,5 @@
-#include "hips.h"
+
+#include "hips.h" // Include the HiPS library header
 #include "cantera/thermo.h"
 #include "cantera/base/Solution.h"
 #include "cantera/numerics/Integrator.h"
@@ -8,10 +9,18 @@
 
 using namespace std;
 
-// Function to initialize mixing fractions
+/**
+ * @brief Initialize mixing fractions.
+ *
+ * This function initializes mixing fractions for a given number of parcels.
+ *
+ * @param numParcels The number of parcels.
+ * @return A vector containing initialized mixing fractions.
+ */
 vector<double> initializeMixingFractions(int numParcels) {
     vector<double> mixingFractions;
     for (int i = 0; i < numParcels; i++) {
+        // Initialize mixing fractions to 0.0 for the first half and 1.0 for the second half
         mixingFractions.push_back(i < numParcels / 2 ? 0.0 : 1.0);
     }
     return mixingFractions;
@@ -40,10 +49,10 @@ int main() {
     // Initialize mixing fractions
     vector<double> initialMixingFractions = initializeMixingFractions(numParcels);
 
-    // Set state vectors in each parcel
+    // Set state vectors in each parcel with initial mixing fractions
     HiPS.set_varData(initialMixingFractions, 0);
 
-    // Advance HiPS for  mixing 
+    // Advance HiPS for mixing 
     HiPS.calculateSolution(tRun);
 
     return 0;
