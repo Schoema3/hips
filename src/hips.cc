@@ -473,6 +473,17 @@ void hips::setState(const int &ipt){
 
 ///////////////////////////////////////////////////////////////////////////////
 
+/**
+ * @brief Retrieve modified data from the HiPS library.
+ *
+ * This function retrieves modified data from the HiPS library for a specified index
+ * and stores it in the provided vector.
+ *
+ * @param modifiedData A vector to store the modified data.
+ * @param i The index indicating the specific data to retrieve.
+ * @note If the provided index is out of bounds, an error message is printed to the console.
+ */
+
 void hips::get_varData(std::vector<double> & modifiedData, int i){
 
     if (i>=0 && i<varData.size()) {
