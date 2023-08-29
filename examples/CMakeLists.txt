@@ -7,10 +7,10 @@ target_sources(ex_1 PRIVATE ex_1.cc)
 target_link_libraries(ex_1 PRIVATE hips_lib)
 
 # Example 2
-#add_executable(example2)
-#target_sources(example2 PRIVATE example2.cc)
+add_executable(ex_2)
+target_sources(ex_2 PRIVATE ex_2.cc)
 
 # Link the hips_lib library to example2
-#target_link_libraries(example2 PRIVATE hips_lib)
+target_link_libraries(ex_2 PRIVATE hips_lib)
 
 # Add more examples as needed...

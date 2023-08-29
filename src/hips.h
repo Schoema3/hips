@@ -80,6 +80,7 @@ class hips {
 
         void calculateSolution(const double tRun);                            // Solution for hips
         void set_varData(std::vector<double> &v, int i) { varData[i] = &v; }  // passing all variables to vector of pointer     
+        void get_varData(std::vector<double> &modifiedData, int i);
 
     private:
 

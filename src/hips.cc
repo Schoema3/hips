@@ -472,3 +472,16 @@ void hips::setState(const int &ipt){
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
+void hips::get_varData(std::vector<double> & modifiedData, int i){
+
+    if (i>=0 && i<varData.size()) {
+        modifiedData = varData[i][0];
+
+    }
+    else{
+        cout << "Invalid index for data retrieval" <<endl;
+    }
+}
+////////////////////////////////////////////////////////
+        
