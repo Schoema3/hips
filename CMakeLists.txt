@@ -18,7 +18,7 @@ set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}/installation")
 
 # ---- Build options ----
 option(HIPS_BUILD_EXAMPLES   "Build hips examples"        OFF)
-option(HIPS_BUILD_DOCS       "Build hips documentation"   OFF)
+option(HIPS_BUILD_DOCS       "Build hips documentation"   ON)
 
 # ---- MAIN PROJECT TARGETS ----
 add_subdirectory(src)
@@ -28,4 +28,10 @@ add_subdirectory(src)
 if (HIPS_BUILD_EXAMPLES)
     set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/examples) # Optional, to set output path for examples
     add_subdirectory(examples)
+endif()
+
+# -------- DOCUMENTATION ----------
+
+if (HIPS_BUILD_DOCS )
+    add_subdirectory(docs)
 endif()

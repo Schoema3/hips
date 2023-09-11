@@ -1,0 +1,77 @@
+\hypertarget{clasships}{}\doxysection{hips Class Reference}
+\label{clasships}\index{hips@{hips}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{clasships_a91176e029fc53d1f2247f11727be93d0}{hips}} (int n\+Levels\+\_\+, double domain\+Length\+\_\+, double tau0\+\_\+, double C\+\_\+param\+\_\+, int force\+Turb\+\_\+, int n\+Var\+\_\+, std\+::vector$<$ double $>$ \&Sc\+Hips\+\_\+, std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$ cant\+Sol, bool perform\+Reaction)
+\item 
+void \mbox{\hyperlink{clasships_ad6c3df079ecab73ae445d7e29069ab63}{calculate\+Solution}} (const double t\+Run)
+\item 
+\mbox{\Hypertarget{clasships_ad8b711110a3461b7de7aaab1e8b7ec4b}\label{clasships_ad8b711110a3461b7de7aaab1e8b7ec4b}} 
+void {\bfseries set\+\_\+var\+Data} (std\+::vector$<$ double $>$ \&v, int i)
+\item 
+void \mbox{\hyperlink{clasships_a3e580e31d2d68115b5ff8474c0497861}{get\+\_\+var\+Data}} (std\+::vector$<$ double $>$ \&modified\+Data, int i)
+\begin{DoxyCompactList}\small\item\em Retrieve modified data from the Hi\+PS library. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{clasships_aacf4a6ce98ac34525bdeb1c775154c67}\label{clasships_aacf4a6ce98ac34525bdeb1c775154c67}} 
+int \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}}
+\begin{DoxyCompactList}\small\item\em number of parcels \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{clasships_af6df1b25342c62d482af24b980dee8af}\label{clasships_af6df1b25342c62d482af24b980dee8af}} 
+std\+::vector$<$ std\+::vector$<$ double $>$ $\ast$ $>$ \mbox{\hyperlink{clasships_af6df1b25342c62d482af24b980dee8af}{var\+Data}}
+\begin{DoxyCompactList}\small\item\em vector of pointers to vector \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{clasships_a4e06e8409d3c1681c718d6d2c9f9a7bf}\label{clasships_a4e06e8409d3c1681c718d6d2c9f9a7bf}} 
+std\+::shared\+\_\+ptr$<$ Cantera\+::\+Thermo\+Phase $>$ {\bfseries gas}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{clasships_a91176e029fc53d1f2247f11727be93d0}\label{clasships_a91176e029fc53d1f2247f11727be93d0}} 
+\index{hips@{hips}!hips@{hips}}
+\index{hips@{hips}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{hips()}{hips()}}
+{\footnotesize\ttfamily hips\+::hips (\begin{DoxyParamCaption}\item[{int}]{n\+Levels\+\_\+,  }\item[{double}]{domain\+Length\+\_\+,  }\item[{double}]{tau0\+\_\+,  }\item[{double}]{C\+\_\+param\+\_\+,  }\item[{int}]{force\+Turb\+\_\+,  }\item[{int}]{n\+Var\+\_\+,  }\item[{std\+::vector$<$ double $>$ \&}]{Sc\+Hips\+\_\+,  }\item[{std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$}]{cant\+Sol,  }\item[{bool}]{perform\+Reaction }\end{DoxyParamCaption})}
+
+Constructor 
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{clasships_ad6c3df079ecab73ae445d7e29069ab63}\label{clasships_ad6c3df079ecab73ae445d7e29069ab63}} 
+\index{hips@{hips}!calculateSolution@{calculateSolution}}
+\index{calculateSolution@{calculateSolution}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{calculateSolution()}{calculateSolution()}}
+{\footnotesize\ttfamily void hips\+::calculate\+Solution (\begin{DoxyParamCaption}\item[{const double}]{t\+Run }\end{DoxyParamCaption})}
+
+The Hi\+PS solver 
+\begin{DoxyParams}{Parameters}
+{\em t\+Run} & \textbackslash{}input simulation run time\\
+\hline
+\end{DoxyParams}
+Sample tee (time of next eddy event) Select and swap subtrees (at current time, not at tee, so that we know whos involved) If the eddy event is at the parcel/micromixing level\+: React involved parcels from their current time to tee Mix the involved parcels (micromixing) \mbox{\Hypertarget{clasships_a3e580e31d2d68115b5ff8474c0497861}\label{clasships_a3e580e31d2d68115b5ff8474c0497861}} 
+\index{hips@{hips}!get\_varData@{get\_varData}}
+\index{get\_varData@{get\_varData}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{get\_varData()}{get\_varData()}}
+{\footnotesize\ttfamily void hips\+::get\+\_\+var\+Data (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{modified\+Data,  }\item[{int}]{i }\end{DoxyParamCaption})}
+
+
+
+Retrieve modified data from the Hi\+PS library. 
+
+This function retrieves modified data from the Hi\+PS library for a specified index and stores it in the provided vector.
+
+
+\begin{DoxyParams}{Parameters}
+{\em modified\+Data} & A vector to store the modified data. \\
+\hline
+{\em i} & The index indicating the specific data to retrieve. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+If the provided index is out of bounds, an error message is printed to the console. 
+\end{DoxyNote}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/mbehrang/codes/hips-\/publish/hips-\/documentation/hips/src/hips.\+h\item 
+/home/mbehrang/codes/hips-\/publish/hips-\/documentation/hips/src/hips.\+cc\end{DoxyCompactItemize}

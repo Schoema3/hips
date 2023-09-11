@@ -1,0 +1,202 @@
+\hypertarget{classstreams}{}\doxysection{streams Class Reference}
+\label{classstreams}\index{streams@{streams}}
+
+
+{\ttfamily \#include $<$streams.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{classstreams_aed21433e408b40a0e7e9e6628c5b3bb4}{get\+Prod\+Of\+Complete\+Comb}} (const double mixf, vector$<$ double $>$ \&ypcc, double \&hpcc, double \&Tpcc)
+\item 
+void \mbox{\hyperlink{classstreams_a7dcaeb31595a41ac5f7d6b2d710f10fa}{get\+Equilibrium\+\_\+\+HP}} (const double mixf, vector$<$ double $>$ \&yeq, double \&heq, double \&Teq)
+\item 
+void \mbox{\hyperlink{classstreams_aaf68232d7da63277b99a33e9646b9773}{get\+Mixing\+State}} (const double mixf, vector$<$ double $>$ \&ymix, double \&hmix, double \&Tmix)
+\item 
+double \mbox{\hyperlink{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}{get\+Mixture\+Fraction}} (const double $\ast$y, const bool do\+Beta01=false)
+\item 
+void \mbox{\hyperlink{classstreams_a156a36b8acc15fd67614480b5b1a07e7}{init}} (domain $\ast$p\+\_\+domn, const vector$<$ double $>$ \&gammas)
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classstreams_a4272ceacc81bb2dcf94296dc3e31b8e4}\label{classstreams_a4272ceacc81bb2dcf94296dc3e31b8e4}} 
+domain $\ast$ \mbox{\hyperlink{classstreams_a4272ceacc81bb2dcf94296dc3e31b8e4}{domn}}
+\begin{DoxyCompactList}\small\item\em pointer to domain object \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a2116c59265b52fa86fecf239eb5928d8}\label{classstreams_a2116c59265b52fa86fecf239eb5928d8}} 
+double \mbox{\hyperlink{classstreams_a2116c59265b52fa86fecf239eb5928d8}{T0}}
+\begin{DoxyCompactList}\small\item\em stream mixf=0 temperature \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a5c98e867f4bd2d5209696a9e8800415f}\label{classstreams_a5c98e867f4bd2d5209696a9e8800415f}} 
+double \mbox{\hyperlink{classstreams_a5c98e867f4bd2d5209696a9e8800415f}{T1}}
+\begin{DoxyCompactList}\small\item\em stream mixf=1 temperature \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_acba6c3551868e1048dab3596dc0be65d}\label{classstreams_acba6c3551868e1048dab3596dc0be65d}} 
+double \mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{h0}}
+\begin{DoxyCompactList}\small\item\em stream mixf=0 enthalpy \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}\label{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}} 
+double \mbox{\hyperlink{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}{h1}}
+\begin{DoxyCompactList}\small\item\em stream mixf=1 enthalpy \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_afab6f70982e481b0813a2fee4e86c759}\label{classstreams_afab6f70982e481b0813a2fee4e86c759}} 
+vector$<$ double $>$ \mbox{\hyperlink{classstreams_afab6f70982e481b0813a2fee4e86c759}{y0}}
+\begin{DoxyCompactList}\small\item\em stream mixf=0 composition vector \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a04da25a8b9fd39525c34ebc8c1a74f29}\label{classstreams_a04da25a8b9fd39525c34ebc8c1a74f29}} 
+vector$<$ double $>$ \mbox{\hyperlink{classstreams_a04da25a8b9fd39525c34ebc8c1a74f29}{y1}}
+\begin{DoxyCompactList}\small\item\em stream mixf=1 composition vector \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_ab5a1b1291cc32f837557c67f570be34b}\label{classstreams_ab5a1b1291cc32f837557c67f570be34b}} 
+double \mbox{\hyperlink{classstreams_ab5a1b1291cc32f837557c67f570be34b}{M0}}
+\begin{DoxyCompactList}\small\item\em stream mixf=0 mean molecular weight \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a5694a6796c977e11177defa43bea1721}\label{classstreams_a5694a6796c977e11177defa43bea1721}} 
+double \mbox{\hyperlink{classstreams_a5694a6796c977e11177defa43bea1721}{M1}}
+\begin{DoxyCompactList}\small\item\em stream mixf=1 mean molecular weight \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_af197c5ea1dc129522eabbbc700482abe}\label{classstreams_af197c5ea1dc129522eabbbc700482abe}} 
+double \mbox{\hyperlink{classstreams_af197c5ea1dc129522eabbbc700482abe}{rho0}}
+\begin{DoxyCompactList}\small\item\em stream mixf=0 density \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a3fa95d70e60dc1b0e1c15edd0d3f1e53}\label{classstreams_a3fa95d70e60dc1b0e1c15edd0d3f1e53}} 
+double \mbox{\hyperlink{classstreams_a3fa95d70e60dc1b0e1c15edd0d3f1e53}{rho1}}
+\begin{DoxyCompactList}\small\item\em stream mixf=1 density \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a6abae77f480edfa4f009747e3a6b3f07}\label{classstreams_a6abae77f480edfa4f009747e3a6b3f07}} 
+vector$<$ double $>$ \mbox{\hyperlink{classstreams_a6abae77f480edfa4f009747e3a6b3f07}{D0}}
+\begin{DoxyCompactList}\small\item\em stream mixf=0 diffusivities \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_aec08f43390068bf119443488d94127fa}\label{classstreams_aec08f43390068bf119443488d94127fa}} 
+vector$<$ double $>$ \mbox{\hyperlink{classstreams_aec08f43390068bf119443488d94127fa}{D1}}
+\begin{DoxyCompactList}\small\item\em stream mixf=1 diffusivities \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a95eccf515b92ecab4b76d29e3175f0df}\label{classstreams_a95eccf515b92ecab4b76d29e3175f0df}} 
+vector$<$ double $>$ \mbox{\hyperlink{classstreams_a95eccf515b92ecab4b76d29e3175f0df}{hsp0}}
+\begin{DoxyCompactList}\small\item\em stream mixf=0 species enthalpies \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a3e69514355a1e9143b2787d1d137181a}\label{classstreams_a3e69514355a1e9143b2787d1d137181a}} 
+vector$<$ double $>$ \mbox{\hyperlink{classstreams_a3e69514355a1e9143b2787d1d137181a}{hsp1}}
+\begin{DoxyCompactList}\small\item\em stream mixf=1 species enthalpies \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}\label{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}} 
+double \mbox{\hyperlink{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}{mixf\+Stoic}}
+\begin{DoxyCompactList}\small\item\em stoichiometric mixture fraction \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a5f4ed5333c43b8761758c93d06232357}\label{classstreams_a5f4ed5333c43b8761758c93d06232357}} 
+int \mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}
+\begin{DoxyCompactList}\small\item\em number of species in gas mechanism \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}}
+\begin{DoxyCompactList}\small\item\em \textbackslash{}fun\{\textbackslash{}text\{mixf\} = \textbackslash{}frac\{\textbackslash{}beta-\/\textbackslash{}beta\+\_\+0\}\{\textbackslash{}beta\+\_\+1-\/\textbackslash{}beta\+\_\+0\}\} \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}\label{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}} 
+double \mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{beta1}}
+\begin{DoxyCompactList}\small\item\em mixf = (beta-\/beta0) / (beta1-\/beta0) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_af1ae3ef06f99e2677d1200907c70c610}\label{classstreams_af1ae3ef06f99e2677d1200907c70c610}} 
+vector$<$ double $>$ \mbox{\hyperlink{classstreams_af1ae3ef06f99e2677d1200907c70c610}{g\+CHON}}
+\begin{DoxyCompactList}\small\item\em gammas, as in beta = sum\+\_\+i (y\+\_\+i$\ast$gamma\+\_\+i) \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classstreams_a60da0f10c7316497d3ac45bedb4a17c5}\label{classstreams_a60da0f10c7316497d3ac45bedb4a17c5}} 
+int \mbox{\hyperlink{classstreams_a60da0f10c7316497d3ac45bedb4a17c5}{comp2}}
+\begin{DoxyCompactList}\small\item\em for premixed combustion to distinguish between different input possibilities for the mixture \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Class implementing streams for use in mixing and or reaction problems. This is writting in terms of mixture fraction with streams defined in an input file. The class can implement products of complete combustion, or equilibrium (through the Cantera Ideal\+Gas\+Phase object, if desired). This class holds a pointer to a Cantera Ideal\+Gas\+Phase object (defined up front in main) that computes thermodynamic, kinetic, and transport data.
+
+\begin{DoxyAuthor}{Author}
+David O. Lignell 
+\end{DoxyAuthor}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classstreams_a7dcaeb31595a41ac5f7d6b2d710f10fa}\label{classstreams_a7dcaeb31595a41ac5f7d6b2d710f10fa}} 
+\index{streams@{streams}!getEquilibrium\_HP@{getEquilibrium\_HP}}
+\index{getEquilibrium\_HP@{getEquilibrium\_HP}!streams@{streams}}
+\doxysubsubsection{\texorpdfstring{getEquilibrium\_HP()}{getEquilibrium\_HP()}}
+{\footnotesize\ttfamily void streams\+::get\+Equilibrium\+\_\+\+HP (\begin{DoxyParamCaption}\item[{const double}]{mixf,  }\item[{vector$<$ double $>$ \&}]{yeq,  }\item[{double \&}]{heq,  }\item[{double \&}]{Teq }\end{DoxyParamCaption})}
+
+Computes the temperature, enthalpy, and composition of equilibrium at the given mixf.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mixf} & \textbackslash{}input mixture fraction, defines elemental composition. \\
+\hline
+{\em yeq} & \textbackslash{}output mass fractions \\
+\hline
+{\em heq} & \textbackslash{}output enthalpy \\
+\hline
+{\em Teq} & \textbackslash{}output temperature \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classstreams_aaf68232d7da63277b99a33e9646b9773}\label{classstreams_aaf68232d7da63277b99a33e9646b9773}} 
+\index{streams@{streams}!getMixingState@{getMixingState}}
+\index{getMixingState@{getMixingState}!streams@{streams}}
+\doxysubsubsection{\texorpdfstring{getMixingState()}{getMixingState()}}
+{\footnotesize\ttfamily void streams\+::get\+Mixing\+State (\begin{DoxyParamCaption}\item[{const double}]{mixf,  }\item[{vector$<$ double $>$ \&}]{ymix,  }\item[{double \&}]{hmix,  }\item[{double \&}]{Tmix }\end{DoxyParamCaption})}
+
+Computes the temperature, enthalpy, and composition of mixing among streams.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mixf} & \textbackslash{}input mixture fraction, defines elemental composition. \\
+\hline
+{\em ymix} & \textbackslash{}output mass fractions of products of complete combustion. \\
+\hline
+{\em hmix} & \textbackslash{}output enthalpy of products of complete combustion. \\
+\hline
+{\em Tmix} & \textbackslash{}output temperature of products of complete combustion. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}\label{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}} 
+\index{streams@{streams}!getMixtureFraction@{getMixtureFraction}}
+\index{getMixtureFraction@{getMixtureFraction}!streams@{streams}}
+\doxysubsubsection{\texorpdfstring{getMixtureFraction()}{getMixtureFraction()}}
+{\footnotesize\ttfamily double streams\+::get\+Mixture\+Fraction (\begin{DoxyParamCaption}\item[{const double $\ast$}]{y,  }\item[{const bool}]{do\+Beta01 = {\ttfamily false} }\end{DoxyParamCaption})}
+
+Compute the mixture fraction from the mass fractions using Bilger\textquotesingle{}s mixf. Set do\+Beta01=true on first call to initialize members beta0, beta1. Later calls of this function only use the first parameter.
+
+
+\begin{DoxyParams}{Parameters}
+{\em y} & \textbackslash{}input vector of species mass fractions. \\
+\hline
+{\em do\+Beta01} & \textbackslash{}input flag=true on first call to set members beta0, beta1. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+mixture fraction 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classstreams_aed21433e408b40a0e7e9e6628c5b3bb4}\label{classstreams_aed21433e408b40a0e7e9e6628c5b3bb4}} 
+\index{streams@{streams}!getProdOfCompleteComb@{getProdOfCompleteComb}}
+\index{getProdOfCompleteComb@{getProdOfCompleteComb}!streams@{streams}}
+\doxysubsubsection{\texorpdfstring{getProdOfCompleteComb()}{getProdOfCompleteComb()}}
+{\footnotesize\ttfamily void streams\+::get\+Prod\+Of\+Complete\+Comb (\begin{DoxyParamCaption}\item[{const double}]{mixf,  }\item[{vector$<$ double $>$ \&}]{ypcc,  }\item[{double \&}]{hpcc,  }\item[{double \&}]{Tpcc }\end{DoxyParamCaption})}
+
+Computes the temperature, enthalpy, and composition of complete combustion at the given mixf. For nonpremixed flames (don\textquotesingle{}t do anything funny, like have oxygen in the fuel stream)
+
+
+\begin{DoxyParams}{Parameters}
+{\em mixf} & \textbackslash{}input mixture fraction, defines elemental composition. \\
+\hline
+{\em ypcc} & \textbackslash{}output mass fractions of products of complete combustion. \\
+\hline
+{\em hpcc} & \textbackslash{}output enthalpy of products of complete combustion. \\
+\hline
+{\em Tpcc} & \textbackslash{}output temperature of products of complete combustion. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classstreams_a156a36b8acc15fd67614480b5b1a07e7}\label{classstreams_a156a36b8acc15fd67614480b5b1a07e7}} 
+\index{streams@{streams}!init@{init}}
+\index{init@{init}!streams@{streams}}
+\doxysubsubsection{\texorpdfstring{init()}{init()}}
+{\footnotesize\ttfamily void streams\+::init (\begin{DoxyParamCaption}\item[{domain $\ast$}]{p\+\_\+domn,  }\item[{const vector$<$ double $>$ \&}]{gammas }\end{DoxyParamCaption})}
+
+Initialize
+
+
+\begin{DoxyParams}{Parameters}
+{\em p\+\_\+domn} & \textbackslash{}input pointer to domain object. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classstreams_a4894ce57805fc6bc320056a74a23ae88}\label{classstreams_a4894ce57805fc6bc320056a74a23ae88}} 
+\index{streams@{streams}!beta0@{beta0}}
+\index{beta0@{beta0}!streams@{streams}}
+\doxysubsubsection{\texorpdfstring{beta0}{beta0}}
+{\footnotesize\ttfamily double streams\+::beta0}
+
+
+
+\textbackslash{}fun\{\textbackslash{}text\{mixf\} = \textbackslash{}frac\{\textbackslash{}beta-\/\textbackslash{}beta\+\_\+0\}\{\textbackslash{}beta\+\_\+1-\/\textbackslash{}beta\+\_\+0\}\} 
+
+mixf = (beta-\/beta0) / (beta1-\/beta0) \textbackslash{}fun\{\textbackslash{}text\{mixf\} = \textbackslash{}frac\{\textbackslash{}beta-\/\textbackslash{}beta\+\_\+0\}\{\textbackslash{}beta\+\_\+1-\/\textbackslash{}beta\+\_\+0\}\} 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/mbehrang/codes/hips-\/publish/hips-\/documentation/hips/src/\mbox{\hyperlink{streams_8h}{streams.\+h}}\item 
+/home/mbehrang/codes/hips-\/publish/hips-\/documentation/hips/src/\mbox{\hyperlink{streams_8cc}{streams.\+cc}}\end{DoxyCompactItemize}

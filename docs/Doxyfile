@@ -38,7 +38,7 @@ PROJECT_NUMBER         =
 # If a relative path is entered, it will be relative to the location
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = ../doc/doxygen
+OUTPUT_DIRECTORY       = doxygen
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create
 # 4096 sub-directories (in 2 levels) under the output directory of each output
@@ -597,14 +597,8 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = ../source \
-                         ../source/odtcases \
-                         ../source/linevariables \
-                         ../source/linevariables/soot \
-                         ../source/flmlt \
-                         ../source/user_chemical_mechanisms \
-                         ../doc/doxygen_build_pages
-
+INPUT                  = ../src 
+                         
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
 # also the default input encoding. Doxygen uses libiconv (or the iconv built
@@ -635,16 +629,7 @@ RECURSIVE              = NO
 # excluded from the INPUT source files. This way you can easily exclude a
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-EXCLUDE                = ../source/flamelet_table_changer.cc \
-                         ../source/QR.h \
-                         ../source/eqTableReader.cc \
-                         ../source/eqTableReader.h \
-                         ../source/flameletTable.cc \
-                         ../source/flameletTable.h \
-                         ../source/bkp_odtline.cc \
-                         ../source/hsens_mixf_table.h \
-                         ../source/hsens_mixf_table.cc
-
+EXCLUDE                = 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or
 # directories that are symbolic links (a Unix filesystem feature) are excluded
 # from the input.
