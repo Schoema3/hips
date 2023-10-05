@@ -21,10 +21,17 @@ hips::hips(int     nLevels_,
            int     nVar_,
            vector<double> &ScHips_,
            shared_ptr<Cantera::Solution> cantSol,
+           Integrator*  customIntegrator,
            bool   performReaction ) : 
     nLevels(nLevels_), domainLength(domainLength_), tau0(tau0_),
     C_param(C_param_), forceTurb(forceTurb_),       ScHips(ScHips_),   
     nVar(nVar_),       LrandSet(true),              cvodeD(cantSol), performReaction(performReaction) { 
+    
+    if (customIntegrator) {
+        integrator = std::unique_ptr<Integrator>(customIntegrator);
+    } else {
+        integrator = std::make_unique<cvodeDriver>(cantSol);
+    }
 
     varData = vector<vector<double> * > (nVar);                  // or varData.resize(nVar)
    
@@ -142,7 +149,7 @@ void hips::calculateSolution(const double tRun) {
 
         nEddies++;
 
-        if(nEddies %1000000 == 0) writeData(++fileCounter, time);
+        if(nEddies %10 == 0) writeData(++fileCounter, time);
     }
     time = tRun;
     iLevel = 0; iTree  = 0;
@@ -306,7 +313,7 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 
         setState(ime);
         dt = time-parcelTimes[ime];
-        cvodeD.integrate(dt);
+        integrator->integrate(dt);
 
         varData[0][0][ime] = gas->enthalpy_mass();
         for (int k=0; k<nsp; k++)

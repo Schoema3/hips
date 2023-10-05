@@ -81,7 +81,7 @@ vector<double> projectHipsToCfd(const vector<double>& vh, const vector<double>& 
 }
 
 int main() {
-    // Example usage
+    
     vector<double> xc = {0.0, 0.1,0.2, 0.4, 0.6, 1.0};
     vector<double> vc = {1, 0.5, 1.7, 2, 1.5 };
 
@@ -111,7 +111,7 @@ int main() {
     vector<double> modifiedData;
 
     // HiPS tree creation
-    hips HiPS(numLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips, cantSol, false);
+    hips HiPS(numLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips, cantSol, nullptr, false);
 
     // Set state vectors in each parcel using vh
     HiPS.set_varData(vh, 0);

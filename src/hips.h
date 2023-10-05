@@ -27,6 +27,10 @@ class hips {
         int                                   nparcels; ///< number of parcels
         std::vector<std::vector<double > * >  varData;  ///< vector of pointers to vector
         std::shared_ptr<Cantera::ThermoPhase> gas;
+        std::unique_ptr<Integrator> integrator;
+
+
+
 
     private:
 
@@ -74,6 +78,7 @@ class hips {
              int             nVar_,
              std::vector<double> &ScHips_,
              std::shared_ptr<Cantera::Solution> cantSol,
+             Integrator*     customIntegrator,
              bool            performReaction);
 
         virtual ~hips() { if(LrandSet) delete rand; }

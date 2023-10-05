@@ -43,7 +43,7 @@ int main() {
     int numVariables = 1;  
 
     // HiPS tree creation
-    hips HiPS(numLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips, cantSol, false);
+    hips HiPS(numLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips, cantSol, nullptr,false);
     int numParcels = HiPS.nparcels;
 
     // Initialize mixing fractions

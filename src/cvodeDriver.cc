@@ -3,7 +3,8 @@
 #include "cvodeDriver.h"
 
 #include <vector>
-
+#include "Integrator.h"
+#include "memory"
 using namespace Cantera;
 using namespace std;
 
@@ -15,7 +16,7 @@ cvodeDriver::cvodeDriver(shared_ptr<Solution> sol) {
     Neq = gas->nSpecies();
     rr.resize(gas->nSpecies());
 
-    integrator = unique_ptr<Integrator>(newIntegrator("CVODE"));
+    integrator = unique_ptr<Cantera::Integrator>(newIntegrator("CVODE"));
     integrator->setTolerances(1E-4, 1E-10);       // rtol, atol
     integrator->setMaxSteps(2000);
     integrator->initialize(0.0, *this);

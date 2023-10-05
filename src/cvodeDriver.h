@@ -1,3 +1,4 @@
+#include "Integrator.h"
 #include "cantera/thermo.h"
 #include "cantera/kinetics.h"
 #include "cantera/base/Solution.h"
@@ -7,7 +8,7 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 
-class cvodeDriver : public Cantera::FuncEval {
+class cvodeDriver : public Cantera::FuncEval, public Integrator {
 
     ////////////////////// DATA MEMBERS /////////////////////
 
