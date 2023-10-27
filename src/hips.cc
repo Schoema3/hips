@@ -128,7 +128,7 @@ hips::hips(int     nLevels_,
 
 void hips::calculateSolution(const double tRun) {
 
-    int    nEddies = 0;                // number of eddy events
+    unsigned long long nEddies = 0;                // number of eddy events
     int    fileCounter = 0;            // number of data files written
     int    iLevel;                     // tree level of EE with top at iLevel=0
     int    iTree;                      // one of two subtrees involved in swap at iLevel
@@ -149,7 +149,7 @@ void hips::calculateSolution(const double tRun) {
 
         nEddies++;
 
-        if(nEddies %10 == 0) writeData(++fileCounter, time);
+        //if(nEddies %1000000ull == 0) writeData(++fileCounter, time);
     }
     time = tRun;
     iLevel = 0; iTree  = 0;
