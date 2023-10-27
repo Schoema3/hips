@@ -1,48 +1,49 @@
+##################### HiPS LIBRARY #####################
 
-# ---- Create the hips library target ----
-add_library(hips_lib STATIC
-    cvodeDriver.cc
-    hips.cc
-    hips.h
-    cvodeDriver.h
-)
+add_library(hips)
 
-# ---- Set C++ standard for the library ----
-target_compile_features(hips_lib PUBLIC cxx_std_17)
+target_sources(hips PRIVATE hips.cc hips.h)
 
-# ---- Include directories for the library ----
-target_include_directories(hips_lib PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-find_package(Threads REQUIRED)
-target_link_libraries(hips_lib PRIVATE Threads::Threads)
-
-
-# ---- the option and variable for custom integrator ----
 option(USE_CUSTOM_INTEGRATOR "Use a custom integrator" OFF)
 set(CUSTOM_INTEGRATOR_PATH "" CACHE STRING "Path to custom integrator library")
 
-# ---- the source files for the library based on the option ----
 if(USE_CUSTOM_INTEGRATOR)
-    # Include the headers and source files of the custom integrator
-    target_sources(hips_lib PRIVATE cvodeDriver.cc hips.cc hips.h cvodeDriver.h ${CUSTOM_INTEGRATOR_PATH}/customIntegrator.cc)
-    target_include_directories(hips_lib PRIVATE ${CUSTOM_INTEGRATOR_PATH})
+    target_sources(hips PRIVATE ${CUSTOM_INTEGRATOR_PATH}/customIntegrator.cc)
+    target_include_directories(hips PRIVATE ${CUSTOM_INTEGRATOR_PATH})
 else()
-    #  the headers and source files of cvodeDriver (default)
-    target_sources(hips_lib PRIVATE cvodeDriver.cc hips.cc hips.h cvodeDriver.h)
+    target_sources(hips PRIVATE cvodeDriver.cc cvodeDriver.h)
 endif()
 
-# ---- Link the necessary libraries to hips_lib (update as needed) ----
-target_link_libraries(hips_lib PRIVATE cantera sundials_cvodes python3.10 Threads::Threads)
+#----------
 
-# ---- Optionally install the library ----
-install(TARGETS hips_lib
-    ARCHIVE DESTINATION lib
-    LIBRARY DESTINATION lib
-    RUNTIME DESTINATION bin
-    INCLUDES DESTINATION include
-)
+set_target_properties(hips PROPERTIES PUBLIC_HEADER "hips.h")
 
-# ---- Optionally install the header files ----
-install(FILES hips.h cvodeDriver.h DESTINATION include)
+if(APPLE)
+    find_library(ACCELERATE Accelerate)
+    find_library(YAML yaml-cpp)
+endif()
+
+find_library(CVODES sundials_cvodes)
+find_library(CANTERA cantera)
+find_package(Python COMPONENTS Interpreter Development)
+
+#----------
+
+target_include_directories(hips PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(hips PRIVATE "/usr/local/include")
+target_link_directories(   hips PRIVATE "/usr/local/lib")
+
+target_link_libraries(hips ${CANTERA})
+target_link_libraries(hips ${CANTERA} ${YAML} ${CVODES} ${Python_LIBRARIES} ${Python} ${ACCELERATE})
+
+############# INSTALLATION ################
+
+include(GNUInstallDirs)
+
+install(TARGETS hips
+        RUNTIME DESTINATION       "${CMAKE_INSTALL_BINDIR}"
+        LIBRARY DESTINATION       "${CMAKE_INSTALL_LIBDIR}"
+        ARCHIVE DESTINATION       "${CMAKE_INSTALL_LIBDIR}"
+        PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" 
+       )
+

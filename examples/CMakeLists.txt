@@ -1,23 +1,33 @@
 
-# Example 1
-add_executable(ex_1)
-target_sources(ex_1 PRIVATE ex_1.cc)
+####################### EXAMPLES #######################
 
-# Link the hips_lib library to example1
-target_link_libraries(ex_1 PRIVATE hips_lib)
+if(APPLE)
+    find_library(ACCELERATE Accelerate)
+    find_library(YAML yaml-cpp)
+endif()
 
-# Example 2
-add_executable(ex_2)
-target_sources(ex_2 PRIVATE ex_2.cc)
+find_library(CVODES sundials_cvodes)
+find_library(CANTERA cantera)
+find_package(Python COMPONENTS Interpreter Development)
 
-# Link the hips_lib library to example2
-target_link_libraries(ex_2 PRIVATE hips_lib)
+#----------
 
-# Example 3
-add_executable(ex_3)
-target_sources(ex_3 PRIVATE ex_3.cc)
+add_executable(ex_1.x ex_1.cc)
+target_include_directories(ex_1.x PRIVATE "${CMAKE_SOURCE_DIR}/src" "/usr/local/include")
+target_link_libraries(ex_1.x PRIVATE hips ${CANTERA} ${YAML} ${CVODES} ${Python} ${ACCELERATE})
+install(TARGETS ex_1.x DESTINATION "${CMAKE_SOURCE_DIR}/run")
 
-# Link the hips_lib library to example2
-target_link_libraries(ex_3 PRIVATE hips_lib)
+#----------
 
-# Add more examples as needed...
+add_executable(ex_2.x ex_2.cc)
+target_include_directories(ex_2.x PRIVATE "${CMAKE_SOURCE_DIR}/src" "/usr/local/include")
+target_link_libraries(ex_2.x PRIVATE hips ${CANTERA} ${YAML} ${CVODES} ${Python} ${ACCELERATE})
+install(TARGETS ex_2.x DESTINATION "${CMAKE_SOURCE_DIR}/run")
+
+#----------
+
+add_executable(ex_3.x ex_3.cc)
+target_include_directories(ex_3.x PRIVATE "${CMAKE_SOURCE_DIR}/src" "/usr/local/include")
+target_link_libraries(ex_3.x PRIVATE hips ${CANTERA} ${YAML} ${CVODES} ${Python} ${ACCELERATE})
+install(TARGETS ex_3.x DESTINATION "${CMAKE_SOURCE_DIR}/run")
+
