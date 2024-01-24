@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['calculatesolution_46',['calculateSolution',['../clasships.html#ad6c3df079ecab73ae445d7e29069ab63',1,'hips']]]
+  ['advancehips_161',['advanceHips',['../clasships.html#ae794eac94488c12cc1aa0a321de471b9',1,'hips']]]
 ];

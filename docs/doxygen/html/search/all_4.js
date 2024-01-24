@@ -1,8 +1,6 @@
 var searchData=
 [
-  ['h0_14',['h0',['../classstreams.html#acba6c3551868e1048dab3596dc0be65d',1,'streams']]],
-  ['h1_15',['h1',['../classstreams.html#a50280c7ff16728e8b0c10c5f6a117f66',1,'streams']]],
-  ['hips_16',['hips',['../clasships.html',1,'hips'],['../clasships.html#a91176e029fc53d1f2247f11727be93d0',1,'hips::hips()']]],
-  ['hsp0_17',['hsp0',['../classstreams.html#a95eccf515b92ecab4b76d29e3175f0df',1,'streams']]],
-  ['hsp1_18',['hsp1',['../classstreams.html#a3e69514355a1e9143b2787d1d137181a',1,'streams']]]
+  ['eddyrate_5finertial_18',['eddyRate_inertial',['../clasships.html#a6bb6bdd8027532037b60a56600c3af40',1,'hips']]],
+  ['eddyrate_5ftotal_19',['eddyRate_total',['../clasships.html#ad56769a509f9d0e67a0e609ac5569b4d',1,'hips']]],
+  ['eval_20',['eval',['../classbatchReactor__cantera.html#af9ad9234676eaf3f4f7a6d20a7de69c5',1,'batchReactor_cantera']]]
 ];

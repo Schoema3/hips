@@ -1,0 +1,127 @@
+\hypertarget{classbatchReactor__cantera}{}\doxysection{batch\+Reactor\+\_\+cantera Class Reference}
+\label{classbatchReactor__cantera}\index{batchReactor\_cantera@{batchReactor\_cantera}}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 14 of file batch\+Reactor\+\_\+cantera.\+h.
+
+
+
+{\ttfamily \#include $<$batch\+Reactor\+\_\+cantera.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classbatchReactor__cantera_a044cbcdcd2d011a24f2adebe8bfcfaa7}{batch\+Reactor\+\_\+cantera}} (std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$ cant\+Sol)
+\item 
+virtual void \mbox{\hyperlink{classbatchReactor__cantera_a8a28338d155ffe76452a04119112021f}{react}} (double \&h, std\+::vector$<$ double $>$ \&y, const double t\+Run)
+\item 
+void \mbox{\hyperlink{classbatchReactor__cantera_af9ad9234676eaf3f4f7a6d20a7de69c5}{eval}} (double t, double $\ast$vars, double $\ast$dvarsdt, double $\ast$not\+\_\+used)
+\item 
+size\+\_\+t \mbox{\hyperlink{classbatchReactor__cantera_af3cc618b57e267c3bb9d732287e46c20}{neq}} ()
+\item 
+void \mbox{\hyperlink{classbatchReactor__cantera_ad64fdb0dc2da58526e083193723a0189}{get\+State}} (double $\ast$y)
+\item 
+virtual \mbox{\hyperlink{classbatchReactor__cantera_aaabf68adab8ee349ace4cab540b07e38}{$\sim$batch\+Reactor\+\_\+cantera}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ Cantera\+::\+Integrator $>$ \mbox{\hyperlink{classbatchReactor__cantera_a733f663675700952fa3b3df28fb03ac9}{integrator}}
+\begin{DoxyCompactList}\small\item\em Cantera cvode wrapper. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classbatchReactor__cantera_a044cbcdcd2d011a24f2adebe8bfcfaa7}\label{classbatchReactor__cantera_a044cbcdcd2d011a24f2adebe8bfcfaa7}} 
+\index{batchReactor\_cantera@{batchReactor\_cantera}!batchReactor\_cantera@{batchReactor\_cantera}}
+\index{batchReactor\_cantera@{batchReactor\_cantera}!batchReactor\_cantera@{batchReactor\_cantera}}
+\doxysubsubsection{\texorpdfstring{batchReactor\_cantera()}{batchReactor\_cantera()}}
+{\footnotesize\ttfamily batch\+Reactor\+\_\+cantera\+::batch\+Reactor\+\_\+cantera (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$}]{cant\+Sol }\end{DoxyParamCaption})}
+
+Constructor 
+
+Definition at line 9 of file batch\+Reactor\+\_\+cantera.\+cc.
+
+\mbox{\Hypertarget{classbatchReactor__cantera_aaabf68adab8ee349ace4cab540b07e38}\label{classbatchReactor__cantera_aaabf68adab8ee349ace4cab540b07e38}} 
+\index{batchReactor\_cantera@{batchReactor\_cantera}!````~batchReactor\_cantera@{$\sim$batchReactor\_cantera}}
+\index{````~batchReactor\_cantera@{$\sim$batchReactor\_cantera}!batchReactor\_cantera@{batchReactor\_cantera}}
+\doxysubsubsection{\texorpdfstring{$\sim$batchReactor\_cantera()}{~batchReactor\_cantera()}}
+{\footnotesize\ttfamily virtual batch\+Reactor\+\_\+cantera\+::$\sim$batch\+Reactor\+\_\+cantera (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Definition at line 36 of file batch\+Reactor\+\_\+cantera.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classbatchReactor__cantera_a8a28338d155ffe76452a04119112021f}\label{classbatchReactor__cantera_a8a28338d155ffe76452a04119112021f}} 
+\index{batchReactor\_cantera@{batchReactor\_cantera}!react@{react}}
+\index{react@{react}!batchReactor\_cantera@{batchReactor\_cantera}}
+\doxysubsubsection{\texorpdfstring{react()}{react()}}
+{\footnotesize\ttfamily void batch\+Reactor\+\_\+cantera\+::react (\begin{DoxyParamCaption}\item[{double \&}]{h,  }\item[{std\+::vector$<$ double $>$ \&}]{y,  }\item[{const double}]{t\+Run }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{classbatchReactor_aec18522d3d27683aee10f482475149e9}{batch\+Reactor}}.
+
+
+
+Definition at line 24 of file batch\+Reactor\+\_\+cantera.\+cc.
+
+\mbox{\Hypertarget{classbatchReactor__cantera_af9ad9234676eaf3f4f7a6d20a7de69c5}\label{classbatchReactor__cantera_af9ad9234676eaf3f4f7a6d20a7de69c5}} 
+\index{batchReactor\_cantera@{batchReactor\_cantera}!eval@{eval}}
+\index{eval@{eval}!batchReactor\_cantera@{batchReactor\_cantera}}
+\doxysubsubsection{\texorpdfstring{eval()}{eval()}}
+{\footnotesize\ttfamily void batch\+Reactor\+\_\+cantera\+::eval (\begin{DoxyParamCaption}\item[{double}]{t,  }\item[{double $\ast$}]{vars,  }\item[{double $\ast$}]{dvarsdt,  }\item[{double $\ast$}]{not\+\_\+used }\end{DoxyParamCaption})}
+
+
+
+Definition at line 43 of file batch\+Reactor\+\_\+cantera.\+cc.
+
+\mbox{\Hypertarget{classbatchReactor__cantera_af3cc618b57e267c3bb9d732287e46c20}\label{classbatchReactor__cantera_af3cc618b57e267c3bb9d732287e46c20}} 
+\index{batchReactor\_cantera@{batchReactor\_cantera}!neq@{neq}}
+\index{neq@{neq}!batchReactor\_cantera@{batchReactor\_cantera}}
+\doxysubsubsection{\texorpdfstring{neq()}{neq()}}
+{\footnotesize\ttfamily size\+\_\+t batch\+Reactor\+\_\+cantera\+::neq (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 30 of file batch\+Reactor\+\_\+cantera.\+h.
+
+\mbox{\Hypertarget{classbatchReactor__cantera_ad64fdb0dc2da58526e083193723a0189}\label{classbatchReactor__cantera_ad64fdb0dc2da58526e083193723a0189}} 
+\index{batchReactor\_cantera@{batchReactor\_cantera}!getState@{getState}}
+\index{getState@{getState}!batchReactor\_cantera@{batchReactor\_cantera}}
+\doxysubsubsection{\texorpdfstring{getState()}{getState()}}
+{\footnotesize\ttfamily void batch\+Reactor\+\_\+cantera\+::get\+State (\begin{DoxyParamCaption}\item[{double $\ast$}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 32 of file batch\+Reactor\+\_\+cantera.\+h.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classbatchReactor__cantera_a733f663675700952fa3b3df28fb03ac9}\label{classbatchReactor__cantera_a733f663675700952fa3b3df28fb03ac9}} 
+\index{batchReactor\_cantera@{batchReactor\_cantera}!integrator@{integrator}}
+\index{integrator@{integrator}!batchReactor\_cantera@{batchReactor\_cantera}}
+\doxysubsubsection{\texorpdfstring{integrator}{integrator}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$Cantera\+::\+Integrator$>$ batch\+Reactor\+\_\+cantera\+::integrator\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Cantera cvode wrapper. 
+
+
+
+Definition at line 18 of file batch\+Reactor\+\_\+cantera.\+h.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/mbehrang/codes/hips-\/publish/hips-\/final-\/projection/hips/src/\mbox{\hyperlink{batchReactor__cantera_8h}{batch\+Reactor\+\_\+cantera.\+h}}\item 
+/home/mbehrang/codes/hips-\/publish/hips-\/final-\/projection/hips/src/\mbox{\hyperlink{batchReactor__cantera_8cc}{batch\+Reactor\+\_\+cantera.\+cc}}\end{DoxyCompactItemize}

@@ -1,0 +1,2 @@
+/Library/Developer/CommandLineTools/usr/bin/ar qc libhips.a CMakeFiles/hips.dir/hips.cc.o CMakeFiles/hips.dir/batchReactor_cvode.cc.o CMakeFiles/hips.dir/batchReactor_cantera.cc.o
+/Library/Developer/CommandLineTools/usr/bin/ranlib libhips.a

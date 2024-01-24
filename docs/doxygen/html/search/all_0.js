@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['beta0_0',['beta0',['../classstreams.html#a4894ce57805fc6bc320056a74a23ae88',1,'streams']]],
-  ['beta1_1',['beta1',['../classstreams.html#a3ec8af43296fdc4618ddc74f84e975bf',1,'streams']]]
+  ['advancehips_0',['advanceHips',['../clasships.html#ae794eac94488c12cc1aa0a321de471b9',1,'hips']]],
+  ['afac_1',['Afac',['../clasships.html#a1690c1395ecbf568cadce02de0c95d2d',1,'hips']]],
+  ['atol_2',['atol',['../classintegrator__cvode.html#a1db23182c20c85ef0efda99a5643405f',1,'integrator_cvode']]]
 ];

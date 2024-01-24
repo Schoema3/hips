@@ -1,0 +1,149 @@
+\hypertarget{classbatchReactor}{}\doxysection{batch\+Reactor Class Reference}
+\label{classbatchReactor}\index{batchReactor@{batchReactor}}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 13 of file batch\+Reactor.\+h.
+
+
+
+{\ttfamily \#include $<$batch\+Reactor.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classbatchReactor_ae9f39242ba26fa25a06a4cc5ff05472e}{batch\+Reactor}} ()
+\item 
+virtual void \mbox{\hyperlink{classbatchReactor_aec18522d3d27683aee10f482475149e9}{react}} (double \&h, std\+::vector$<$ double $>$ \&y, const double t\+Run)=0
+\item 
+virtual \mbox{\hyperlink{classbatchReactor_ae95e00b784edcb60c91a87eab93584d4}{$\sim$batch\+Reactor}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ Cantera\+::\+Thermo\+Phase $>$ \mbox{\hyperlink{classbatchReactor_a569251f4aa45e53dfd7584aa671a9771}{gas}}
+\begin{DoxyCompactList}\small\item\em Cantera thermo object. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ Cantera\+::\+Kinetics $>$ \mbox{\hyperlink{classbatchReactor_a44101d5defb4ba69474697744cbef158}{kin}}
+\begin{DoxyCompactList}\small\item\em Cantera kinetics object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classbatchReactor_a25a411dda898478f3c8ff2a5351906e5}{nvar}}
+\begin{DoxyCompactList}\small\item\em number of variables/equations solved \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classbatchReactor_a8d8d86a997c4e8424063f943ffab033a}{h\+\_\+fixed}}
+\begin{DoxyCompactList}\small\item\em adiabatic h during integrate \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classbatchReactor_a486da1fa66d5cad76ca4614371dc335a}{P\+\_\+fixed}}
+\begin{DoxyCompactList}\small\item\em pressure during integrate \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classbatchReactor_ae9f39242ba26fa25a06a4cc5ff05472e}\label{classbatchReactor_ae9f39242ba26fa25a06a4cc5ff05472e}} 
+\index{batchReactor@{batchReactor}!batchReactor@{batchReactor}}
+\index{batchReactor@{batchReactor}!batchReactor@{batchReactor}}
+\doxysubsubsection{\texorpdfstring{batchReactor()}{batchReactor()}}
+{\footnotesize\ttfamily batch\+Reactor\+::batch\+Reactor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 31 of file batch\+Reactor.\+h.
+
+\mbox{\Hypertarget{classbatchReactor_ae95e00b784edcb60c91a87eab93584d4}\label{classbatchReactor_ae95e00b784edcb60c91a87eab93584d4}} 
+\index{batchReactor@{batchReactor}!````~batchReactor@{$\sim$batchReactor}}
+\index{````~batchReactor@{$\sim$batchReactor}!batchReactor@{batchReactor}}
+\doxysubsubsection{\texorpdfstring{$\sim$batchReactor()}{~batchReactor()}}
+{\footnotesize\ttfamily virtual batch\+Reactor\+::$\sim$batch\+Reactor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Definition at line 35 of file batch\+Reactor.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classbatchReactor_aec18522d3d27683aee10f482475149e9}\label{classbatchReactor_aec18522d3d27683aee10f482475149e9}} 
+\index{batchReactor@{batchReactor}!react@{react}}
+\index{react@{react}!batchReactor@{batchReactor}}
+\doxysubsubsection{\texorpdfstring{react()}{react()}}
+{\footnotesize\ttfamily virtual void batch\+Reactor\+::react (\begin{DoxyParamCaption}\item[{double \&}]{h,  }\item[{std\+::vector$<$ double $>$ \&}]{y,  }\item[{const double}]{t\+Run }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{classbatchReactor__cvode_a48446f013f84461660ef4cff24cb6cf1}{batch\+Reactor\+\_\+cvode}}, and \mbox{\hyperlink{classbatchReactor__cantera_a8a28338d155ffe76452a04119112021f}{batch\+Reactor\+\_\+cantera}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classbatchReactor_a569251f4aa45e53dfd7584aa671a9771}\label{classbatchReactor_a569251f4aa45e53dfd7584aa671a9771}} 
+\index{batchReactor@{batchReactor}!gas@{gas}}
+\index{gas@{gas}!batchReactor@{batchReactor}}
+\doxysubsubsection{\texorpdfstring{gas}{gas}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$Cantera\+::\+Thermo\+Phase$>$ batch\+Reactor\+::gas\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Cantera thermo object. 
+
+
+
+Definition at line 19 of file batch\+Reactor.\+h.
+
+\mbox{\Hypertarget{classbatchReactor_a44101d5defb4ba69474697744cbef158}\label{classbatchReactor_a44101d5defb4ba69474697744cbef158}} 
+\index{batchReactor@{batchReactor}!kin@{kin}}
+\index{kin@{kin}!batchReactor@{batchReactor}}
+\doxysubsubsection{\texorpdfstring{kin}{kin}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$Cantera\+::\+Kinetics$>$ batch\+Reactor\+::kin\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Cantera kinetics object. 
+
+
+
+Definition at line 20 of file batch\+Reactor.\+h.
+
+\mbox{\Hypertarget{classbatchReactor_a25a411dda898478f3c8ff2a5351906e5}\label{classbatchReactor_a25a411dda898478f3c8ff2a5351906e5}} 
+\index{batchReactor@{batchReactor}!nvar@{nvar}}
+\index{nvar@{nvar}!batchReactor@{batchReactor}}
+\doxysubsubsection{\texorpdfstring{nvar}{nvar}}
+{\footnotesize\ttfamily int batch\+Reactor\+::nvar\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+number of variables/equations solved 
+
+
+
+Definition at line 22 of file batch\+Reactor.\+h.
+
+\mbox{\Hypertarget{classbatchReactor_a8d8d86a997c4e8424063f943ffab033a}\label{classbatchReactor_a8d8d86a997c4e8424063f943ffab033a}} 
+\index{batchReactor@{batchReactor}!h\_fixed@{h\_fixed}}
+\index{h\_fixed@{h\_fixed}!batchReactor@{batchReactor}}
+\doxysubsubsection{\texorpdfstring{h\_fixed}{h\_fixed}}
+{\footnotesize\ttfamily double batch\+Reactor\+::h\+\_\+fixed\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+adiabatic h during integrate 
+
+
+
+Definition at line 24 of file batch\+Reactor.\+h.
+
+\mbox{\Hypertarget{classbatchReactor_a486da1fa66d5cad76ca4614371dc335a}\label{classbatchReactor_a486da1fa66d5cad76ca4614371dc335a}} 
+\index{batchReactor@{batchReactor}!P\_fixed@{P\_fixed}}
+\index{P\_fixed@{P\_fixed}!batchReactor@{batchReactor}}
+\doxysubsubsection{\texorpdfstring{P\_fixed}{P\_fixed}}
+{\footnotesize\ttfamily double batch\+Reactor\+::\+P\+\_\+fixed\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+pressure during integrate 
+
+
+
+Definition at line 25 of file batch\+Reactor.\+h.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/mbehrang/codes/hips-\/publish/hips-\/final-\/projection/hips/src/\mbox{\hyperlink{batchReactor_8h}{batch\+Reactor.\+h}}\end{DoxyCompactItemize}

@@ -110,11 +110,16 @@
 \setcounter{secnumdepth}{5}
 \makeindex
 
+% Packages requested by user
+\usepackage{latexsym}
+\usepackage{amsmath}
+
 \usepackage{newunicodechar}
   \newunicodechar{⁻}{${}^{-}$}% Superscript minus
   \newunicodechar{²}{${}^{2}$}% Superscript two
   \newunicodechar{³}{${}^{3}$}% Superscript three
 
+\input{extra-stuff.sty}
 % Hyperlinks (required, but should be loaded last)
 \ifpdf
   \usepackage[pdftex,pagebackref=true]{hyperref}
@@ -171,6 +176,12 @@
 \hypersetup{pageanchor=true}
 
 %--- Begin generated contents ---
+\chapter{Main Page}
+\label{index}\hypertarget{index}{}\input{index}
+\chapter{test}
+\label{test}
+\Hypertarget{test}
+\input{test}
 \chapter{Hierarchical Index}
 \input{hierarchy}
 \chapter{Class Index}
@@ -178,12 +189,26 @@
 \chapter{File Index}
 \input{files}
 \chapter{Class Documentation}
-\input{classcvodeDriver}
+\input{classbatchReactor}
+\input{classbatchReactor__cantera}
+\input{classbatchReactor__cvode}
 \input{clasships}
+\input{classintegrator__cvode}
 \input{classMTRand}
 \input{classrandomGenerator}
 \input{classstreams}
 \chapter{File Documentation}
+\input{mainpage_8md}
+\input{test_8md}
+\input{batchReactor_8h}
+\input{batchReactor__cantera_8cc}
+\input{batchReactor__cantera_8h}
+\input{batchReactor__cvode_8cc}
+\input{batchReactor__cvode_8h}
+\input{hips_8cc}
+\input{hips_8h}
+\input{integrator__cvode_8h}
+\input{MersenneTwister_8h}
 \input{randomGenerator_8h}
 \input{streams_8cc}
 \input{streams_8h}

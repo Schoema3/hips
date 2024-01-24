@@ -23,7 +23,7 @@ set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}/installed")
 
 # ---- Build options ----
 
-option(HIPS_BUILD_EXAMPLES   "Build hips examples"        ON)
+option(HIPS_BUILD_EXAMPLES   "Build hips examples"        OFF)
 option(HIPS_BUILD_DOCS       "Build hips documentation"   OFF)
 
 ################### MAIN PROJECT TARGETS #####################

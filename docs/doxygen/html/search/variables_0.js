@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['beta0_54',['beta0',['../classstreams.html#a4894ce57805fc6bc320056a74a23ae88',1,'streams']]],
-  ['beta1_55',['beta1',['../classstreams.html#a3ec8af43296fdc4618ddc74f84e975bf',1,'streams']]]
+  ['afac_226',['Afac',['../clasships.html#a1690c1395ecbf568cadce02de0c95d2d',1,'hips']]],
+  ['atol_227',['atol',['../classintegrator__cvode.html#a1db23182c20c85ef0efda99a5643405f',1,'integrator_cvode']]]
 ];

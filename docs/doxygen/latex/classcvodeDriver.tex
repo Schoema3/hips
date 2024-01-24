@@ -2,45 +2,177 @@
 \label{classcvodeDriver}\index{cvodeDriver@{cvodeDriver}}
 
 
-Inheritance diagram for cvode\+Driver\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=184pt]{classcvodeDriver__inherit__graph}
-\end{center}
-\end{figure}
+\doxysubsection{Detailed Description}
 
 
-Collaboration diagram for cvode\+Driver\+:
-\nopagebreak
-\begin{figure}[H]
-\begin{center}
-\leavevmode
-\includegraphics[width=184pt]{classcvodeDriver__coll__graph}
-\end{center}
-\end{figure}
+Definition at line 10 of file cvode\+Driver.\+h.
+
+
+
+{\ttfamily \#include $<$cvode\+Driver.\+h$>$}
+
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classcvodeDriver_a1be8653ce32e57527dc26e4763709dba}\label{classcvodeDriver_a1be8653ce32e57527dc26e4763709dba}} 
-void {\bfseries integrate} (double dt)
+void \mbox{\hyperlink{classcvodeDriver_a1be8653ce32e57527dc26e4763709dba}{integrate}} (double dt)
 \item 
-\mbox{\Hypertarget{classcvodeDriver_a025eb4b6ba235e2b3737aa2d52db3c00}\label{classcvodeDriver_a025eb4b6ba235e2b3737aa2d52db3c00}} 
-void {\bfseries eval} (double t, double $\ast$y, double $\ast$ydot, double $\ast$not\+\_\+used)
+void \mbox{\hyperlink{classcvodeDriver_a025eb4b6ba235e2b3737aa2d52db3c00}{eval}} (double t, double $\ast$y, double $\ast$ydot, double $\ast$not\+\_\+used)
 \item 
-\mbox{\Hypertarget{classcvodeDriver_a92106e23cebc20cac06fe67872f72e24}\label{classcvodeDriver_a92106e23cebc20cac06fe67872f72e24}} 
-size\+\_\+t {\bfseries neq} ()
+size\+\_\+t \mbox{\hyperlink{classcvodeDriver_a92106e23cebc20cac06fe67872f72e24}{neq}} ()
 \item 
-\mbox{\Hypertarget{classcvodeDriver_a0b46e8a62479a7feeb0a6f6a3b1a7d20}\label{classcvodeDriver_a0b46e8a62479a7feeb0a6f6a3b1a7d20}} 
-void {\bfseries get\+State} (double $\ast$y)
+void \mbox{\hyperlink{classcvodeDriver_a0b46e8a62479a7feeb0a6f6a3b1a7d20}{get\+State}} (double $\ast$y)
 \item 
-\mbox{\Hypertarget{classcvodeDriver_a1b198fc4be497e79cbc71c4f8852c573}\label{classcvodeDriver_a1b198fc4be497e79cbc71c4f8852c573}} 
-{\bfseries cvode\+Driver} (std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$ sol)
+\mbox{\hyperlink{classcvodeDriver_a1b198fc4be497e79cbc71c4f8852c573}{cvode\+Driver}} (std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$ sol)
 \end{DoxyCompactItemize}
+\doxysubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ Cantera\+::\+Thermo\+Phase $>$ \mbox{\hyperlink{classcvodeDriver_a2ec9768fcdd7773dcee13bed7d9670eb}{gas}}
+\item 
+std\+::shared\+\_\+ptr$<$ Cantera\+::\+Kinetics $>$ \mbox{\hyperlink{classcvodeDriver_a5ef143232e73cbf8250dece220585096}{kin}}
+\item 
+int \mbox{\hyperlink{classcvodeDriver_aefcf134094c49b0420157f319291bf74}{Neq}}
+\item 
+double \mbox{\hyperlink{classcvodeDriver_ac7a426fea0c708bffcdc9471af50b63e}{h\+\_\+fixed}}
+\item 
+double \mbox{\hyperlink{classcvodeDriver_a7d26049d8292a14f260dfcc20fda458f}{P\+\_\+fixed}}
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classcvodeDriver_a1612c18bf35fa9f51f1172838d4804d8}{rr}}
+\item 
+std\+::unique\+\_\+ptr$<$ Cantera\+::\+Integrator $>$ \mbox{\hyperlink{classcvodeDriver_a566916d1fa8d2a36a80a91c420611c50}{integrator}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classcvodeDriver_a1b198fc4be497e79cbc71c4f8852c573}\label{classcvodeDriver_a1b198fc4be497e79cbc71c4f8852c573}} 
+\index{cvodeDriver@{cvodeDriver}!cvodeDriver@{cvodeDriver}}
+\index{cvodeDriver@{cvodeDriver}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{cvodeDriver()}{cvodeDriver()}}
+{\footnotesize\ttfamily cvode\+Driver\+::cvode\+Driver (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$}]{sol }\end{DoxyParamCaption})}
+
+
+
+Definition at line 12 of file cvode\+Driver.\+cc.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classcvodeDriver_a1be8653ce32e57527dc26e4763709dba}\label{classcvodeDriver_a1be8653ce32e57527dc26e4763709dba}} 
+\index{cvodeDriver@{cvodeDriver}!integrate@{integrate}}
+\index{integrate@{integrate}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{integrate()}{integrate()}}
+{\footnotesize\ttfamily void cvode\+Driver\+::integrate (\begin{DoxyParamCaption}\item[{double}]{dt }\end{DoxyParamCaption})}
+
+
+
+Definition at line 26 of file cvode\+Driver.\+cc.
+
+\mbox{\Hypertarget{classcvodeDriver_a025eb4b6ba235e2b3737aa2d52db3c00}\label{classcvodeDriver_a025eb4b6ba235e2b3737aa2d52db3c00}} 
+\index{cvodeDriver@{cvodeDriver}!eval@{eval}}
+\index{eval@{eval}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{eval()}{eval()}}
+{\footnotesize\ttfamily void cvode\+Driver\+::eval (\begin{DoxyParamCaption}\item[{double}]{t,  }\item[{double $\ast$}]{y,  }\item[{double $\ast$}]{ydot,  }\item[{double $\ast$}]{not\+\_\+used }\end{DoxyParamCaption})}
+
+
+
+Definition at line 44 of file cvode\+Driver.\+cc.
+
+\mbox{\Hypertarget{classcvodeDriver_a92106e23cebc20cac06fe67872f72e24}\label{classcvodeDriver_a92106e23cebc20cac06fe67872f72e24}} 
+\index{cvodeDriver@{cvodeDriver}!neq@{neq}}
+\index{neq@{neq}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{neq()}{neq()}}
+{\footnotesize\ttfamily size\+\_\+t cvode\+Driver\+::neq (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 36 of file cvode\+Driver.\+h.
+
+\mbox{\Hypertarget{classcvodeDriver_a0b46e8a62479a7feeb0a6f6a3b1a7d20}\label{classcvodeDriver_a0b46e8a62479a7feeb0a6f6a3b1a7d20}} 
+\index{cvodeDriver@{cvodeDriver}!getState@{getState}}
+\index{getState@{getState}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{getState()}{getState()}}
+{\footnotesize\ttfamily void cvode\+Driver\+::get\+State (\begin{DoxyParamCaption}\item[{double $\ast$}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 38 of file cvode\+Driver.\+h.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classcvodeDriver_a2ec9768fcdd7773dcee13bed7d9670eb}\label{classcvodeDriver_a2ec9768fcdd7773dcee13bed7d9670eb}} 
+\index{cvodeDriver@{cvodeDriver}!gas@{gas}}
+\index{gas@{gas}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{gas}{gas}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$Cantera\+::\+Thermo\+Phase$>$ cvode\+Driver\+::gas\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 16 of file cvode\+Driver.\+h.
+
+\mbox{\Hypertarget{classcvodeDriver_a5ef143232e73cbf8250dece220585096}\label{classcvodeDriver_a5ef143232e73cbf8250dece220585096}} 
+\index{cvodeDriver@{cvodeDriver}!kin@{kin}}
+\index{kin@{kin}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{kin}{kin}}
+{\footnotesize\ttfamily std\+::shared\+\_\+ptr$<$Cantera\+::\+Kinetics$>$ cvode\+Driver\+::kin\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 17 of file cvode\+Driver.\+h.
+
+\mbox{\Hypertarget{classcvodeDriver_aefcf134094c49b0420157f319291bf74}\label{classcvodeDriver_aefcf134094c49b0420157f319291bf74}} 
+\index{cvodeDriver@{cvodeDriver}!Neq@{Neq}}
+\index{Neq@{Neq}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{Neq}{Neq}}
+{\footnotesize\ttfamily int cvode\+Driver\+::\+Neq\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 18 of file cvode\+Driver.\+h.
+
+\mbox{\Hypertarget{classcvodeDriver_ac7a426fea0c708bffcdc9471af50b63e}\label{classcvodeDriver_ac7a426fea0c708bffcdc9471af50b63e}} 
+\index{cvodeDriver@{cvodeDriver}!h\_fixed@{h\_fixed}}
+\index{h\_fixed@{h\_fixed}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{h\_fixed}{h\_fixed}}
+{\footnotesize\ttfamily double cvode\+Driver\+::h\+\_\+fixed\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 19 of file cvode\+Driver.\+h.
+
+\mbox{\Hypertarget{classcvodeDriver_a7d26049d8292a14f260dfcc20fda458f}\label{classcvodeDriver_a7d26049d8292a14f260dfcc20fda458f}} 
+\index{cvodeDriver@{cvodeDriver}!P\_fixed@{P\_fixed}}
+\index{P\_fixed@{P\_fixed}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{P\_fixed}{P\_fixed}}
+{\footnotesize\ttfamily double cvode\+Driver\+::\+P\+\_\+fixed\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 20 of file cvode\+Driver.\+h.
+
+\mbox{\Hypertarget{classcvodeDriver_a1612c18bf35fa9f51f1172838d4804d8}\label{classcvodeDriver_a1612c18bf35fa9f51f1172838d4804d8}} 
+\index{cvodeDriver@{cvodeDriver}!rr@{rr}}
+\index{rr@{rr}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{rr}{rr}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ cvode\+Driver\+::rr\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 21 of file cvode\+Driver.\+h.
+
+\mbox{\Hypertarget{classcvodeDriver_a566916d1fa8d2a36a80a91c420611c50}\label{classcvodeDriver_a566916d1fa8d2a36a80a91c420611c50}} 
+\index{cvodeDriver@{cvodeDriver}!integrator@{integrator}}
+\index{integrator@{integrator}!cvodeDriver@{cvodeDriver}}
+\doxysubsubsection{\texorpdfstring{integrator}{integrator}}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$Cantera\+::\+Integrator$>$ cvode\+Driver\+::integrator\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line 23 of file cvode\+Driver.\+h.
+
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/home/mbehrang/codes/hips-\/publish/hips-\/documentation/hips/src/cvode\+Driver.\+h\item 
-/home/mbehrang/codes/hips-\/publish/hips-\/documentation/hips/src/cvode\+Driver.\+cc\end{DoxyCompactItemize}
+/home/mbehrang/improved\+Doc/hips/src/\mbox{\hyperlink{cvodeDriver_8h}{cvode\+Driver.\+h}}\item 
+/home/mbehrang/improved\+Doc/hips/src/\mbox{\hyperlink{cvodeDriver_8cc}{cvode\+Driver.\+cc}}\end{DoxyCompactItemize}

@@ -1,17 +1,39 @@
 #include "hips.h"
+#include "batchReactor_cvode.h"
+#include "batchReactor_cantera.h"
+#include "randomGenerator.h"
 
 #include <iostream>
-#include <cmath>
 #include <iomanip>
-#include "randomGenerator.h"
 #include <fstream>
 #include <sstream>
-
+#include <cmath>
+#include <vector>
 using namespace std;
 
+////////////////////////////////////////////////////////////////////////////////
+/**
+ * \brief Constructor for initializing 'nLevels_' based on Reynolds number.
+ * \param Re Reynolds number for turbulence simulation.
+ */
+hips::hips(double Re) {
+
+    nLevels_ = static_cast<int>(round(log2(Re) - 3));
+}
 ///////////////////////////////////////////////////////////////////////////////
-/** Constructor
-  */
+/**
+ * \brief Constructor for initializing various parameters for the simulation.
+ * \param nLevels Number of simulation levels.
+ * \param domainLength_ Length of the simulation domain.
+ * \param tau0_ Initial timescale parameter.
+ * \param C_param_ C parameter.
+ * \param forceTurb_ Flag for forcing turbulence.
+ * \param nVar_ Number of variables.
+ * \param ScHips_ Vector of Schmidt numbers for HIPS simulation.
+ * \param cantSol Cantera solution object.
+ * \param performReaction_ Flag for performing chemical reactions.
+ * \param seed Seed for the random number generator.
+ */
 
 hips::hips(int     nLevels_, 
            double  domainLength_, 
@@ -21,22 +43,22 @@ hips::hips(int     nLevels_,
            int     nVar_,
            vector<double> &ScHips_,
            shared_ptr<Cantera::Solution> cantSol,
-           Integrator*  customIntegrator,
-           bool   performReaction ) : 
-    nLevels(nLevels_), domainLength(domainLength_), tau0(tau0_),
-    C_param(C_param_), forceTurb(forceTurb_),       ScHips(ScHips_),   
-    nVar(nVar_),       LrandSet(true),              cvodeD(cantSol), performReaction(performReaction) { 
+           bool   performReaction_,
+           int    seed) : 
+    nLevels(nLevels_),                 domainLength(domainLength_), tau0(tau0_),
+    C_param(C_param_),                 forceTurb(forceTurb_),       ScHips(ScHips_),   
+    nVar(nVar_),                       LrandSet(true),              rand(seed),
+    performReaction(performReaction_) { 
     
-    if (customIntegrator) {
-        integrator = std::unique_ptr<Integrator>(customIntegrator);
-    } else {
-        integrator = std::make_unique<cvodeDriver>(cantSol);
-    }
-
-    varData = vector<vector<double> * > (nVar);                  // or varData.resize(nVar)
    
     gas = cantSol->thermo(); 
-    nsp = gas->nSpecies();                                           // read the size of species
+    nsp = gas->nSpecies();
+
+    varData.resize(nVar);
+    varName.resize(nVar);
+
+    bRxr = make_unique<batchReactor_cvode>(cantSol);
+    //bRxr = make_unique<batchReactor_cantera>(cantSol);
 
     //-------------------------- Set number of parcels, level lengthscales, timescales, and rates, and i_plus && i_batchelor
      
@@ -110,10 +132,108 @@ hips::hips(int     nLevels_,
     for (int i=0; i<nparcels; i++)
         pLoc[i] = i;
     
-    //-------------------------------------
-
-    rand = new randomGenerator(seed);
 } 
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * \brief Function to set the variables and their weights.
+ * \param v Vector of variables.
+ * \param w Vector of weights.
+ * \param i Index for the variable data.
+ */
+void hips:: set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, int i) {  
+
+    varData[i] = new  vector<double>(projection(v, w));
+    varName[i] = varN;
+
+}
+//////////////////////////////////////////////////////////////////////////////////////
+/**
+ * \brief Function for projecting vectors onto a grid.
+ * \param v Vector to be projected.
+ * \param w Weight vector.
+ * \return Projected vector.
+ */
+
+std::vector<double> hips:: projection( std::vector<double> &vcfd, std::vector<double> &weight){
+    
+    std::vector<double> xc = setGridCfd(weight);
+    std::vector<double> xh = setGridHips(nparcels);
+
+    int nc = xc.size() - 1;//check if the size is ok.
+    int nh = xh.size() - 1; 
+
+    std::vector<double> vh(nh, 0.0);
+    int jprev = 0;
+
+    for(int i=0; i<nh; i++) {
+        for(int j=jprev +1; j<=nc; ++j){
+            if(xc[j] <= xh[i+1]) {
+
+                double d1 = xc[j] - xc[j-1];
+                double d2 = xc[j] - xh[i];
+                double d = std::min(d1, d2);
+
+                vh[i] += vcfd[j-1]*d;
+            }else{
+
+                double d1 = xh[i+1] - xc[j-1];
+                double d2 = xh[i+1] - xh[i];
+                double d = std::min(d1, d2);
+
+                vh[i] += vcfd[j-1]*d;
+                jprev = j-1;
+                break;
+            }
+        }
+        
+        vh[i] /=(xh[i+1] - xh[i]);           
+    }
+    return vh;
+ 
+}
+/////////////////////////////////////////////////////////////////////////////////
+/**
+ * \brief Function to set a grid for CFD simulation.
+ * \param w Weight vector.
+ * \return Vector representing the grid.
+ */
+
+std::vector<double> hips:: setGridCfd(std::vector<double> &w) {
+
+    vector<double> pos;
+    double posL = 0.0;
+    int i =0;
+    while(i<=w.size()) {
+        pos.push_back(posL);
+        posL +=w[i];
+        i++;
+   
+    }
+   
+    return pos;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * \brief Function to set a grid for HIPS simulation.
+ * \param N Number of grid points.
+ * \return Vector representing the grid.
+ */
+std::vector<double> hips::setGridHips(int N){
+
+    vector<double> xh(N+1);
+    double step = 1.0/N;
+
+    for(int i=0; i<=N; i++){
+
+        xh[i] = i*step;
+
+    }
+        
+    return xh;
+
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 /** The HiPS solver
@@ -142,14 +262,15 @@ void hips::calculateSolution(const double tRun) {
     while (time+dtEE<=tRun) {
 
         time += dtEE;
+        //cout<<"time is "<<time<<endl;
         selectAndSwapTwoSubtrees(iLevel, iTree);
         advanceHips(iLevel, iTree);    // reaction and micromixing (if needed) to t=time
 
         sample_hips_eddy(dtEE, iLevel);
 
         nEddies++;
-
-        //if(nEddies %1000000ull == 0) writeData(++fileCounter, time);
+        //cout<<"-------------------------------------"<<nEddies<<endl;
+        if(nEddies %2 == 0) writeData(++fileCounter, time);
     }
     time = tRun;
     iLevel = 0; iTree  = 0;
@@ -172,22 +293,22 @@ void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
 
     //--------------- time to next eddy
 
-    double r = rand->getRand();
+    double r = rand.getRand();
     dtEE = -log(r)/eddyRate_total;
 
     //----------------- get eddy level
 
-    r = rand->getRand();
+    r = rand.getRand();
 
     if ( r <= eddyRate_inertial/eddyRate_total) {     // inertial region
-        r = rand->getRand();
+        r = rand.getRand();
         iLevel = ceil(3.0/5.0*log2(1.0-r*c1) - 1.0);
         if (iLevel < 0)    iLevel = 0;
         if (iLevel > iEta) iLevel = iEta;
     }
 
     else {                                            // "Batchelor" region
-        r = rand->getRand();
+        r = rand.getRand();
         iLevel = ceil(log2(r*c2 + c3) - 1.0);
         if(iLevel < iEta+1) iLevel = iEta+1;
         if(iLevel > Nm3) iLevel = Nm3;
@@ -248,9 +369,9 @@ void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
 
 void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
 
-    iTree = rand->getRandInt((1 << iLevel)-1);
-    int zero_q = rand->getRandInt(1);                                    // 0q where q is 0 or 1
-    int one_r  = 2 + rand->getRandInt(1);                                // 1r where r is 0 or 1
+    iTree = rand.getRandInt((1 << iLevel)-1);
+    int zero_q = rand.getRandInt(1);                                    // 0q where q is 0 or 1
+    int one_r  = 2 + rand.getRandInt(1);                                // 1r where r is 0 or 1
 
     int Qstart = (zero_q << (Nm3-iLevel)) + (iTree << (Nm1-iLevel));     // starting index of Q parcels
     int Rstart = (one_r  << (Nm3-iLevel)) + (iTree << (Nm1-iLevel));     // starting index of R parcels
@@ -280,7 +401,7 @@ void hips::advanceHips(const int iLevel, const int iTree) {
     bool rxnDone = false;                       // react all variables once
     for (int k=0; k<nVar; k++) {                //   upon finding first variable needing micromixing
         if ( (iLevel >= i_plus[k]) || 
-             (iLevel==i_plus[k]-1 && rand->getRand() <= i_plus[k]-i_batchelor[k]) ) {
+             (iLevel==i_plus[k]-1 && rand.getRand() <= i_plus[k]-i_batchelor[k]) ) {
                 if(!rxnDone && performReaction) {
                    reactParcels_LevelTree(iLevel, iTree);
                    rxnDone = true;
@@ -307,17 +428,22 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
     int iend = istart + nP;
     int ime;
     double dt;
+    double h;
+    vector<double> y(nsp);
 
     for (int i=istart; i<iend; i++) {
         ime = pLoc[i];
-
-        setState(ime);
+        //cout<<"pLoc "<<pLoc[i]<<"  gas "<<gas->density()<<"\n\n"<<endl;
         dt = time-parcelTimes[ime];
-        integrator->integrate(dt);
-
-        varData[0][0][ime] = gas->enthalpy_mass();
+        h = varData[0][0][ime]; 
         for (int k=0; k<nsp; k++)
-            varData[k+1][0][ime] = gas->massFraction(k);
+            y[k] = varData[k+1][0][ime];
+
+        bRxr->react(h, y, dt);
+         //cout<<"h    "<<h<<endl;
+        varData[0][0][ime] = h;
+        for (int k=0; k<nsp; k++)
+            varData[k+1][0][ime] = y[k];
     }
 
 }
@@ -385,7 +511,10 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
     }
     for (int i=istart; i<iend; i++) {
         ime = pLoc[i];
-        varData[kVar][0][ime] = s / nPmix;  
+        varData[kVar][0][ime] = s / nPmix; 
+
+        //cout<<"var Data in mixxx "<<varData[0][0][ime]<<endl;
+        
     }   
 }
 
@@ -420,7 +549,8 @@ void hips::forceProfile() {
 
         s /= (nparcels>>1);
         for (int i=nparcels>>1; i<nparcels; i++)
-            varData[k][0][pLoc[i]] += (-s + 1.0);   
+            varData[k][0][pLoc[i]] += (-s + 1.0); 
+        
     }
 }
 
@@ -442,10 +572,10 @@ void hips::writeData(const int ifile, const double outputTime) {
     ofile << "# time = " << outputTime;
     ofile <<"\n# Grid Poins = " << nparcels;
 
-    for (int i=0; i<nVar; i++){
-        ofile << setw(14) <<  "variable_"+std::to_string(i);
+   for (const auto& name : varName)
+        ofile << setw(14) << name;
+   
 
-    }
 
     ofile << scientific;
     ofile << setprecision(10);
@@ -459,47 +589,66 @@ void hips::writeData(const int ifile, const double outputTime) {
 
     ofile.close();
 }
-
 ///////////////////////////////////////////////////////////////////////////////
-/** Set the Cantera gas state.
-  * @param ipt \input parcel to set the state for.
-  */
+/**
+ * \brief Function for projecting vectors onto a grid.
+ * \param vb Vector to be projected back.
+ */
 
-void hips::setState(const int &ipt){
-
-    vector<double> yi(nsp);
-    double h = varData[0][0][ipt]; 
-
-    for (int k=0; k<nsp; k++)
-        yi[k] = varData[k+1][0][ipt];
-
-    gas->setMassFractions(&yi[0]);
-    gas->setState_HP(h, gas->pressure());
+std::vector<double> hips::projection_back(std::vector<double> &vb){
     
-}
+    int jprev = 0;
+
+    std::vector<double> xh = setGridHips(nparcels);
+    std::vector<double> xc = setGridCfd(vb);
+
+    int nh = xh.size() - 1;
+    int nc = xc.size() - 1;
+    std::vector<double> vc(nc, 0);
+
+    for (int i = 0; i < nc; ++i) {
+        for (int j = jprev + 1; j < xh.size(); ++j) {
+            double d1 = xh[j] - xh[j - 1];
+            double d2 = xh[j] - xc[i];
+            double d = (d1 < d2) ? d1 : d2;
+
+            if (xh[j] <= xc[i + 1]) {
+                vc[i] += vb[j - 1] * d;
+            } else {
+                double d1 = xc[i + 1] - xh[j - 1];
+                double d2 = xc[i + 1] - xc[i];
+                d = (d1 < d2) ? d1 : d2;
+                vc[i] += vb[j - 1] * d;
+                jprev = j - 1;
+                break;
+            }
+        }
+        vc[i] /= (xc[i + 1] - xc[i]);
+    }
+
+    return vc;
+}    
 
 ///////////////////////////////////////////////////////////////////////////////
 
 /**
  * @brief Retrieve modified data from the HiPS library.
  *
- * This function retrieves modified data from the HiPS library for a specified index
+ * This function retrieves modified data from the HiPS library 
  * and stores it in the provided vector.
  *
- * @param modifiedData A vector to store the modified data.
- * @param i The index indicating the specific data to retrieve.
- * @note If the provided index is out of bounds, an error message is printed to the console.
  */
+std::vector<std::vector<double>> hips::get_varData(){
+    
+       std::vector<std::vector<double>> vh;
 
-void hips::get_varData(std::vector<double> & modifiedData, int i){
+       for (int i=0; i<varData.size(); i++)
+           vh.push_back(projection_back(varData[i][0]));
 
-    if (i>=0 && i<varData.size()) {
-        modifiedData = varData[i][0];
+        return vh;
 
-    }
-    else{
-        cout << "Invalid index for data retrieval" <<endl;
-    }
 }
 ////////////////////////////////////////////////////////
-        
+ 
+
+

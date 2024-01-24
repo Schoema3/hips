@@ -1,22 +1,15 @@
 #################### Doxygen documentation
 
-
-find_package(Doxygen REQUIRED)
-
+find_package(Doxygen)
 if(DOXYGEN_FOUND)
-    # Set the input and output directories for Doxygen
-    set(DOXYGEN_INPUT_DIR "${CMAKE_SOURCE_DIR}/src")
-    set(DOXYGEN_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/doxygen")
-
-    configure_file(Doxyfile.in Doxyfile @ONLY)
-
     add_custom_target(docs
-        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        COMMENT "Generating Doxygen documentation"
+        COMMENT "Building doxygen documentation"
+        COMMAND rm -rf doxygen/html
+        COMMAND mkdir  doxygen/html
+        COMMAND doxygen -s Doxyfile
+        WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}"
         VERBATIM
     )
 else()
-    message(WARNING "Doxygen not found, cannot generate documentation")
+    message("Cannot build documentation because doxygen was not found")
 endif()
-

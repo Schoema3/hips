@@ -1,30 +1,77 @@
+<!-- HTML header for doxygen 1.9.5-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="$langISO">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>hips: streams Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+   TeX: { Macros: {
+    doot: ["{\\dot{#1}}",1],
+  } }
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+$darkmode
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<!-- ... other metadata & script includes ... -->
+<!--
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeDarkModeToggle.init()
+</script>
+-->
 </head>
 <body>
 <div id="top"><!-- do not remove this div, it is closed by doxygen! -->
 <div id="titlearea">
 <table cellspacing="0" cellpadding="0">
  <tbody>
- <tr style="height: 56px;">
-  <td id="projectalign" style="padding-left: 0.5em;">
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="fig1.svg"/></td>
+  <td id="projectalign">
    <div id="projectname">hips
    </div>
   </td>
  </tr>
+   <!--BEGIN FULL_SIDEBAR-->
+   <tr><td colspan="2">        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.svg"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Search" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
+          </span>
+        </div>
+</td></tr>
+   <!--END FULL_SIDEBAR-->
  </tbody>
 </table>
 </div>
@@ -45,6 +92,23 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('classstreams.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -59,124 +123,250 @@ $(function() {
 </iframe>
 </div>
 
-</div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="classstreams-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">streams Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class implementing streams for use in mixing and or reaction problems. This is writting in terms of mixture fraction with streams defined in an input file. The class can implement products of complete combustion, or equilibrium (through the Cantera IdealGasPhase object, if desired). This class holds a pointer to a Cantera IdealGasPhase object (defined up front in main) that computes thermodynamic, kinetic, and transport data.</p>
+<dl class="section author"><dt>Author</dt><dd>David O. Lignell </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00021">21</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+</div>
 <p><code>#include &lt;<a class="el" href="streams_8h_source.html">streams.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aed21433e408b40a0e7e9e6628c5b3bb4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#aed21433e408b40a0e7e9e6628c5b3bb4">getProdOfCompleteComb</a> (const double mixf, vector&lt; double &gt; &amp;ypcc, double &amp;hpcc, double &amp;Tpcc)</td></tr>
-<tr class="separator:aed21433e408b40a0e7e9e6628c5b3bb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dcaeb31595a41ac5f7d6b2d710f10fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a7dcaeb31595a41ac5f7d6b2d710f10fa">getEquilibrium_HP</a> (const double mixf, vector&lt; double &gt; &amp;yeq, double &amp;heq, double &amp;Teq)</td></tr>
-<tr class="separator:a7dcaeb31595a41ac5f7d6b2d710f10fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf68232d7da63277b99a33e9646b9773"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#aaf68232d7da63277b99a33e9646b9773">getMixingState</a> (const double mixf, vector&lt; double &gt; &amp;ymix, double &amp;hmix, double &amp;Tmix)</td></tr>
-<tr class="separator:aaf68232d7da63277b99a33e9646b9773"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1acfdaebac0b26841c76d9aaacc4b31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#ae1acfdaebac0b26841c76d9aaacc4b31">getProdOfCompleteComb</a> (const double mixf, std::vector&lt; double &gt; &amp;ypcc, double &amp;hpcc, double &amp;Tpcc)</td></tr>
+<tr class="separator:ae1acfdaebac0b26841c76d9aaacc4b31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dbf93fbcde09e925bead7ce9c0113e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a6dbf93fbcde09e925bead7ce9c0113e9">getEquilibrium_HP</a> (const double mixf, std::vector&lt; double &gt; &amp;yeq, double &amp;heq, double &amp;Teq)</td></tr>
+<tr class="separator:a6dbf93fbcde09e925bead7ce9c0113e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb9231a9360300ec0688d1c1e404ca78"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#afb9231a9360300ec0688d1c1e404ca78">getEquilibrium_TP</a> (const double mixf, double Teq, std::vector&lt; double &gt; &amp;yeq, double &amp;heq)</td></tr>
+<tr class="separator:afb9231a9360300ec0688d1c1e404ca78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebccdb0fdffb04228f87d73d506d96c5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#aebccdb0fdffb04228f87d73d506d96c5">getMixingState</a> (const double mixf, std::vector&lt; double &gt; &amp;ymix, double &amp;hmix, double &amp;Tmix)</td></tr>
+<tr class="separator:aebccdb0fdffb04228f87d73d506d96c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad4916fb672c02d1c414b55f443f6f4f4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#ad4916fb672c02d1c414b55f443f6f4f4">getMixtureFraction</a> (const double *y, const bool doBeta01=false)</td></tr>
 <tr class="separator:ad4916fb672c02d1c414b55f443f6f4f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a156a36b8acc15fd67614480b5b1a07e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a156a36b8acc15fd67614480b5b1a07e7">init</a> (domain *p_domn, const vector&lt; double &gt; &amp;gammas)</td></tr>
-<tr class="separator:a156a36b8acc15fd67614480b5b1a07e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30bf5c7e8dd1d2c111118b87fd9f6057"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a30bf5c7e8dd1d2c111118b87fd9f6057">streams</a> ()</td></tr>
+<tr class="separator:a30bf5c7e8dd1d2c111118b87fd9f6057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28a239d95efcd8d117af8ddbd982965f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a28a239d95efcd8d117af8ddbd982965f">streams</a> (std::shared_ptr&lt; Cantera::Solution &gt; csol, const double _P, const double _h0, const double _h1, const std::vector&lt; double &gt; &amp;_y0, const std::vector&lt; double &gt; &amp;_y1)</td></tr>
+<tr class="separator:a28a239d95efcd8d117af8ddbd982965f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c69b3a6858ce8ce1dfc7ae242710038"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a7c69b3a6858ce8ce1dfc7ae242710038">~streams</a> ()</td></tr>
+<tr class="separator:a7c69b3a6858ce8ce1dfc7ae242710038"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a4272ceacc81bb2dcf94296dc3e31b8e4"><td class="memItemLeft" align="right" valign="top"><a id="a4272ceacc81bb2dcf94296dc3e31b8e4"></a>
-domain *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a4272ceacc81bb2dcf94296dc3e31b8e4">domn</a></td></tr>
-<tr class="memdesc:a4272ceacc81bb2dcf94296dc3e31b8e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">pointer to domain object <br /></td></tr>
-<tr class="separator:a4272ceacc81bb2dcf94296dc3e31b8e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2116c59265b52fa86fecf239eb5928d8"><td class="memItemLeft" align="right" valign="top"><a id="a2116c59265b52fa86fecf239eb5928d8"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a2116c59265b52fa86fecf239eb5928d8">T0</a></td></tr>
-<tr class="memdesc:a2116c59265b52fa86fecf239eb5928d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=0 temperature <br /></td></tr>
-<tr class="separator:a2116c59265b52fa86fecf239eb5928d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c98e867f4bd2d5209696a9e8800415f"><td class="memItemLeft" align="right" valign="top"><a id="a5c98e867f4bd2d5209696a9e8800415f"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a5c98e867f4bd2d5209696a9e8800415f">T1</a></td></tr>
-<tr class="memdesc:a5c98e867f4bd2d5209696a9e8800415f"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=1 temperature <br /></td></tr>
-<tr class="separator:a5c98e867f4bd2d5209696a9e8800415f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acba6c3551868e1048dab3596dc0be65d"><td class="memItemLeft" align="right" valign="top"><a id="acba6c3551868e1048dab3596dc0be65d"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#acba6c3551868e1048dab3596dc0be65d">h0</a></td></tr>
-<tr class="memdesc:acba6c3551868e1048dab3596dc0be65d"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=0 enthalpy <br /></td></tr>
+<tr class="memitem:acba6c3551868e1048dab3596dc0be65d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#acba6c3551868e1048dab3596dc0be65d">h0</a></td></tr>
+<tr class="memdesc:acba6c3551868e1048dab3596dc0be65d"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=0 enthalpy (J/kg)  <a href="classstreams.html#acba6c3551868e1048dab3596dc0be65d">More...</a><br /></td></tr>
 <tr class="separator:acba6c3551868e1048dab3596dc0be65d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50280c7ff16728e8b0c10c5f6a117f66"><td class="memItemLeft" align="right" valign="top"><a id="a50280c7ff16728e8b0c10c5f6a117f66"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a50280c7ff16728e8b0c10c5f6a117f66">h1</a></td></tr>
-<tr class="memdesc:a50280c7ff16728e8b0c10c5f6a117f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=1 enthalpy <br /></td></tr>
+<tr class="memitem:a50280c7ff16728e8b0c10c5f6a117f66"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a50280c7ff16728e8b0c10c5f6a117f66">h1</a></td></tr>
+<tr class="memdesc:a50280c7ff16728e8b0c10c5f6a117f66"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=1 enthalpy (J/kg)  <a href="classstreams.html#a50280c7ff16728e8b0c10c5f6a117f66">More...</a><br /></td></tr>
 <tr class="separator:a50280c7ff16728e8b0c10c5f6a117f66"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afab6f70982e481b0813a2fee4e86c759"><td class="memItemLeft" align="right" valign="top"><a id="afab6f70982e481b0813a2fee4e86c759"></a>
-vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#afab6f70982e481b0813a2fee4e86c759">y0</a></td></tr>
-<tr class="memdesc:afab6f70982e481b0813a2fee4e86c759"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=0 composition vector <br /></td></tr>
-<tr class="separator:afab6f70982e481b0813a2fee4e86c759"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a04da25a8b9fd39525c34ebc8c1a74f29"><td class="memItemLeft" align="right" valign="top"><a id="a04da25a8b9fd39525c34ebc8c1a74f29"></a>
-vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a04da25a8b9fd39525c34ebc8c1a74f29">y1</a></td></tr>
-<tr class="memdesc:a04da25a8b9fd39525c34ebc8c1a74f29"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=1 composition vector <br /></td></tr>
-<tr class="separator:a04da25a8b9fd39525c34ebc8c1a74f29"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5a1b1291cc32f837557c67f570be34b"><td class="memItemLeft" align="right" valign="top"><a id="ab5a1b1291cc32f837557c67f570be34b"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#ab5a1b1291cc32f837557c67f570be34b">M0</a></td></tr>
-<tr class="memdesc:ab5a1b1291cc32f837557c67f570be34b"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=0 mean molecular weight <br /></td></tr>
-<tr class="separator:ab5a1b1291cc32f837557c67f570be34b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5694a6796c977e11177defa43bea1721"><td class="memItemLeft" align="right" valign="top"><a id="a5694a6796c977e11177defa43bea1721"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a5694a6796c977e11177defa43bea1721">M1</a></td></tr>
-<tr class="memdesc:a5694a6796c977e11177defa43bea1721"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=1 mean molecular weight <br /></td></tr>
-<tr class="separator:a5694a6796c977e11177defa43bea1721"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af197c5ea1dc129522eabbbc700482abe"><td class="memItemLeft" align="right" valign="top"><a id="af197c5ea1dc129522eabbbc700482abe"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#af197c5ea1dc129522eabbbc700482abe">rho0</a></td></tr>
-<tr class="memdesc:af197c5ea1dc129522eabbbc700482abe"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=0 density <br /></td></tr>
-<tr class="separator:af197c5ea1dc129522eabbbc700482abe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fa95d70e60dc1b0e1c15edd0d3f1e53"><td class="memItemLeft" align="right" valign="top"><a id="a3fa95d70e60dc1b0e1c15edd0d3f1e53"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a3fa95d70e60dc1b0e1c15edd0d3f1e53">rho1</a></td></tr>
-<tr class="memdesc:a3fa95d70e60dc1b0e1c15edd0d3f1e53"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=1 density <br /></td></tr>
-<tr class="separator:a3fa95d70e60dc1b0e1c15edd0d3f1e53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6abae77f480edfa4f009747e3a6b3f07"><td class="memItemLeft" align="right" valign="top"><a id="a6abae77f480edfa4f009747e3a6b3f07"></a>
-vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a6abae77f480edfa4f009747e3a6b3f07">D0</a></td></tr>
-<tr class="memdesc:a6abae77f480edfa4f009747e3a6b3f07"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=0 diffusivities <br /></td></tr>
-<tr class="separator:a6abae77f480edfa4f009747e3a6b3f07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec08f43390068bf119443488d94127fa"><td class="memItemLeft" align="right" valign="top"><a id="aec08f43390068bf119443488d94127fa"></a>
-vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#aec08f43390068bf119443488d94127fa">D1</a></td></tr>
-<tr class="memdesc:aec08f43390068bf119443488d94127fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=1 diffusivities <br /></td></tr>
-<tr class="separator:aec08f43390068bf119443488d94127fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a95eccf515b92ecab4b76d29e3175f0df"><td class="memItemLeft" align="right" valign="top"><a id="a95eccf515b92ecab4b76d29e3175f0df"></a>
-vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a95eccf515b92ecab4b76d29e3175f0df">hsp0</a></td></tr>
-<tr class="memdesc:a95eccf515b92ecab4b76d29e3175f0df"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=0 species enthalpies <br /></td></tr>
-<tr class="separator:a95eccf515b92ecab4b76d29e3175f0df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3e69514355a1e9143b2787d1d137181a"><td class="memItemLeft" align="right" valign="top"><a id="a3e69514355a1e9143b2787d1d137181a"></a>
-vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a3e69514355a1e9143b2787d1d137181a">hsp1</a></td></tr>
-<tr class="memdesc:a3e69514355a1e9143b2787d1d137181a"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=1 species enthalpies <br /></td></tr>
-<tr class="separator:a3e69514355a1e9143b2787d1d137181a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3bca73dd6a32a008a47a01da4ab89c0"><td class="memItemLeft" align="right" valign="top"><a id="aa3bca73dd6a32a008a47a01da4ab89c0"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#aa3bca73dd6a32a008a47a01da4ab89c0">mixfStoic</a></td></tr>
-<tr class="memdesc:aa3bca73dd6a32a008a47a01da4ab89c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">stoichiometric mixture fraction <br /></td></tr>
+<tr class="memitem:a56f01526b24b000b290d0641997a3833"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a56f01526b24b000b290d0641997a3833">y0</a></td></tr>
+<tr class="memdesc:a56f01526b24b000b290d0641997a3833"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=0 composition vector  <a href="classstreams.html#a56f01526b24b000b290d0641997a3833">More...</a><br /></td></tr>
+<tr class="separator:a56f01526b24b000b290d0641997a3833"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a241a53d6d43a2d79c1165f4f6d2d581e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a241a53d6d43a2d79c1165f4f6d2d581e">y1</a></td></tr>
+<tr class="memdesc:a241a53d6d43a2d79c1165f4f6d2d581e"><td class="mdescLeft">&#160;</td><td class="mdescRight">stream mixf=1 composition vector  <a href="classstreams.html#a241a53d6d43a2d79c1165f4f6d2d581e">More...</a><br /></td></tr>
+<tr class="separator:a241a53d6d43a2d79c1165f4f6d2d581e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc61624ba39cbf93e7e1ea260f34861b"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#acc61624ba39cbf93e7e1ea260f34861b">P</a></td></tr>
+<tr class="separator:acc61624ba39cbf93e7e1ea260f34861b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4b6df5777b35edb11ff73d5491ffda5"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; Cantera::ThermoPhase &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#ae4b6df5777b35edb11ff73d5491ffda5">gas</a></td></tr>
+<tr class="separator:ae4b6df5777b35edb11ff73d5491ffda5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3bca73dd6a32a008a47a01da4ab89c0"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#aa3bca73dd6a32a008a47a01da4ab89c0">mixfStoic</a></td></tr>
+<tr class="memdesc:aa3bca73dd6a32a008a47a01da4ab89c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">stoichiometric mixture fraction  <a href="classstreams.html#aa3bca73dd6a32a008a47a01da4ab89c0">More...</a><br /></td></tr>
 <tr class="separator:aa3bca73dd6a32a008a47a01da4ab89c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5f4ed5333c43b8761758c93d06232357"><td class="memItemLeft" align="right" valign="top"><a id="a5f4ed5333c43b8761758c93d06232357"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a5f4ed5333c43b8761758c93d06232357">nspc</a></td></tr>
-<tr class="memdesc:a5f4ed5333c43b8761758c93d06232357"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of species in gas mechanism <br /></td></tr>
+<tr class="memitem:a5f4ed5333c43b8761758c93d06232357"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a5f4ed5333c43b8761758c93d06232357">nspc</a></td></tr>
+<tr class="memdesc:a5f4ed5333c43b8761758c93d06232357"><td class="mdescLeft">&#160;</td><td class="mdescRight">number of species in gas mechanism  <a href="classstreams.html#a5f4ed5333c43b8761758c93d06232357">More...</a><br /></td></tr>
 <tr class="separator:a5f4ed5333c43b8761758c93d06232357"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4894ce57805fc6bc320056a74a23ae88"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a4894ce57805fc6bc320056a74a23ae88">beta0</a></td></tr>
-<tr class="memdesc:a4894ce57805fc6bc320056a74a23ae88"><td class="mdescLeft">&#160;</td><td class="mdescRight">\fun{\text{mixf} = \frac{\beta-\beta_0}{\beta_1-\beta_0}}  <a href="classstreams.html#a4894ce57805fc6bc320056a74a23ae88">More...</a><br /></td></tr>
+<tr class="memdesc:a4894ce57805fc6bc320056a74a23ae88"><td class="mdescLeft">&#160;</td><td class="mdescRight">mixf = (beta-beta0) / (beta1-beta0)  <a href="classstreams.html#a4894ce57805fc6bc320056a74a23ae88">More...</a><br /></td></tr>
 <tr class="separator:a4894ce57805fc6bc320056a74a23ae88"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ec8af43296fdc4618ddc74f84e975bf"><td class="memItemLeft" align="right" valign="top"><a id="a3ec8af43296fdc4618ddc74f84e975bf"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a3ec8af43296fdc4618ddc74f84e975bf">beta1</a></td></tr>
-<tr class="memdesc:a3ec8af43296fdc4618ddc74f84e975bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">mixf = (beta-beta0) / (beta1-beta0) <br /></td></tr>
+<tr class="memitem:a3ec8af43296fdc4618ddc74f84e975bf"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a3ec8af43296fdc4618ddc74f84e975bf">beta1</a></td></tr>
+<tr class="memdesc:a3ec8af43296fdc4618ddc74f84e975bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">mixf = (beta-beta0) / (beta1-beta0)  <a href="classstreams.html#a3ec8af43296fdc4618ddc74f84e975bf">More...</a><br /></td></tr>
 <tr class="separator:a3ec8af43296fdc4618ddc74f84e975bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1ae3ef06f99e2677d1200907c70c610"><td class="memItemLeft" align="right" valign="top"><a id="af1ae3ef06f99e2677d1200907c70c610"></a>
-vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#af1ae3ef06f99e2677d1200907c70c610">gCHON</a></td></tr>
-<tr class="memdesc:af1ae3ef06f99e2677d1200907c70c610"><td class="mdescLeft">&#160;</td><td class="mdescRight">gammas, as in beta = sum_i (y_i*gamma_i) <br /></td></tr>
-<tr class="separator:af1ae3ef06f99e2677d1200907c70c610"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60da0f10c7316497d3ac45bedb4a17c5"><td class="memItemLeft" align="right" valign="top"><a id="a60da0f10c7316497d3ac45bedb4a17c5"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a60da0f10c7316497d3ac45bedb4a17c5">comp2</a></td></tr>
-<tr class="memdesc:a60da0f10c7316497d3ac45bedb4a17c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">for premixed combustion to distinguish between different input possibilities for the mixture <br /></td></tr>
-<tr class="separator:a60da0f10c7316497d3ac45bedb4a17c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf0b064bb492fa5ea0836bc178e8303a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#abf0b064bb492fa5ea0836bc178e8303a">gCHON</a></td></tr>
+<tr class="memdesc:abf0b064bb492fa5ea0836bc178e8303a"><td class="mdescLeft">&#160;</td><td class="mdescRight">gammas, as in beta = sum_i (y_i*gamma_i)  <a href="classstreams.html#abf0b064bb492fa5ea0836bc178e8303a">More...</a><br /></td></tr>
+<tr class="separator:abf0b064bb492fa5ea0836bc178e8303a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a346c56671eabbde2eecfaf60f5b5b0f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a346c56671eabbde2eecfaf60f5b5b0f9">setStoicMixf</a> ()</td></tr>
+<tr class="separator:a346c56671eabbde2eecfaf60f5b5b0f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa90d1d3506e58bb7fb7e983fd1c6eb97"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#aa90d1d3506e58bb7fb7e983fd1c6eb97">setElementMassFracs</a> (const double *y)</td></tr>
+<tr class="separator:aa90d1d3506e58bb7fb7e983fd1c6eb97"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acff00c7b976a7ffe31bf0832b38eeaaa"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#acff00c7b976a7ffe31bf0832b38eeaaa">setElementMoleFracs</a> (const double *y)</td></tr>
+<tr class="separator:acff00c7b976a7ffe31bf0832b38eeaaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45695a5c046ae2a7de87af1654996ce8"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams.html#a45695a5c046ae2a7de87af1654996ce8">getElementMoles</a> (const double *x, double &amp;nOnotFromO2, double &amp;nHnotFromH2O, double &amp;nCnotFromCO2)</td></tr>
+<tr class="separator:a45695a5c046ae2a7de87af1654996ce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Class implementing streams for use in mixing and or reaction problems. This is writting in terms of mixture fraction with streams defined in an input file. The class can implement products of complete combustion, or equilibrium (through the Cantera IdealGasPhase object, if desired). This class holds a pointer to a Cantera IdealGasPhase object (defined up front in main) that computes thermodynamic, kinetic, and transport data.</p>
-<dl class="section author"><dt>Author</dt><dd>David O. Lignell </dd></dl>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7dcaeb31595a41ac5f7d6b2d710f10fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7dcaeb31595a41ac5f7d6b2d710f10fa">&#9670;&nbsp;</a></span>getEquilibrium_HP()</h2>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a30bf5c7e8dd1d2c111118b87fd9f6057"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30bf5c7e8dd1d2c111118b87fd9f6057">&#9670;&nbsp;</a></span>streams() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streams::streams </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00082">82</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
+<a id="a28a239d95efcd8d117af8ddbd982965f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28a239d95efcd8d117af8ddbd982965f">&#9670;&nbsp;</a></span>streams() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">streams::streams </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; Cantera::Solution &gt;&#160;</td>
+          <td class="paramname"><em>csol</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>_P</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>_h0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>_h1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_y0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>_y1</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7c69b3a6858ce8ce1dfc7ae242710038"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c69b3a6858ce8ce1dfc7ae242710038">&#9670;&nbsp;</a></span>~streams()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">streams::~streams </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00090">90</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ae1acfdaebac0b26841c76d9aaacc4b31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1acfdaebac0b26841c76d9aaacc4b31">&#9670;&nbsp;</a></span>getProdOfCompleteComb()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streams::getProdOfCompleteComb </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>mixf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>ypcc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>hpcc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>Tpcc</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes the temperature, enthalpy, and composition of complete combustion at the given mixf. For nonpremixed flames (don't do anything funny, like have oxygen in the fuel stream)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mixf</td><td><em>input:</em> mixture fraction, defines elemental composition. </td></tr>
+    <tr><td class="paramname">ypcc</td><td><em>output:</em> mass fractions of products of complete combustion. </td></tr>
+    <tr><td class="paramname">hpcc</td><td><em>output:</em> enthalpy of products of complete combustion. </td></tr>
+    <tr><td class="paramname">Tpcc</td><td><em>output:</em> temperature of products of complete combustion. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="streams_8cc_source.html#l00129">129</a> of file <a class="el" href="streams_8cc_source.html">streams.cc</a>.</p>
+
+</div>
+</div>
+<a id="a6dbf93fbcde09e925bead7ce9c0113e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dbf93fbcde09e925bead7ce9c0113e9">&#9670;&nbsp;</a></span>getEquilibrium_HP()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -190,7 +380,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
           <td class="paramname"><em>yeq</em>, </td>
         </tr>
         <tr>
@@ -215,18 +405,72 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <p>Computes the temperature, enthalpy, and composition of equilibrium at the given mixf.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mixf</td><td>\input mixture fraction, defines elemental composition. </td></tr>
-    <tr><td class="paramname">yeq</td><td>\output mass fractions </td></tr>
-    <tr><td class="paramname">heq</td><td>\output enthalpy </td></tr>
-    <tr><td class="paramname">Teq</td><td>\output temperature </td></tr>
+    <tr><td class="paramname">mixf</td><td><em>input:</em> mixture fraction, defines elemental composition. </td></tr>
+    <tr><td class="paramname">yeq</td><td><em>output:</em> mass fractions </td></tr>
+    <tr><td class="paramname">heq</td><td><em>output:</em> enthalpy </td></tr>
+    <tr><td class="paramname">Teq</td><td><em>output:</em> temperature </td></tr>
   </table>
   </dd>
 </dl>
 
+<p class="definition">Definition at line <a class="el" href="streams_8cc_source.html#l00072">72</a> of file <a class="el" href="streams_8cc_source.html">streams.cc</a>.</p>
+
 </div>
 </div>
-<a id="aaf68232d7da63277b99a33e9646b9773"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf68232d7da63277b99a33e9646b9773">&#9670;&nbsp;</a></span>getMixingState()</h2>
+<a id="afb9231a9360300ec0688d1c1e404ca78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb9231a9360300ec0688d1c1e404ca78">&#9670;&nbsp;</a></span>getEquilibrium_TP()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void streams::getEquilibrium_TP </td>
+          <td>(</td>
+          <td class="paramtype">const double&#160;</td>
+          <td class="paramname"><em>mixf</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>Teq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>yeq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>heq</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes the enthalpy, and composition of equilibrium at the given mixf for given T</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">mixf</td><td><em>input:</em> mixture fraction, defines elemental composition. </td></tr>
+    <tr><td class="paramname">Teq</td><td><em>input:</em> temperature </td></tr>
+    <tr><td class="paramname">yeq</td><td><em>output:</em> mass fractions </td></tr>
+    <tr><td class="paramname">heq</td><td><em>output:</em> enthalpy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="streams_8cc_source.html#l00101">101</a> of file <a class="el" href="streams_8cc_source.html">streams.cc</a>.</p>
+
+</div>
+</div>
+<a id="aebccdb0fdffb04228f87d73d506d96c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebccdb0fdffb04228f87d73d506d96c5">&#9670;&nbsp;</a></span>getMixingState()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -240,7 +484,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; double &gt; &amp;&#160;</td>
           <td class="paramname"><em>ymix</em>, </td>
         </tr>
         <tr>
@@ -265,13 +509,15 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <p>Computes the temperature, enthalpy, and composition of mixing among streams.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mixf</td><td>\input mixture fraction, defines elemental composition. </td></tr>
-    <tr><td class="paramname">ymix</td><td>\output mass fractions of products of complete combustion. </td></tr>
-    <tr><td class="paramname">hmix</td><td>\output enthalpy of products of complete combustion. </td></tr>
-    <tr><td class="paramname">Tmix</td><td>\output temperature of products of complete combustion. </td></tr>
+    <tr><td class="paramname">mixf</td><td><em>input:</em> mixture fraction, defines elemental composition. </td></tr>
+    <tr><td class="paramname">ymix</td><td><em>output:</em> mass fractions of products of complete combustion. </td></tr>
+    <tr><td class="paramname">hmix</td><td><em>output:</em> enthalpy of products of complete combustion. </td></tr>
+    <tr><td class="paramname">Tmix</td><td><em>output:</em> temperature of products of complete combustion. </td></tr>
   </table>
   </dd>
 </dl>
+
+<p class="definition">Definition at line <a class="el" href="streams_8cc_source.html#l00050">50</a> of file <a class="el" href="streams_8cc_source.html">streams.cc</a>.</p>
 
 </div>
 </div>
@@ -303,44 +549,147 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <p>Compute the mixture fraction from the mass fractions using Bilger's mixf. Set doBeta01=true on first call to initialize members beta0, beta1. Later calls of this function only use the first parameter.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">y</td><td>\input vector of species mass fractions. </td></tr>
-    <tr><td class="paramname">doBeta01</td><td>\input flag=true on first call to set members beta0, beta1. </td></tr>
+    <tr><td class="paramname">y</td><td><em>input:</em> vector of species mass fractions. </td></tr>
+    <tr><td class="paramname">doBeta01</td><td><em>input:</em> flag=true on first call to set members beta0, beta1. </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>mixture fraction </dd></dl>
 
+<p class="definition">Definition at line <a class="el" href="streams_8cc_source.html#l00363">363</a> of file <a class="el" href="streams_8cc_source.html">streams.cc</a>.</p>
+
 </div>
 </div>
-<a id="aed21433e408b40a0e7e9e6628c5b3bb4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed21433e408b40a0e7e9e6628c5b3bb4">&#9670;&nbsp;</a></span>getProdOfCompleteComb()</h2>
+<a id="a346c56671eabbde2eecfaf60f5b5b0f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a346c56671eabbde2eecfaf60f5b5b0f9">&#9670;&nbsp;</a></span>setStoicMixf()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void streams::getProdOfCompleteComb </td>
+          <td class="memname">void streams::setStoicMixf </td>
           <td>(</td>
-          <td class="paramtype">const double&#160;</td>
-          <td class="paramname"><em>mixf</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype">vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>ypcc</em>, </td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the stoichiometric mixture fraction using Bilger's definition </p>
+
+<p class="definition">Definition at line <a class="el" href="streams_8cc_source.html#l00229">229</a> of file <a class="el" href="streams_8cc_source.html">streams.cc</a>.</p>
+
+</div>
+</div>
+<a id="aa90d1d3506e58bb7fb7e983fd1c6eb97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa90d1d3506e58bb7fb7e983fd1c6eb97">&#9670;&nbsp;</a></span>setElementMassFracs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; double &gt; streams::setElementMassFracs </td>
+          <td>(</td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sets the elements to have the correct Mass Fractions based on the specified array. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td><em>input:</em> mass fraction array to use to get corresponding element fractions. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>vector of element mass fractions. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="streams_8cc_source.html#l00264">264</a> of file <a class="el" href="streams_8cc_source.html">streams.cc</a>.</p>
+
+</div>
+</div>
+<a id="acff00c7b976a7ffe31bf0832b38eeaaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acff00c7b976a7ffe31bf0832b38eeaaa">&#9670;&nbsp;</a></span>setElementMoleFracs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; double &gt; streams::setElementMoleFracs </td>
+          <td>(</td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>y</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sets the elements to have the correct Mole Fractions based on the specified array. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">y</td><td><em>input:</em> mass fraction array to use to get corresponding element fractions. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>vector of element mole fractions. </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="streams_8cc_source.html#l00293">293</a> of file <a class="el" href="streams_8cc_source.html">streams.cc</a>.</p>
+
+</div>
+</div>
+<a id="a45695a5c046ae2a7de87af1654996ce8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45695a5c046ae2a7de87af1654996ce8">&#9670;&nbsp;</a></span>getElementMoles()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vector&lt; double &gt; streams::getElementMoles </td>
+          <td>(</td>
+          <td class="paramtype">const double *&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double &amp;&#160;</td>
-          <td class="paramname"><em>hpcc</em>, </td>
+          <td class="paramname"><em>nOnotFromO2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double &amp;&#160;</td>
-          <td class="paramname"><em>Tpcc</em>&#160;</td>
+          <td class="paramname"><em>nHnotFromH2O</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double &amp;&#160;</td>
+          <td class="paramname"><em>nCnotFromCO2</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -348,56 +697,168 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
           <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Computes the temperature, enthalpy, and composition of complete combustion at the given mixf. For nonpremixed flames (don't do anything funny, like have oxygen in the fuel stream)</p>
-<dl class="params"><dt>Parameters</dt><dd>
+<p>Get amount of moles for each element. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">mixf</td><td>\input mixture fraction, defines elemental composition. </td></tr>
-    <tr><td class="paramname">ypcc</td><td>\output mass fractions of products of complete combustion. </td></tr>
-    <tr><td class="paramname">hpcc</td><td>\output enthalpy of products of complete combustion. </td></tr>
-    <tr><td class="paramname">Tpcc</td><td>\output temperature of products of complete combustion. </td></tr>
+    <tr><td class="paramname">x</td><td><em>input:</em> pointer to vector of species mole fractions. </td></tr>
+    <tr><td class="paramname">nOnotFromO2</td><td><em>input:</em> number of moles of oxygen not from O2 (oxygen in the base fuel). </td></tr>
+    <tr><td class="paramname">nHnotFromH2O</td><td><em>input:</em> number of moles of hydrogen not from H2O. </td></tr>
+    <tr><td class="paramname">nCnotFromCO2</td><td><em>input:</em> number of moles of carbon not from CO2. </td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>vector of element moles. </dd></dl>
 
-</div>
-</div>
-<a id="a156a36b8acc15fd67614480b5b1a07e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a156a36b8acc15fd67614480b5b1a07e7">&#9670;&nbsp;</a></span>init()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void streams::init </td>
-          <td>(</td>
-          <td class="paramtype">domain *&#160;</td>
-          <td class="paramname"><em>p_domn</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const vector&lt; double &gt; &amp;&#160;</td>
-          <td class="paramname"><em>gammas</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Initialize</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_domn</td><td>\input pointer to domain object. </td></tr>
-  </table>
-  </dd>
-</dl>
+<p class="definition">Definition at line <a class="el" href="streams_8cc_source.html#l00326">326</a> of file <a class="el" href="streams_8cc_source.html">streams.cc</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="acba6c3551868e1048dab3596dc0be65d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acba6c3551868e1048dab3596dc0be65d">&#9670;&nbsp;</a></span>h0</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double streams::h0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>stream mixf=0 enthalpy (J/kg) </p>
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00027">27</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
+<a id="a50280c7ff16728e8b0c10c5f6a117f66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50280c7ff16728e8b0c10c5f6a117f66">&#9670;&nbsp;</a></span>h1</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double streams::h1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>stream mixf=1 enthalpy (J/kg) </p>
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00028">28</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
+<a id="a56f01526b24b000b290d0641997a3833"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56f01526b24b000b290d0641997a3833">&#9670;&nbsp;</a></span>y0</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; streams::y0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>stream mixf=0 composition vector </p>
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00029">29</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
+<a id="a241a53d6d43a2d79c1165f4f6d2d581e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a241a53d6d43a2d79c1165f4f6d2d581e">&#9670;&nbsp;</a></span>y1</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; streams::y1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>stream mixf=1 composition vector </p>
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00030">30</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
+<a id="acc61624ba39cbf93e7e1ea260f34861b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc61624ba39cbf93e7e1ea260f34861b">&#9670;&nbsp;</a></span>P</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double streams::P</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00032">32</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
+<a id="ae4b6df5777b35edb11ff73d5491ffda5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4b6df5777b35edb11ff73d5491ffda5">&#9670;&nbsp;</a></span>gas</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt;Cantera::ThermoPhase&gt; streams::gas</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00034">34</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
+<a id="aa3bca73dd6a32a008a47a01da4ab89c0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3bca73dd6a32a008a47a01da4ab89c0">&#9670;&nbsp;</a></span>mixfStoic</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double streams::mixfStoic</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>stoichiometric mixture fraction </p>
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00036">36</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
+<a id="a5f4ed5333c43b8761758c93d06232357"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5f4ed5333c43b8761758c93d06232357">&#9670;&nbsp;</a></span>nspc</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int streams::nspc</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>number of species in gas mechanism </p>
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00037">37</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
 <a id="a4894ce57805fc6bc320056a74a23ae88"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4894ce57805fc6bc320056a74a23ae88">&#9670;&nbsp;</a></span>beta0</h2>
 
@@ -410,19 +871,61 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
       </table>
 </div><div class="memdoc">
 
-<p>\fun{\text{mixf} = \frac{\beta-\beta_0}{\beta_1-\beta_0}} </p>
-<p>mixf = (beta-beta0) / (beta1-beta0) \fun{\text{mixf} = \frac{\beta-\beta_0}{\beta_1-\beta_0}} </p>
+<p>mixf = (beta-beta0) / (beta1-beta0) </p>
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00038">38</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
+<a id="a3ec8af43296fdc4618ddc74f84e975bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ec8af43296fdc4618ddc74f84e975bf">&#9670;&nbsp;</a></span>beta1</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double streams::beta1</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>mixf = (beta-beta0) / (beta1-beta0) </p>
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00039">39</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+
+</div>
+</div>
+<a id="abf0b064bb492fa5ea0836bc178e8303a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf0b064bb492fa5ea0836bc178e8303a">&#9670;&nbsp;</a></span>gCHON</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;double&gt; streams::gCHON</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>gammas, as in beta = sum_i (y_i*gamma_i) </p>
+
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00041">41</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li>/home/mbehrang/codes/hips-publish/hips-documentation/hips/src/<a class="el" href="streams_8h_source.html">streams.h</a></li>
-<li>/home/mbehrang/codes/hips-publish/hips-documentation/hips/src/<a class="el" href="streams_8cc.html">streams.cc</a></li>
+<li>/home/mbehrang/codes/hips-publish/hips-final-projection/hips/src/<a class="el" href="streams_8h_source.html">streams.h</a></li>
+<li>/home/mbehrang/codes/hips-publish/hips-final-projection/hips/src/<a class="el" href="streams_8cc_source.html">streams.cc</a></li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
+<!-- HTML footer for doxygen 1.9.5-->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="classstreams.html">streams</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+  </ul>
+</div>
 </body>
 </html>

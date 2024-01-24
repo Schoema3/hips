@@ -1,59 +1,87 @@
 
-#include "hips.h" // Include the HiPS library header
+#include <iostream>
+#include <vector>
+#include "hips.h"
 #include "cantera/thermo.h"
 #include "cantera/base/Solution.h"
 #include "cantera/numerics/Integrator.h"
-#include <vector>
-#include <string>
-#include <iostream>
 
 using namespace std;
 
-/**
- * @brief Initialize mixing fractions.
- *
- * This function initializes mixing fractions for a given number of parcels.
- *
- * @param numParcels The number of parcels.
- * @return A vector containing initialized mixing fractions.
- */
+// Function to initialize mixing fractions
 vector<double> initializeMixingFractions(int numParcels) {
+
     vector<double> mixingFractions;
     for (int i = 0; i < numParcels; i++) {
-        // Initialize mixing fractions to 0.0 for the first half and 1.0 for the second half
         mixingFractions.push_back(i < numParcels / 2 ? 0.0 : 1.0);
+
     }
+
+    // for (int i =0; i<7;i++)
+    //    cout<<"first vat "<<mixingFractions[i] <<endl;
+
     return mixingFractions;
 }
+    
+vector<double> initializeMixingFractions_2(int numParcels) {
+    vector<double> mixingFractions_2;
+    for (int i = 0; i < numParcels; i++) {
+        mixingFractions_2.push_back(i < numParcels / 2 ? -1000.0 : -500.0);
+     //cout<<"i is "<<i<<"     "<<   mixingFractions_2[i]<<endl;
+
+    }
+   cout<<"\n\n";
+   return mixingFractions_2;
+}
+   
+std::vector<std::string> variableNames={"mixf_00","mixf_01"};
 
 int main() {
     // HiPS tree and constructor parameters
-    int numLevels = 16;
+    //hips Hi(200.08);
+    int numLevels = 4;
     double domainLength = 1.0;
     double tau0 = 1.0;
     double C_param = 0.5;
-    double tRun = 700.0;
-    int forceTurb = 2;
-    vector<double> ScHips(1, 1);
+    double tRun = 30.0;
+    int forceTurb = 0;
+    vector<double> ScHips(2, 1 );
 
     // Gas solution setup
     auto cantSol = Cantera::newSolution("gri30.yaml");
     auto gas = cantSol->thermo();
     size_t numSpecies = gas->nSpecies();
-    int numVariables = 1;  
+    int numVariables = 2;
 
     // HiPS tree creation
-    hips HiPS(numLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips, cantSol, nullptr,false);
+    hips HiPS(numLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips, cantSol, false);
     int numParcels = HiPS.nparcels;
 
+
+    cout<<"number of parcels --> "<<numParcels<<endl;
     // Initialize mixing fractions
-    vector<double> initialMixingFractions = initializeMixingFractions(numParcels);
+    vector<double> mixingFractions = initializeMixingFractions(8);
+    vector<double> mixingFractions_2 = initializeMixingFractions_2(8);
+    vector<double> weight(8, 1.0/8);
 
-    // Set state vectors in each parcel with initial mixing fractions
-    HiPS.set_varData(initialMixingFractions, 0);
 
-    // Advance HiPS for mixing 
+   // for (int i =0; i<weight.size();i++)
+   //     cout<<"weight "<<weight[i]<<endl;
+
+
+    // Create a vector to hold all mixing fractions
+    vector<vector<double>> tot_vec;
+    tot_vec.push_back(mixingFractions);
+    tot_vec.push_back(mixingFractions_2);
+
+    // Set state vectors in each parcel
+    for (int i = 0; i < tot_vec.size(); i++) 
+        HiPS.set_varData(tot_vec[i],weight, variableNames[i], i);
+
     HiPS.calculateSolution(tRun);
+
+    for (int i = 0; i < tot_vec.size(); i++) 
+        HiPS.get_varData();
 
     return 0;
 }

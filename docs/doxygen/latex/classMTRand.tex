@@ -1,136 +1,504 @@
 \hypertarget{classMTRand}{}\doxysection{MTRand Class Reference}
 \label{classMTRand}\index{MTRand@{MTRand}}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 69 of file Mersenne\+Twister.\+h.
+
+
+
+{\ttfamily \#include $<$Mersenne\+Twister.\+h$>$}
+
 \doxysubsection*{Public Types}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6}\label{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6}} 
-enum \{ {\bfseries N} = 624
+enum \{ \mbox{\hyperlink{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} = 624
  \}
 \item 
-\mbox{\Hypertarget{classMTRand_a7d9f4f1783a4e45f7834dd5174dfc2a1}\label{classMTRand_a7d9f4f1783a4e45f7834dd5174dfc2a1}} 
-enum \{ {\bfseries SAVE} = N + 1
+enum \{ \mbox{\hyperlink{classMTRand_a7d9f4f1783a4e45f7834dd5174dfc2a1a3899803ea0d4da3018d311ed4902d9cc}{SAVE}} = N + 1
  \}
 \item 
-\mbox{\Hypertarget{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}\label{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}} 
-typedef unsigned long {\bfseries uint32}
+typedef unsigned long \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}
 \end{DoxyCompactItemize}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classMTRand_ab4f392e44228a583b7b1a3f036fb2fd0}\label{classMTRand_ab4f392e44228a583b7b1a3f036fb2fd0}} 
-{\bfseries MTRand} (const uint32 \&one\+Seed)
+\mbox{\hyperlink{classMTRand_ab4f392e44228a583b7b1a3f036fb2fd0}{MTRand}} (const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&one\+Seed)
 \item 
-\mbox{\Hypertarget{classMTRand_a380e79e0192b46426abcefa6e2dd082e}\label{classMTRand_a380e79e0192b46426abcefa6e2dd082e}} 
-{\bfseries MTRand} (uint32 $\ast$const big\+Seed, uint32 const seed\+Length=N)
+\mbox{\hyperlink{classMTRand_a380e79e0192b46426abcefa6e2dd082e}{MTRand}} (\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} $\ast$const big\+Seed, \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} const seed\+Length=\mbox{\hyperlink{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}})
 \item 
-\mbox{\Hypertarget{classMTRand_a76d129a2d850c24ff4a0613f299cf3a5}\label{classMTRand_a76d129a2d850c24ff4a0613f299cf3a5}} 
-double {\bfseries rand} ()
+\mbox{\hyperlink{classMTRand_a265dc65546e26073c0d5f8787b045a1d}{MTRand}} ()
 \item 
-\mbox{\Hypertarget{classMTRand_a7a47382fb7b19ae1f330691735dc800b}\label{classMTRand_a7a47382fb7b19ae1f330691735dc800b}} 
-double {\bfseries rand} (const double \&n)
+double \mbox{\hyperlink{classMTRand_a76d129a2d850c24ff4a0613f299cf3a5}{rand}} ()
 \item 
-\mbox{\Hypertarget{classMTRand_afd05e468983b3a3d66ce0f403bd666af}\label{classMTRand_afd05e468983b3a3d66ce0f403bd666af}} 
-double {\bfseries rand\+Exc} ()
+double \mbox{\hyperlink{classMTRand_a7a47382fb7b19ae1f330691735dc800b}{rand}} (const double \&n)
 \item 
-\mbox{\Hypertarget{classMTRand_a2955abdb96e6cab97e50ac755d48dad1}\label{classMTRand_a2955abdb96e6cab97e50ac755d48dad1}} 
-double {\bfseries rand\+Exc} (const double \&n)
+double \mbox{\hyperlink{classMTRand_afd05e468983b3a3d66ce0f403bd666af}{rand\+Exc}} ()
 \item 
-\mbox{\Hypertarget{classMTRand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}\label{classMTRand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}} 
-double {\bfseries rand\+Dbl\+Exc} ()
+double \mbox{\hyperlink{classMTRand_a2955abdb96e6cab97e50ac755d48dad1}{rand\+Exc}} (const double \&n)
 \item 
-\mbox{\Hypertarget{classMTRand_a587c90f52c35fa2bf05d34791dd5457e}\label{classMTRand_a587c90f52c35fa2bf05d34791dd5457e}} 
-double {\bfseries rand\+Dbl\+Exc} (const double \&n)
+double \mbox{\hyperlink{classMTRand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}{rand\+Dbl\+Exc}} ()
 \item 
-\mbox{\Hypertarget{classMTRand_ad1008efd4fe0e8aae30459c2c58cfe35}\label{classMTRand_ad1008efd4fe0e8aae30459c2c58cfe35}} 
-uint32 {\bfseries rand\+Int} ()
+double \mbox{\hyperlink{classMTRand_a587c90f52c35fa2bf05d34791dd5457e}{rand\+Dbl\+Exc}} (const double \&n)
 \item 
-\mbox{\Hypertarget{classMTRand_a18ea21f615df06c9359c34d2eba6f252}\label{classMTRand_a18ea21f615df06c9359c34d2eba6f252}} 
-uint32 {\bfseries rand\+Int} (const uint32 \&n)
+\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{classMTRand_ad1008efd4fe0e8aae30459c2c58cfe35}{rand\+Int}} ()
 \item 
-\mbox{\Hypertarget{classMTRand_abbb87a08d622d58fdee0eea4cb5471a0}\label{classMTRand_abbb87a08d622d58fdee0eea4cb5471a0}} 
-double {\bfseries operator()} ()
+\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{classMTRand_a18ea21f615df06c9359c34d2eba6f252}{rand\+Int}} (const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&n)
 \item 
-\mbox{\Hypertarget{classMTRand_a15f4daf79febbe4ff43c3e6ce2c4fcbe}\label{classMTRand_a15f4daf79febbe4ff43c3e6ce2c4fcbe}} 
-double {\bfseries rand53} ()
+double \mbox{\hyperlink{classMTRand_abbb87a08d622d58fdee0eea4cb5471a0}{operator()}} ()
 \item 
-\mbox{\Hypertarget{classMTRand_af759d1f30d4f29a715e6f6e86850b5c4}\label{classMTRand_af759d1f30d4f29a715e6f6e86850b5c4}} 
-double {\bfseries rand\+Norm} (const double \&mean=0.\+0, const double \&variance=0.\+0)
+double \mbox{\hyperlink{classMTRand_a15f4daf79febbe4ff43c3e6ce2c4fcbe}{rand53}} ()
 \item 
-\mbox{\Hypertarget{classMTRand_a1e21a79e0a30225fffe924229e34a923}\label{classMTRand_a1e21a79e0a30225fffe924229e34a923}} 
-void {\bfseries seed} (const uint32 one\+Seed)
+double \mbox{\hyperlink{classMTRand_af759d1f30d4f29a715e6f6e86850b5c4}{rand\+Norm}} (const double \&mean=0.\+0, const double \&variance=0.\+0)
 \item 
-\mbox{\Hypertarget{classMTRand_a5758103776b131e8ea46b6dc1b9fb267}\label{classMTRand_a5758103776b131e8ea46b6dc1b9fb267}} 
-void {\bfseries seed} (uint32 $\ast$const big\+Seed, const uint32 seed\+Length=N)
+void \mbox{\hyperlink{classMTRand_a1e21a79e0a30225fffe924229e34a923}{seed}} (const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} one\+Seed)
 \item 
-\mbox{\Hypertarget{classMTRand_ad88ea3363d55bafb62826bbd130279c2}\label{classMTRand_ad88ea3363d55bafb62826bbd130279c2}} 
-void {\bfseries seed} ()
+void \mbox{\hyperlink{classMTRand_a5758103776b131e8ea46b6dc1b9fb267}{seed}} (\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} $\ast$const big\+Seed, const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} seed\+Length=\mbox{\hyperlink{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}})
 \item 
-\mbox{\Hypertarget{classMTRand_aabe5ec2cad71c1c67d9390a4a235edad}\label{classMTRand_aabe5ec2cad71c1c67d9390a4a235edad}} 
-void {\bfseries save} (uint32 $\ast$save\+Array) const
+void \mbox{\hyperlink{classMTRand_ad88ea3363d55bafb62826bbd130279c2}{seed}} ()
 \item 
-\mbox{\Hypertarget{classMTRand_a8302e9a8cd16d8dfc536a85bf2f68be0}\label{classMTRand_a8302e9a8cd16d8dfc536a85bf2f68be0}} 
-void {\bfseries load} (uint32 $\ast$const load\+Array)
+void \mbox{\hyperlink{classMTRand_aabe5ec2cad71c1c67d9390a4a235edad}{save}} (\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} $\ast$save\+Array) const
+\item 
+void \mbox{\hyperlink{classMTRand_a8302e9a8cd16d8dfc536a85bf2f68be0}{load}} (\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} $\ast$const load\+Array)
 \end{DoxyCompactItemize}
 \doxysubsection*{Protected Types}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classMTRand_a10c3437be98225f5b0beee1ed8c033c8}\label{classMTRand_a10c3437be98225f5b0beee1ed8c033c8}} 
-enum \{ {\bfseries M} = 397
+enum \{ \mbox{\hyperlink{classMTRand_a10c3437be98225f5b0beee1ed8c033c8a133070000b798889cd75535ea0d5bb71}{M}} = 397
  \}
 \end{DoxyCompactItemize}
 \doxysubsection*{Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classMTRand_a9b9a20998f5c805af6301ce5c37dcfc3}\label{classMTRand_a9b9a20998f5c805af6301ce5c37dcfc3}} 
-void {\bfseries initialize} (const uint32 one\+Seed)
+void \mbox{\hyperlink{classMTRand_a9b9a20998f5c805af6301ce5c37dcfc3}{initialize}} (const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} one\+Seed)
 \item 
-\mbox{\Hypertarget{classMTRand_a1d5fcb69d83f4d2fd653883c8352f86c}\label{classMTRand_a1d5fcb69d83f4d2fd653883c8352f86c}} 
-void {\bfseries reload} ()
+void \mbox{\hyperlink{classMTRand_a1d5fcb69d83f4d2fd653883c8352f86c}{reload}} ()
 \item 
-\mbox{\Hypertarget{classMTRand_a900c4700226add7e7eb0c2efd9f24ced}\label{classMTRand_a900c4700226add7e7eb0c2efd9f24ced}} 
-uint32 {\bfseries hi\+Bit} (const uint32 \&u) const
+\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{classMTRand_a900c4700226add7e7eb0c2efd9f24ced}{hi\+Bit}} (const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&u) const
 \item 
-\mbox{\Hypertarget{classMTRand_a6e2f7d8bae68dc63f6bcbb954cf4fb29}\label{classMTRand_a6e2f7d8bae68dc63f6bcbb954cf4fb29}} 
-uint32 {\bfseries lo\+Bit} (const uint32 \&u) const
+\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{classMTRand_a6e2f7d8bae68dc63f6bcbb954cf4fb29}{lo\+Bit}} (const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&u) const
 \item 
-\mbox{\Hypertarget{classMTRand_a1930fa7c242d35be28bb99b18a84a93d}\label{classMTRand_a1930fa7c242d35be28bb99b18a84a93d}} 
-uint32 {\bfseries lo\+Bits} (const uint32 \&u) const
+\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{classMTRand_a1930fa7c242d35be28bb99b18a84a93d}{lo\+Bits}} (const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&u) const
 \item 
-\mbox{\Hypertarget{classMTRand_a41b6713f75a771c5ec8e71ef6832a5fa}\label{classMTRand_a41b6713f75a771c5ec8e71ef6832a5fa}} 
-uint32 {\bfseries mix\+Bits} (const uint32 \&u, const uint32 \&v) const
+\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{classMTRand_a41b6713f75a771c5ec8e71ef6832a5fa}{mix\+Bits}} (const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&u, const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&v) const
 \item 
-\mbox{\Hypertarget{classMTRand_adf604988eb6155df3143d9207f02f61a}\label{classMTRand_adf604988eb6155df3143d9207f02f61a}} 
-uint32 {\bfseries twist} (const uint32 \&m, const uint32 \&s0, const uint32 \&s1) const
+\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{classMTRand_adf604988eb6155df3143d9207f02f61a}{twist}} (const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&m, const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&s0, const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&s1) const
 \end{DoxyCompactItemize}
 \doxysubsection*{Static Protected Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classMTRand_a486885d03f38c844315d002e6312fa23}\label{classMTRand_a486885d03f38c844315d002e6312fa23}} 
-static uint32 {\bfseries hash} (time\+\_\+t t, clock\+\_\+t c)
+static \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{classMTRand_a486885d03f38c844315d002e6312fa23}{hash}} (time\+\_\+t t, clock\+\_\+t c)
 \end{DoxyCompactItemize}
 \doxysubsection*{Protected Attributes}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classMTRand_a2c87f537429bf0b0f6a452c22b9eebba}\label{classMTRand_a2c87f537429bf0b0f6a452c22b9eebba}} 
-uint32 {\bfseries state} \mbox{[}N\mbox{]}
+\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{classMTRand_a2c87f537429bf0b0f6a452c22b9eebba}{state}} \mbox{[}\mbox{\hyperlink{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}\mbox{]}
 \item 
-\mbox{\Hypertarget{classMTRand_a2b80858137c88fe69d4d2bdc665bcf93}\label{classMTRand_a2b80858137c88fe69d4d2bdc665bcf93}} 
-uint32 $\ast$ {\bfseries p\+Next}
+\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} $\ast$ \mbox{\hyperlink{classMTRand_a2b80858137c88fe69d4d2bdc665bcf93}{p\+Next}}
 \item 
-\mbox{\Hypertarget{classMTRand_a98eabf568c88f121e44f487397f32495}\label{classMTRand_a98eabf568c88f121e44f487397f32495}} 
-int {\bfseries left}
+int \mbox{\hyperlink{classMTRand_a98eabf568c88f121e44f487397f32495}{left}}
 \end{DoxyCompactItemize}
 \doxysubsection*{Friends}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classMTRand_a059061d50a1e54ee3067d4e1dbdd7c64}\label{classMTRand_a059061d50a1e54ee3067d4e1dbdd7c64}} 
-std\+::ostream \& {\bfseries operator$<$$<$} (std\+::ostream \&os, const \mbox{\hyperlink{classMTRand}{MTRand}} \&mtrand)
+std\+::ostream \& \mbox{\hyperlink{classMTRand_a059061d50a1e54ee3067d4e1dbdd7c64}{operator$<$$<$}} (std\+::ostream \&os, const \mbox{\hyperlink{classMTRand}{MTRand}} \&mtrand)
 \item 
-\mbox{\Hypertarget{classMTRand_a45b02a702835a3be42171c5c2dc79b2d}\label{classMTRand_a45b02a702835a3be42171c5c2dc79b2d}} 
-std\+::istream \& {\bfseries operator$>$$>$} (std\+::istream \&is, \mbox{\hyperlink{classMTRand}{MTRand}} \&mtrand)
+std\+::istream \& \mbox{\hyperlink{classMTRand_a45b02a702835a3be42171c5c2dc79b2d}{operator$>$$>$}} (std\+::istream \&is, \mbox{\hyperlink{classMTRand}{MTRand}} \&mtrand)
 \end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Typedef Documentation}
+\mbox{\Hypertarget{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}\label{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}} 
+\index{MTRand@{MTRand}!uint32@{uint32}}
+\index{uint32@{uint32}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{uint32}{uint32}}
+{\footnotesize\ttfamily typedef unsigned long \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{MTRand\+::uint32}}}
+
+
+
+Definition at line 72 of file Mersenne\+Twister.\+h.
+
+
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6}\label{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6}} 
+\doxysubsubsection{\texorpdfstring{anonymous enum}{anonymous enum}}
+{\footnotesize\ttfamily anonymous enum}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{N@{N}!MTRand@{MTRand}}\index{MTRand@{MTRand}!N@{N}}}\mbox{\Hypertarget{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}\label{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}} 
+N&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line 74 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a7d9f4f1783a4e45f7834dd5174dfc2a1}\label{classMTRand_a7d9f4f1783a4e45f7834dd5174dfc2a1}} 
+\doxysubsubsection{\texorpdfstring{anonymous enum}{anonymous enum}}
+{\footnotesize\ttfamily anonymous enum}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SAVE@{SAVE}!MTRand@{MTRand}}\index{MTRand@{MTRand}!SAVE@{SAVE}}}\mbox{\Hypertarget{classMTRand_a7d9f4f1783a4e45f7834dd5174dfc2a1a3899803ea0d4da3018d311ed4902d9cc}\label{classMTRand_a7d9f4f1783a4e45f7834dd5174dfc2a1a3899803ea0d4da3018d311ed4902d9cc}} 
+SAVE&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line 75 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a10c3437be98225f5b0beee1ed8c033c8}\label{classMTRand_a10c3437be98225f5b0beee1ed8c033c8}} 
+\doxysubsubsection{\texorpdfstring{anonymous enum}{anonymous enum}}
+{\footnotesize\ttfamily anonymous enum\hspace{0.3cm}{\ttfamily [protected]}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{M@{M}!MTRand@{MTRand}}\index{MTRand@{MTRand}!M@{M}}}\mbox{\Hypertarget{classMTRand_a10c3437be98225f5b0beee1ed8c033c8a133070000b798889cd75535ea0d5bb71}\label{classMTRand_a10c3437be98225f5b0beee1ed8c033c8a133070000b798889cd75535ea0d5bb71}} 
+M&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line 78 of file Mersenne\+Twister.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMTRand_ab4f392e44228a583b7b1a3f036fb2fd0}\label{classMTRand_ab4f392e44228a583b7b1a3f036fb2fd0}} 
+\index{MTRand@{MTRand}!MTRand@{MTRand}}
+\index{MTRand@{MTRand}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{MTRand()}{MTRand()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily MTRand\+::\+MTRand (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&}]{one\+Seed }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 137 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a380e79e0192b46426abcefa6e2dd082e}\label{classMTRand_a380e79e0192b46426abcefa6e2dd082e}} 
+\index{MTRand@{MTRand}!MTRand@{MTRand}}
+\index{MTRand@{MTRand}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{MTRand()}{MTRand()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily MTRand\+::\+MTRand (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} $\ast$const}]{big\+Seed,  }\item[{\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} const}]{seed\+Length = {\ttfamily \mbox{\hyperlink{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 140 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a265dc65546e26073c0d5f8787b045a1d}\label{classMTRand_a265dc65546e26073c0d5f8787b045a1d}} 
+\index{MTRand@{MTRand}!MTRand@{MTRand}}
+\index{MTRand@{MTRand}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{MTRand()}{MTRand()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily MTRand\+::\+MTRand (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 143 of file Mersenne\+Twister.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMTRand_a76d129a2d850c24ff4a0613f299cf3a5}\label{classMTRand_a76d129a2d850c24ff4a0613f299cf3a5}} 
+\index{MTRand@{MTRand}!rand@{rand}}
+\index{rand@{rand}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{rand()}{rand()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily double MTRand\+::rand (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 146 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a7a47382fb7b19ae1f330691735dc800b}\label{classMTRand_a7a47382fb7b19ae1f330691735dc800b}} 
+\index{MTRand@{MTRand}!rand@{rand}}
+\index{rand@{rand}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{rand()}{rand()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily double MTRand\+::rand (\begin{DoxyParamCaption}\item[{const double \&}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 149 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_afd05e468983b3a3d66ce0f403bd666af}\label{classMTRand_afd05e468983b3a3d66ce0f403bd666af}} 
+\index{MTRand@{MTRand}!randExc@{randExc}}
+\index{randExc@{randExc}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{randExc()}{randExc()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily double MTRand\+::rand\+Exc (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 152 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a2955abdb96e6cab97e50ac755d48dad1}\label{classMTRand_a2955abdb96e6cab97e50ac755d48dad1}} 
+\index{MTRand@{MTRand}!randExc@{randExc}}
+\index{randExc@{randExc}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{randExc()}{randExc()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily double MTRand\+::rand\+Exc (\begin{DoxyParamCaption}\item[{const double \&}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 155 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}\label{classMTRand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}} 
+\index{MTRand@{MTRand}!randDblExc@{randDblExc}}
+\index{randDblExc@{randDblExc}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{randDblExc()}{randDblExc()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily double MTRand\+::rand\+Dbl\+Exc (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 158 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a587c90f52c35fa2bf05d34791dd5457e}\label{classMTRand_a587c90f52c35fa2bf05d34791dd5457e}} 
+\index{MTRand@{MTRand}!randDblExc@{randDblExc}}
+\index{randDblExc@{randDblExc}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{randDblExc()}{randDblExc()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily double MTRand\+::rand\+Dbl\+Exc (\begin{DoxyParamCaption}\item[{const double \&}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 161 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_ad1008efd4fe0e8aae30459c2c58cfe35}\label{classMTRand_ad1008efd4fe0e8aae30459c2c58cfe35}} 
+\index{MTRand@{MTRand}!randInt@{randInt}}
+\index{randInt@{randInt}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{randInt()}{randInt()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{MTRand\+::uint32}} MTRand\+::rand\+Int (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 179 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a18ea21f615df06c9359c34d2eba6f252}\label{classMTRand_a18ea21f615df06c9359c34d2eba6f252}} 
+\index{MTRand@{MTRand}!randInt@{randInt}}
+\index{randInt@{randInt}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{randInt()}{randInt()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{MTRand\+::uint32}} MTRand\+::rand\+Int (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 195 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_abbb87a08d622d58fdee0eea4cb5471a0}\label{classMTRand_abbb87a08d622d58fdee0eea4cb5471a0}} 
+\index{MTRand@{MTRand}!operator()@{operator()}}
+\index{operator()@{operator()}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily double MTRand\+::operator() (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 104 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a15f4daf79febbe4ff43c3e6ce2c4fcbe}\label{classMTRand_a15f4daf79febbe4ff43c3e6ce2c4fcbe}} 
+\index{MTRand@{MTRand}!rand53@{rand53}}
+\index{rand53@{rand53}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{rand53()}{rand53()}}
+{\footnotesize\ttfamily double MTRand\+::rand53 (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 164 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_af759d1f30d4f29a715e6f6e86850b5c4}\label{classMTRand_af759d1f30d4f29a715e6f6e86850b5c4}} 
+\index{MTRand@{MTRand}!randNorm@{randNorm}}
+\index{randNorm@{randNorm}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{randNorm()}{randNorm()}}
+{\footnotesize\ttfamily double MTRand\+::rand\+Norm (\begin{DoxyParamCaption}\item[{const double \&}]{mean = {\ttfamily 0.0},  }\item[{const double \&}]{variance = {\ttfamily 0.0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 170 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a1e21a79e0a30225fffe924229e34a923}\label{classMTRand_a1e21a79e0a30225fffe924229e34a923}} 
+\index{MTRand@{MTRand}!seed@{seed}}
+\index{seed@{seed}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{seed()}{seed()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily void MTRand\+::seed (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}}]{one\+Seed }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 215 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a5758103776b131e8ea46b6dc1b9fb267}\label{classMTRand_a5758103776b131e8ea46b6dc1b9fb267}} 
+\index{MTRand@{MTRand}!seed@{seed}}
+\index{seed@{seed}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{seed()}{seed()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily void MTRand\+::seed (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} $\ast$const}]{big\+Seed,  }\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}}]{seed\+Length = {\ttfamily \mbox{\hyperlink{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 223 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_ad88ea3363d55bafb62826bbd130279c2}\label{classMTRand_ad88ea3363d55bafb62826bbd130279c2}} 
+\index{MTRand@{MTRand}!seed@{seed}}
+\index{seed@{seed}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{seed()}{seed()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily void MTRand\+::seed (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 259 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_aabe5ec2cad71c1c67d9390a4a235edad}\label{classMTRand_aabe5ec2cad71c1c67d9390a4a235edad}} 
+\index{MTRand@{MTRand}!save@{save}}
+\index{save@{save}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{save()}{save()}}
+{\footnotesize\ttfamily void MTRand\+::save (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} $\ast$}]{save\+Array }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 343 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a8302e9a8cd16d8dfc536a85bf2f68be0}\label{classMTRand_a8302e9a8cd16d8dfc536a85bf2f68be0}} 
+\index{MTRand@{MTRand}!load@{load}}
+\index{load@{load}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{load()}{load()}}
+{\footnotesize\ttfamily void MTRand\+::load (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} $\ast$const}]{load\+Array }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Definition at line 353 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a9b9a20998f5c805af6301ce5c37dcfc3}\label{classMTRand_a9b9a20998f5c805af6301ce5c37dcfc3}} 
+\index{MTRand@{MTRand}!initialize@{initialize}}
+\index{initialize@{initialize}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{initialize()}{initialize()}}
+{\footnotesize\ttfamily void MTRand\+::initialize (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}}]{one\+Seed }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Definition at line 283 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a1d5fcb69d83f4d2fd653883c8352f86c}\label{classMTRand_a1d5fcb69d83f4d2fd653883c8352f86c}} 
+\index{MTRand@{MTRand}!reload@{reload}}
+\index{reload@{reload}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{reload()}{reload()}}
+{\footnotesize\ttfamily void MTRand\+::reload (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Definition at line 301 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a900c4700226add7e7eb0c2efd9f24ced}\label{classMTRand_a900c4700226add7e7eb0c2efd9f24ced}} 
+\index{MTRand@{MTRand}!hiBit@{hiBit}}
+\index{hiBit@{hiBit}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{hiBit()}{hiBit()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} MTRand\+::hi\+Bit (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&}]{u }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Definition at line 126 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a6e2f7d8bae68dc63f6bcbb954cf4fb29}\label{classMTRand_a6e2f7d8bae68dc63f6bcbb954cf4fb29}} 
+\index{MTRand@{MTRand}!loBit@{loBit}}
+\index{loBit@{loBit}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{loBit()}{loBit()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} MTRand\+::lo\+Bit (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&}]{u }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Definition at line 127 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a1930fa7c242d35be28bb99b18a84a93d}\label{classMTRand_a1930fa7c242d35be28bb99b18a84a93d}} 
+\index{MTRand@{MTRand}!loBits@{loBits}}
+\index{loBits@{loBits}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{loBits()}{loBits()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} MTRand\+::lo\+Bits (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&}]{u }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Definition at line 128 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a41b6713f75a771c5ec8e71ef6832a5fa}\label{classMTRand_a41b6713f75a771c5ec8e71ef6832a5fa}} 
+\index{MTRand@{MTRand}!mixBits@{mixBits}}
+\index{mixBits@{mixBits}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{mixBits()}{mixBits()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} MTRand\+::mix\+Bits (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&}]{u,  }\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&}]{v }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Definition at line 129 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_adf604988eb6155df3143d9207f02f61a}\label{classMTRand_adf604988eb6155df3143d9207f02f61a}} 
+\index{MTRand@{MTRand}!twist@{twist}}
+\index{twist@{twist}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{twist()}{twist()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} MTRand\+::twist (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&}]{m,  }\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&}]{s0,  }\item[{const \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \&}]{s1 }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}
+
+
+
+Definition at line 131 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a486885d03f38c844315d002e6312fa23}\label{classMTRand_a486885d03f38c844315d002e6312fa23}} 
+\index{MTRand@{MTRand}!hash@{hash}}
+\index{hash@{hash}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{hash()}{hash()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{MTRand\+::uint32}} MTRand\+::hash (\begin{DoxyParamCaption}\item[{time\+\_\+t}]{t,  }\item[{clock\+\_\+t}]{c }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}, {\ttfamily [protected]}}
+
+
+
+Definition at line 317 of file Mersenne\+Twister.\+h.
+
+
+
+\doxysubsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{classMTRand_a059061d50a1e54ee3067d4e1dbdd7c64}\label{classMTRand_a059061d50a1e54ee3067d4e1dbdd7c64}} 
+\index{MTRand@{MTRand}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{operator$<$$<$}{operator<<}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{os,  }\item[{const \mbox{\hyperlink{classMTRand}{MTRand}} \&}]{mtrand }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Definition at line 364 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a45b02a702835a3be42171c5c2dc79b2d}\label{classMTRand_a45b02a702835a3be42171c5c2dc79b2d}} 
+\index{MTRand@{MTRand}!operator$>$$>$@{operator$>$$>$}}
+\index{operator$>$$>$@{operator$>$$>$}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{operator$>$$>$}{operator>>}}
+{\footnotesize\ttfamily std\+::istream\& operator$>$$>$ (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{is,  }\item[{\mbox{\hyperlink{classMTRand}{MTRand}} \&}]{mtrand }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Definition at line 373 of file Mersenne\+Twister.\+h.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{classMTRand_a2c87f537429bf0b0f6a452c22b9eebba}\label{classMTRand_a2c87f537429bf0b0f6a452c22b9eebba}} 
+\index{MTRand@{MTRand}!state@{state}}
+\index{state@{state}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{state}{state}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} MTRand\+::state\mbox{[}\mbox{\hyperlink{classMTRand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}\mbox{]}\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 80 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a2b80858137c88fe69d4d2bdc665bcf93}\label{classMTRand_a2b80858137c88fe69d4d2bdc665bcf93}} 
+\index{MTRand@{MTRand}!pNext@{pNext}}
+\index{pNext@{pNext}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{pNext}{pNext}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classMTRand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}$\ast$ MTRand\+::p\+Next\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 81 of file Mersenne\+Twister.\+h.
+
+\mbox{\Hypertarget{classMTRand_a98eabf568c88f121e44f487397f32495}\label{classMTRand_a98eabf568c88f121e44f487397f32495}} 
+\index{MTRand@{MTRand}!left@{left}}
+\index{left@{left}!MTRand@{MTRand}}
+\doxysubsubsection{\texorpdfstring{left}{left}}
+{\footnotesize\ttfamily int MTRand\+::left\hspace{0.3cm}{\ttfamily [protected]}}
+
+
+
+Definition at line 82 of file Mersenne\+Twister.\+h.
+
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-/home/mbehrang/codes/hips-\/publish/hips-\/documentation/hips/src/Mersenne\+Twister.\+h\end{DoxyCompactItemize}
+/home/mbehrang/codes/hips-\/publish/hips-\/final-\/projection/hips/src/\mbox{\hyperlink{MersenneTwister_8h}{Mersenne\+Twister.\+h}}\end{DoxyCompactItemize}
