@@ -1,0 +1,41 @@
+\hypertarget{batch_reactor_8h_source}{}\doxysection{batch\+Reactor.\+h}
+\label{batch_reactor_8h_source}\index{/Users/maisy/codeHips/hips/src/batchReactor.h@{/Users/maisy/codeHips/hips/src/batchReactor.h}}
+\mbox{\hyperlink{batch_reactor_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00001}00001 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00002}00002 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00003}00003 \textcolor{preprocessor}{\#include "{}cantera/base/Solution.h"{}}}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00004}00004 \textcolor{preprocessor}{\#include "{}cantera/thermo.h"{}}}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00005}00005 \textcolor{preprocessor}{\#include "{}cantera/kinetics.h"{}}}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00006}00006 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{integrator__cvode_8h}{integrator\_cvode.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00007}00007 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00008}00008 \textcolor{preprocessor}{\#include <memory>}}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00009}00009 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00010}00010 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00012}00012 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00013}\mbox{\hyperlink{classbatch_reactor}{00013}} \textcolor{keyword}{class }\mbox{\hyperlink{classbatch_reactor}{batchReactor}} \{}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00014}00014 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00016}00016 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00017}00017 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00018}00018 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00019}\mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{00019}}     std::shared\_ptr<Cantera::ThermoPhase> \mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{gas}};        }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00020}\mbox{\hyperlink{classbatch_reactor_a44101d5defb4ba69474697744cbef158}{00020}}     std::shared\_ptr<Cantera::Kinetics>    \mbox{\hyperlink{classbatch_reactor_a44101d5defb4ba69474697744cbef158}{kin}};        }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00021}00021 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00022}\mbox{\hyperlink{classbatch_reactor_a25a411dda898478f3c8ff2a5351906e5}{00022}}     \textcolor{keywordtype}{int}                                   \mbox{\hyperlink{classbatch_reactor_a25a411dda898478f3c8ff2a5351906e5}{nvar}};       }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00023}00023 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00024}\mbox{\hyperlink{classbatch_reactor_a8d8d86a997c4e8424063f943ffab033a}{00024}}     \textcolor{keywordtype}{double}                                \mbox{\hyperlink{classbatch_reactor_a8d8d86a997c4e8424063f943ffab033a}{h\_fixed}};    }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00025}\mbox{\hyperlink{classbatch_reactor_a486da1fa66d5cad76ca4614371dc335a}{00025}}     \textcolor{keywordtype}{double}                                \mbox{\hyperlink{classbatch_reactor_a486da1fa66d5cad76ca4614371dc335a}{P\_fixed}};    }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00026}\mbox{\hyperlink{classbatch_reactor_a38e600224710a61029e49eb91ab1480d}{00026}}     \textcolor{keywordtype}{double}                                \mbox{\hyperlink{classbatch_reactor_a38e600224710a61029e49eb91ab1480d}{rho}};}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00027}00027 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00029}00029 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00030}00030 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00031}00031 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00032}\mbox{\hyperlink{classbatch_reactor_ae9f39242ba26fa25a06a4cc5ff05472e}{00032}}     \mbox{\hyperlink{classbatch_reactor_ae9f39242ba26fa25a06a4cc5ff05472e}{batchReactor}}() \{\};}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00033}00033 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00034}\mbox{\hyperlink{classbatch_reactor_aec18522d3d27683aee10f482475149e9}{00034}}     \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} \mbox{\hyperlink{classbatch_reactor_aec18522d3d27683aee10f482475149e9}{react}}(\textcolor{keywordtype}{double} \&h, std::vector<double> \&y, \textcolor{keyword}{const} \textcolor{keywordtype}{double} tRun) = 0;}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00035}\mbox{\hyperlink{classbatch_reactor_a915a784039c36da099fe591c30566d2f}{00035}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{classbatch_reactor_a915a784039c36da099fe591c30566d2f}{getDensity}}()\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{classbatch_reactor_a38e600224710a61029e49eb91ab1480d}{rho}}; \}       \textcolor{comment}{//Mb}}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00036}00036 }
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00037}\mbox{\hyperlink{classbatch_reactor_ae95e00b784edcb60c91a87eab93584d4}{00037}}     \textcolor{keyword}{virtual} \mbox{\hyperlink{classbatch_reactor_ae95e00b784edcb60c91a87eab93584d4}{\string~batchReactor}}() \{\}}
+\DoxyCodeLine{\Hypertarget{batch_reactor_8h_source_l00038}00038 \};}
+
+\end{DoxyCode}

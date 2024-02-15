@@ -1,0 +1,89 @@
+\hypertarget{integrator__cvode_8h_source}{}\doxysection{integrator\+\_\+cvode.\+h}
+\label{integrator__cvode_8h_source}\index{/Users/maisy/codeHips/hips/src/integrator\_cvode.h@{/Users/maisy/codeHips/hips/src/integrator\_cvode.h}}
+\mbox{\hyperlink{integrator__cvode_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00001}00001 \textcolor{preprocessor}{\#pragma once}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00002}00002 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00003}00003 \textcolor{preprocessor}{\#include <vector>}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00004}00004 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00005}00005 \textcolor{preprocessor}{\#include <cvode/cvode.h>}               \textcolor{comment}{// prototypes for CVODE fcts., consts.}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00006}00006 \textcolor{preprocessor}{\#include <nvector/nvector\_serial.h>}    \textcolor{comment}{// access to serial N\_Vector}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00007}00007 \textcolor{preprocessor}{\#include <sunmatrix/sunmatrix\_dense.h>} \textcolor{comment}{// access to dense SUNMatrix}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00008}00008 \textcolor{preprocessor}{\#include <sunlinsol/sunlinsol\_dense.h>} \textcolor{comment}{// access to dense SUNLinearSolver}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00009}00009 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00011}00011 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00012}\mbox{\hyperlink{classintegrator__cvode}{00012}} \textcolor{keyword}{class }\mbox{\hyperlink{classintegrator__cvode}{integrator\_cvode}} \{}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00013}00013 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00014}00014 \textcolor{keyword}{public}: }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00015}00015 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00017}00017 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00018}\mbox{\hyperlink{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}{00018}}     SUNContext      \mbox{\hyperlink{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}{sun}};           \textcolor{comment}{// sundials object}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00019}\mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{00019}}     \textcolor{keywordtype}{void}           *\mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}};         \textcolor{comment}{// cvode object}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00020}\mbox{\hyperlink{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}{00020}}     N\_Vector        \mbox{\hyperlink{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}{vars}};             \textcolor{comment}{// vector of variables being solved}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00021}\mbox{\hyperlink{classintegrator__cvode_a1db23182c20c85ef0efda99a5643405f}{00021}}     N\_Vector        \mbox{\hyperlink{classintegrator__cvode_a1db23182c20c85ef0efda99a5643405f}{atol}};          \textcolor{comment}{// vector atol (for each variable)}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00022}\mbox{\hyperlink{classintegrator__cvode_a50b4013a0d1d9deb6d5b12cc29b38903}{00022}}     realtype        \mbox{\hyperlink{classintegrator__cvode_a50b4013a0d1d9deb6d5b12cc29b38903}{rtol}};          \textcolor{comment}{// scalar rtol}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00023}\mbox{\hyperlink{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}{00023}}     \textcolor{keywordtype}{unsigned}        \mbox{\hyperlink{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}{nvar}};           \textcolor{comment}{// number of equations being solved}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00024}\mbox{\hyperlink{classintegrator__cvode_a5988472a70299834919ec7e9d50cbb4a}{00024}}     SUNMatrix       \mbox{\hyperlink{classintegrator__cvode_a5988472a70299834919ec7e9d50cbb4a}{J}};             \textcolor{comment}{// matrix for linear solver}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00025}\mbox{\hyperlink{classintegrator__cvode_a5a2234e49b1f6057b7f041277f115077}{00025}}     SUNLinearSolver \mbox{\hyperlink{classintegrator__cvode_a5a2234e49b1f6057b7f041277f115077}{LS}};            \textcolor{comment}{// linear solver}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00026}\mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{00026}}     \textcolor{keywordtype}{int}             \mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{rv}};            \textcolor{comment}{// return value: checking status of calls}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00027}00027 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00029}00029 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00030}\mbox{\hyperlink{classintegrator__cvode_a4591e56bcf643d5f7c731e01162c967b}{00030}} \mbox{\hyperlink{classintegrator__cvode_a4591e56bcf643d5f7c731e01162c967b}{integrator\_cvode}}(}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00031}00031                  \textcolor{keywordtype}{int} (*Func)(realtype, N\_Vector, N\_Vector, \textcolor{keywordtype}{void}*),}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00032}00032                  \textcolor{keywordtype}{void} *                \_user\_data,}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00033}00033                  \textcolor{keyword}{const} \textcolor{keywordtype}{int}             \_nvar, }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00034}00034                  \textcolor{keyword}{const} \textcolor{keywordtype}{double}          \_rtol,}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00035}00035                  \textcolor{keyword}{const} std::vector<double> \&\_atol) :}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00036}00036     \mbox{\hyperlink{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}{nvar}}(\_nvar),}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00037}00037     \mbox{\hyperlink{classintegrator__cvode_a50b4013a0d1d9deb6d5b12cc29b38903}{rtol}}(\_rtol) \{}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00038}00038 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00039}00039     \mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{rv}} = SUNContext\_Create(NULL, \&\mbox{\hyperlink{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}{sun}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00040}00040 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00041}00041     \mbox{\hyperlink{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}{vars}} = N\_VNew\_Serial(\mbox{\hyperlink{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}{nvar}}, \mbox{\hyperlink{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}{sun}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00042}00042     \mbox{\hyperlink{classintegrator__cvode_a1db23182c20c85ef0efda99a5643405f}{atol}} = N\_VNew\_Serial(\mbox{\hyperlink{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}{nvar}}, \mbox{\hyperlink{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}{sun}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00043}00043     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}{nvar}}; ++k)}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00044}00044         NV\_Ith\_S(\mbox{\hyperlink{classintegrator__cvode_a1db23182c20c85ef0efda99a5643405f}{atol}}, k) = \_atol[k];}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00045}00045 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00046}00046     \mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}} = CVodeCreate(CV\_BDF, \mbox{\hyperlink{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}{sun}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00047}00047     \mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{rv}}   = CVodeSetUserData(\mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}}, \_user\_data);}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00048}00048     \mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{rv}}   = CVodeInit(\mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}}, Func, 0.0, \mbox{\hyperlink{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}{vars}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00049}00049     \mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{rv}}   = CVodeSVtolerances(\mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}}, \mbox{\hyperlink{classintegrator__cvode_a50b4013a0d1d9deb6d5b12cc29b38903}{rtol}}, \mbox{\hyperlink{classintegrator__cvode_a1db23182c20c85ef0efda99a5643405f}{atol}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00050}00050     \mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{rv}}   = CVodeSetMaxNumSteps(\mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}}, 5000);}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00051}00051 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00052}00052     \mbox{\hyperlink{classintegrator__cvode_a5988472a70299834919ec7e9d50cbb4a}{J}}    = SUNDenseMatrix(\mbox{\hyperlink{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}{nvar}}, \mbox{\hyperlink{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}{nvar}}, \mbox{\hyperlink{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}{sun}});   \textcolor{comment}{// linear solver matrix J}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00053}00053     \mbox{\hyperlink{classintegrator__cvode_a5a2234e49b1f6057b7f041277f115077}{LS}}   = SUNLinSol\_Dense(\mbox{\hyperlink{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}{vars}}, \mbox{\hyperlink{classintegrator__cvode_a5988472a70299834919ec7e9d50cbb4a}{J}}, \mbox{\hyperlink{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}{sun}});          \textcolor{comment}{// set linear solver}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00054}00054     \mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{rv}}   = CVodeSetLinearSolver(\mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}}, \mbox{\hyperlink{classintegrator__cvode_a5a2234e49b1f6057b7f041277f115077}{LS}}, \mbox{\hyperlink{classintegrator__cvode_a5988472a70299834919ec7e9d50cbb4a}{J}});  \textcolor{comment}{// associate matrix J and solver LS}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00055}00055 \}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00056}00056 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00057}00057 \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00058}00058 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00059}\mbox{\hyperlink{classintegrator__cvode_a200d2664a94c9ec095df1d9830e9e8c7}{00059}} \textcolor{keywordtype}{int} \mbox{\hyperlink{classintegrator__cvode_a200d2664a94c9ec095df1d9830e9e8c7}{integrate}}(std::vector<double> \&y, \textcolor{keyword}{const} realtype dt) \{}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00060}00060 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00061}00061     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}{nvar}}; ++k)}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00062}00062         NV\_Ith\_S(\mbox{\hyperlink{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}{vars}}, k) = y[k];}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00063}00063 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00064}00064     realtype t;}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00065}00065 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00066}00066     \mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{rv}} = CVodeReInit(\mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}}, 0.0, \mbox{\hyperlink{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}{vars}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00067}00067     \mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{rv}} = CVode(\mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}}, dt, \mbox{\hyperlink{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}{vars}}, \&t, CV\_NORMAL);}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00068}00068 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00069}00069     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}{nvar}}; ++k)}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00070}00070         y[k] = NV\_Ith\_S(\mbox{\hyperlink{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}{vars}},k);}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00071}00071 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00072}00072     \textcolor{keywordflow}{return} \mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{rv}};}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00073}00073 \}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00074}00074 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00075}00075 \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00076}00076 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00077}\mbox{\hyperlink{classintegrator__cvode_a928725febae9aa71042c36a1dd8753ef}{00077}} \mbox{\hyperlink{classintegrator__cvode_a928725febae9aa71042c36a1dd8753ef}{\string~integrator\_cvode}}() \{}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00078}00078 }
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00079}00079     N\_VDestroy(\mbox{\hyperlink{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}{vars}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00080}00080     N\_VDestroy(\mbox{\hyperlink{classintegrator__cvode_a1db23182c20c85ef0efda99a5643405f}{atol}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00081}00081     CVodeFree(\&\mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00082}00082     SUNLinSolFree(\mbox{\hyperlink{classintegrator__cvode_a5a2234e49b1f6057b7f041277f115077}{LS}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00083}00083     SUNMatDestroy(\mbox{\hyperlink{classintegrator__cvode_a5988472a70299834919ec7e9d50cbb4a}{J}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00084}00084     SUNContext\_Free(\&\mbox{\hyperlink{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}{sun}});}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00085}00085 \}}
+\DoxyCodeLine{\Hypertarget{integrator__cvode_8h_source_l00086}00086 \};}
+
+\end{DoxyCode}

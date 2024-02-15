@@ -27,23 +27,37 @@ var NAVTREE =
   [ "hips", "index.html", [
     [ "Overview", "index.html#autotoc_md1", null ],
     [ "Dependencies and installation", "index.html#autotoc_md2", [
-      [ "Build and installation instructions", "index.html#autotoc_md3", null ],
-      [ "CMake configuration variables", "index.html#autotoc_md4", null ]
+      [ "Build and installation instructions", "index.html#autotoc_md4", null ],
+      [ "CMake configuration variables", "index.html#autotoc_md7", null ]
     ] ],
-    [ "Using HiPS", "index.html#autotoc_md5", null ],
-    [ "Example workflow", "index.html#autotoc_md6", [
-      [ "1. HiPS Tree and Constructor Parameters", "index.html#autotoc_md7", null ],
-      [ "2. Gas Solution Setup (required for reaction)", "index.html#autotoc_md8", null ],
-      [ "3. HiPS Tree Creation", "index.html#autotoc_md9", null ],
-      [ "4. Initialize Variables and Parameters", "index.html#autotoc_md10", null ],
-      [ "5. Initialize Mixing Fractions", "index.html#autotoc_md11", null ],
-      [ "6. Set Initial State in Parcels", "index.html#autotoc_md12", null ],
-      [ "7. Advance HiPS for Mixing and Reaction", "index.html#autotoc_md13", null ],
-      [ "Implementation Guidelines", "index.html#autotoc_md14", null ]
+    [ "Using HiPS", "index.html#autotoc_md15", null ],
+    [ "Example workflow", "index.html#autotoc_md17", [
+      [ "1. HiPS Tree and Constructor Parameters", "index.html#autotoc_md18", null ],
+      [ "2. Gas Solution Setup (required for reaction)", "index.html#autotoc_md19", null ],
+      [ "3. HiPS Tree Creation", "index.html#autotoc_md20", null ],
+      [ "4. Initialize Variables and Parameters", "index.html#autotoc_md21", null ],
+      [ "5. Initialize Mixing Fractions", "index.html#autotoc_md22", null ],
+      [ "6. Set Initial State in Parcels", "index.html#autotoc_md23", null ],
+      [ "7. Advance HiPS for Mixing and Reaction", "index.html#autotoc_md24", null ],
+      [ "Implementation Guidelines", "index.html#autotoc_md25", null ]
     ] ],
-    [ "Examples", "index.html#autotoc_md15", null ],
-    [ "test", "test.html", [
-      [ "JUST TO SEE", "test.html#autotoc_md0", null ]
+    [ "Examples", "index.html#autotoc_md26", null ],
+    [ "mainpage", "md_mainpage.html", [
+      [ "Using HiPS", "md_mainpage.html#autotoc_md3", null ],
+      [ "Example workflow", "md_mainpage.html#autotoc_md5", [
+        [ "1. HiPS Tree and Constructor Parameters", "md_mainpage.html#autotoc_md6", null ],
+        [ "2. Gas Solution Setup (required for reaction)", "md_mainpage.html#autotoc_md8", null ],
+        [ "3. HiPS Tree Creation", "md_mainpage.html#autotoc_md9", null ],
+        [ "4. Initialize Variables and Parameters", "md_mainpage.html#autotoc_md10", null ],
+        [ "5. Initialize Mixing Fractions", "md_mainpage.html#autotoc_md11", null ],
+        [ "6. Set Initial State in Parcels", "md_mainpage.html#autotoc_md12", null ],
+        [ "7. Advance HiPS for Mixing and Reaction", "md_mainpage.html#autotoc_md13", null ],
+        [ "Implementation Guidelines", "md_mainpage.html#autotoc_md14", null ]
+      ] ],
+      [ "Examples", "md_mainpage.html#autotoc_md16", null ]
+    ] ],
+    [ "md_results_test", "md_results_test.html", [
+      [ "JUST TO SEE", "md_results_test.html#autotoc_md0", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -69,7 +83,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"MersenneTwister_8h.html"
+"_mersenne_twister_8h.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

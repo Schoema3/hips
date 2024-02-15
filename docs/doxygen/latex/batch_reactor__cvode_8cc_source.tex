@@ -1,0 +1,72 @@
+\hypertarget{batch_reactor__cvode_8cc_source}{}\doxysection{batch\+Reactor\+\_\+cvode.\+cc}
+\label{batch_reactor__cvode_8cc_source}\index{/Users/maisy/codeHips/hips/src/batchReactor\_cvode.cc@{/Users/maisy/codeHips/hips/src/batchReactor\_cvode.cc}}
+\mbox{\hyperlink{batch_reactor__cvode_8cc}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00001}00001 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{batch_reactor__cvode_8h}{batchReactor\_cvode.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00002}00002 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00004}00004 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00014}00014 \textcolor{keywordtype}{int} \mbox{\hyperlink{batch_reactor__cvode_8cc_a32482f0a6ee1883664a92263941f63b8}{rhsf\_cvode}}(realtype t, N\_Vector varsCV, N\_Vector dvarsdtCV, \textcolor{keywordtype}{void} *user\_data);}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00015}00015 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00017}00017 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00023}\mbox{\hyperlink{classbatch_reactor__cvode_a0e008b252f8c5d4ce503ba70787f6b90}{00023}} \mbox{\hyperlink{classbatch_reactor__cvode_a0e008b252f8c5d4ce503ba70787f6b90}{batchReactor\_cvode::batchReactor\_cvode}}(std::shared\_ptr<Cantera::Solution> cantSol) \{}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00024}00024 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00025}00025     \mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{gas}} = cantSol-\/>thermo(); }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00026}00026     \mbox{\hyperlink{classbatch_reactor_a44101d5defb4ba69474697744cbef158}{kin}} = cantSol-\/>kinetics(); }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00027}00027 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00028}00028     \mbox{\hyperlink{classbatch_reactor_a25a411dda898478f3c8ff2a5351906e5}{nvar}} = \mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{gas}}-\/>nSpecies();}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00029}00029 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00030}00030     \textcolor{comment}{// Set absolute and relative tolerances}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00031}00031     std::vector<double> atol(\mbox{\hyperlink{classbatch_reactor_a25a411dda898478f3c8ff2a5351906e5}{nvar}}, 1E-\/10);}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00032}00032     \textcolor{keywordtype}{double} rtol = 1E-\/4;}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00033}00033 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00034}00034     \textcolor{comment}{// Initialize the integrator with CVODE}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00035}00035     \mbox{\hyperlink{classbatch_reactor__cvode_a8e86d9cf30e1887a45d67196d8dfa8e0}{integrator}} = std::make\_unique<integrator\_cvode>(\mbox{\hyperlink{batch_reactor__cvode_8cc_a32482f0a6ee1883664a92263941f63b8}{rhsf\_cvode}}, \textcolor{keyword}{this}, \mbox{\hyperlink{classbatch_reactor_a25a411dda898478f3c8ff2a5351906e5}{nvar}}, rtol, atol);}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00036}00036 \}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00037}00037 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00039}00039 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00045}\mbox{\hyperlink{classbatch_reactor__cvode_a48446f013f84461660ef4cff24cb6cf1}{00045}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classbatch_reactor__cvode_a48446f013f84461660ef4cff24cb6cf1}{batchReactor\_cvode::react}}(\textcolor{keywordtype}{double} \&h, std::vector<double> \&y, \textcolor{keyword}{const} \textcolor{keywordtype}{double} tRun) \{}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00046}00046 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00047}00047     \textcolor{comment}{// Store fixed enthalpy and pressure}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00048}00048     \mbox{\hyperlink{classbatch_reactor_a8d8d86a997c4e8424063f943ffab033a}{h\_fixed}} = h;}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00049}00049     \mbox{\hyperlink{classbatch_reactor_a486da1fa66d5cad76ca4614371dc335a}{P\_fixed}} = \mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{gas}}-\/>pressure();}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00050}00050 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00051}00051     \textcolor{comment}{// Integrate over the given time}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00052}00052     \mbox{\hyperlink{classbatch_reactor__cvode_a8e86d9cf30e1887a45d67196d8dfa8e0}{integrator}}-\/>integrate(y, tRun);}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00053}00053 \}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00054}00054 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00056}00056 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00065}\mbox{\hyperlink{classbatch_reactor__cvode_a22fd562f616891c39b82d8f320eba0f4}{00065}} \textcolor{keywordtype}{int} \mbox{\hyperlink{classbatch_reactor__cvode_a22fd562f616891c39b82d8f320eba0f4}{batchReactor\_cvode::rhsf}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} t, \textcolor{keyword}{const} \textcolor{keywordtype}{double} *vars, \textcolor{keywordtype}{double} *dvarsdt) \{}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00066}00066 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00067}00067     \textcolor{comment}{// Set mass fractions and state}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00068}00068     \mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{gas}}-\/>setMassFractions\_NoNorm(vars);}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00069}00069     \mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{gas}}-\/>setState\_HP(\mbox{\hyperlink{classbatch_reactor_a8d8d86a997c4e8424063f943ffab033a}{h\_fixed}}, \mbox{\hyperlink{classbatch_reactor_a486da1fa66d5cad76ca4614371dc335a}{P\_fixed}});}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00070}00070 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00071}00071     \textcolor{comment}{// Calculate density and reaction rates}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00072}00072     \textcolor{keywordtype}{double} \mbox{\hyperlink{classbatch_reactor_a38e600224710a61029e49eb91ab1480d}{rho}} = \mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{gas}}-\/>density();}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00073}00073     std::vector<double> rr(\mbox{\hyperlink{classbatch_reactor_a25a411dda898478f3c8ff2a5351906e5}{nvar}});}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00074}00074     \mbox{\hyperlink{classbatch_reactor_a44101d5defb4ba69474697744cbef158}{kin}}-\/>getNetProductionRates(\&rr[0]);}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00075}00075     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{size\_t} k = 0; k < \mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{gas}}-\/>nSpecies(); k++)}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00076}00076         dvarsdt[k] = rr[k] * \mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{gas}}-\/>molecularWeight(k) / \mbox{\hyperlink{classbatch_reactor_a38e600224710a61029e49eb91ab1480d}{rho}};}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00077}00077 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00078}00078     \textcolor{keywordflow}{return} 0;}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00079}00079 \}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00080}00080 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00082}00082 \textcolor{comment}{// CVODE interface; CVODE calls this function, which then calls user\_data's rhsf}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00083}00083 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00095}\mbox{\hyperlink{batch_reactor__cvode_8cc_a32482f0a6ee1883664a92263941f63b8}{00095}} \textcolor{keywordtype}{int} \mbox{\hyperlink{batch_reactor__cvode_8cc_a32482f0a6ee1883664a92263941f63b8}{rhsf\_cvode}}(realtype t, N\_Vector varsCV, N\_Vector dvarsdtCV, \textcolor{keywordtype}{void} *user\_data) \{}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00096}00096 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00097}00097     \textcolor{comment}{// Cast user\_data pointer to batchReactor\_cvode pointer}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00098}00098     \mbox{\hyperlink{classbatch_reactor__cvode}{batchReactor\_cvode}} *bRxr = \textcolor{keyword}{static\_cast<}\mbox{\hyperlink{classbatch_reactor__cvode}{batchReactor\_cvode}} *\textcolor{keyword}{>}(user\_data);}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00099}00099 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00100}00100     \textcolor{comment}{// Get array pointers for variables and derivatives}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00101}00101     \textcolor{keywordtype}{double} *vars    = N\_VGetArrayPointer(varsCV);}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00102}00102     \textcolor{keywordtype}{double} *dvarsdt = N\_VGetArrayPointer(dvarsdtCV);}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00103}00103 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00104}00104     \textcolor{comment}{// Call rhsf method of batchReactor\_cvode instance}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00105}00105     \textcolor{keywordtype}{int} rv = bRxr-\/>\mbox{\hyperlink{classbatch_reactor__cvode_a22fd562f616891c39b82d8f320eba0f4}{rhsf}}(t, vars, dvarsdt);}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00106}00106 }
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00107}00107     \textcolor{keywordflow}{return} rv;}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00108}00108 \}}
+\DoxyCodeLine{\Hypertarget{batch_reactor__cvode_8cc_source_l00109}00109 }
+
+\end{DoxyCode}

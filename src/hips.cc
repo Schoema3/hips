@@ -14,52 +14,78 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 /**
  * \brief Constructor for initializing 'nLevels_' based on Reynolds number.
- * \param Re Reynolds number for turbulence simulation.
+ * \param Re                Reynolds number for turbulence simulation.
  */
 hips::hips(double Re) {
 
-    nLevels_ = static_cast<int>(round(log2(Re) - 3));
+    double original_N = (3.0/4) * log(1/Re) / log(Afac);                            // Calculate the original N
+
+    double closest_N = round(original_N);                                           // Round the original N to the closest integer
+
+    double desired_exponent = ceil(log(1/Re) / log(Afac));                          // Calculate the desired exponent that makes log_A(1/Re) an integer
+
+    Afac = pow(1/Re, 1/desired_exponent);                                           // Calculate the adjusted A
+
+    nL = (3.0/4) * log(1/Re) / log(Afac) + 3;                                       // Recalculate N
+
+    if (abs(nL - original_N) > abs(closest_N - original_N)) {                        // Check if adjusting A to a lower exponent brings N closer to the original N
+        desired_exponent -= 1;
+        Afac = pow(1/Re, 1/desired_exponent);
+        cout <<"Afac in the cosntructor  "<<Afac<<endl;
+        nL = (3.0/4) * log(1/Re) / log(Afac);
+        nL = nL + 3;
+    }
+
+      
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * \brief Constructor for initializing various parameters for the simulation.
- * \param nLevels Number of simulation levels.
- * \param domainLength_ Length of the simulation domain.
- * \param tau0_ Initial timescale parameter.
- * \param C_param_ C parameter.
- * \param forceTurb_ Flag for forcing turbulence.
- * \param nVar_ Number of variables.
- * \param ScHips_ Vector of Schmidt numbers for HIPS simulation.
- * \param cantSol Cantera solution object.
- * \param performReaction_ Flag for performing chemical reactions.
- * \param seed Seed for the random number generator.
+ * \Constructor for initializing required parameters to create the HiPS tree. 
+ * \param nLevels_                      Number of tree levels.
+ * \param domainLength_                 Length scale of the domain.
+ * \param tau0_                         Time scale of the domain.
+ * \param C_param_                      C parameter to control eddy rate
+ * \param forceTurb_                    Flag for forcing turbulence.
+ * \param nVar_                         Number of variables.
+ * \param ScHips_                       Vector of Schmidt numbers for HiPS simulation.
+ * \param cantSol                       Cantera solution object.
+ * \param performReaction_              Flag for performing chemical reactions
+ * \param seed                          Seed for the random number generator(negative to randomize it).
  */
-
-hips::hips(int     nLevels_, 
-           double  domainLength_, 
-           double  tau0_, 
-           double  C_param_, 
-           int     forceTurb_,
-           int     nVar_,
+hips::hips(int nLevels_, 
+           double domainLength_, 
+           double tau0_, 
+           double C_param_, 
+           int forceTurb_,
+           int nVar_,
            vector<double> &ScHips_,
            shared_ptr<Cantera::Solution> cantSol,
-           bool   performReaction_,
-           int    seed) : 
-    nLevels(nLevels_),                 domainLength(domainLength_), tau0(tau0_),
-    C_param(C_param_),                 forceTurb(forceTurb_),       ScHips(ScHips_),   
-    nVar(nVar_),                       LrandSet(true),              rand(seed),
+           bool performReaction_,
+           int seed) : 
+
+    nLevels(nLevels_), 
+    domainLength(domainLength_), 
+    tau0(tau0_),
+    C_param(C_param_), 
+    forceTurb(forceTurb_),       
+    ScHips(ScHips_),   
+    nVar(nVar_),                       
+    LrandSet(true),              
+    rand(seed),
     performReaction(performReaction_) { 
     
-   
     gas = cantSol->thermo(); 
     nsp = gas->nSpecies();
 
     varData.resize(nVar);
+    varRho.resize(nparcels);
     varName.resize(nVar);
 
-    bRxr = make_unique<batchReactor_cvode>(cantSol);
-    //bRxr = make_unique<batchReactor_cantera>(cantSol);
-
+    bRxr = make_unique<batchReactor_cvode>(cantSol);                  // initialize integrator pointer(cvode)
+    //bRxr = make_unique<batchReactor_cantera>(cantSol);                // initialize integrator pointer(cantera)
+              
+    
     //-------------------------- Set number of parcels, level lengthscales, timescales, and rates, and i_plus && i_batchelor
      
     iEta = nLevels - 3;        // Kolmogorov level; if nLevels = 7, then 0, 1, 2, 3, (4), 5, 6; iEta=4 is the lowest swap level: swap grandchildren of iEta=4 at level 6.
@@ -87,6 +113,7 @@ hips::hips(int     nLevels_,
     levelRates   = vector<double>(nLevels);
 
     for (int i=0; i<nLevels; i++) {
+        cout<<"Afac behore level  "<<Afac<<endl;
         levelLengths[i] = domainLength * pow(Afac,i);
         levelTaus[i] = tau0 * pow(levelLengths[i]/domainLength, 2.0/3.0) / C_param;
         levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
@@ -131,113 +158,191 @@ hips::hips(int     nLevels_,
     pLoc.resize(nparcels);
     for (int i=0; i<nparcels; i++)
         pLoc[i] = i;
-    
 } 
-
-///////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////i///////////////////////////////////////
 /**
- * \brief Function to set the variables and their weights.
- * \param v Vector of variables.
- * \param w Vector of weights.
- * \param i Index for the variable data.
+ * \brief Function to pass the variables, their weights, and their names to the parcels of the tree.  
+ * \param v                             Vector of variables that are passed to the HiPS tree.
+ * \param w                             Vector of weights; each flow particle has a weights.
+ * \param varN                          Vector of names of the variable.
+ * \param i                             Index indicating where the data should be assigned in the vectors varData and varName.
  */
-void hips:: set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, int i) {  
+void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, int i) {  
 
-    varData[i] = new  vector<double>(projection(v, w));
+    varData[i] = new vector<double>(projection(v, w));
     varName[i] = varN;
-
 }
-//////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////i///////////////////////////////////////
+/**
+ * \brief Function to pass the variable, their weights, names, and densities to the parcels of the tree. 
+ * \param v                              Vector of variables that are passed to the HiPS tree.
+ * \param w                              Vector of weights; each flow particle has a weight.
+ * \param varN                           Vector of names of the variable.
+ * \param rho                            Vector of density; each flow particle has a specific density.
+ * \param i                              index indicating where the data should be assigned in the vectors varData and varName.
+ * \note This function is overloaded. This version considers particle density.
+ */
+void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho, int i) {
+    
+    std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
+    std::vector<double> vh = results.first;
+    std::vector<double> rho_h = results.second;
+
+    varData[i] = new std::vector<double>(vh);            
+    varRho =  std::vector<double>(rho_h);                 
+}
+
+/////////////////////////////////////////i/////////////////////////////////////////////
 /**
  * \brief Function for projecting vectors onto a grid.
- * \param v Vector to be projected.
- * \param w Weight vector.
+ * \param v                              Vector to be projected.
+ * \param w                              Weight vector.
  * \return Projected vector.
  */
-
-std::vector<double> hips:: projection( std::vector<double> &vcfd, std::vector<double> &weight){
+std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight) {
     
     std::vector<double> xc = setGridCfd(weight);
     std::vector<double> xh = setGridHips(nparcels);
 
-    int nc = xc.size() - 1;//check if the size is ok.
+    int nc = xc.size() - 1;                 
     int nh = xh.size() - 1; 
 
     std::vector<double> vh(nh, 0.0);
     int jprev = 0;
 
-    for(int i=0; i<nh; i++) {
-        for(int j=jprev +1; j<=nc; ++j){
-            if(xc[j] <= xh[i+1]) {
-
-                double d1 = xc[j] - xc[j-1];
+    for(int i = 0; i < nh; i++) {
+        for(int j = jprev + 1; j <= nc; ++j) {
+            if(xc[j] <= xh[i + 1]) {
+                double d1 = xc[j] - xc[j - 1];
                 double d2 = xc[j] - xh[i];
                 double d = std::min(d1, d2);
 
-                vh[i] += vcfd[j-1]*d;
-            }else{
+                vh[i] += vcfd[j - 1] * d;
+            } 
 
-                double d1 = xh[i+1] - xc[j-1];
-                double d2 = xh[i+1] - xh[i];
+        else {
+                double d1 = xh[i + 1] - xc[j - 1];
+                double d2 = xh[i + 1] - xh[i];
                 double d = std::min(d1, d2);
 
-                vh[i] += vcfd[j-1]*d;
-                jprev = j-1;
+                vh[i] += vcfd[j - 1] * d;
+                jprev = j - 1;
                 break;
             }
         }
         
-        vh[i] /=(xh[i+1] - xh[i]);           
+        vh[i] /= (xh[i + 1] - xh[i]);           
     }
     return vh;
- 
 }
+
+/////////////////////////////////////////i/////////////////////////////////////////////
+/**
+ * \brief Project vectors onto a grid.
+ *
+ * This function projects vectors onto a grid. It takes a vector of variables, a weight vector, and a vector of density as input parameters,
+ * and returns the projected vector.
+ *
+ * \param vcfd                          Vector of variables passed to the HiPS tree.
+ * \param weight                        Weight vector; each flow particle has a weight.
+ * \param density                       Vector of density.
+ * \return A pair of vectors representing the projected vector and the density on the grid.
+  * \note This function is overloaded. This version considers particle density.
+ */
+std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight, const std::vector<double> &density) {
+    
+    std::vector<double> xc = setGridCfd(weight);
+    std::vector<double> xh = setGridHips(nparcels);
+
+    // Initialize variables
+    int nc = xc.size() - 1;
+    int nh = xh.size() - 1;
+
+    std::vector<double> vh(nh, 0.0);
+    std::vector<double> rho_h(nh, 0.0);
+    int jprev = 0;
+
+    // Main loop
+    for (int i = 0; i < nh; i++) {
+        double total_dx = 0.0;
+
+        for (int j = jprev + 1; j <= nc; ++j) {
+            if (xc[j] <= xh[i + 1]) {
+                double d = std::min(xc[j] - xc[j - 1], xc[j] - xh[i]);
+                total_dx += d;
+                rho_h[i] += density[j - 1] * d;
+                vh[i] += density[j - 1] * vcfd[j - 1] * d;
+            } 
+
+        else {
+                double d = std::min(xh[i + 1] - xc[j - 1], xh[i + 1] - xh[i]);
+                total_dx += d;
+                rho_h[i] += density[j - 1] * d;
+                vh[i] += density[j - 1] * vcfd[j - 1] * d;
+                jprev = j - 1;
+                break;
+            }
+        }
+
+        // Normalize results
+        rho_h[i] /= (xh[i + 1] - xh[i]);
+        vh[i] /= rho_h[i] * (xh[i + 1] - xh[i]);
+    }
+
+    return {vh, rho_h};
+}
+
+
 /////////////////////////////////////////////////////////////////////////////////
 /**
- * \brief Function to set a grid for CFD simulation.
- * \param w Weight vector.
- * \return Vector representing the grid.
+ * \brief Set up a grid for CFD simulation.
+ *
+ * This function generates a grid for CFD simulation based on a given weight vector.
+ *
+ * \param w Weight vector defining the spacing between grid points.
+ * \return Vector representing the grid positions.
  */
+std::vector<double> hips::setGridCfd(std::vector<double> &w) {
+    
+    std::vector<double> pos;                               // Initializing a vector to hold the grid positions
+    double posL = 0.0;                                     // Initializing the starting position
 
-std::vector<double> hips:: setGridCfd(std::vector<double> &w) {
+    int i = 0;
 
-    vector<double> pos;
-    double posL = 0.0;
-    int i =0;
-    while(i<=w.size()) {
-        pos.push_back(posL);
-        posL +=w[i];
-        i++;
-   
+    while (i <= w.size()) {                                // Generate the grid positions based on the weights
+        pos.push_back(posL);                               // Add the current position to the grid
+        posL += w[i];                                      // Move to the next position by adding the corresponding weight
+        i++;                                              
+                                                   
     }
-   
-    return pos;
+
+    return pos;                                          // Return the generated grid positions
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * \brief Function to set a grid for HIPS simulation.
+ * \brief Set up a grid for HIPS simulation.
+ *
+ * This function generates a grid for HIPS simulation with a specified number of grid points.
+ *
  * \param N Number of grid points.
  * \return Vector representing the grid.
  */
 std::vector<double> hips::setGridHips(int N){
 
-    vector<double> xh(N+1);
-    double step = 1.0/N;
+    std::vector<double> xh(N + 1);                               // Initialize a vector to hold the grid points
+    double step = 1.0 / N;                                       // Calculate the step size
 
-    for(int i=0; i<=N; i++){
-
-        xh[i] = i*step;
-
+    for(int i = 0; i <= N; i++){                                // Populate the grid with evenly spaced points
+        xh[i] = i * step;
     }
         
-    return xh;
-
+    return xh;                                                  // Return the generated grid
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /** The HiPS solver
- * @param tRun \input simulation run time
+ * \param tRun Input simulation run time
  *
  * Sample tee (time of next eddy event)
  * Select and swap subtrees (at current time, not at tee, so that we know whos involved)
@@ -248,21 +353,18 @@ std::vector<double> hips::setGridHips(int N){
 
 void hips::calculateSolution(const double tRun) {
 
-    unsigned long long nEddies = 0;                // number of eddy events
-    int    fileCounter = 0;            // number of data files written
-    int    iLevel;                     // tree level of EE with top at iLevel=0
-    int    iTree;                      // one of two subtrees involved in swap at iLevel
-    double dtEE;                       // time increment to next eddy event 
-
+    unsigned long long nEddies = 0;                                        // number of eddy events
+    int    fileCounter = 0;                                                // number of data files written
+    int    iLevel;                                                         // tree level of EE with top at iLevel=0
+    int    iTree;                                                          // one of two subtrees involved in swap at iLevel
+    double dtEE;                                                           // time increment to next eddy event 
     time = 0.0;                        // initialize simulation time
 
     sample_hips_eddy(dtEE, iLevel);    // get first EE at time 0+dtEE
     nEddies++;
 
     while (time+dtEE<=tRun) {
-
         time += dtEE;
-        //cout<<"time is "<<time<<endl;
         selectAndSwapTwoSubtrees(iLevel, iTree);
         advanceHips(iLevel, iTree);    // reaction and micromixing (if needed) to t=time
 
@@ -281,8 +383,8 @@ void hips::calculateSolution(const double tRun) {
 
 ///////////////////////////////////////////////////////////////////////////////
 /** Samples stochastic eddy events on the hips tree: time and level.
-*   @param dtEE   \output time increment to next eddy event (EE)
-*   @param iLevel \output tree level of EE
+*   \param dtEE   \output time increment to next eddy event (EE)
+*   \param iLevel \output tree level of EE
 */
 
 void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
@@ -399,7 +501,7 @@ void hips::advanceHips(const int iLevel, const int iTree) {
         forceProfile();
 
     bool rxnDone = false;                       // react all variables once
-    for (int k=0; k<nVar; k++) {                //   upon finding first variable needing micromixing
+    for (int k=0; k<nVar; k++) {                // upon finding first variable needing micromixing
         if ( (iLevel >= i_plus[k]) || 
              (iLevel==i_plus[k]-1 && rand.getRand() <= i_plus[k]-i_batchelor[k]) ) {
                 if(!rxnDone && performReaction) {
@@ -410,8 +512,7 @@ void hips::advanceHips(const int iLevel, const int iTree) {
         }
     }
 
-    }
-
+}
 ///////////////////////////////////////////////////////////////////////////////
 /** React parcels that are involved in a micromixing process.
   * Parcels might react for different amounts of time depending on when they last
@@ -440,6 +541,7 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
             y[k] = varData[k+1][0][ime];
 
         bRxr->react(h, y, dt);
+        varRho[ime] =  bRxr->getDensity();             //Mb
          //cout<<"h    "<<h<<endl;
         varData[0][0][ime] = h;
         for (int k=0; k<nsp; k++)
@@ -480,7 +582,7 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
     int istart;
     int iend;
 
-    int nPmix = 1 << (nLevels - iLevel - 2);   // number of parcels mixed together
+    int nPmix = 1 << (nLevels - iLevel - 2);                   // number of parcels mixed together
 
     int ime;
 
@@ -489,7 +591,7 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
     istart = iTree << (Nm1-iLevel);  
     iend = istart + nPmix;
 
-    double s = 0;                   // initialize sum to 0
+    double s = 0;                                               // initialize sum to 0
     for (int i=istart; i<iend; i++) {
         ime = pLoc[i];
         s += varData[kVar][0][ime];
@@ -519,82 +621,84 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/** Force hips profile to get statistically stationary
-  * Meant to demonstrate forcing for simple scalars.
-  * Such as, for a mixture fraction variable that varies between 0 and 1.
-  * Code here is setup to force the left half of parcels to average 0,
-  * and the right half of parcels to average 1.
-  */
-
+/**
+ * @brief Force the HiPS profile to achieve statistical stationarity.
+ *
+ * This function is meant to demonstrate forcing for simple scalars, such as a mixture fraction variable that varies between 0 and 1.
+ * The code within this function is configured to force the left half of parcels to average 0 and the right half of parcels to average 1.
+ * 
+ * @note This function modifies the data stored in the HiPS profile.
+ */
 void hips::forceProfile() {
+    // Loop through each variable in the HiPS profile
+    for (int k = 0; k < varData.size(); k++) {
+        double s;                                                    // Temporary variable for summation
 
-    for (int k=0; k<varData.size(); k++) {
-        double s;
+        //---------- Force the left half of parcels to average 0 ----------
 
-        //---------- force the left half of parcels to average 0
-
-        s = 0.0;
-        for (int i=0; i<nparcels>>1; i++)
-            s += varData[k][0][pLoc[i]];
+        for (int i = 0; i < nparcels >> 1; i++)
+            s += varData[k][0][pLoc[i]];                             // Calculate the sum of values in the left half of parcels
         
-        s /= (nparcels>>1);
-        for (int i=0; i<nparcels>>1; i++)
-            varData[k][0][pLoc[i]] += (-s - 0.0);
-         
-        //---------- force the right half of parcels to average 1
-
-        s = 0.0;
-        for (int i=nparcels>>1; i<nparcels; i++)
-            s += varData[k][0][pLoc[i]];
-
-        s /= (nparcels>>1);
-        for (int i=nparcels>>1; i<nparcels; i++)
-            varData[k][0][pLoc[i]] += (-s + 1.0); 
+        s /= (nparcels >> 1); // Calculate the average of values in the left half of parcels
         
+        for (int i = 0; i < nparcels >> 1; i++)
+            varData[k][0][pLoc[i]] += (-s - 0.0);                    // Adjust values in the left half of parcels to achieve an average of 0
+
+        //---------- Force the right half of parcels to average 1 ----------
+        s = 0.0;
+
+        for (int i = nparcels >> 1; i < nparcels; i++)
+            s += varData[k][0][pLoc[i]];                             // Calculate the sum of values in the right half of parcels
+        
+        s /= (nparcels >> 1);                                        // Calculate the average of values in the right half of parcels
+        
+        for (int i = nparcels >> 1; i < nparcels; i++)
+            varData[k][0][pLoc[i]] += (-s + 1.0);                    // Adjust values in the right half of parcels to achieve an average of 1
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/** Write a data file
-  * @param ifile \input index used in the file name (sequential incrementing: Data_00001.dat, Data_00002.dat, etc.)
-  * @param outputTime \input time of data file, written in file.
-  */
-
+/**
+ * @brief Write data to a file with a specific index and output time.
+ *
+ * This function writes data to a file with a filename following a sequential incrementing index pattern 
+ * (e.g., Data_00001.dat, Data_00002.dat, etc.). The time of the data file is also written into the file.
+ *
+ * @param ifile The sequential index used in the file name.
+ * @param outputTime The time associated with the data, written into the file.
+ */
 void hips::writeData(const int ifile, const double outputTime) {
-
+    
     stringstream ss1;
-    string       s1;
-    ss1.clear(); ss1<<setfill('0') << setw(5) << ifile; ss1 >> s1;
-    string fname = "../data/Data_" + s1 + ".dat";
+    string s1;
+    ss1 << setfill('0') << setw(5) << ifile;
+    ss1 >> s1;                                                                  // Convert the index into a string with leading zeros for filename
 
-    ofstream ofile(fname.c_str());
+    string fname = "../data/Data_" + s1 + ".dat";                               // Construct the filename
 
-    ofile << "# time = " << outputTime;
-    ofile <<"\n# Grid Poins = " << nparcels;
+    ofstream ofile(fname.c_str());                                              // Open the file for writing
 
-   for (const auto& name : varName)
-        ofile << setw(14) << name;
-   
+    ofile << "# time = " << outputTime << "\n";                                  // Write the time and number of grid points into the file
+    ofile << "# Grid Points = " << nparcels << "\n";
 
+    for (const auto& name : varName)
+        ofile << setw(14) << name;                                              // Write variable names into the file
+    ofile << scientific << setprecision(10);
 
-    ofile << scientific;
-    ofile << setprecision(10);
+    for (int i = 0; i < nparcels; i++) {
+        ofile << "\n";                                                          // Start a new line for each parcel
 
-    for (int i=0; i<nparcels; i++) {
-        ofile<<endl; 
- 
-        for (int k=0; k<nVar; k++)
-            ofile<<setw(19) <<varData[k][0][pLoc[i]];
+        for (int k = 0; k < nVar; k++)
+            ofile << setw(19) << varData[k][0][pLoc[i]];                       // Write data for each variable
     }
 
-    ofile.close();
+    ofile.close();                                                              // Close the file
 }
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * \brief Function for projecting vectors onto a grid.
  * \param vb Vector to be projected back.
  */
-
 std::vector<double> hips::projection_back(std::vector<double> &vb){
     
     int jprev = 0;
@@ -629,25 +733,26 @@ std::vector<double> hips::projection_back(std::vector<double> &vb){
     return vc;
 }    
 
-///////////////////////////////////////////////////////////////////////////////
-
+/////////////////////////////////////////////////////////////////////////////////////////
 /**
- * @brief Retrieve modified data from the HiPS library.
+ * @brief Retrieve modified data from the Hierarchical Progressive Survey (HiPS) library.
  *
- * This function retrieves modified data from the HiPS library 
- * and stores it in the provided vector.
+ * This function retrieves modified data from the HiPS library and stores it in the provided vector.
+ * Each element of the returned vector contains a vector representing a single data projection.
  *
+ * @return A vector of vectors containing modified data retrieved from the HiPS library.
  */
 std::vector<std::vector<double>> hips::get_varData(){
-    
-       std::vector<std::vector<double>> vh;
 
-       for (int i=0; i<varData.size(); i++)
-           vh.push_back(projection_back(varData[i][0]));
+    std::vector<std::vector<double>> varDataProjections;                             // Vector to store modified data projections
 
-        return vh;
+    for (int i = 0; i < varData.size(); i++) {                                        // Loop through each element of varData and project the data back
+        varDataProjections.push_back(projection_back(varData[i][0]));                 // Project the data back and store it in vh
+    }
 
+    return varDataProjections;                                                         // Return the vector containing modified data projections
 }
+
 ////////////////////////////////////////////////////////
  
 

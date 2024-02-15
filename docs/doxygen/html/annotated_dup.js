@@ -1,11 +1,11 @@
 var annotated_dup =
 [
-    [ "batchReactor", "classbatchReactor.html", "classbatchReactor" ],
-    [ "batchReactor_cantera", "classbatchReactor__cantera.html", "classbatchReactor__cantera" ],
-    [ "batchReactor_cvode", "classbatchReactor__cvode.html", "classbatchReactor__cvode" ],
+    [ "batchReactor", "classbatch_reactor.html", "classbatch_reactor" ],
+    [ "batchReactor_cantera", "classbatch_reactor__cantera.html", "classbatch_reactor__cantera" ],
+    [ "batchReactor_cvode", "classbatch_reactor__cvode.html", "classbatch_reactor__cvode" ],
     [ "hips", "clasships.html", "clasships" ],
     [ "integrator_cvode", "classintegrator__cvode.html", "classintegrator__cvode" ],
-    [ "MTRand", "classMTRand.html", "classMTRand" ],
-    [ "randomGenerator", "classrandomGenerator.html", "classrandomGenerator" ],
+    [ "MTRand", "class_m_t_rand.html", "class_m_t_rand" ],
+    [ "randomGenerator", "classrandom_generator.html", "classrandom_generator" ],
     [ "streams", "classstreams.html", "classstreams" ]
 ];

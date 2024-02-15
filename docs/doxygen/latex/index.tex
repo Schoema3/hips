@@ -1,5 +1,5 @@
 \hypertarget{index_autotoc_md1}{}\doxysection{Overview}\label{index_autotoc_md1}
-\href{git clone https://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:x-oauth-basic@github.com/BYUignite/hips.git}{\texttt{ Hi\+PS}} is an open-\/source C++ library that is used as a mixing model for Transported Probability Distribution Functions.\hypertarget{index_autotoc_md2}{}\doxysection{Dependencies and installation}\label{index_autotoc_md2}
+\href{git clone https://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:x-oauth-basic@github.com/BYUignite/hips.git}{\texttt{ Hi\+PS}} is an open-\/source C++ library that is used as a mixing model for Transported Probability Distribution Functions.\hypertarget{index_autotoc_md2}{}\doxysection{Dependencies and installation}\label{index_autotoc_md2}
 The code is intended to be built and used on Linux-\/like systems, including Mac\+OS and the Linux subsystem for Windows.
 
 Required software\+:
@@ -12,14 +12,14 @@ Optional software\+:
 \begin{DoxyItemize}
 \item Doxygen (for building documentation)
 \item graphviz (for Doxygen)
-\end{DoxyItemize}\hypertarget{index_autotoc_md3}{}\doxysubsection{Build and installation instructions}\label{index_autotoc_md3}
+\end{DoxyItemize}\hypertarget{index_autotoc_md4}{}\doxysubsection{Build and installation instructions}\label{index_autotoc_md4}
 
 \begin{DoxyEnumerate}
 \item Create and navigate into a top-\/level {\ttfamily build} directory
 \item Configure CMake\+: {\ttfamily cmake ..}
 \item Build Hi\+PSlib\+: {\ttfamily make}
 \item Install Hi\+PSlib\+: {\ttfamily make install}
-\end{DoxyEnumerate}\hypertarget{index_autotoc_md4}{}\doxysubsection{CMake configuration variables}\label{index_autotoc_md4}
+\end{DoxyEnumerate}\hypertarget{index_autotoc_md7}{}\doxysubsection{CMake configuration variables}\label{index_autotoc_md7}
 The default CMake configuration should be adequate for users that do not immediately require the examples, tests, or documentation. CMake configuration options can be set by editing the top-\/level {\ttfamily CMake\+Lists.\+txt} file, editing the {\ttfamily CMake\+Cache.\+txt} file (generated in the {\ttfamily build} directory after running CMake at least once), or specifying them on the command line during step 2 as follows\+: 
 \begin{DoxyCode}{0}
 \DoxyCodeLine{cmake -\/DHIPSLIB\_BUILD\_EXAMPLES=ON ..}
@@ -41,17 +41,17 @@ The following project-\/specific CMake configuration variables can be specified 
 {\ttfamily HIPSLIB\+\_\+\+BUILD\+\_\+\+EXAMPLES}   &{\ttfamily OFF}   &Builds Hi\+PS examples    \\\cline{1-3}
 {\ttfamily HIPSLIB\+\_\+\+BUILD\+\_\+\+DOCS}   &{\ttfamily OFF}   &Builds Hi\+PS documentation via Doxygen   \\\cline{1-3}
 \end{longtabu}
-\hypertarget{index_autotoc_md5}{}\doxysection{Using Hi\+PS}\label{index_autotoc_md5}
-The Hi\+PS library consists of three main object classes that users can interact with\+: {\ttfamily hips}, {\ttfamily \mbox{\hyperlink{classbatchReactor__cvode}{batch\+Reactor\+\_\+cvode}}} and {\ttfamily \mbox{\hyperlink{classbatchReactor__cantera}{batch\+Reactor\+\_\+cantera}}}. {\ttfamily bach\+Reactor\+\_\+cvode} and {\ttfamily \mbox{\hyperlink{classbatchReactor__cantera}{batch\+Reactor\+\_\+cantera}}} are two integrators which serve as the computational engine responsible for advancing the reaction system through time, solving complex sets of differential equations. ~\newline
-\hypertarget{index_autotoc_md6}{}\doxysection{Example workflow}\label{index_autotoc_md6}
-\hypertarget{index_autotoc_md7}{}\doxysubsection{1. Hi\+PS Tree and Constructor Parameters}\label{index_autotoc_md7}
-Define essential parameters for the Hi\+PS simulation, including the number of levels, domain length, time step (tau0), a parameter (C\+\_\+param), simulation time (t\+Run), and other pertinent settings.\hypertarget{index_autotoc_md8}{}\doxysubsection{2. Gas Solution Setup (required for reaction)}\label{index_autotoc_md8}
-Initialize the gas solution using Cantera, specifying a mechanism file (e.\+g., \char`\"{}gri30.\+yaml\char`\"{}). Extract thermodynamic information and the number of species to facilitate subsequent computations.\hypertarget{index_autotoc_md9}{}\doxysubsection{3. Hi\+PS Tree Creation}\label{index_autotoc_md9}
-Instantiate the Hi\+PS object with specified parameters, encompassing the number of levels, domain length, time step, and additional simulation details.\hypertarget{index_autotoc_md10}{}\doxysubsection{4. Initialize Variables and Parameters}\label{index_autotoc_md10}
-Set up variables and parameters required for the simulation, such as the number of parcels, weights, and variable names.\hypertarget{index_autotoc_md11}{}\doxysubsection{5. Initialize Mixing Fractions}\label{index_autotoc_md11}
-Utilize a designated function to initialize mixing fractions for a predefined number of parcels. The function sets mixing fractions to 0.\+0 for the first half and 1.\+0 for the second half.\hypertarget{index_autotoc_md12}{}\doxysubsection{6. Set Initial State in Parcels}\label{index_autotoc_md12}
-Establish the initial state vectors in each parcel using the initialized mixing fractions, weights, and variable names.\hypertarget{index_autotoc_md13}{}\doxysubsection{7. Advance Hi\+PS for Mixing and Reaction}\label{index_autotoc_md13}
-Utilize the Hi\+PS object to advance the simulation for a specified run time (t\+Run). This involves solving the equations governing particle-\/laden flows and updating state variables accordingly.\hypertarget{index_autotoc_md14}{}\doxysubsection{Implementation Guidelines}\label{index_autotoc_md14}
+\hypertarget{index_autotoc_md15}{}\doxysection{Using Hi\+PS}\label{index_autotoc_md15}
+The Hi\+PS library consists of three main object classes that users can interact with\+: {\ttfamily hips}, {\ttfamily \mbox{\hyperlink{classbatch_reactor__cvode}{batch\+Reactor\+\_\+cvode}}} and {\ttfamily \mbox{\hyperlink{classbatch_reactor__cantera}{batch\+Reactor\+\_\+cantera}}}. {\ttfamily bach\+Reactor\+\_\+cvode} and {\ttfamily \mbox{\hyperlink{classbatch_reactor__cantera}{batch\+Reactor\+\_\+cantera}}} are two integrators which serve as the computational engine responsible for advancing the reaction system through time, solving complex sets of differential equations. ~\newline
+\hypertarget{index_autotoc_md17}{}\doxysection{Example workflow}\label{index_autotoc_md17}
+\hypertarget{index_autotoc_md18}{}\doxysubsection{1. Hi\+PS Tree and Constructor Parameters}\label{index_autotoc_md18}
+Define essential parameters for the Hi\+PS simulation, including the number of levels, domain length, time step (tau0), a parameter (C\+\_\+param), simulation time (t\+Run), and other pertinent settings.\hypertarget{index_autotoc_md19}{}\doxysubsection{2. Gas Solution Setup (required for reaction)}\label{index_autotoc_md19}
+Initialize the gas solution using Cantera, specifying a mechanism file (e.\+g., \char`\"{}gri30.\+yaml\char`\"{}). Extract thermodynamic information and the number of species to facilitate subsequent computations.\hypertarget{index_autotoc_md20}{}\doxysubsection{3. Hi\+PS Tree Creation}\label{index_autotoc_md20}
+Instantiate the Hi\+PS object with specified parameters, encompassing the number of levels, domain length, time step, and additional simulation details.\hypertarget{index_autotoc_md21}{}\doxysubsection{4. Initialize Variables and Parameters}\label{index_autotoc_md21}
+Set up variables and parameters required for the simulation, such as the number of parcels, weights, and variable names.\hypertarget{index_autotoc_md22}{}\doxysubsection{5. Initialize Mixing Fractions}\label{index_autotoc_md22}
+Utilize a designated function to initialize mixing fractions for a predefined number of parcels. The function sets mixing fractions to 0.\+0 for the first half and 1.\+0 for the second half.\hypertarget{index_autotoc_md23}{}\doxysubsection{6. Set Initial State in Parcels}\label{index_autotoc_md23}
+Establish the initial state vectors in each parcel using the initialized mixing fractions, weights, and variable names.\hypertarget{index_autotoc_md24}{}\doxysubsection{7. Advance Hi\+PS for Mixing and Reaction}\label{index_autotoc_md24}
+Utilize the Hi\+PS object to advance the simulation for a specified run time (t\+Run). This involves solving the equations governing particle-\/laden flows and updating state variables accordingly.\hypertarget{index_autotoc_md25}{}\doxysubsection{Implementation Guidelines}\label{index_autotoc_md25}
 To implement a Hi\+PS simulation based on this example in an academic setting, adhere to the following guidelines\+:
 
 
@@ -61,5 +61,7 @@ To implement a Hi\+PS simulation based on this example in an academic setting, a
 \item Monitor the simulation progress and analyze the output for relevant information.
 \end{DoxyEnumerate}
 
-Researchers may customize parameters and mechanisms based on specific simulation requirements within the confines of this methodological framework.\hypertarget{index_autotoc_md15}{}\doxysection{Examples}\label{index_autotoc_md15}
-Hi\+PS is written in C++ and indludes three examples that illustrate its use. The first example {\ttfamily ex\+\_\+1.\+cc} shows that how hips is used for simple mixing. {\ttfamily ex\+\_\+2.\+cc} illustrtares the use of hips in a premixed flame. The third example {\ttfamily ex\+\_\+3.\+cc} shows the usage of hips in a non-\/premixed flame. 
+Researchers may customize parameters and mechanisms based on specific simulation requirements within the confines of this methodological framework.\hypertarget{index_autotoc_md26}{}\doxysection{Examples}\label{index_autotoc_md26}
+Hi\+PS is written in C++ and indludes three examples that illustrate its use. The first example {\ttfamily \mbox{\hyperlink{ex__1_8cc}{ex\+\_\+1.\+cc}}} shows that how hips is used for simple mixing. The first example, \$ex\+\_\+1.\+cc\$, shows the basic simulation of scalar mixing to highlight the qualitative behavior of the simple mixing model. We set the first half of the fluid parcels an initial value of 0 and the second half of the fluid parcels a value of 1. They simply become mixed to the average value.
+
+{\ttfamily \mbox{\hyperlink{ex__2_8cc}{ex\+\_\+2.\+cc}}} and {\ttfamily \mbox{\hyperlink{ex__3_8cc}{ex\+\_\+3.\+cc}}} are designed to facilitate the Hi\+PS mixing with a focus on chemical reactions, specifically targeting the combustion process. In the second case, a turbulent premixed flame was simulated using a stoichiometric ethylene/air mixture. The Chemical mechanism was \`{}`gri30'\textquotesingle{} which is advanced. A Hi\+PS domain with nine levels was initialized with 50\% of the parcels burnt and the other 50\% being fresh reactants. The mixing rate is varied through \$\textbackslash{}tau\+\_\+0\$. The Hi\+PS library supports two integrators for simulating chemical reactions within the framework. In the first integrator, embedded in the {\ttfamily \mbox{\hyperlink{classbatch_reactor__cvode}{batch\+Reactor\+\_\+cvode}}} class, the CVODE solver seamlessly incorporates chemical kinetics. The class\textquotesingle{}s constructor establishes essential components, including the Cantera solution for thermodynamics and kinetics. The \textbackslash{}texttt\{react\} function adeptly oversees the reaction simulation, considering parameters like enthalpy and species concentrations, while the underlying \textbackslash{}texttt\{rhsf\} function computes reaction rates for a smooth integration process. Simultaneously, the second integrator within the {\ttfamily \mbox{\hyperlink{classbatch_reactor__cantera}{batch\+Reactor\+\_\+cantera}}} class offers an alternative approach, utilizing Cantera\textquotesingle{}s built-\/in capabilities. Users can set tolerances and maximum steps for a customized simulation experience. Whether opting for the CVODE solver or Cantera\textquotesingle{}s integrator, this choice provides a versatile and confident approach to efficiently simulate chemical reactions within the Hi\+PS library. 

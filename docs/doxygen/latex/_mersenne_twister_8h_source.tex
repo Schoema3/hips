@@ -1,0 +1,429 @@
+\hypertarget{_mersenne_twister_8h_source}{}\doxysection{Mersenne\+Twister.\+h}
+\label{_mersenne_twister_8h_source}\index{/Users/maisy/codeHips/hips/src/MersenneTwister.h@{/Users/maisy/codeHips/hips/src/MersenneTwister.h}}
+\mbox{\hyperlink{_mersenne_twister_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00001}00001 \textcolor{comment}{// MersenneTwister.h}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00002}00002 \textcolor{comment}{// Mersenne Twister random number generator -\/-\/ a C++ class MTRand}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00003}00003 \textcolor{comment}{// Based on code by Makoto Matsumoto, Takuji Nishimura, and Shawn Cokus}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00004}00004 \textcolor{comment}{// Richard J. Wagner  v1.0  15 May 2003  rjwagner@writeme.com}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00005}00005 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00006}00006 \textcolor{comment}{// The Mersenne Twister is an algorithm for generating random numbers.  It}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00007}00007 \textcolor{comment}{// was designed with consideration of the flaws in various other generators.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00008}00008 \textcolor{comment}{// The period, 2\string^19937-\/1, and the order of equidistribution, 623 dimensions,}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00009}00009 \textcolor{comment}{// are far greater.  The generator is also fast; it avoids multiplication and}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00010}00010 \textcolor{comment}{// division, and it benefits from caches and pipelines.  For more information}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00011}00011 \textcolor{comment}{// see the inventors' web page at http://www.math.keio.ac.jp/\string~matumoto/emt.html}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00012}00012 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00013}00013 \textcolor{comment}{// Reference}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00014}00014 \textcolor{comment}{// M. Matsumoto and T. Nishimura, "{}Mersenne Twister: A 623-\/Dimensionally}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00015}00015 \textcolor{comment}{// Equidistributed Uniform Pseudo-\/Random Number Generator"{}, ACM Transactions on}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00016}00016 \textcolor{comment}{// Modeling and Computer Simulation, Vol. 8, No. 1, January 1998, pp 3-\/30.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00017}00017 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00018}00018 \textcolor{comment}{// Copyright (C) 1997 -\/ 2002, Makoto Matsumoto and Takuji Nishimura,}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00019}00019 \textcolor{comment}{// Copyright (C) 2000 -\/ 2003, Richard J. Wagner}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00020}00020 \textcolor{comment}{// All rights reserved.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00021}00021 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00022}00022 \textcolor{comment}{// Redistribution and use in source and binary forms, with or without}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00023}00023 \textcolor{comment}{// modification, are permitted provided that the following conditions}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00024}00024 \textcolor{comment}{// are met:}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00025}00025 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00026}00026 \textcolor{comment}{//   1. Redistributions of source code must retain the above copyright}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00027}00027 \textcolor{comment}{//      notice, this list of conditions and the following disclaimer.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00028}00028 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00029}00029 \textcolor{comment}{//   2. Redistributions in binary form must reproduce the above copyright}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00030}00030 \textcolor{comment}{//      notice, this list of conditions and the following disclaimer in the}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00031}00031 \textcolor{comment}{//      documentation and/or other materials provided with the distribution.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00032}00032 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00033}00033 \textcolor{comment}{//   3. The names of its contributors may not be used to endorse or promote}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00034}00034 \textcolor{comment}{//      products derived from this software without specific prior written}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00035}00035 \textcolor{comment}{//      permission.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00036}00036 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00037}00037 \textcolor{comment}{// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00038}00038 \textcolor{comment}{// "{}AS IS"{} AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00039}00039 \textcolor{comment}{// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00040}00040 \textcolor{comment}{// A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00041}00041 \textcolor{comment}{// CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00042}00042 \textcolor{comment}{// EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00043}00043 \textcolor{comment}{// PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00044}00044 \textcolor{comment}{// PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00045}00045 \textcolor{comment}{// LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00046}00046 \textcolor{comment}{// NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00047}00047 \textcolor{comment}{// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00048}00048 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00049}00049 \textcolor{comment}{// The original code included the following notice:}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00050}00050 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00051}00051 \textcolor{comment}{//     When you use this, send an email to: matumoto@math.keio.ac.jp}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00052}00052 \textcolor{comment}{//     with an appropriate reference to your work.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00053}00053 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00054}00054 \textcolor{comment}{// It would be nice to CC: rjwagner@writeme.com and Cokus@math.washington.edu}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00055}00055 \textcolor{comment}{// when you write.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00056}00056 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00057}00057 \textcolor{preprocessor}{\#ifndef MERSENNETWISTER\_H}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00058}00058 \textcolor{preprocessor}{\#define MERSENNETWISTER\_H}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00059}00059 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00060}00060 \textcolor{comment}{// Not thread safe (unless auto-\/initialization is avoided and each thread has}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00061}00061 \textcolor{comment}{// its own MTRand object)}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00062}00062 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00063}00063 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00064}00064 \textcolor{preprocessor}{\#include <limits.h>}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00065}00065 \textcolor{preprocessor}{\#include <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00066}00066 \textcolor{preprocessor}{\#include <time.h>}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00067}00067 \textcolor{preprocessor}{\#include <math.h>}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00068}00068 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00069}\mbox{\hyperlink{class_m_t_rand}{00069}} \textcolor{keyword}{class }\mbox{\hyperlink{class_m_t_rand}{MTRand}} \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00070}00070 \textcolor{comment}{// Data}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00071}00071 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00072}\mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{00072}}     \textcolor{keyword}{typedef} \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}};  \textcolor{comment}{// unsigned integer type, at least 32 bits}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00073}00073 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00074}\mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{00074}}     \textcolor{keyword}{enum} \{ \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} = 624 \};       \textcolor{comment}{// length of state vector}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00075}\mbox{\hyperlink{class_m_t_rand_a7d9f4f1783a4e45f7834dd5174dfc2a1a3899803ea0d4da3018d311ed4902d9cc}{00075}}     \textcolor{keyword}{enum} \{ \mbox{\hyperlink{class_m_t_rand_a7d9f4f1783a4e45f7834dd5174dfc2a1a3899803ea0d4da3018d311ed4902d9cc}{SAVE}} = \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} + 1 \};  \textcolor{comment}{// length of array for save()}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00076}00076 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00077}00077 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00078}\mbox{\hyperlink{class_m_t_rand_a10c3437be98225f5b0beee1ed8c033c8a133070000b798889cd75535ea0d5bb71}{00078}}     \textcolor{keyword}{enum} \{ \mbox{\hyperlink{class_m_t_rand_a10c3437be98225f5b0beee1ed8c033c8a133070000b798889cd75535ea0d5bb71}{M}} = 397 \};  \textcolor{comment}{// period parameter}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00079}00079 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00080}\mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{00080}}     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[\mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}];   \textcolor{comment}{// internal state}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00081}\mbox{\hyperlink{class_m_t_rand_a2b80858137c88fe69d4d2bdc665bcf93}{00081}}     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *\mbox{\hyperlink{class_m_t_rand_a2b80858137c88fe69d4d2bdc665bcf93}{pNext}};     \textcolor{comment}{// next value to get from state}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00082}\mbox{\hyperlink{class_m_t_rand_a98eabf568c88f121e44f487397f32495}{00082}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{class_m_t_rand_a98eabf568c88f121e44f487397f32495}{left}};          \textcolor{comment}{// number of values left before reload needed}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00083}00083 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00084}00084 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00085}00085 \textcolor{comment}{//Methods}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00086}00086 \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00087}00087     \mbox{\hyperlink{class_m_t_rand_a265dc65546e26073c0d5f8787b045a1d}{MTRand}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& oneSeed );  \textcolor{comment}{// initialize with a simple uint32}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00088}00088     \mbox{\hyperlink{class_m_t_rand_a265dc65546e26073c0d5f8787b045a1d}{MTRand}}( \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *\textcolor{keyword}{const} bigSeed, \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \textcolor{keyword}{const} seedLength = \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} );  \textcolor{comment}{// or an array}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00089}00089     \mbox{\hyperlink{class_m_t_rand_a265dc65546e26073c0d5f8787b045a1d}{MTRand}}();  \textcolor{comment}{// auto-\/initialize with /dev/urandom or time() and clock()}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00090}00090 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00091}00091     \textcolor{comment}{// Do NOT use for CRYPTOGRAPHY without securely hashing several returned}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00092}00092     \textcolor{comment}{// values together, otherwise the generator state can be learned after}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00093}00093     \textcolor{comment}{// reading 624 consecutive values.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00094}00094 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00095}00095     \textcolor{comment}{// Access to 32-\/bit random numbers}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00096}00096     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_a76d129a2d850c24ff4a0613f299cf3a5}{rand}}();                          \textcolor{comment}{// real number in [0,1]}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00097}00097     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_a76d129a2d850c24ff4a0613f299cf3a5}{rand}}( \textcolor{keyword}{const} \textcolor{keywordtype}{double}\& n );         \textcolor{comment}{// real number in [0,n]}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00098}00098     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_afd05e468983b3a3d66ce0f403bd666af}{randExc}}();                       \textcolor{comment}{// real number in [0,1)}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00099}00099     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_afd05e468983b3a3d66ce0f403bd666af}{randExc}}( \textcolor{keyword}{const} \textcolor{keywordtype}{double}\& n );      \textcolor{comment}{// real number in [0,n)}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00100}00100     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}{randDblExc}}();                    \textcolor{comment}{// real number in (0,1)}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00101}00101     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}{randDblExc}}( \textcolor{keyword}{const} \textcolor{keywordtype}{double}\& n );   \textcolor{comment}{// real number in (0,n)}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00102}00102     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{class_m_t_rand_ad1008efd4fe0e8aae30459c2c58cfe35}{randInt}}();                       \textcolor{comment}{// integer in [0,2\string^32-\/1]}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00103}00103     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{class_m_t_rand_ad1008efd4fe0e8aae30459c2c58cfe35}{randInt}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& n );      \textcolor{comment}{// integer in [0,n] for n < 2\string^32}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00104}\mbox{\hyperlink{class_m_t_rand_abbb87a08d622d58fdee0eea4cb5471a0}{00104}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_abbb87a08d622d58fdee0eea4cb5471a0}{operator()}}() \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_m_t_rand_a76d129a2d850c24ff4a0613f299cf3a5}{rand}}(); \}  \textcolor{comment}{// same as rand()}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00105}00105 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00106}00106     \textcolor{comment}{// Access to 53-\/bit random numbers (capacity of IEEE double precision)}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00107}00107     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_a15f4daf79febbe4ff43c3e6ce2c4fcbe}{rand53}}();  \textcolor{comment}{// real number in [0,1)}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00108}00108 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00109}00109     \textcolor{comment}{// Access to nonuniform random number distributions}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00110}00110     \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_af759d1f30d4f29a715e6f6e86850b5c4}{randNorm}}( \textcolor{keyword}{const} \textcolor{keywordtype}{double}\& mean = 0.0, \textcolor{keyword}{const} \textcolor{keywordtype}{double}\& variance = 0.0 );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00111}00111 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00112}00112     \textcolor{comment}{// Re-\/seeding functions with same behavior as initializers}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00113}00113     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{seed}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} oneSeed );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00114}00114     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{seed}}( \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *\textcolor{keyword}{const} bigSeed, \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} seedLength = \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00115}00115     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{seed}}();}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00116}00116 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00117}00117     \textcolor{comment}{// Saving and loading generator state}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00118}00118     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_aabe5ec2cad71c1c67d9390a4a235edad}{save}}( \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}* saveArray ) \textcolor{keyword}{const};  \textcolor{comment}{// to array of size SAVE}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00119}00119     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_a8302e9a8cd16d8dfc536a85bf2f68be0}{load}}( \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *\textcolor{keyword}{const} loadArray );  \textcolor{comment}{// from such array}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00120}00120     \textcolor{keyword}{friend} std::ostream\& \mbox{\hyperlink{class_m_t_rand_a5ca1e3e4ee3ab9001d0407a81437c58b}{operator<<}}( std::ostream\& os, \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand}{MTRand}}\& mtrand );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00121}00121     \textcolor{keyword}{friend} std::istream\& \mbox{\hyperlink{class_m_t_rand_ac931e35e0d686b97d83edb8b249ec52a}{operator>>}}( std::istream\& is, \mbox{\hyperlink{class_m_t_rand}{MTRand}}\& mtrand );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00122}00122 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00123}00123 \textcolor{keyword}{protected}:}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00124}00124     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_a9b9a20998f5c805af6301ce5c37dcfc3}{initialize}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} oneSeed );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00125}00125     \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_a1d5fcb69d83f4d2fd653883c8352f86c}{reload}}();}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00126}\mbox{\hyperlink{class_m_t_rand_a900c4700226add7e7eb0c2efd9f24ced}{00126}}     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{class_m_t_rand_a900c4700226add7e7eb0c2efd9f24ced}{hiBit}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& u )\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} u \& 0x80000000UL; \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00127}\mbox{\hyperlink{class_m_t_rand_a6e2f7d8bae68dc63f6bcbb954cf4fb29}{00127}}     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{class_m_t_rand_a6e2f7d8bae68dc63f6bcbb954cf4fb29}{loBit}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& u )\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} u \& 0x00000001UL; \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00128}\mbox{\hyperlink{class_m_t_rand_a1930fa7c242d35be28bb99b18a84a93d}{00128}}     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{class_m_t_rand_a1930fa7c242d35be28bb99b18a84a93d}{loBits}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& u )\textcolor{keyword}{ const }\{ \textcolor{keywordflow}{return} u \& 0x7fffffffUL; \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00129}\mbox{\hyperlink{class_m_t_rand_a41b6713f75a771c5ec8e71ef6832a5fa}{00129}}     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{class_m_t_rand_a41b6713f75a771c5ec8e71ef6832a5fa}{mixBits}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& u, \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& v )\textcolor{keyword}{ const}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00130}00130 \textcolor{keyword}{        }\{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_m_t_rand_a900c4700226add7e7eb0c2efd9f24ced}{hiBit}}(u) | \mbox{\hyperlink{class_m_t_rand_a1930fa7c242d35be28bb99b18a84a93d}{loBits}}(v); \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00131}\mbox{\hyperlink{class_m_t_rand_adf604988eb6155df3143d9207f02f61a}{00131}}     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{class_m_t_rand_adf604988eb6155df3143d9207f02f61a}{twist}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& m, \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& s0, \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& s1 )\textcolor{keyword}{ const}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00132}00132 \textcolor{keyword}{        }\{ \textcolor{keywordflow}{return} m \string^ (\mbox{\hyperlink{class_m_t_rand_a41b6713f75a771c5ec8e71ef6832a5fa}{mixBits}}(s0,s1)>>1) \string^ (-\/\mbox{\hyperlink{class_m_t_rand_a6e2f7d8bae68dc63f6bcbb954cf4fb29}{loBit}}(s1) \& 0x9908b0dfUL); \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00133}00133     \textcolor{keyword}{static} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} \mbox{\hyperlink{class_m_t_rand_a486885d03f38c844315d002e6312fa23}{hash}}( time\_t t, clock\_t c );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00134}00134 \};}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00135}00135 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00136}00136 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00137}\mbox{\hyperlink{class_m_t_rand_ab4f392e44228a583b7b1a3f036fb2fd0}{00137}} \textcolor{keyword}{inline} \mbox{\hyperlink{class_m_t_rand_a265dc65546e26073c0d5f8787b045a1d}{MTRand::MTRand}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& oneSeed )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00138}00138     \{ \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{seed}}(oneSeed); \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00139}00139 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00140}\mbox{\hyperlink{class_m_t_rand_a380e79e0192b46426abcefa6e2dd082e}{00140}} \textcolor{keyword}{inline} \mbox{\hyperlink{class_m_t_rand_a265dc65546e26073c0d5f8787b045a1d}{MTRand::MTRand}}( \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *\textcolor{keyword}{const} bigSeed, \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} seedLength )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00141}00141     \{ \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{seed}}(bigSeed,seedLength); \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00142}00142 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00143}\mbox{\hyperlink{class_m_t_rand_a265dc65546e26073c0d5f8787b045a1d}{00143}} \textcolor{keyword}{inline} \mbox{\hyperlink{class_m_t_rand_a265dc65546e26073c0d5f8787b045a1d}{MTRand::MTRand}}()}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00144}00144     \{ \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{seed}}(); \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00145}00145 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00146}\mbox{\hyperlink{class_m_t_rand_a76d129a2d850c24ff4a0613f299cf3a5}{00146}} \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_a76d129a2d850c24ff4a0613f299cf3a5}{MTRand::rand}}()}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00147}00147     \{ \textcolor{keywordflow}{return} double(\mbox{\hyperlink{class_m_t_rand_ad1008efd4fe0e8aae30459c2c58cfe35}{randInt}}()) * (1.0/4294967295.0); \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00148}00148 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00149}\mbox{\hyperlink{class_m_t_rand_a7a47382fb7b19ae1f330691735dc800b}{00149}} \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_a76d129a2d850c24ff4a0613f299cf3a5}{MTRand::rand}}( \textcolor{keyword}{const} \textcolor{keywordtype}{double}\& n )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00150}00150     \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_m_t_rand_a76d129a2d850c24ff4a0613f299cf3a5}{rand}}() * n; \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00151}00151 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00152}\mbox{\hyperlink{class_m_t_rand_afd05e468983b3a3d66ce0f403bd666af}{00152}} \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_afd05e468983b3a3d66ce0f403bd666af}{MTRand::randExc}}()}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00153}00153     \{ \textcolor{keywordflow}{return} double(\mbox{\hyperlink{class_m_t_rand_ad1008efd4fe0e8aae30459c2c58cfe35}{randInt}}()) * (1.0/4294967296.0); \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00154}00154 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00155}\mbox{\hyperlink{class_m_t_rand_a2955abdb96e6cab97e50ac755d48dad1}{00155}} \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_afd05e468983b3a3d66ce0f403bd666af}{MTRand::randExc}}( \textcolor{keyword}{const} \textcolor{keywordtype}{double}\& n )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00156}00156     \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_m_t_rand_afd05e468983b3a3d66ce0f403bd666af}{randExc}}() * n; \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00157}00157 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00158}\mbox{\hyperlink{class_m_t_rand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}{00158}} \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}{MTRand::randDblExc}}()}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00159}00159     \{ \textcolor{keywordflow}{return} ( \textcolor{keywordtype}{double}(\mbox{\hyperlink{class_m_t_rand_ad1008efd4fe0e8aae30459c2c58cfe35}{randInt}}()) + 0.5 ) * (1.0/4294967296.0); \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00160}00160 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00161}\mbox{\hyperlink{class_m_t_rand_a587c90f52c35fa2bf05d34791dd5457e}{00161}} \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}{MTRand::randDblExc}}( \textcolor{keyword}{const} \textcolor{keywordtype}{double}\& n )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00162}00162     \{ \textcolor{keywordflow}{return} \mbox{\hyperlink{class_m_t_rand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}{randDblExc}}() * n; \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00163}00163 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00164}\mbox{\hyperlink{class_m_t_rand_a15f4daf79febbe4ff43c3e6ce2c4fcbe}{00164}} \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_a15f4daf79febbe4ff43c3e6ce2c4fcbe}{MTRand::rand53}}()}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00165}00165 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00166}00166     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} a = \mbox{\hyperlink{class_m_t_rand_ad1008efd4fe0e8aae30459c2c58cfe35}{randInt}}() >> 5, b = \mbox{\hyperlink{class_m_t_rand_ad1008efd4fe0e8aae30459c2c58cfe35}{randInt}}() >> 6;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00167}00167     \textcolor{keywordflow}{return} ( a * 67108864.0 + b ) * (1.0/9007199254740992.0);  \textcolor{comment}{// by Isaku Wada}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00168}00168 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00169}00169 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00170}\mbox{\hyperlink{class_m_t_rand_af759d1f30d4f29a715e6f6e86850b5c4}{00170}} \textcolor{keyword}{inline} \textcolor{keywordtype}{double} \mbox{\hyperlink{class_m_t_rand_af759d1f30d4f29a715e6f6e86850b5c4}{MTRand::randNorm}}( \textcolor{keyword}{const} \textcolor{keywordtype}{double}\& mean, \textcolor{keyword}{const} \textcolor{keywordtype}{double}\& variance )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00171}00171 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00172}00172     \textcolor{comment}{// Return a real number from a normal (Gaussian) distribution with given}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00173}00173     \textcolor{comment}{// mean and variance by Box-\/Muller method}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00174}00174     \textcolor{keywordtype}{double} r = sqrt( -\/2.0 * log( 1.0-\/\mbox{\hyperlink{class_m_t_rand_a4d3a475aa72fe6d1a6d7d9e16d6a732e}{randDblExc}}()) ) * variance;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00175}00175     \textcolor{keywordtype}{double} phi = 2.0 * 3.14159265358979323846264338328 * \mbox{\hyperlink{class_m_t_rand_afd05e468983b3a3d66ce0f403bd666af}{randExc}}();}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00176}00176     \textcolor{keywordflow}{return} mean + r * cos(phi);}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00177}00177 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00178}00178 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00179}\mbox{\hyperlink{class_m_t_rand_ad1008efd4fe0e8aae30459c2c58cfe35}{00179}} \textcolor{keyword}{inline} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{MTRand::uint32}} \mbox{\hyperlink{class_m_t_rand_ad1008efd4fe0e8aae30459c2c58cfe35}{MTRand::randInt}}()}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00180}00180 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00181}00181     \textcolor{comment}{// Pull a 32-\/bit integer from the generator state}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00182}00182     \textcolor{comment}{// Every other access function simply transforms the numbers extracted here}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00183}00183 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00184}00184     \textcolor{keywordflow}{if}( \mbox{\hyperlink{class_m_t_rand_a98eabf568c88f121e44f487397f32495}{left}} == 0 ) \mbox{\hyperlink{class_m_t_rand_a1d5fcb69d83f4d2fd653883c8352f86c}{reload}}();}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00185}00185     -\/-\/\mbox{\hyperlink{class_m_t_rand_a98eabf568c88f121e44f487397f32495}{left}};}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00186}00186 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00187}00187     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} s1;        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00188}00188     s1 = *\mbox{\hyperlink{class_m_t_rand_a2b80858137c88fe69d4d2bdc665bcf93}{pNext}}++;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00189}00189     s1 \string^= (s1 >> 11);}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00190}00190     s1 \string^= (s1 <<  7) \& 0x9d2c5680UL;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00191}00191     s1 \string^= (s1 << 15) \& 0xefc60000UL;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00192}00192     \textcolor{keywordflow}{return} ( s1 \string^ (s1 >> 18) );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00193}00193 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00194}00194 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00195}\mbox{\hyperlink{class_m_t_rand_a18ea21f615df06c9359c34d2eba6f252}{00195}} \textcolor{keyword}{inline} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{MTRand::uint32}} \mbox{\hyperlink{class_m_t_rand_ad1008efd4fe0e8aae30459c2c58cfe35}{MTRand::randInt}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}\& n )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00196}00196 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00197}00197     \textcolor{comment}{// Find which bits are used in n}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00198}00198     \textcolor{comment}{// Optimized by Magnus Jonsson (magnus@smartelectronix.com)}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00199}00199     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} used = n;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00200}00200     used |= used >> 1;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00201}00201     used |= used >> 2;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00202}00202     used |= used >> 4;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00203}00203     used |= used >> 8;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00204}00204     used |= used >> 16;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00205}00205 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00206}00206     \textcolor{comment}{// Draw numbers until one is found in [0,n]}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00207}00207     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} i;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00208}00208     \textcolor{keywordflow}{do}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00209}00209         i = \mbox{\hyperlink{class_m_t_rand_ad1008efd4fe0e8aae30459c2c58cfe35}{randInt}}() \& used;  \textcolor{comment}{// toss unused bits to shorten search}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00210}00210     \textcolor{keywordflow}{while}( i > n );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00211}00211     \textcolor{keywordflow}{return} i;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00212}00212 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00213}00213 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00214}00214 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00215}\mbox{\hyperlink{class_m_t_rand_a1e21a79e0a30225fffe924229e34a923}{00215}} \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{MTRand::seed}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} oneSeed )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00216}00216 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00217}00217     \textcolor{comment}{// Seed the generator with a simple uint32}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00218}00218     \mbox{\hyperlink{class_m_t_rand_a9b9a20998f5c805af6301ce5c37dcfc3}{initialize}}(oneSeed);}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00219}00219     \mbox{\hyperlink{class_m_t_rand_a1d5fcb69d83f4d2fd653883c8352f86c}{reload}}();}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00220}00220 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00221}00221 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00222}00222 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00223}\mbox{\hyperlink{class_m_t_rand_a5758103776b131e8ea46b6dc1b9fb267}{00223}} \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{MTRand::seed}}( \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *\textcolor{keyword}{const} bigSeed, \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} seedLength )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00224}00224 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00225}00225     \textcolor{comment}{// Seed the generator with an array of uint32's}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00226}00226     \textcolor{comment}{// There are 2\string^19937-\/1 possible initial states.  This function allows}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00227}00227     \textcolor{comment}{// all of those to be accessed by providing at least 19937 bits (with a}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00228}00228     \textcolor{comment}{// default seed length of N = 624 uint32's).  Any bits above the lower 32}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00229}00229     \textcolor{comment}{// in each element are discarded.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00230}00230     \textcolor{comment}{// Just call seed() if you want to get array from /dev/urandom}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00231}00231     \mbox{\hyperlink{class_m_t_rand_a9b9a20998f5c805af6301ce5c37dcfc3}{initialize}}(19650218UL);}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00232}00232     \textcolor{keywordtype}{int} i = 1;        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00233}00233     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} j = 0;        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00234}00234     \textcolor{keywordtype}{int} k = ( \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} > seedLength ? \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} : seedLength );        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00235}00235     \textcolor{keywordflow}{for}( ; k; -\/-\/k )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00236}00236     \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00237}00237         \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i] =}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00238}00238             \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i] \string^ ( (\mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i-\/1] \string^ (\mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i-\/1] >> 30)) * 1664525UL );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00239}00239         \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i] += ( bigSeed[j] \& 0xffffffffUL ) + j;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00240}00240         \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i] \&= 0xffffffffUL;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00241}00241         ++i;  ++j;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00242}00242         \textcolor{keywordflow}{if}( i >= \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} ) \{ \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[0] = \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[\mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}-\/1];  i = 1; \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00243}00243         \textcolor{keywordflow}{if}( j >= seedLength ) j = 0;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00244}00244     \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00245}00245     \textcolor{keywordflow}{for}( k = \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} -\/ 1; k; -\/-\/k )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00246}00246     \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00247}00247         \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i] =}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00248}00248             \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i] \string^ ( (\mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i-\/1] \string^ (\mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i-\/1] >> 30)) * 1566083941UL );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00249}00249         \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i] -\/= i;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00250}00250         \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[i] \&= 0xffffffffUL;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00251}00251         ++i;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00252}00252         \textcolor{keywordflow}{if}( i >= \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} ) \{ \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[0] = \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[\mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}-\/1];  i = 1; \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00253}00253     \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00254}00254     \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[0] = 0x80000000UL;  \textcolor{comment}{// MSB is 1, assuring non-\/zero initial array}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00255}00255     \mbox{\hyperlink{class_m_t_rand_a1d5fcb69d83f4d2fd653883c8352f86c}{reload}}();}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00256}00256 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00257}00257 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00258}00258 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00259}\mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{00259}} \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{MTRand::seed}}()}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00260}00260 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00261}00261     \textcolor{comment}{// Seed the generator with an array from /dev/urandom if available}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00262}00262     \textcolor{comment}{// Otherwise use a hash of time() and clock() values}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00263}00263 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00264}00264     \textcolor{comment}{// First try getting an array from /dev/urandom}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00265}00265     FILE* urandom = fopen( \textcolor{stringliteral}{"{}/dev/urandom"{}}, \textcolor{stringliteral}{"{}rb"{}} );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00266}00266     \textcolor{keywordflow}{if}( urandom )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00267}00267     \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00268}00268         \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} bigSeed[\mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}];}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00269}00269         \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *s = bigSeed;        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00270}00270         \textcolor{keywordtype}{int} i = \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00271}00271         \textcolor{keywordtype}{bool} success = \textcolor{keyword}{true};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00272}00272         \textcolor{keywordflow}{while}( success \&\& i-\/-\/ )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00273}00273             success = fread( s++, \textcolor{keyword}{sizeof}(\mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}), 1, urandom );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00274}00274         fclose(urandom);}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00275}00275         \textcolor{keywordflow}{if}( success ) \{ \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{seed}}( bigSeed, \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} );  \textcolor{keywordflow}{return}; \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00276}00276     \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00277}00277 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00278}00278     \textcolor{comment}{// Was not successful, so use time() and clock() instead}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00279}00279     \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{seed}}( \mbox{\hyperlink{class_m_t_rand_a486885d03f38c844315d002e6312fa23}{hash}}( time(NULL), clock() ) );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00280}00280 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00281}00281 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00282}00282 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00283}\mbox{\hyperlink{class_m_t_rand_a9b9a20998f5c805af6301ce5c37dcfc3}{00283}} \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_a9b9a20998f5c805af6301ce5c37dcfc3}{MTRand::initialize}}( \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} seed )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00284}00284 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00285}00285     \textcolor{comment}{// Initialize generator state with seed}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00286}00286     \textcolor{comment}{// See Knuth TAOCP Vol 2, 3rd Ed, p.106 for multiplier.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00287}00287     \textcolor{comment}{// In previous versions, most significant bits (MSBs) of the seed affect}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00288}00288     \textcolor{comment}{// only MSBs of the state array.  Modified 9 Jan 2002 by Makoto Matsumoto.}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00289}00289     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *s = \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00290}00290     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *r = \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00291}00291     \textcolor{keywordtype}{int} i = 1;        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00292}00292     *s++ = \mbox{\hyperlink{class_m_t_rand_ad88ea3363d55bafb62826bbd130279c2}{seed}} \& 0xffffffffUL;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00293}00293     \textcolor{keywordflow}{for}( ; i < \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}; ++i )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00294}00294     \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00295}00295         *s++ = ( 1812433253UL * ( *r \string^ (*r >> 30) ) + i ) \& 0xffffffffUL;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00296}00296         r++;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00297}00297     \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00298}00298 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00299}00299 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00300}00300 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00301}\mbox{\hyperlink{class_m_t_rand_a1d5fcb69d83f4d2fd653883c8352f86c}{00301}} \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_a1d5fcb69d83f4d2fd653883c8352f86c}{MTRand::reload}}()}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00302}00302 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00303}00303     \textcolor{comment}{// Generate N new values in state}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00304}00304     \textcolor{comment}{// Made clearer and faster by Matthew Bellew (matthew.bellew@home.com)}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00305}00305     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *p = \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00306}00306     \textcolor{keywordtype}{int} i;        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00307}00307     \textcolor{keywordflow}{for}( i = \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}} -\/ \mbox{\hyperlink{class_m_t_rand_a10c3437be98225f5b0beee1ed8c033c8a133070000b798889cd75535ea0d5bb71}{M}}; i-\/-\/; ++p )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00308}00308         *p = \mbox{\hyperlink{class_m_t_rand_adf604988eb6155df3143d9207f02f61a}{twist}}( p[\mbox{\hyperlink{class_m_t_rand_a10c3437be98225f5b0beee1ed8c033c8a133070000b798889cd75535ea0d5bb71}{M}}], p[0], p[1] );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00309}00309     \textcolor{keywordflow}{for}( i = \mbox{\hyperlink{class_m_t_rand_a10c3437be98225f5b0beee1ed8c033c8a133070000b798889cd75535ea0d5bb71}{M}}; -\/-\/i; ++p )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00310}00310         *p = \mbox{\hyperlink{class_m_t_rand_adf604988eb6155df3143d9207f02f61a}{twist}}( p[\mbox{\hyperlink{class_m_t_rand_a10c3437be98225f5b0beee1ed8c033c8a133070000b798889cd75535ea0d5bb71}{M}}-\/\mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}], p[0], p[1] );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00311}00311     *p = \mbox{\hyperlink{class_m_t_rand_adf604988eb6155df3143d9207f02f61a}{twist}}( p[\mbox{\hyperlink{class_m_t_rand_a10c3437be98225f5b0beee1ed8c033c8a133070000b798889cd75535ea0d5bb71}{M}}-\/\mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}], p[0], \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[0] );}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00312}00312 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00313}00313     \mbox{\hyperlink{class_m_t_rand_a98eabf568c88f121e44f487397f32495}{left}} = \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}, \mbox{\hyperlink{class_m_t_rand_a2b80858137c88fe69d4d2bdc665bcf93}{pNext}} = \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}};}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00314}00314 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00315}00315 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00316}00316 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00317}\mbox{\hyperlink{class_m_t_rand_a486885d03f38c844315d002e6312fa23}{00317}} \textcolor{keyword}{inline} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{MTRand::uint32}} \mbox{\hyperlink{class_m_t_rand_a486885d03f38c844315d002e6312fa23}{MTRand::hash}}( time\_t t, clock\_t c )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00318}00318 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00319}00319     \textcolor{comment}{// Get a uint32 from t and c}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00320}00320     \textcolor{comment}{// Better than uint32(x) in case x is floating point in [0,1]}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00321}00321     \textcolor{comment}{// Based on code by Lawrence Kirby (fred@genesis.demon.co.uk)}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00322}00322 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00323}00323     \textcolor{keyword}{static} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} differ = 0;  \textcolor{comment}{// guarantee time-\/based seeds will change}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00324}00324 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00325}00325     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} h1 = 0;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00326}00326     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *p = (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *) \&t;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00327}00327     \textcolor{keywordflow}{for}( \textcolor{keywordtype}{size\_t} i = 0; i < \textcolor{keyword}{sizeof}(t); ++i )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00328}00328     \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00329}00329         h1 *= UCHAR\_MAX + 2U;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00330}00330         h1 += p[i];}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00331}00331     \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00332}00332     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} h2 = 0;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00333}00333     p = (\textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{char} *) \&c;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00334}00334     \textcolor{keywordflow}{for}( \textcolor{keywordtype}{size\_t} j = 0; j < \textcolor{keyword}{sizeof}(c); ++j )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00335}00335     \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00336}00336         h2 *= UCHAR\_MAX + 2U;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00337}00337         h2 += p[j];}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00338}00338     \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00339}00339     \textcolor{keywordflow}{return} ( h1 + differ++ ) \string^ h2;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00340}00340 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00341}00341 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00342}00342 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00343}\mbox{\hyperlink{class_m_t_rand_aabe5ec2cad71c1c67d9390a4a235edad}{00343}} \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_aabe5ec2cad71c1c67d9390a4a235edad}{MTRand::save}}( \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}}* saveArray )\textcolor{keyword}{ const}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00344}00344 \textcolor{keyword}{}\{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00345}00345     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *sa = saveArray;        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00346}00346     \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *s = \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00347}00347     \textcolor{keywordtype}{int} i = \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00348}00348     \textcolor{keywordflow}{for}( ; i-\/-\/; *sa++ = *s++ ) \{\}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00349}00349     *sa = \mbox{\hyperlink{class_m_t_rand_a98eabf568c88f121e44f487397f32495}{left}};}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00350}00350 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00351}00351 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00352}00352 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00353}\mbox{\hyperlink{class_m_t_rand_a8302e9a8cd16d8dfc536a85bf2f68be0}{00353}} \textcolor{keyword}{inline} \textcolor{keywordtype}{void} \mbox{\hyperlink{class_m_t_rand_a8302e9a8cd16d8dfc536a85bf2f68be0}{MTRand::load}}( \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *\textcolor{keyword}{const} loadArray )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00354}00354 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00355}00355     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *s = \mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00356}00356     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{uint32}} *la = loadArray;        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00357}00357     \textcolor{keywordtype}{int} i = \mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00358}00358     \textcolor{keywordflow}{for}( ; i-\/-\/; *s++ = *la++ ) \{\}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00359}00359     \mbox{\hyperlink{class_m_t_rand_a98eabf568c88f121e44f487397f32495}{left}} = *la;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00360}00360     \mbox{\hyperlink{class_m_t_rand_a2b80858137c88fe69d4d2bdc665bcf93}{pNext}} = \&\mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[\mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}-\/\mbox{\hyperlink{class_m_t_rand_a98eabf568c88f121e44f487397f32495}{left}}];}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00361}00361 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00362}00362 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00363}00363 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00364}\mbox{\hyperlink{class_m_t_rand_a5ca1e3e4ee3ab9001d0407a81437c58b}{00364}} \textcolor{keyword}{inline} std::ostream\& \mbox{\hyperlink{_mersenne_twister_8h_a5ca1e3e4ee3ab9001d0407a81437c58b}{operator<<}}( std::ostream\& os, \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand}{MTRand}}\& mtrand )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00365}00365 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00366}00366     \textcolor{keyword}{const} \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{MTRand::uint32}} *s = mtrand.\mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00367}00367     \textcolor{keywordtype}{int} i = mtrand.\mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00368}00368     \textcolor{keywordflow}{for}( ; i-\/-\/; os << *s++ << \textcolor{stringliteral}{"{}\(\backslash\)t"{}} ) \{\}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00369}00369     \textcolor{keywordflow}{return} os << mtrand.\mbox{\hyperlink{class_m_t_rand_a98eabf568c88f121e44f487397f32495}{left}};}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00370}00370 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00371}00371 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00372}00372 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00373}\mbox{\hyperlink{class_m_t_rand_ac931e35e0d686b97d83edb8b249ec52a}{00373}} \textcolor{keyword}{inline} std::istream\& \mbox{\hyperlink{_mersenne_twister_8h_ac931e35e0d686b97d83edb8b249ec52a}{operator>>}}( std::istream\& is, \mbox{\hyperlink{class_m_t_rand}{MTRand}}\& mtrand )}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00374}00374 \{}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00375}00375     \mbox{\hyperlink{class_m_t_rand_a45478edf9e24dcd2a5164bac3889d6a2}{MTRand::uint32}} *s = mtrand.\mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00376}00376     \textcolor{keywordtype}{int} i = mtrand.\mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}};        \textcolor{comment}{// dol delted leading register}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00377}00377     \textcolor{keywordflow}{for}( ; i-\/-\/; is >> *s++ ) \{\}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00378}00378     is >> mtrand.\mbox{\hyperlink{class_m_t_rand_a98eabf568c88f121e44f487397f32495}{left}};}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00379}00379     mtrand.\mbox{\hyperlink{class_m_t_rand_a2b80858137c88fe69d4d2bdc665bcf93}{pNext}} = \&mtrand.\mbox{\hyperlink{class_m_t_rand_a2c87f537429bf0b0f6a452c22b9eebba}{state}}[mtrand.\mbox{\hyperlink{class_m_t_rand_ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b}{N}}-\/mtrand.\mbox{\hyperlink{class_m_t_rand_a98eabf568c88f121e44f487397f32495}{left}}];}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00380}00380     \textcolor{keywordflow}{return} is;}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00381}00381 \}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00382}00382 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00383}00383 \textcolor{preprocessor}{\#endif  }\textcolor{comment}{// MERSENNETWISTER\_H}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00384}00384 }
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00385}00385 \textcolor{comment}{// Change log:}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00386}00386 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00387}00387 \textcolor{comment}{// v0.1 -\/ First release on 15 May 2000}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00388}00388 \textcolor{comment}{//      -\/ Based on code by Makoto Matsumoto, Takuji Nishimura, and Shawn Cokus}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00389}00389 \textcolor{comment}{//      -\/ Translated from C to C++}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00390}00390 \textcolor{comment}{//      -\/ Made completely ANSI compliant}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00391}00391 \textcolor{comment}{//      -\/ Designed convenient interface for initialization, seeding, and}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00392}00392 \textcolor{comment}{//        obtaining numbers in default or user-\/defined ranges}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00393}00393 \textcolor{comment}{//      -\/ Added automatic seeding from /dev/urandom or time() and clock()}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00394}00394 \textcolor{comment}{//      -\/ Provided functions for saving and loading generator state}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00395}00395 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00396}00396 \textcolor{comment}{// v0.2 -\/ Fixed bug which reloaded generator one step too late}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00397}00397 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00398}00398 \textcolor{comment}{// v0.3 -\/ Switched to clearer, faster reload() code from Matthew Bellew}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00399}00399 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00400}00400 \textcolor{comment}{// v0.4 -\/ Removed trailing newline in saved generator format to be consistent}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00401}00401 \textcolor{comment}{//        with output format of built-\/in types}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00402}00402 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00403}00403 \textcolor{comment}{// v0.5 -\/ Improved portability by replacing static const int's with enum's and}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00404}00404 \textcolor{comment}{//        clarifying return values in seed(); suggested by Eric Heimburg}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00405}00405 \textcolor{comment}{//      -\/ Removed MAXINT constant; use 0xffffffffUL instead}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00406}00406 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00407}00407 \textcolor{comment}{// v0.6 -\/ Eliminated seed overflow when uint32 is larger than 32 bits}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00408}00408 \textcolor{comment}{//      -\/ Changed integer [0,n] generator to give better uniformity}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00409}00409 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00410}00410 \textcolor{comment}{// v0.7 -\/ Fixed operator precedence ambiguity in reload()}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00411}00411 \textcolor{comment}{//      -\/ Added access for real numbers in (0,1) and (0,n)}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00412}00412 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00413}00413 \textcolor{comment}{// v0.8 -\/ Included time.h header to properly support time\_t and clock\_t}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00414}00414 \textcolor{comment}{//}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00415}00415 \textcolor{comment}{// v1.0 -\/ Revised seeding to match 26 Jan 2002 update of Nishimura and Matsumoto}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00416}00416 \textcolor{comment}{//      -\/ Allowed for seeding with arrays of any length}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00417}00417 \textcolor{comment}{//      -\/ Added access for real numbers in [0,1) with 53-\/bit resolution}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00418}00418 \textcolor{comment}{//      -\/ Added access for real numbers from normal (Gaussian) distributions}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00419}00419 \textcolor{comment}{//      -\/ Increased overall speed by optimizing twist()}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00420}00420 \textcolor{comment}{//      -\/ Doubled speed of integer [0,n] generation}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00421}00421 \textcolor{comment}{//      -\/ Fixed out-\/of-\/range number generation on 64-\/bit machines}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00422}00422 \textcolor{comment}{//      -\/ Improved portability by substituting literal constants for long enum's}}
+\DoxyCodeLine{\Hypertarget{_mersenne_twister_8h_source_l00423}00423 \textcolor{comment}{//      -\/ Changed license from GNU LGPL to BSD}}
+
+\end{DoxyCode}

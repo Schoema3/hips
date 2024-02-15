@@ -5,7 +5,7 @@
 \doxysubsection{Detailed Description}
 
 
-Definition at line 16 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00013}{13}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 
 
@@ -14,20 +14,30 @@ Definition at line 16 of file hips.\+h.
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{clasships_aed30ba57fd6e64de1b8bd5a7d829cbc8}{hips}} (int n\+Levels\+\_\+, double domain\+Length\+\_\+, double tau0\+\_\+, double C\+\_\+param\+\_\+, int force\+Turb\+\_\+, int n\+Var\+\_\+, std\+::vector$<$ double $>$ \&Sc\+Hips\+\_\+, std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$ cant\+Sol, bool \mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{perform\+Reaction}}, int seed=10)
+\mbox{\hyperlink{clasships_aed30ba57fd6e64de1b8bd5a7d829cbc8}{hips}} (int \mbox{\hyperlink{clasships_a0c7d7ea0e014fe4b34c9db6ad9e19fba}{n\+Levels\+\_\+}}, double domain\+Length\+\_\+, double tau0\+\_\+, double C\+\_\+param\+\_\+, int force\+Turb\+\_\+, int n\+Var\+\_\+, std\+::vector$<$ double $>$ \&Sc\+Hips\+\_\+, std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$ cant\+Sol, bool \mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{perform\+Reaction}}, int seed=10)
 \begin{DoxyCompactList}\small\item\em Constructor for the hips class. Initializes a hips object with specified parameters. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{clasships_a76c0133835b10d509df416b57ed06fe6}{hips}} (double Re)
+\begin{DoxyCompactList}\small\item\em Constructor for the hips class with a Reynolds number parameter. \end{DoxyCompactList}\item 
 virtual \mbox{\hyperlink{clasships_a39030d04a24424284f2ba3a079686e2e}{$\sim$hips}} ()
 \begin{DoxyCompactList}\small\item\em Destructor for the hips class. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{set\+\_\+var\+Data}} (std\+::vector$<$ double $>$ \&v, std\+::vector$<$ double $>$ \&w, const std\+::string \&varN, int i)
 \begin{DoxyCompactList}\small\item\em passing all variables to vector of pointer \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{clasships_ac563a03328850c5a4413e48feed9dc40}{set\+\_\+var\+Data}} (std\+::vector$<$ double $>$ \&v, std\+::vector$<$ double $>$ \&w, const std\+::string \&varN, const std\+::vector$<$ double $>$ \&rho, int i)
+\begin{DoxyCompactList}\small\item\em passing all variables to vector of pointer ~\newline
+ \end{DoxyCompactList}\item 
 std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{projection}} (std\+::vector$<$ double $>$ \&vcfd, std\+::vector$<$ double $>$ \&weight)
-\begin{DoxyCompactList}\small\item\em Perform vector projection operation. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Perform vector projection operation without density. \end{DoxyCompactList}\item 
+std\+::pair$<$ std\+::vector$<$ double $>$, std\+::vector$<$ double $>$ $>$ \mbox{\hyperlink{clasships_af7d9fc8b48ce945bccf4b397102a3ee3}{projection}} (std\+::vector$<$ double $>$ \&vcfd, std\+::vector$<$ double $>$ \&weight, const std\+::vector$<$ double $>$ \&density)
+\begin{DoxyCompactList}\small\item\em Perform vector projection operation with density. \end{DoxyCompactList}\item 
 std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{set\+Grid\+Hips}} (int N)
-\begin{DoxyCompactList}\small\item\em Function to set a grid for HIPS simulation. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Set Hips grid with a specified number of grid points equal to number of parcels ~\newline
+ \end{DoxyCompactList}\item 
 std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{set\+Grid\+Cfd}} (std\+::vector$<$ double $>$ \&w)
 \begin{DoxyCompactList}\small\item\em Set CFD grid using provided weight vector. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{clasships_a3e580e31d2d68115b5ff8474c0497861}{get\+\_\+var\+Data}} (std\+::vector$<$ double $>$ \&modified\+Data, int i)
-\begin{DoxyCompactList}\small\item\em Retrieve modified data from the Hi\+PS library. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::vector$<$ double $>$ $>$ \mbox{\hyperlink{clasships_a4f12ec17e2983edef734832203570c87}{get\+\_\+var\+Data}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves modified data from the Hi\+PS library and stores it in the provided vector. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}{projection\+\_\+back}} (std\+::vector$<$ double $>$ \&vb)
+\begin{DoxyCompactList}\small\item\em Function for projecting vectors onto a grid. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{clasships_ad6c3df079ecab73ae445d7e29069ab63}{calculate\+Solution}} (const double t\+Run)
 \begin{DoxyCompactList}\small\item\em Running simulations. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
@@ -35,12 +45,28 @@ void \mbox{\hyperlink{clasships_ad6c3df079ecab73ae445d7e29069ab63}{calculate\+So
 \item 
 int \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}}
 \begin{DoxyCompactList}\small\item\em number of parcels \end{DoxyCompactList}\item 
-std\+::vector$<$ std\+::vector$<$ double $>$ $\ast$ $>$ \mbox{\hyperlink{clasships_af6df1b25342c62d482af24b980dee8af}{var\+Data}}
+std\+::vector$<$ std\+::vector$<$ double $>$ $\ast$ $>$ \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{var\+Data}}
 \begin{DoxyCompactList}\small\item\em vector of pointers to vector \end{DoxyCompactList}\item 
 std\+::shared\+\_\+ptr$<$ Cantera\+::\+Thermo\+Phase $>$ \mbox{\hyperlink{clasships_a4e06e8409d3c1681c718d6d2c9f9a7bf}{gas}}
 \begin{DoxyCompactList}\small\item\em cantera thermo object \end{DoxyCompactList}\item 
-std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classbatchReactor}{batch\+Reactor}} $>$ \mbox{\hyperlink{clasships_a8712aef5b4f2678ec42d5230b32aad4a}{b\+Rxr}}
-\begin{DoxyCompactList}\small\item\em chemistry integrator (constant pressure) \end{DoxyCompactList}\end{DoxyCompactItemize}
+std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classbatch_reactor}{batch\+Reactor}} $>$ \mbox{\hyperlink{clasships_a8712aef5b4f2678ec42d5230b32aad4a}{b\+Rxr}}
+\begin{DoxyCompactList}\small\item\em chemistry integrator (constant pressure) \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{clasships_a385507f28dfda82ed6d172d8533fb336}{nL}}
+\begin{DoxyCompactList}\small\item\em adjusted number of levels based on Reynolds. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{domain\+Length}}
+\begin{DoxyCompactList}\small\item\em length of domain (m) \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{clasships_aefdec9ee971fd921a9edae48e5fee8e0}{tau0}}
+\begin{DoxyCompactList}\small\item\em integral timescale \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}{C\+\_\+param}}
+\begin{DoxyCompactList}\small\item\em Eddy frequency parameter. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}}
+\begin{DoxyCompactList}\small\item\em current simulation time \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddy\+Rate\+\_\+total}}
+\begin{DoxyCompactList}\small\item\em total rate of all eddies 0 through n\+Levels-\/3 \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{eddy\+Rate\+\_\+inertial}}
+\begin{DoxyCompactList}\small\item\em ????? \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{clasships_a5d68e2f3f805f6c419ab606fb1bb9c91}{Afac}}
+\begin{DoxyCompactList}\small\item\em level lengthscale reduction factor (0.\+5) \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -50,34 +76,28 @@ void \mbox{\hyperlink{clasships_a8b2206a09dc03321585fbbcf94fbbb14}{sample\+\_\+h
 void \mbox{\hyperlink{clasships_a672cc0cc3879ccf71023a059739ab547}{select\+And\+Swap\+Two\+Subtrees}} (const int i\+Level, int \&i\+Tree)
 \begin{DoxyCompactList}\small\item\em Select and swap two subtrees in the level tree. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{clasships_ae794eac94488c12cc1aa0a321de471b9}{advance\+Hips}} (const int i\+Level, const int i\+Tree)
-\item 
+\begin{DoxyCompactList}\small\item\em Advancing simulations to do mixing and reaction. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}{react\+Parcels\+\_\+\+Level\+Tree}} (const int i\+Level, const int i\+Tree)
-\item 
+\begin{DoxyCompactList}\small\item\em Reacting parcels involved in micro-\/mixing. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}{mix\+Across\+Level\+Tree}} (int k\+Var, const int i\+Mix\+Level, const int i\+Tree)
-\item 
+\begin{DoxyCompactList}\small\item\em Mixing paecels involved in micr0-\/mixing. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{clasships_a2e1bb3550fb08551e13609f028a10712}{force\+Profile}} ()
-\item 
+\begin{DoxyCompactList}\small\item\em Force the Hi\+PS profile to achieve statistical stationarity. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}{write\+Data}} (const int ifile, const double output\+Time)
-\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Writing the results for a user-\/defined number of eddies in the data folder. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 int \mbox{\hyperlink{clasships_af05ebcf315fa2b5c627f9d38395f576e}{n\+Levels}}
-\item 
-double \mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{domain\+Length}}
-\begin{DoxyCompactList}\small\item\em length of domain (m) \end{DoxyCompactList}\item 
-double \mbox{\hyperlink{clasships_aefdec9ee971fd921a9edae48e5fee8e0}{tau0}}
-\begin{DoxyCompactList}\small\item\em integral timescale \end{DoxyCompactList}\item 
-double \mbox{\hyperlink{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}{C\+\_\+param}}
-\begin{DoxyCompactList}\small\item\em Eddy frequency parameter. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em number of tree levels \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{clasships_a0c7d7ea0e014fe4b34c9db6ad9e19fba}{n\+Levels\+\_\+}}
+\begin{DoxyCompactList}\small\item\em number of tree levels? \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{clasships_a61569cff2835802d3daca4fb71e11b76}{force\+Turb}}
 \begin{DoxyCompactList}\small\item\em forcing function for statistically stationary\+: -\/1 = none, 1 = source term, 2 = dir \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{n\+Var}}
 \begin{DoxyCompactList}\small\item\em number of parcel variables (e.\+g., h, ysp) \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{clasships_a61dca70748931a42d50254435f36e5e8}{nsp}}
 \begin{DoxyCompactList}\small\item\em number of species \end{DoxyCompactList}\item 
-double \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}}
-\item 
 int \mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{Nm1}}
 \begin{DoxyCompactList}\small\item\em n\+Levels -\/ 1 \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{clasships_a0a59c28db4e081ee7c4afa2ba051dc64}{Nm2}}
@@ -87,75 +107,63 @@ int \mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}}
 \begin{DoxyCompactList}\small\item\em n\+Levels -\/ 3 \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{i\+Eta}}
 \begin{DoxyCompactList}\small\item\em Kolmogorov level (needed for variable Sc scalars) \end{DoxyCompactList}\item 
-double \mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddy\+Rate\+\_\+total}}
-\begin{DoxyCompactList}\small\item\em total rate of all eddies 0 through n\+Levels-\/3 \end{DoxyCompactList}\item 
-double \mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{eddy\+Rate\+\_\+inertial}}
-\begin{DoxyCompactList}\small\item\em tota public\+: \end{DoxyCompactList}\item 
 bool \mbox{\hyperlink{clasships_af0693b6587b038be50f185a0a8e1d67e}{LSc\+Hips}}
 \begin{DoxyCompactList}\small\item\em hips schmidt number \end{DoxyCompactList}\item 
-std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\+\_\+batchelor}}
-\begin{DoxyCompactList}\small\item\em Batchelor level for variable Sc scalars; NOTE\+: double, as in, between levels. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{perform\+Reaction}}
+\begin{DoxyCompactList}\small\item\em Flag indicating whether chemical reactions are performed in the simulation. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{clasships_a3a48aadeba689191761cae9951f83466}{Lrand\+Set}}
+\begin{DoxyCompactList}\small\item\em flag indicating new random\+Gen -\/-\/\texorpdfstring{$>$}{>} allow deletion \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classrandom_generator}{random\+Generator}} \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}
+\item 
 std\+::vector$<$ int $>$ \mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\+\_\+plus}}
 \begin{DoxyCompactList}\small\item\em ceil(i\+\_\+batchelor) \end{DoxyCompactList}\item 
+std\+::vector$<$ int $>$ \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{p\+Loc}}
+\begin{DoxyCompactList}\small\item\em parcel index array for fast implementation of swaps \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_a8f22f735022a7d81c44a714b44a62694}{var\+Rho}}
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{Sc\+Hips}}
+\begin{DoxyCompactList}\small\item\em Vector containing Schmidt numbers related to each variable. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{clasships_a998b5a76ecd9d451115b96702b914096}{var\+Name}}
+\begin{DoxyCompactList}\small\item\em Vector containing the names of parcel variables. \end{DoxyCompactList}\item 
 std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_a02e76a9b13872dff1fb000a751198330}{parcel\+Times}}
 \begin{DoxyCompactList}\small\item\em current times corresponding to the parcel states \end{DoxyCompactList}\item 
 std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{level\+Rates}}
 \begin{DoxyCompactList}\small\item\em list of eddy event rates at each level \end{DoxyCompactList}\item 
-std\+::vector$<$ int $>$ \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{p\+Loc}}
-\begin{DoxyCompactList}\small\item\em parcel index array for fast implementation of swaps \end{DoxyCompactList}\item 
-std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{Sc\+Hips}}
-\begin{DoxyCompactList}\small\item\em Vector containing Schmidt numbers related to each variable. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{perform\+Reaction}}
-\begin{DoxyCompactList}\small\item\em Flag indicating whether chemical reactions are performed in the simulation. \end{DoxyCompactList}\item 
-bool \mbox{\hyperlink{clasships_a3a48aadeba689191761cae9951f83466}{Lrand\+Set}}
-\begin{DoxyCompactList}\small\item\em flag indicating new random\+Gen -\/-\/$>$ allow deletion \end{DoxyCompactList}\item 
-\mbox{\hyperlink{classrandomGenerator}{random\+Generator}} \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}
-\item 
-const double \mbox{\hyperlink{clasships_a1690c1395ecbf568cadce02de0c95d2d}{Afac}} = 0.\+5
-\begin{DoxyCompactList}\small\item\em level lengthscale reduction factor (0.\+5) \end{DoxyCompactList}\item 
-std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{clasships_a998b5a76ecd9d451115b96702b914096}{var\+Name}}
-\begin{DoxyCompactList}\small\item\em Vector containing the names of parcel variables. \end{DoxyCompactList}\end{DoxyCompactItemize}
+std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\+\_\+batchelor}}
+\begin{DoxyCompactList}\small\item\em Batchelor level for variable Sc scalars; NOTE\+: double, as in, between levels. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
 \mbox{\Hypertarget{clasships_aed30ba57fd6e64de1b8bd5a7d829cbc8}\label{clasships_aed30ba57fd6e64de1b8bd5a7d829cbc8}} 
 \index{hips@{hips}!hips@{hips}}
 \index{hips@{hips}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{hips()}{hips()}}
+\doxysubsubsection{\texorpdfstring{hips()}{hips()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily hips\+::hips (\begin{DoxyParamCaption}\item[{int}]{n\+Levels\+\_\+,  }\item[{double}]{domain\+Length\+\_\+,  }\item[{double}]{tau0\+\_\+,  }\item[{double}]{C\+\_\+param\+\_\+,  }\item[{int}]{force\+Turb\+\_\+,  }\item[{int}]{n\+Var\+\_\+,  }\item[{std\+::vector$<$ double $>$ \&}]{Sc\+Hips\+\_\+,  }\item[{std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$}]{cant\+Sol,  }\item[{bool}]{perform\+Reaction,  }\item[{int}]{seed = {\ttfamily 10} }\end{DoxyParamCaption})}
 
 
 
 Constructor for the hips class. Initializes a hips object with specified parameters. 
 
-Constructor for initializing various parameters for the simulation.
+\mbox{\Hypertarget{clasships_a76c0133835b10d509df416b57ed06fe6}\label{clasships_a76c0133835b10d509df416b57ed06fe6}} 
+\index{hips@{hips}!hips@{hips}}
+\index{hips@{hips}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{hips()}{hips()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily hips\+::hips (\begin{DoxyParamCaption}\item[{double}]{Re }\end{DoxyParamCaption})}
+
+
+
+Constructor for the hips class with a Reynolds number parameter. 
+
+Constructor for initializing \textquotesingle{}n\+Levels\+\_\+\textquotesingle{} based on Reynolds number.
 
 
 \begin{DoxyParams}{Parameters}
-{\em n\+Levels} & Number of simulation levels. \\
-\hline
-{\em domain\+Length\+\_\+} & Length of the simulation domain. \\
-\hline
-{\em tau0\+\_\+} & Initial timescale parameter. \\
-\hline
-{\em C\+\_\+param\+\_\+} & C parameter. \\
-\hline
-{\em force\+Turb\+\_\+} & Flag for forcing turbulence. \\
-\hline
-{\em n\+Var\+\_\+} & Number of variables. \\
-\hline
-{\em Sc\+Hips\+\_\+} & Vector of Schmidt numbers for HIPS simulation. \\
-\hline
-{\em cant\+Sol} & Cantera solution object. \\
-\hline
-{\em perform\+Reaction\+\_\+} & Flag for performing chemical reactions. \\
-\hline
-{\em seed} & Seed for the random number generator. \\
+{\em Re} & Reynolds number for turbulence simulation. \\
 \hline
 \end{DoxyParams}
 
 
-Definition at line 29 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00019}{19}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a39030d04a24424284f2ba3a079686e2e}\label{clasships_a39030d04a24424284f2ba3a079686e2e}} 
 \index{hips@{hips}!````~hips@{$\sim$hips}}
@@ -169,7 +177,7 @@ Destructor for the hips class.
 
 
 
-Definition at line 83 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00075}{75}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 
 
@@ -177,37 +185,73 @@ Definition at line 83 of file hips.\+h.
 \mbox{\Hypertarget{clasships_af9538eb8b5500ff92191287ffb1b1358}\label{clasships_af9538eb8b5500ff92191287ffb1b1358}} 
 \index{hips@{hips}!set\_varData@{set\_varData}}
 \index{set\_varData@{set\_varData}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{set\_varData()}{set\_varData()}}
+\doxysubsubsection{\texorpdfstring{set\_varData()}{set\_varData()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily void hips\+::set\+\_\+var\+Data (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{v,  }\item[{std\+::vector$<$ double $>$ \&}]{w,  }\item[{const std\+::string \&}]{varN,  }\item[{int}]{i }\end{DoxyParamCaption})}
 
 
 
 passing all variables to vector of pointer 
 
-Function to set the variables and their weights.
+Function to pass the variables, their weights, and their names to the parcels of the tree. ~\newline
+
 
 
 \begin{DoxyParams}{Parameters}
-{\em v} & Vector of variables. \\
+{\em v} & Vector of variables that are passed to the Hi\+PS tree. \\
 \hline
-{\em w} & Vector of weights. \\
+{\em w} & Vector of weights; each flow particle has a weights. \\
 \hline
-{\em i} & Index for the variable data. \\
+{\em varN} & Vector of names of the variable. \\
+\hline
+{\em i} & Index indicating where the data should be assigned in the vectors var\+Data and var\+Name. \\
 \hline
 \end{DoxyParams}
 
 
-Definition at line 135 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00170}{170}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+
+\mbox{\Hypertarget{clasships_ac563a03328850c5a4413e48feed9dc40}\label{clasships_ac563a03328850c5a4413e48feed9dc40}} 
+\index{hips@{hips}!set\_varData@{set\_varData}}
+\index{set\_varData@{set\_varData}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{set\_varData()}{set\_varData()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void hips\+::set\+\_\+var\+Data (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{v,  }\item[{std\+::vector$<$ double $>$ \&}]{w,  }\item[{const std\+::string \&}]{varN,  }\item[{const std\+::vector$<$ double $>$ \&}]{rho,  }\item[{int}]{i }\end{DoxyParamCaption})}
+
+
+
+passing all variables to vector of pointer ~\newline
+ 
+
+Function to pass the variable, their weights, names, and densities to the parcels of the tree.
+
+
+\begin{DoxyParams}{Parameters}
+{\em v} & Vector of variables that are passed to the Hi\+PS tree. \\
+\hline
+{\em w} & Vector of weights; each flow particle has a weight. \\
+\hline
+{\em varN} & Vector of names of the variable. \\
+\hline
+{\em rho} & Vector of density; each flow particle has a specific density. \\
+\hline
+{\em i} & index indicating where the data should be assigned in the vectors var\+Data and var\+Name. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyNote}{Note}
+This function is overloaded. This version considers particle density. 
+\end{DoxyNote}
+
+
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00185}{185}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_ae0c1598d16584096403630e1b3f147dd}\label{clasships_ae0c1598d16584096403630e1b3f147dd}} 
 \index{hips@{hips}!projection@{projection}}
 \index{projection@{projection}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{projection()}{projection()}}
+\doxysubsubsection{\texorpdfstring{projection()}{projection()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily std\+::vector$<$ double $>$ hips\+::projection (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{vcfd,  }\item[{std\+::vector$<$ double $>$ \&}]{weight }\end{DoxyParamCaption})}
 
 
 
-Perform vector projection operation. 
+Perform vector projection operation without density. 
 
 Function for projecting vectors onto a grid.
 
@@ -223,7 +267,40 @@ Projected vector.
 \end{DoxyReturn}
 
 
-Definition at line 149 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00202}{202}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+
+\mbox{\Hypertarget{clasships_af7d9fc8b48ce945bccf4b397102a3ee3}\label{clasships_af7d9fc8b48ce945bccf4b397102a3ee3}} 
+\index{hips@{hips}!projection@{projection}}
+\index{projection@{projection}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{projection()}{projection()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::pair$<$ std\+::vector$<$ double $>$, std\+::vector$<$ double $>$ $>$ hips\+::projection (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{vcfd,  }\item[{std\+::vector$<$ double $>$ \&}]{weight,  }\item[{const std\+::vector$<$ double $>$ \&}]{density }\end{DoxyParamCaption})}
+
+
+
+Perform vector projection operation with density. 
+
+Project vectors onto a grid.
+
+This function projects vectors onto a grid. It takes a vector of variables, a weight vector, and a vector of density as input parameters, and returns the projected vector.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vcfd} & Vector of variables passed to the Hi\+PS tree. \\
+\hline
+{\em weight} & Weight vector; each flow particle has a weight. \\
+\hline
+{\em density} & Vector of density. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pair of vectors representing the projected vector and the density on the grid. 
+\end{DoxyReturn}
+\begin{DoxyNote}{Note}
+This function is overloaded. This version considers particle density. 
+\end{DoxyNote}
+
+
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00252}{252}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a012995a97c1d8ff113dae91847890c2e}\label{clasships_a012995a97c1d8ff113dae91847890c2e}} 
 \index{hips@{hips}!setGridHips@{setGridHips}}
@@ -233,10 +310,12 @@ Definition at line 149 of file hips.\+cc.
 
 
 
-Function to set a grid for HIPS simulation. 
+Set Hips grid with a specified number of grid points equal to number of parcels ~\newline
+ 
 
-Set Hips grid with a specified number of \textbackslash{} grid points equal to number of parcels ~\newline
+Set up a grid for HIPS simulation.
 
+This function generates a grid for HIPS simulation with a specified number of grid points.
 
 
 \begin{DoxyParams}{Parameters}
@@ -248,7 +327,7 @@ Vector representing the grid.
 \end{DoxyReturn}
 
 
-Definition at line 214 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00331}{331}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}\label{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}} 
 \index{hips@{hips}!setGridCfd@{setGridCfd}}
@@ -260,45 +339,61 @@ Definition at line 214 of file hips.\+cc.
 
 Set CFD grid using provided weight vector. 
 
-Function to set a grid for CFD simulation.
+Set up a grid for CFD simulation.
+
+This function generates a grid for CFD simulation based on a given weight vector.
 
 
 \begin{DoxyParams}{Parameters}
-{\em w} & Weight vector. \\
+{\em w} & Weight vector defining the spacing between grid points. \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Vector representing the grid. 
+Vector representing the grid positions. 
 \end{DoxyReturn}
 
 
-Definition at line 193 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00305}{305}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
-\mbox{\Hypertarget{clasships_a3e580e31d2d68115b5ff8474c0497861}\label{clasships_a3e580e31d2d68115b5ff8474c0497861}} 
+\mbox{\Hypertarget{clasships_a4f12ec17e2983edef734832203570c87}\label{clasships_a4f12ec17e2983edef734832203570c87}} 
 \index{hips@{hips}!get\_varData@{get\_varData}}
 \index{get\_varData@{get\_varData}!hips@{hips}}
 \doxysubsubsection{\texorpdfstring{get\_varData()}{get\_varData()}}
-{\footnotesize\ttfamily void hips\+::get\+\_\+var\+Data (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{modified\+Data,  }\item[{int}]{i }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily std\+::vector$<$ std\+::vector$<$ double $>$ $>$ hips\+::get\+\_\+var\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
 
 
-Retrieve modified data from the Hi\+PS library. 
+Retrieves modified data from the Hi\+PS library and stores it in the provided vector. 
 
-This function retrieves modified data from the Hi\+PS library for a specified index and stores it in the provided vector.
+Retrieve modified data from the Hierarchical Progressive Survey (Hi\+PS) library.
+
+This function retrieves modified data from the Hi\+PS library and stores it in the provided vector. Each element of the returned vector contains a vector representing a single data projection.
+
+\begin{DoxyReturn}{Returns}
+A vector of vectors containing modified data retrieved from the Hi\+PS library. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00745}{745}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+
+\mbox{\Hypertarget{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}\label{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}} 
+\index{hips@{hips}!projection\_back@{projection\_back}}
+\index{projection\_back@{projection\_back}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{projection\_back()}{projection\_back()}}
+{\footnotesize\ttfamily std\+::vector$<$ double $>$ hips\+::projection\+\_\+back (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$ \&}]{vb }\end{DoxyParamCaption})}
+
+
+
+Function for projecting vectors onto a grid. 
 
 
 \begin{DoxyParams}{Parameters}
-{\em modified\+Data} & A vector to store the modified data. \\
-\hline
-{\em i} & The index indicating the specific data to retrieve. \\
+{\em vb} & Vector to be projected back. \\
 \hline
 \end{DoxyParams}
-\begin{DoxyNote}{Note}
-If the provided index is out of bounds, an error message is printed to the console. 
-\end{DoxyNote}
 
 
-Definition at line 597 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00702}{702}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_ad6c3df079ecab73ae445d7e29069ab63}\label{clasships_ad6c3df079ecab73ae445d7e29069ab63}} 
 \index{hips@{hips}!calculateSolution@{calculateSolution}}
@@ -312,12 +407,12 @@ Running simulations.
 
 The Hi\+PS solver 
 \begin{DoxyParams}{Parameters}
-{\em t\+Run} & {\itshape input\+:} simulation run time\\
+{\em t\+Run} & Input simulation run time\\
 \hline
 \end{DoxyParams}
 Sample tee (time of next eddy event) Select and swap subtrees (at current time, not at tee, so that we know whos involved) If the eddy event is at the parcel/micromixing level\+: React involved parcels from their current time to tee Mix the involved parcels (micromixing) 
 
-Definition at line 240 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00354}{354}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a8b2206a09dc03321585fbbcf94fbbb14}\label{clasships_a8b2206a09dc03321585fbbcf94fbbb14}} 
 \index{hips@{hips}!sample\_hips\_eddy@{sample\_hips\_eddy}}
@@ -339,7 +434,7 @@ Samples stochastic eddy events on the hips tree\+: time and level.
 \end{DoxyParams}
 
 
-Definition at line 279 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00390}{390}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a672cc0cc3879ccf71023a059739ab547}\label{clasships_a672cc0cc3879ccf71023a059739ab547}} 
 \index{hips@{hips}!selectAndSwapTwoSubtrees@{selectAndSwapTwoSubtrees}}
@@ -362,7 +457,7 @@ Randomly select a node on i\+Level. Go down two levels and select nodes 0q and 1
 
 For a 6 level tree\+: 0, 1, 2, 3, 4, 5\+: If i\+Level = 1, then suppose i=1, 0q = 00 and 1r = 11\+: Then we are swaping 0100$\ast$$\ast$ with 0111$\ast$$\ast$ or (01$\vert$00$\vert$$\ast$$\ast$) with (01$\vert$11$\vert$$\ast$$\ast$) or i0qs with i1rs, where i = 01; 0q = 00; 1r = 11; and s = $\ast$$\ast$
 
-We use bitwise shifts for easy powers of 2. The swap is done by adding or subtracting a value (shift), which should be equivalent to flipping the swapping the two 0q bits and 1r bits. \hypertarget{clasships_autotoc_md16}{}\doxysubsubsection{Level}\label{clasships_autotoc_md16}
+We use bitwise shifts for easy powers of 2. The swap is done by adding or subtracting a value (shift), which should be equivalent to flipping the swapping the two 0q bits and 1r bits. \hypertarget{clasships_autotoc_md27}{}\doxysubsubsection{Level}\label{clasships_autotoc_md27}
 0 / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} ($\ast$) 01$\vert$0000 1 / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{}
 \begin{DoxyItemize}
 \item $\ast$ $\ast$ 2 / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{}
@@ -373,13 +468,17 @@ $\ast$ $\ast$ \mbox{[}$\ast$\mbox{]} 00$\vert$$\ast$$\ast$ $\ast$ $\ast$ \mbox{[
 \item $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ 4 / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 5 $^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$ $^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$ 
 \end{DoxyItemize}
 
-Definition at line 361 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00472}{472}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_ae794eac94488c12cc1aa0a321de471b9}\label{clasships_ae794eac94488c12cc1aa0a321de471b9}} 
 \index{hips@{hips}!advanceHips@{advanceHips}}
 \index{advanceHips@{advanceHips}!hips@{hips}}
 \doxysubsubsection{\texorpdfstring{advanceHips()}{advanceHips()}}
 {\footnotesize\ttfamily void hips\+::advance\+Hips (\begin{DoxyParamCaption}\item[{const int}]{i\+Level,  }\item[{const int}]{i\+Tree }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Advancing simulations to do mixing and reaction. 
 
 React and mix parcels that are involved in a micromixing process. This is determined by the level and the tree within that level. Might not do anything if the eddy doesn\textquotesingle{}t cause micromixing. 
 \begin{DoxyParams}{Parameters}
@@ -390,13 +489,17 @@ React and mix parcels that are involved in a micromixing process. This is determ
 \end{DoxyParams}
 
 
-Definition at line 387 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00498}{498}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}\label{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}} 
 \index{hips@{hips}!reactParcels\_LevelTree@{reactParcels\_LevelTree}}
 \index{reactParcels\_LevelTree@{reactParcels\_LevelTree}!hips@{hips}}
 \doxysubsubsection{\texorpdfstring{reactParcels\_LevelTree()}{reactParcels\_LevelTree()}}
 {\footnotesize\ttfamily void hips\+::react\+Parcels\+\_\+\+Level\+Tree (\begin{DoxyParamCaption}\item[{const int}]{i\+Level,  }\item[{const int}]{i\+Tree }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Reacting parcels involved in micro-\/mixing. 
 
 React parcels that are involved in a micromixing process. Parcels might react for different amounts of time depending on when they last reacted, which is stored in the parcel\+Times array. 
 \begin{DoxyParams}{Parameters}
@@ -407,13 +510,17 @@ React parcels that are involved in a micromixing process. Parcels might react fo
 \end{DoxyParams}
 
 
-Definition at line 414 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00524}{524}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}\label{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}} 
 \index{hips@{hips}!mixAcrossLevelTree@{mixAcrossLevelTree}}
 \index{mixAcrossLevelTree@{mixAcrossLevelTree}!hips@{hips}}
 \doxysubsubsection{\texorpdfstring{mixAcrossLevelTree()}{mixAcrossLevelTree()}}
 {\footnotesize\ttfamily void hips\+::mix\+Across\+Level\+Tree (\begin{DoxyParamCaption}\item[{int}]{k\+Var,  }\item[{const int}]{i\+Level,  }\item[{const int}]{i\+Tree }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Mixing paecels involved in micr0-\/mixing. 
 
 Mix parcels uniformly (using average) at given level and tree Mixing at levels above the lowest enables low Sc variables. 
 \begin{DoxyParams}{Parameters}
@@ -437,11 +544,11 @@ Example\+: For a 5 level tree, we have levels 0, 1, 2, 3, 4 (top to bottom). \be
      if iTree = 0 we will mix parcels (0,1,2,3) and (4,5,6,7) with (istart=0,iend=4), (istart=4, iend=8)
      if iTree = 1 we will mix parcels (8,9,10,11) and (12,13,14,15) with (istart=8,iend=12), (istart=12, iend=16)
 \end{DoxyVerb}
- recall\+: 3 $<$$<$ 4 means 3$\ast$2$^\wedge$4 (or 3 = 000011 and 3$<$$<$4 = 110000 = 48), that is, we shift the bits left 4 places.
+ recall\+: 3 \texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<} 4 means 3$\ast$2$^\wedge$4 (or 3 = 000011 and 3\texorpdfstring{$<$}{<}\texorpdfstring{$<$}{<}4 = 110000 = 48), that is, we shift the bits left 4 places.
 
 NOTE\+: BE CAREFUL WITH MIXING SOME SCALARS, LIKE MASS FRACTIONS; CURRENT CODE ASSUMES ALL PARCELS HAVE SAME DENSITY (mixing Yi directly) 
 
-Definition at line 469 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00580}{580}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a2e1bb3550fb08551e13609f028a10712}\label{clasships_a2e1bb3550fb08551e13609f028a10712}} 
 \index{hips@{hips}!forceProfile@{forceProfile}}
@@ -449,9 +556,18 @@ Definition at line 469 of file hips.\+cc.
 \doxysubsubsection{\texorpdfstring{forceProfile()}{forceProfile()}}
 {\footnotesize\ttfamily void hips\+::force\+Profile (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
-Force hips profile to get statistically stationary Meant to demonstrate forcing for simple scalars. Such as, for a mixture fraction variable that varies between 0 and 1. Code here is setup to force the left half of parcels to average 0, and the right half of parcels to average 1. 
 
-Definition at line 520 of file hips.\+cc.
+
+Force the Hi\+PS profile to achieve statistical stationarity. 
+
+This function is meant to demonstrate forcing for simple scalars, such as a mixture fraction variable that varies between 0 and 1. The code within this function is configured to force the left half of parcels to average 0 and the right half of parcels to average 1.
+
+\begin{DoxyNote}{Note}
+This function modifies the data stored in the Hi\+PS profile. 
+\end{DoxyNote}
+
+
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00632}{632}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}\label{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}} 
 \index{hips@{hips}!writeData@{writeData}}
@@ -459,16 +575,24 @@ Definition at line 520 of file hips.\+cc.
 \doxysubsubsection{\texorpdfstring{writeData()}{writeData()}}
 {\footnotesize\ttfamily void hips\+::write\+Data (\begin{DoxyParamCaption}\item[{const int}]{ifile,  }\item[{const double}]{output\+Time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
-Write a data file 
+
+
+Writing the results for a user-\/defined number of eddies in the data folder. 
+
+Write data to a file with a specific index and output time.
+
+This function writes data to a file with a filename following a sequential incrementing index pattern (e.\+g., Data\+\_\+00001.\+dat, Data\+\_\+00002.\+dat, etc.). The time of the data file is also written into the file.
+
+
 \begin{DoxyParams}{Parameters}
-{\em ifile} & {\itshape input\+:} index used in the file name (sequential incrementing\+: Data\+\_\+00001.\+dat, Data\+\_\+00002.\+dat, etc.) \\
+{\em ifile} & The sequential index used in the file name. \\
 \hline
-{\em output\+Time} & {\itshape input\+:} time of data file, written in file. \\
+{\em output\+Time} & The time associated with the data, written into the file. \\
 \hline
 \end{DoxyParams}
 
 
-Definition at line 554 of file hips.\+cc.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00670}{670}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 
 
@@ -485,13 +609,13 @@ number of parcels
 
 
 
-Definition at line 23 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00016}{16}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
-\mbox{\Hypertarget{clasships_af6df1b25342c62d482af24b980dee8af}\label{clasships_af6df1b25342c62d482af24b980dee8af}} 
+\mbox{\Hypertarget{clasships_a02a6412147880d980d79851117066306}\label{clasships_a02a6412147880d980d79851117066306}} 
 \index{hips@{hips}!varData@{varData}}
 \index{varData@{varData}!hips@{hips}}
 \doxysubsubsection{\texorpdfstring{varData}{varData}}
-{\footnotesize\ttfamily std\+::vector$<$std\+::vector$<$double $>$ $\ast$ $>$ hips\+::var\+Data}
+{\footnotesize\ttfamily std\+::vector$<$std\+::vector$<$double$>$$\ast$$>$ hips\+::var\+Data}
 
 
 
@@ -499,7 +623,7 @@ vector of pointers to vector
 
 
 
-Definition at line 24 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00017}{17}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_a4e06e8409d3c1681c718d6d2c9f9a7bf}\label{clasships_a4e06e8409d3c1681c718d6d2c9f9a7bf}} 
 \index{hips@{hips}!gas@{gas}}
@@ -513,13 +637,13 @@ cantera thermo object
 
 
 
-Definition at line 25 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00018}{18}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_a8712aef5b4f2678ec42d5230b32aad4a}\label{clasships_a8712aef5b4f2678ec42d5230b32aad4a}} 
 \index{hips@{hips}!bRxr@{bRxr}}
 \index{bRxr@{bRxr}!hips@{hips}}
 \doxysubsubsection{\texorpdfstring{bRxr}{bRxr}}
-{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{classbatchReactor}{batch\+Reactor}}$>$ hips\+::b\+Rxr}
+{\footnotesize\ttfamily std\+::unique\+\_\+ptr$<$\mbox{\hyperlink{classbatch_reactor}{batch\+Reactor}}$>$ hips\+::b\+Rxr}
 
 
 
@@ -527,7 +651,119 @@ chemistry integrator (constant pressure)
 
 
 
-Definition at line 26 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00019}{19}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_a385507f28dfda82ed6d172d8533fb336}\label{clasships_a385507f28dfda82ed6d172d8533fb336}} 
+\index{hips@{hips}!nL@{nL}}
+\index{nL@{nL}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{nL}{nL}}
+{\footnotesize\ttfamily int hips\+::nL}
+
+
+
+adjusted number of levels based on Reynolds. 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00022}{22}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_ad5868e484de1ca30cb7427d4a17e2734}\label{clasships_ad5868e484de1ca30cb7427d4a17e2734}} 
+\index{hips@{hips}!domainLength@{domainLength}}
+\index{domainLength@{domainLength}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{domainLength}{domainLength}}
+{\footnotesize\ttfamily double hips\+::domain\+Length}
+
+
+
+length of domain (m) 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00023}{23}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_aefdec9ee971fd921a9edae48e5fee8e0}\label{clasships_aefdec9ee971fd921a9edae48e5fee8e0}} 
+\index{hips@{hips}!tau0@{tau0}}
+\index{tau0@{tau0}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{tau0}{tau0}}
+{\footnotesize\ttfamily double hips\+::tau0}
+
+
+
+integral timescale 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00024}{24}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}\label{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}} 
+\index{hips@{hips}!C\_param@{C\_param}}
+\index{C\_param@{C\_param}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{C\_param}{C\_param}}
+{\footnotesize\ttfamily double hips\+::\+C\+\_\+param}
+
+
+
+Eddy frequency parameter. 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00025}{25}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_a854afb00db645be7307d09bf72ff10d4}\label{clasships_a854afb00db645be7307d09bf72ff10d4}} 
+\index{hips@{hips}!time@{time}}
+\index{time@{time}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{time}{time}}
+{\footnotesize\ttfamily double hips\+::time}
+
+
+
+current simulation time 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00026}{26}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_ad56769a509f9d0e67a0e609ac5569b4d}\label{clasships_ad56769a509f9d0e67a0e609ac5569b4d}} 
+\index{hips@{hips}!eddyRate\_total@{eddyRate\_total}}
+\index{eddyRate\_total@{eddyRate\_total}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{eddyRate\_total}{eddyRate\_total}}
+{\footnotesize\ttfamily double hips\+::eddy\+Rate\+\_\+total}
+
+
+
+total rate of all eddies 0 through n\+Levels-\/3 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00027}{27}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_a6bb6bdd8027532037b60a56600c3af40}\label{clasships_a6bb6bdd8027532037b60a56600c3af40}} 
+\index{hips@{hips}!eddyRate\_inertial@{eddyRate\_inertial}}
+\index{eddyRate\_inertial@{eddyRate\_inertial}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{eddyRate\_inertial}{eddyRate\_inertial}}
+{\footnotesize\ttfamily double hips\+::eddy\+Rate\+\_\+inertial}
+
+
+
+????? 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00028}{28}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_a5d68e2f3f805f6c419ab606fb1bb9c91}\label{clasships_a5d68e2f3f805f6c419ab606fb1bb9c91}} 
+\index{hips@{hips}!Afac@{Afac}}
+\index{Afac@{Afac}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{Afac}{Afac}}
+{\footnotesize\ttfamily double hips\+::\+Afac}
+
+
+
+level lengthscale reduction factor (0.\+5) 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00029}{29}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_af05ebcf315fa2b5c627f9d38395f576e}\label{clasships_af05ebcf315fa2b5c627f9d38395f576e}} 
 \index{hips@{hips}!nLevels@{nLevels}}
@@ -537,49 +773,25 @@ Definition at line 26 of file hips.\+h.
 
 
 
-Definition at line 31 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_ad5868e484de1ca30cb7427d4a17e2734}\label{clasships_ad5868e484de1ca30cb7427d4a17e2734}} 
-\index{hips@{hips}!domainLength@{domainLength}}
-\index{domainLength@{domainLength}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{domainLength}{domainLength}}
-{\footnotesize\ttfamily double hips\+::domain\+Length\hspace{0.3cm}{\ttfamily [private]}}
+number of tree levels 
 
 
 
-length of domain (m) 
+Definition at line \mbox{\hyperlink{hips_8h_source_l00033}{33}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_a0c7d7ea0e014fe4b34c9db6ad9e19fba}\label{clasships_a0c7d7ea0e014fe4b34c9db6ad9e19fba}} 
+\index{hips@{hips}!nLevels\_@{nLevels\_}}
+\index{nLevels\_@{nLevels\_}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{nLevels\_}{nLevels\_}}
+{\footnotesize\ttfamily int hips\+::n\+Levels\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line 32 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_aefdec9ee971fd921a9edae48e5fee8e0}\label{clasships_aefdec9ee971fd921a9edae48e5fee8e0}} 
-\index{hips@{hips}!tau0@{tau0}}
-\index{tau0@{tau0}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{tau0}{tau0}}
-{\footnotesize\ttfamily double hips\+::tau0\hspace{0.3cm}{\ttfamily [private]}}
+number of tree levels? 
 
 
 
-integral timescale 
-
-
-
-Definition at line 33 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}\label{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}} 
-\index{hips@{hips}!C\_param@{C\_param}}
-\index{C\_param@{C\_param}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{C\_param}{C\_param}}
-{\footnotesize\ttfamily double hips\+::\+C\+\_\+param\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-Eddy frequency parameter. 
-
-
-
-Definition at line 34 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00034}{34}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_a61569cff2835802d3daca4fb71e11b76}\label{clasships_a61569cff2835802d3daca4fb71e11b76}} 
 \index{hips@{hips}!forceTurb@{forceTurb}}
@@ -593,7 +805,7 @@ forcing function for statistically stationary\+: -\/1 = none, 1 = source term, 2
 
 
 
-Definition at line 35 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00035}{35}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_a0b8e82059b65e7870c04dd696f930248}\label{clasships_a0b8e82059b65e7870c04dd696f930248}} 
 \index{hips@{hips}!nVar@{nVar}}
@@ -607,7 +819,7 @@ number of parcel variables (e.\+g., h, ysp)
 
 
 
-Definition at line 36 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00036}{36}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_a61dca70748931a42d50254435f36e5e8}\label{clasships_a61dca70748931a42d50254435f36e5e8}} 
 \index{hips@{hips}!nsp@{nsp}}
@@ -621,17 +833,7 @@ number of species
 
 
 
-Definition at line 37 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_a854afb00db645be7307d09bf72ff10d4}\label{clasships_a854afb00db645be7307d09bf72ff10d4}} 
-\index{hips@{hips}!time@{time}}
-\index{time@{time}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{time}{time}}
-{\footnotesize\ttfamily double hips\+::time\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-Definition at line 39 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00037}{37}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_af0e018ac591dc6d210f39d73152dc5b7}\label{clasships_af0e018ac591dc6d210f39d73152dc5b7}} 
 \index{hips@{hips}!Nm1@{Nm1}}
@@ -645,7 +847,7 @@ n\+Levels -\/ 1
 
 
 
-Definition at line 40 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00038}{38}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_a0a59c28db4e081ee7c4afa2ba051dc64}\label{clasships_a0a59c28db4e081ee7c4afa2ba051dc64}} 
 \index{hips@{hips}!Nm2@{Nm2}}
@@ -660,7 +862,7 @@ n\+Levels -\/ 2 ~\newline
 
 
 
-Definition at line 41 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00039}{39}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_a008fdf2528663d23c02f07364bce9e45}\label{clasships_a008fdf2528663d23c02f07364bce9e45}} 
 \index{hips@{hips}!Nm3@{Nm3}}
@@ -674,7 +876,7 @@ n\+Levels -\/ 3
 
 
 
-Definition at line 42 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00040}{40}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_acf56678e2fdbe105d9b6a218262fa517}\label{clasships_acf56678e2fdbe105d9b6a218262fa517}} 
 \index{hips@{hips}!iEta@{iEta}}
@@ -688,35 +890,7 @@ Kolmogorov level (needed for variable Sc scalars)
 
 
 
-Definition at line 43 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_ad56769a509f9d0e67a0e609ac5569b4d}\label{clasships_ad56769a509f9d0e67a0e609ac5569b4d}} 
-\index{hips@{hips}!eddyRate\_total@{eddyRate\_total}}
-\index{eddyRate\_total@{eddyRate\_total}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{eddyRate\_total}{eddyRate\_total}}
-{\footnotesize\ttfamily double hips\+::eddy\+Rate\+\_\+total\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-total rate of all eddies 0 through n\+Levels-\/3 
-
-
-
-Definition at line 44 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_a6bb6bdd8027532037b60a56600c3af40}\label{clasships_a6bb6bdd8027532037b60a56600c3af40}} 
-\index{hips@{hips}!eddyRate\_inertial@{eddyRate\_inertial}}
-\index{eddyRate\_inertial@{eddyRate\_inertial}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{eddyRate\_inertial}{eddyRate\_inertial}}
-{\footnotesize\ttfamily double hips\+::eddy\+Rate\+\_\+inertial\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-tota public\+: 
-
-
-
-Definition at line 45 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00041}{41}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_af0693b6587b038be50f185a0a8e1d67e}\label{clasships_af0693b6587b038be50f185a0a8e1d67e}} 
 \index{hips@{hips}!LScHips@{LScHips}}
@@ -730,91 +904,7 @@ hips schmidt number
 
 
 
-Definition at line 46 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_a7e27da1761f73d3653dc62c56be21bdd}\label{clasships_a7e27da1761f73d3653dc62c56be21bdd}} 
-\index{hips@{hips}!i\_batchelor@{i\_batchelor}}
-\index{i\_batchelor@{i\_batchelor}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{i\_batchelor}{i\_batchelor}}
-{\footnotesize\ttfamily std\+::vector$<$double$>$ hips\+::i\+\_\+batchelor\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-Batchelor level for variable Sc scalars; NOTE\+: double, as in, between levels. 
-
-
-
-Definition at line 47 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_a52ef091a3269bf7bc68008064297b625}\label{clasships_a52ef091a3269bf7bc68008064297b625}} 
-\index{hips@{hips}!i\_plus@{i\_plus}}
-\index{i\_plus@{i\_plus}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{i\_plus}{i\_plus}}
-{\footnotesize\ttfamily std\+::vector$<$int$>$ hips\+::i\+\_\+plus\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-ceil(i\+\_\+batchelor) 
-
-
-
-Definition at line 48 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_a02e76a9b13872dff1fb000a751198330}\label{clasships_a02e76a9b13872dff1fb000a751198330}} 
-\index{hips@{hips}!parcelTimes@{parcelTimes}}
-\index{parcelTimes@{parcelTimes}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{parcelTimes}{parcelTimes}}
-{\footnotesize\ttfamily std\+::vector$<$double$>$ hips\+::parcel\+Times\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-current times corresponding to the parcel states 
-
-
-
-Definition at line 49 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_a9966d2b2baaebd32582c70190c5f3c0c}\label{clasships_a9966d2b2baaebd32582c70190c5f3c0c}} 
-\index{hips@{hips}!levelRates@{levelRates}}
-\index{levelRates@{levelRates}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{levelRates}{levelRates}}
-{\footnotesize\ttfamily std\+::vector$<$double$>$ hips\+::level\+Rates\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-list of eddy event rates at each level 
-
-
-
-Definition at line 51 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_a27391cfb6e9e60f55e7483fde28eade3}\label{clasships_a27391cfb6e9e60f55e7483fde28eade3}} 
-\index{hips@{hips}!pLoc@{pLoc}}
-\index{pLoc@{pLoc}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{pLoc}{pLoc}}
-{\footnotesize\ttfamily std\+::vector$<$int$>$ hips\+::p\+Loc\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-parcel index array for fast implementation of swaps 
-
-
-
-Definition at line 52 of file hips.\+h.
-
-\mbox{\Hypertarget{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}\label{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}} 
-\index{hips@{hips}!ScHips@{ScHips}}
-\index{ScHips@{ScHips}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{ScHips}{ScHips}}
-{\footnotesize\ttfamily std\+::vector$<$double$>$ hips\+::\+Sc\+Hips\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-Vector containing Schmidt numbers related to each variable. 
-
-
-
-Definition at line 53 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00042}{42}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_a27430a737318590bcc888bb2a760d2ee}\label{clasships_a27430a737318590bcc888bb2a760d2ee}} 
 \index{hips@{hips}!performReaction@{performReaction}}
@@ -828,7 +918,7 @@ Flag indicating whether chemical reactions are performed in the simulation.
 
 
 
-Definition at line 56 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00043}{43}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_a3a48aadeba689191761cae9951f83466}\label{clasships_a3a48aadeba689191761cae9951f83466}} 
 \index{hips@{hips}!LrandSet@{LrandSet}}
@@ -838,35 +928,73 @@ Definition at line 56 of file hips.\+h.
 
 
 
-flag indicating new random\+Gen -\/-\/$>$ allow deletion 
+flag indicating new random\+Gen -\/-\/\texorpdfstring{$>$}{>} allow deletion 
 
 
 
-Definition at line 57 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00044}{44}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_a846a206ec9adaac3a83057fb0068be7e}\label{clasships_a846a206ec9adaac3a83057fb0068be7e}} 
 \index{hips@{hips}!rand@{rand}}
 \index{rand@{rand}!hips@{hips}}
 \doxysubsubsection{\texorpdfstring{rand}{rand}}
-{\footnotesize\ttfamily \mbox{\hyperlink{classrandomGenerator}{random\+Generator}} hips\+::rand\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classrandom_generator}{random\+Generator}} hips\+::rand\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line 58 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00045}{45}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
-\mbox{\Hypertarget{clasships_a1690c1395ecbf568cadce02de0c95d2d}\label{clasships_a1690c1395ecbf568cadce02de0c95d2d}} 
-\index{hips@{hips}!Afac@{Afac}}
-\index{Afac@{Afac}!hips@{hips}}
-\doxysubsubsection{\texorpdfstring{Afac}{Afac}}
-{\footnotesize\ttfamily const double hips\+::\+Afac = 0.\+5\hspace{0.3cm}{\ttfamily [private]}}
-
-
-
-level lengthscale reduction factor (0.\+5) 
+\mbox{\Hypertarget{clasships_a52ef091a3269bf7bc68008064297b625}\label{clasships_a52ef091a3269bf7bc68008064297b625}} 
+\index{hips@{hips}!i\_plus@{i\_plus}}
+\index{i\_plus@{i\_plus}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{i\_plus}{i\_plus}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ hips\+::i\+\_\+plus\hspace{0.3cm}{\ttfamily [private]}}
 
 
 
-Definition at line 60 of file hips.\+h.
+ceil(i\+\_\+batchelor) 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00046}{46}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_a27391cfb6e9e60f55e7483fde28eade3}\label{clasships_a27391cfb6e9e60f55e7483fde28eade3}} 
+\index{hips@{hips}!pLoc@{pLoc}}
+\index{pLoc@{pLoc}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{pLoc}{pLoc}}
+{\footnotesize\ttfamily std\+::vector$<$int$>$ hips\+::p\+Loc\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+parcel index array for fast implementation of swaps 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00047}{47}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_a8f22f735022a7d81c44a714b44a62694}\label{clasships_a8f22f735022a7d81c44a714b44a62694}} 
+\index{hips@{hips}!varRho@{varRho}}
+\index{varRho@{varRho}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{varRho}{varRho}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ hips\+::var\+Rho\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00048}{48}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}\label{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}} 
+\index{hips@{hips}!ScHips@{ScHips}}
+\index{ScHips@{ScHips}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{ScHips}{ScHips}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ hips\+::\+Sc\+Hips\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Vector containing Schmidt numbers related to each variable. 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00049}{49}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 \mbox{\Hypertarget{clasships_a998b5a76ecd9d451115b96702b914096}\label{clasships_a998b5a76ecd9d451115b96702b914096}} 
 \index{hips@{hips}!varName@{varName}}
@@ -880,11 +1008,53 @@ Vector containing the names of parcel variables.
 
 
 
-Definition at line 61 of file hips.\+h.
+Definition at line \mbox{\hyperlink{hips_8h_source_l00050}{50}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_a02e76a9b13872dff1fb000a751198330}\label{clasships_a02e76a9b13872dff1fb000a751198330}} 
+\index{hips@{hips}!parcelTimes@{parcelTimes}}
+\index{parcelTimes@{parcelTimes}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{parcelTimes}{parcelTimes}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ hips\+::parcel\+Times\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+current times corresponding to the parcel states 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00051}{51}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_a9966d2b2baaebd32582c70190c5f3c0c}\label{clasships_a9966d2b2baaebd32582c70190c5f3c0c}} 
+\index{hips@{hips}!levelRates@{levelRates}}
+\index{levelRates@{levelRates}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{levelRates}{levelRates}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ hips\+::level\+Rates\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+list of eddy event rates at each level 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00052}{52}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
+
+\mbox{\Hypertarget{clasships_a7e27da1761f73d3653dc62c56be21bdd}\label{clasships_a7e27da1761f73d3653dc62c56be21bdd}} 
+\index{hips@{hips}!i\_batchelor@{i\_batchelor}}
+\index{i\_batchelor@{i\_batchelor}!hips@{hips}}
+\doxysubsubsection{\texorpdfstring{i\_batchelor}{i\_batchelor}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ hips\+::i\+\_\+batchelor\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Batchelor level for variable Sc scalars; NOTE\+: double, as in, between levels. 
+
+
+
+Definition at line \mbox{\hyperlink{hips_8h_source_l00053}{53}} of file \mbox{\hyperlink{hips_8h_source}{hips.\+h}}.
 
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/home/mbehrang/codes/hips-\/publish/hips-\/final-\/projection/hips/src/\mbox{\hyperlink{hips_8h}{hips.\+h}}\item 
-/home/mbehrang/codes/hips-\/publish/hips-\/final-\/projection/hips/src/\mbox{\hyperlink{hips_8cc}{hips.\+cc}}\end{DoxyCompactItemize}
+/\+Users/maisy/code\+Hips/hips/src/\mbox{\hyperlink{hips_8h}{hips.\+h}}\item 
+/\+Users/maisy/code\+Hips/hips/src/\mbox{\hyperlink{hips_8cc}{hips.\+cc}}\end{DoxyCompactItemize}

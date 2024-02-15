@@ -918,6 +918,7 @@ WARN_LOGFILE           =
 INPUT                  = ../src      \ 
                          ../docs     \
                          ../docs/results \
+                         ../examples/examples-bkp  \
                          
 
 # This tag can be used to specify the character encoding of the source files

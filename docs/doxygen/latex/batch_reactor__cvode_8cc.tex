@@ -1,0 +1,59 @@
+\hypertarget{batch_reactor__cvode_8cc}{}\doxysection{/\+Users/maisy/code\+Hips/hips/src/batch\+Reactor\+\_\+cvode.cc File Reference}
+\label{batch_reactor__cvode_8cc}\index{/Users/maisy/codeHips/hips/src/batchReactor\_cvode.cc@{/Users/maisy/codeHips/hips/src/batchReactor\_cvode.cc}}
+{\ttfamily \#include \char`\"{}batch\+Reactor\+\_\+cvode.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{batch_reactor__cvode_8cc_a32482f0a6ee1883664a92263941f63b8}{rhsf\+\_\+cvode}} (realtype t, N\+\_\+\+Vector vars\+CV, N\+\_\+\+Vector dvarsdt\+CV, void $\ast$user\+\_\+data)
+\begin{DoxyCompactList}\small\item\em Callback function for the right-\/hand side of the ODE system used by CVODE. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{batch_reactor__cvode_8cc_a32482f0a6ee1883664a92263941f63b8}\label{batch_reactor__cvode_8cc_a32482f0a6ee1883664a92263941f63b8}} 
+\index{batchReactor\_cvode.cc@{batchReactor\_cvode.cc}!rhsf\_cvode@{rhsf\_cvode}}
+\index{rhsf\_cvode@{rhsf\_cvode}!batchReactor\_cvode.cc@{batchReactor\_cvode.cc}}
+\doxysubsubsection{\texorpdfstring{rhsf\_cvode()}{rhsf\_cvode()}}
+{\footnotesize\ttfamily int rhsf\+\_\+cvode (\begin{DoxyParamCaption}\item[{realtype}]{t,  }\item[{N\+\_\+\+Vector}]{vars\+CV,  }\item[{N\+\_\+\+Vector}]{dvarsdt\+CV,  }\item[{void $\ast$}]{user\+\_\+data }\end{DoxyParamCaption})}
+
+
+
+Callback function for the right-\/hand side of the ODE system used by CVODE. 
+
+This function calculates the right-\/hand side of the ODE system.
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & Current time. \\
+\hline
+{\em vars\+CV} & N\+\_\+\+Vector containing the variables (species concentrations). \\
+\hline
+{\em dvarsdt\+CV} & N\+\_\+\+Vector containing the derivatives of the variables with respect to time. \\
+\hline
+{\em user\+\_\+data} & Pointer to the user-\/defined data (\mbox{\hyperlink{classbatch_reactor__cvode}{batch\+Reactor\+\_\+cvode}} instance). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success.
+\end{DoxyReturn}
+
+
+This function is called by CVODE, which in turn calls the rhsf method of the \mbox{\hyperlink{classbatch_reactor__cvode}{batch\+Reactor\+\_\+cvode}} instance.
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & Current time. \\
+\hline
+{\em vars\+CV} & N\+\_\+\+Vector containing the variables (species concentrations). \\
+\hline
+{\em dvarsdt\+CV} & N\+\_\+\+Vector containing the derivatives of the variables with respect to time. \\
+\hline
+{\em user\+\_\+data} & Pointer to the user-\/defined data (\mbox{\hyperlink{classbatch_reactor__cvode}{batch\+Reactor\+\_\+cvode}} instance). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success. 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{batch_reactor__cvode_8cc_source_l00095}{95}} of file \mbox{\hyperlink{batch_reactor__cvode_8cc_source}{batch\+Reactor\+\_\+cvode.\+cc}}.
+

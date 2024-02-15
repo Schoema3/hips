@@ -16,6 +16,7 @@ class batchReactor_cvode : public batchReactor {
 ////////////////////////////// DATA MEMBERS /////////////////////////////
     
     std::unique_ptr<integrator_cvode>     integrator; ///< cvode integrator wrappter
+    //double rho;                                             //Mb 
 
 /////////////////////////////// MEMBER FUNCTIONS//////////////////////////////////////////
 
@@ -26,6 +27,9 @@ public:
     virtual void react(double &h, std::vector<double> &y, const double tRun);
 
     int rhsf(const double t, const double *vars, double *dvarsdt);  // dydt = rhsf
+    
+    //double getDensity() const { return rho; }       //Mb
 
     virtual ~batchReactor_cvode() {}
+
 };
