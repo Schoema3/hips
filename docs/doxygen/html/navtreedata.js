@@ -25,12 +25,12 @@
 var NAVTREE =
 [
   [ "hips", "index.html", [
-    [ "Overview", "index.html#autotoc_md1", null ],
-    [ "Dependencies and installation", "index.html#autotoc_md2", [
-      [ "Build and installation instructions", "index.html#autotoc_md4", null ],
-      [ "CMake configuration variables", "index.html#autotoc_md7", null ]
+    [ "Overview", "index.html#autotoc_md6", null ],
+    [ "Dependencies and installation", "index.html#autotoc_md10", [
+      [ "Build and installation instructions", "index.html#autotoc_md13", null ],
+      [ "CMake configuration variables", "index.html#autotoc_md15", null ]
     ] ],
-    [ "Using HiPS", "index.html#autotoc_md15", null ],
+    [ "Using HiPS", "index.html#autotoc_md16", null ],
     [ "Example workflow", "index.html#autotoc_md17", [
       [ "1. HiPS Tree and Constructor Parameters", "index.html#autotoc_md18", null ],
       [ "2. Gas Solution Setup (required for reaction)", "index.html#autotoc_md19", null ],
@@ -43,18 +43,18 @@ var NAVTREE =
     ] ],
     [ "Examples", "index.html#autotoc_md26", null ],
     [ "mainpage", "md_mainpage.html", [
-      [ "Using HiPS", "md_mainpage.html#autotoc_md3", null ],
-      [ "Example workflow", "md_mainpage.html#autotoc_md5", [
-        [ "1. HiPS Tree and Constructor Parameters", "md_mainpage.html#autotoc_md6", null ],
-        [ "2. Gas Solution Setup (required for reaction)", "md_mainpage.html#autotoc_md8", null ],
-        [ "3. HiPS Tree Creation", "md_mainpage.html#autotoc_md9", null ],
-        [ "4. Initialize Variables and Parameters", "md_mainpage.html#autotoc_md10", null ],
-        [ "5. Initialize Mixing Fractions", "md_mainpage.html#autotoc_md11", null ],
-        [ "6. Set Initial State in Parcels", "md_mainpage.html#autotoc_md12", null ],
-        [ "7. Advance HiPS for Mixing and Reaction", "md_mainpage.html#autotoc_md13", null ],
-        [ "Implementation Guidelines", "md_mainpage.html#autotoc_md14", null ]
+      [ "Using HiPS", "md_mainpage.html#autotoc_md1", null ],
+      [ "Example workflow", "md_mainpage.html#autotoc_md2", [
+        [ "1. HiPS Tree and Constructor Parameters", "md_mainpage.html#autotoc_md3", null ],
+        [ "2. Gas Solution Setup (required for reaction)", "md_mainpage.html#autotoc_md4", null ],
+        [ "3. HiPS Tree Creation", "md_mainpage.html#autotoc_md5", null ],
+        [ "4. Initialize Variables and Parameters", "md_mainpage.html#autotoc_md7", null ],
+        [ "5. Initialize Mixing Fractions", "md_mainpage.html#autotoc_md8", null ],
+        [ "6. Set Initial State in Parcels", "md_mainpage.html#autotoc_md9", null ],
+        [ "7. Advance HiPS for Mixing and Reaction", "md_mainpage.html#autotoc_md11", null ],
+        [ "Implementation Guidelines", "md_mainpage.html#autotoc_md12", null ]
       ] ],
-      [ "Examples", "md_mainpage.html#autotoc_md16", null ]
+      [ "Examples", "md_mainpage.html#autotoc_md14", null ]
     ] ],
     [ "md_results_test", "md_results_test.html", [
       [ "JUST TO SEE", "md_results_test.html#autotoc_md0", null ]

@@ -38,7 +38,7 @@ std\+::vector$<$ std\+::vector$<$ double $>$ $>$ \mbox{\hyperlink{clasships_a4f1
 \begin{DoxyCompactList}\small\item\em Retrieves modified data from the Hi\+PS library and stores it in the provided vector. \end{DoxyCompactList}\item 
 std\+::vector$<$ double $>$ \mbox{\hyperlink{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}{projection\+\_\+back}} (std\+::vector$<$ double $>$ \&vb)
 \begin{DoxyCompactList}\small\item\em Function for projecting vectors onto a grid. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{clasships_ad6c3df079ecab73ae445d7e29069ab63}{calculate\+Solution}} (const double t\+Run)
+void \mbox{\hyperlink{clasships_a8dd010962442d98a3959ea336670c8db}{calculate\+Solution}} (const double t\+Run, bool should\+Write\+Data)
 \begin{DoxyCompactList}\small\item\em Running simulations. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
@@ -208,7 +208,7 @@ Function to pass the variables, their weights, and their names to the parcels of
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00170}{170}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00169}{169}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_ac563a03328850c5a4413e48feed9dc40}\label{clasships_ac563a03328850c5a4413e48feed9dc40}} 
 \index{hips@{hips}!set\_varData@{set\_varData}}
@@ -241,7 +241,7 @@ This function is overloaded. This version considers particle density.
 \end{DoxyNote}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00185}{185}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00184}{184}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_ae0c1598d16584096403630e1b3f147dd}\label{clasships_ae0c1598d16584096403630e1b3f147dd}} 
 \index{hips@{hips}!projection@{projection}}
@@ -267,7 +267,7 @@ Projected vector.
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00202}{202}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00201}{201}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_af7d9fc8b48ce945bccf4b397102a3ee3}\label{clasships_af7d9fc8b48ce945bccf4b397102a3ee3}} 
 \index{hips@{hips}!projection@{projection}}
@@ -300,7 +300,7 @@ This function is overloaded. This version considers particle density.
 \end{DoxyNote}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00252}{252}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00251}{251}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a012995a97c1d8ff113dae91847890c2e}\label{clasships_a012995a97c1d8ff113dae91847890c2e}} 
 \index{hips@{hips}!setGridHips@{setGridHips}}
@@ -327,7 +327,7 @@ Vector representing the grid.
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00331}{331}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00330}{330}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}\label{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}} 
 \index{hips@{hips}!setGridCfd@{setGridCfd}}
@@ -353,7 +353,7 @@ Vector representing the grid positions.
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00305}{305}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00304}{304}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a4f12ec17e2983edef734832203570c87}\label{clasships_a4f12ec17e2983edef734832203570c87}} 
 \index{hips@{hips}!get\_varData@{get\_varData}}
@@ -374,7 +374,7 @@ A vector of vectors containing modified data retrieved from the Hi\+PS library.
 \end{DoxyReturn}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00745}{745}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00744}{744}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}\label{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}} 
 \index{hips@{hips}!projection\_back@{projection\_back}}
@@ -393,13 +393,13 @@ Function for projecting vectors onto a grid.
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00702}{702}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00701}{701}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
-\mbox{\Hypertarget{clasships_ad6c3df079ecab73ae445d7e29069ab63}\label{clasships_ad6c3df079ecab73ae445d7e29069ab63}} 
+\mbox{\Hypertarget{clasships_a8dd010962442d98a3959ea336670c8db}\label{clasships_a8dd010962442d98a3959ea336670c8db}} 
 \index{hips@{hips}!calculateSolution@{calculateSolution}}
 \index{calculateSolution@{calculateSolution}!hips@{hips}}
 \doxysubsubsection{\texorpdfstring{calculateSolution()}{calculateSolution()}}
-{\footnotesize\ttfamily void hips\+::calculate\+Solution (\begin{DoxyParamCaption}\item[{const double}]{t\+Run }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void hips\+::calculate\+Solution (\begin{DoxyParamCaption}\item[{const double}]{t\+Run,  }\item[{bool}]{should\+Write\+Data }\end{DoxyParamCaption})}
 
 
 
@@ -412,7 +412,7 @@ The Hi\+PS solver
 \end{DoxyParams}
 Sample tee (time of next eddy event) Select and swap subtrees (at current time, not at tee, so that we know whos involved) If the eddy event is at the parcel/micromixing level\+: React involved parcels from their current time to tee Mix the involved parcels (micromixing) 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00354}{354}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00353}{353}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a8b2206a09dc03321585fbbcf94fbbb14}\label{clasships_a8b2206a09dc03321585fbbcf94fbbb14}} 
 \index{hips@{hips}!sample\_hips\_eddy@{sample\_hips\_eddy}}
@@ -427,14 +427,14 @@ Sample hips eddy with specified time step and level ~\newline
 
 Samples stochastic eddy events on the hips tree\+: time and level. 
 \begin{DoxyParams}{Parameters}
-{\em dt\+EE} & {\itshape output\+:} time increment to next eddy event (EE) \\
+{\em dt\+EE} & Output time increment to next eddy event (EE) \\
 \hline
-{\em i\+Level} & {\itshape output\+:} tree level of EE \\
+{\em i\+Level} & Output tree level of EE \\
 \hline
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00390}{390}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00389}{389}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a672cc0cc3879ccf71023a059739ab547}\label{clasships_a672cc0cc3879ccf71023a059739ab547}} 
 \index{hips@{hips}!selectAndSwapTwoSubtrees@{selectAndSwapTwoSubtrees}}
@@ -448,9 +448,9 @@ Select and swap two subtrees in the level tree.
 
 Function performs eddy events\+: parcel swaps. 
 \begin{DoxyParams}{Parameters}
-{\em i\+Level} & {\itshape input\+:} level of the tree for the base of the swap. \\
+{\em i\+Level} & Input level of the tree for the base of the swap. \\
 \hline
-{\em i\+Tree} & {\itshape output\+:} which subtree on the level is selected\\
+{\em i\+Tree} & Output which subtree on the level is selected\\
 \hline
 \end{DoxyParams}
 Randomly select a node on i\+Level. Go down two levels and select nodes 0q and 1r, where q, r are randomly 0 or 1 Find the starting index of the Q-\/tree and R-\/tree to swap and the number of parcels. Then swap the cells.
@@ -468,7 +468,7 @@ $\ast$ $\ast$ \mbox{[}$\ast$\mbox{]} 00$\vert$$\ast$$\ast$ $\ast$ $\ast$ \mbox{[
 \item $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ $\ast$ 4 / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} / \textbackslash{} 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 5 $^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$ $^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$$^\wedge$ 
 \end{DoxyItemize}
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00472}{472}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00471}{471}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_ae794eac94488c12cc1aa0a321de471b9}\label{clasships_ae794eac94488c12cc1aa0a321de471b9}} 
 \index{hips@{hips}!advanceHips@{advanceHips}}
@@ -482,14 +482,14 @@ Advancing simulations to do mixing and reaction.
 
 React and mix parcels that are involved in a micromixing process. This is determined by the level and the tree within that level. Might not do anything if the eddy doesn\textquotesingle{}t cause micromixing. 
 \begin{DoxyParams}{Parameters}
-{\em i\+Level} & {\itshape input\+:} level that the eddy event occurred. \\
+{\em i\+Level} & Input level that the eddy event occurred. \\
 \hline
-{\em i\+Tree} & {\itshape input\+:} root note of the eddy event at i\+Level. \\
+{\em i\+Tree} & Input root note of the eddy event at i\+Level. \\
 \hline
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00498}{498}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00497}{497}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}\label{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}} 
 \index{hips@{hips}!reactParcels\_LevelTree@{reactParcels\_LevelTree}}
@@ -510,7 +510,7 @@ React parcels that are involved in a micromixing process. Parcels might react fo
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00524}{524}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00523}{523}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}\label{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}} 
 \index{hips@{hips}!mixAcrossLevelTree@{mixAcrossLevelTree}}
@@ -548,7 +548,7 @@ Example\+: For a 5 level tree, we have levels 0, 1, 2, 3, 4 (top to bottom). \be
 
 NOTE\+: BE CAREFUL WITH MIXING SOME SCALARS, LIKE MASS FRACTIONS; CURRENT CODE ASSUMES ALL PARCELS HAVE SAME DENSITY (mixing Yi directly) 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00580}{580}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00579}{579}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a2e1bb3550fb08551e13609f028a10712}\label{clasships_a2e1bb3550fb08551e13609f028a10712}} 
 \index{hips@{hips}!forceProfile@{forceProfile}}
@@ -567,7 +567,7 @@ This function modifies the data stored in the Hi\+PS profile.
 \end{DoxyNote}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00632}{632}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00631}{631}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 \mbox{\Hypertarget{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}\label{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}} 
 \index{hips@{hips}!writeData@{writeData}}
@@ -592,7 +592,7 @@ This function writes data to a file with a filename following a sequential incre
 \end{DoxyParams}
 
 
-Definition at line \mbox{\hyperlink{hips_8cc_source_l00670}{670}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
+Definition at line \mbox{\hyperlink{hips_8cc_source_l00669}{669}} of file \mbox{\hyperlink{hips_8cc_source}{hips.\+cc}}.
 
 
 
@@ -1056,5 +1056,5 @@ Definition at line \mbox{\hyperlink{hips_8h_source_l00053}{53}} of file \mbox{\h
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/\+Users/maisy/code\+Hips/hips/src/\mbox{\hyperlink{hips_8h}{hips.\+h}}\item 
-/\+Users/maisy/code\+Hips/hips/src/\mbox{\hyperlink{hips_8cc}{hips.\+cc}}\end{DoxyCompactItemize}
+/\+Users/maisy/hips-\/lib-\/final/hips/src/\mbox{\hyperlink{hips_8h}{hips.\+h}}\item 
+/\+Users/maisy/hips-\/lib-\/final/hips/src/\mbox{\hyperlink{hips_8cc}{hips.\+cc}}\end{DoxyCompactItemize}

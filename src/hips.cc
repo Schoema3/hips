@@ -31,7 +31,6 @@ hips::hips(double Re) {
     if (abs(nL - original_N) > abs(closest_N - original_N)) {                        // Check if adjusting A to a lower exponent brings N closer to the original N
         desired_exponent -= 1;
         Afac = pow(1/Re, 1/desired_exponent);
-        cout <<"Afac in the cosntructor  "<<Afac<<endl;
         nL = (3.0/4) * log(1/Re) / log(Afac);
         nL = nL + 3;
     }
@@ -42,16 +41,16 @@ hips::hips(double Re) {
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * \Constructor for initializing required parameters to create the HiPS tree. 
- * \param nLevels_                      Number of tree levels.
- * \param domainLength_                 Length scale of the domain.
- * \param tau0_                         Time scale of the domain.
- * \param C_param_                      C parameter to control eddy rate
- * \param forceTurb_                    Flag for forcing turbulence.
- * \param nVar_                         Number of variables.
- * \param ScHips_                       Vector of Schmidt numbers for HiPS simulation.
- * \param cantSol                       Cantera solution object.
- * \param performReaction_              Flag for performing chemical reactions
- * \param seed                          Seed for the random number generator(negative to randomize it).
+ * \param nLevels_                     Input number of tree levels.
+ * \param domainLength_                Input length scale of the domain.
+ * \param tau0_                        Input time scale of the domain.
+ * \param C_param_                     Input c parameter to control eddy rate
+ * \param forceTurb_                   Input flag for forcing turbulence.
+ * \param nVar_                        Input number of variables.
+ * \param ScHips_                      Input vector of Schmidt numbers for HiPS simulation.
+ * \param cantSol                      Input Cantera solution object.
+ * \param performReaction_             Input flag for performing chemical reactions
+ * \param seed                         Input seed for the random number generator(negative to randomize it).
  */
 hips::hips(int nLevels_, 
            double domainLength_, 
@@ -113,7 +112,6 @@ hips::hips(int nLevels_,
     levelRates   = vector<double>(nLevels);
 
     for (int i=0; i<nLevels; i++) {
-        cout<<"Afac behore level  "<<Afac<<endl;
         levelLengths[i] = domainLength * pow(Afac,i);
         levelTaus[i] = tau0 * pow(levelLengths[i]/domainLength, 2.0/3.0) / C_param;
         levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
@@ -162,9 +160,9 @@ hips::hips(int nLevels_,
 ////////////////////////////////////////i///////////////////////////////////////
 /**
  * \brief Function to pass the variables, their weights, and their names to the parcels of the tree.  
- * \param v                             Vector of variables that are passed to the HiPS tree.
- * \param w                             Vector of weights; each flow particle has a weights.
- * \param varN                          Vector of names of the variable.
+ * \param v                            Input vector consisting of variables passed to the HiPS tree.
+ * \param w                            Input vector containing weights for each flow particle.
+ * \param varN                         Input vector containing names corresponding to each variable.
  * \param i                             Index indicating where the data should be assigned in the vectors varData and varName.
  */
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, int i) {  
@@ -299,7 +297,7 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
  *
  * This function generates a grid for CFD simulation based on a given weight vector.
  *
- * \param w Weight vector defining the spacing between grid points.
+ * \param w                     Weight vector defining the spacing between grid points.
  * \return Vector representing the grid positions.
  */
 std::vector<double> hips::setGridCfd(std::vector<double> &w) {
@@ -325,7 +323,7 @@ std::vector<double> hips::setGridCfd(std::vector<double> &w) {
  *
  * This function generates a grid for HIPS simulation with a specified number of grid points.
  *
- * \param N Number of grid points.
+ * \param N                       Number of grid points.
  * \return Vector representing the grid.
  */
 std::vector<double> hips::setGridHips(int N){
@@ -342,16 +340,17 @@ std::vector<double> hips::setGridHips(int N){
 
 ///////////////////////////////////////////////////////////////////////////////
 /** The HiPS solver
- * \param tRun Input simulation run time
+ * \param tRun                               Input simulation run time
+ * \param shouldWriteData                    Set to false by default. If true, data will be written.
  *
  * Sample tee (time of next eddy event)
- * Select and swap subtrees (at current time, not at tee, so that we know whos involved)
+ * Select and swap subtrees (at current time, not at tee, so that we know who's involved)
  * If the eddy event is at the parcel/micromixing level:
  *     React involved parcels from their current time to tee
  *     Mix the involved parcels (micromixing)
  */
 
-void hips::calculateSolution(const double tRun) {
+void hips::calculateSolution(const double tRun, bool shouldWriteData) {
 
     unsigned long long nEddies = 0;                                        // number of eddy events
     int    fileCounter = 0;                                                // number of data files written
@@ -372,7 +371,7 @@ void hips::calculateSolution(const double tRun) {
 
         nEddies++;
         //cout<<"-------------------------------------"<<nEddies<<endl;
-        if(nEddies %2 == 0) writeData(++fileCounter, time);
+        if(shouldWriteData && nEddies %200000 == 0) writeData(++fileCounter, time);
     }
     time = tRun;
     iLevel = 0; iTree  = 0;
@@ -383,8 +382,8 @@ void hips::calculateSolution(const double tRun) {
 
 ///////////////////////////////////////////////////////////////////////////////
 /** Samples stochastic eddy events on the hips tree: time and level.
-*   \param dtEE   \output time increment to next eddy event (EE)
-*   \param iLevel \output tree level of EE
+*   \param dtEE                            Output time increment to next eddy event (EE)
+*   \param iLevel                          Output tree level of EE
 */
 
 void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
@@ -421,8 +420,8 @@ void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
 
 ///////////////////////////////////////////////////////////////////////////////
 /** Function performs eddy events: parcel swaps.
-    @param iLevel \input  level of the tree for the base of the swap.
-    @param iTree  \output which subtree on the level is selected
+    @param iLevel                          Input  level of the tree for the base of the swap.
+    @param iTree                           Output which subtree on the level is selected
 
     Randomly select a node on iLevel.
     Go down two levels and select nodes 0q and 1r, where q, r are randomly 0 or 1
@@ -491,8 +490,8 @@ void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
 /** React and mix parcels that are involved in a micromixing process.
   * This is determined by the level and the tree within that level.
   * Might not do anything if the eddy doesn't cause micromixing.
-  * @param iLevel \input level that the eddy event occurred.
-  * @param iTree  \input root note of the eddy event at iLevel.
+  * \param iLevel                    Input level that the eddy event occurred.
+  * \param iTree                     Input root note of the eddy event at iLevel.
   */
 
 void hips::advanceHips(const int iLevel, const int iTree) {
@@ -517,8 +516,8 @@ void hips::advanceHips(const int iLevel, const int iTree) {
 /** React parcels that are involved in a micromixing process.
   * Parcels might react for different amounts of time depending on when they last
   * reacted, which is stored in the parcelTimes array.
-  * @param iLevel \input level that the eddy event occurred.
-  * @param iTree  \input root note of the eddy event at iLevel.
+  * @param iLevel                    Input level that the eddy event occurred.
+  * @param iTree                     Input root note of the eddy event at iLevel.
   */
 
 void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
@@ -668,7 +667,9 @@ void hips::forceProfile() {
  * @param outputTime The time associated with the data, written into the file.
  */
 void hips::writeData(const int ifile, const double outputTime) {
-    
+    // Create the "data" directory if it doesn't exist
+    system("mkdir -p ../data");
+
     stringstream ss1;
     string s1;
     ss1 << setfill('0') << setw(5) << ifile;
@@ -694,6 +695,34 @@ void hips::writeData(const int ifile, const double outputTime) {
 
     ofile.close();                                                              // Close the file
 }
+
+//void hips::writeDataiconst int ifile, const double outputTime) {
+//    
+//    stringstream ss1;
+//    string s1;
+//    ss1 << setfill('0') << setw(5) << ifile;
+//    ss1 >> s1;                                                                  // Convert the index into a string with leading zeros for filename
+//
+//    string fname = "../data/Data_" + s1 + ".dat";                               // Construct the filename
+//
+//    ofstream ofile(fname.c_str());                                              // Open the file for writing
+//
+//    ofile << "# time = " << outputTime << "\n";                                  // Write the time and number of grid points into the file
+//    ofile << "# Grid Points = " << nparcels << "\n";
+//
+//    for (const auto& name : varName)
+//        ofile << setw(14) << name;                                              // Write variable names into the file
+//    ofile << scientific << setprecision(10);
+//
+//    for (int i = 0; i < nparcels; i++) {
+//        ofile << "\n";                                                          // Start a new line for each parcel
+//
+//        for (int k = 0; k < nVar; k++)
+//            ofile << setw(19) << varData[k][0][pLoc[i]];                       // Write data for each variable
+//    }
+//
+//    ofile.close();                                                              // Close the file
+//}
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * \brief Function for projecting vectors onto a grid.

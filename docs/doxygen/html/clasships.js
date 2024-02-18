@@ -11,7 +11,7 @@ var clasships =
     [ "setGridCfd", "clasships.html#ae269fef0b7e1d74916c0d4e03f76ac44", null ],
     [ "get_varData", "clasships.html#a4f12ec17e2983edef734832203570c87", null ],
     [ "projection_back", "clasships.html#a3e9e5bd1177df81f02d588cbd25c0eed", null ],
-    [ "calculateSolution", "clasships.html#ad6c3df079ecab73ae445d7e29069ab63", null ],
+    [ "calculateSolution", "clasships.html#a8dd010962442d98a3959ea336670c8db", null ],
     [ "sample_hips_eddy", "clasships.html#a8b2206a09dc03321585fbbcf94fbbb14", null ],
     [ "selectAndSwapTwoSubtrees", "clasships.html#a672cc0cc3879ccf71023a059739ab547", null ],
     [ "advanceHips", "clasships.html#ae794eac94488c12cc1aa0a321de471b9", null ],

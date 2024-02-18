@@ -123,34 +123,34 @@ $(document).ready(function(){initNavTree('md_mainpage.html',''); initResizable()
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code>HIPSLIB_BUILD_DOCS</code>   </td><td class="markdownTableBodyNone"><code>OFF</code>   </td><td class="markdownTableBodyNone">Builds HiPS documentation via Doxygen   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md3"></a>
+<h1><a class="anchor" id="autotoc_md1"></a>
 Using HiPS</h1>
 <p >The HiPS library consists of three main object classes that users can interact with: <code>hips</code>, <code><a class="el" href="classbatch_reactor__cvode.html">batchReactor_cvode</a></code> and <code><a class="el" href="classbatch_reactor__cantera.html">batchReactor_cantera</a></code>. <code><a class="el" href="classbatch_reactor__cvode.html">batchReactor_cvode</a></code> and <code><a class="el" href="classbatch_reactor__cantera.html">batchReactor_cantera</a></code> are two integrators which serve as the computational engine responsible for advancing the reaction system through time, solving complex sets of differential equations. <br  />
 </p>
-<h1><a class="anchor" id="autotoc_md5"></a>
+<h1><a class="anchor" id="autotoc_md2"></a>
 Example workflow</h1>
-<h2><a class="anchor" id="autotoc_md6"></a>
+<h2><a class="anchor" id="autotoc_md3"></a>
 1. HiPS Tree and Constructor Parameters</h2>
 <p >Define essential parameters for the HiPS simulation, including the number of levels, domain length, time step (tau0), a parameter (C_param), simulation time (tRun), and other pertinent settings.</p>
-<h2><a class="anchor" id="autotoc_md8"></a>
+<h2><a class="anchor" id="autotoc_md4"></a>
 2. Gas Solution Setup (required for reaction)</h2>
 <p >Maaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa Initialize the gas solution using Cantera, specifying a mechanism file (e.g., "gri30.yaml"). Extract thermodynamic information and the number of species to facilitate subsequent computations.</p>
-<h2><a class="anchor" id="autotoc_md9"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 3. HiPS Tree Creation</h2>
 <p >Instantiate the HiPS object with specified parameters, encompassing the number of levels, domain length, time step, and additional simulation details.</p>
-<h2><a class="anchor" id="autotoc_md10"></a>
+<h2><a class="anchor" id="autotoc_md7"></a>
 4. Initialize Variables and Parameters</h2>
 <p >Set up variables and parameters required for the simulation, such as the number of parcels, weights, and variable names.</p>
-<h2><a class="anchor" id="autotoc_md11"></a>
+<h2><a class="anchor" id="autotoc_md8"></a>
 5. Initialize Mixing Fractions</h2>
 <p >Utilize a designated function to initialize mixing fractions for a predefined number of parcels. The function sets mixing fractions to 0.0 for the first half and 1.0 for the second half.</p>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<h2><a class="anchor" id="autotoc_md9"></a>
 6. Set Initial State in Parcels</h2>
 <p >Establish the initial state vectors in each parcel using the initialized mixing fractions, weights, and variable names.</p>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md11"></a>
 7. Advance HiPS for Mixing and Reaction</h2>
 <p >Utilize the HiPS object to advance the simulation for a specified run time (tRun). This involves solving the equations governing particle-laden flows and updating state variables accordingly.</p>
-<h2><a class="anchor" id="autotoc_md14"></a>
+<h2><a class="anchor" id="autotoc_md12"></a>
 Implementation Guidelines</h2>
 <p >To implement a HiPS simulation based on this example in an academic setting, adhere to the following guidelines:</p>
 <ol type="1">
@@ -159,7 +159,7 @@ Implementation Guidelines</h2>
 <li>Monitor the simulation progress and analyze the output for relevant information.</li>
 </ol>
 <p >Researchers may customize parameters and mechanisms based on specific simulation requirements within the confines of this methodological framework.</p>
-<h1><a class="anchor" id="autotoc_md16"></a>
+<h1><a class="anchor" id="autotoc_md14"></a>
 Examples</h1>
 <p >HiPS is written in C++ and includes three examples that illustrate its use. The first example <code><a class="el" href="ex__1_8cc.html">ex_1.cc</a></code> shows how HiPS is used for simple mixing. The first example, <code><a class="el" href="ex__1_8cc.html">ex_1.cc</a></code>, shows the basic simulation of scalar mixing to highlight the qualitative behavior of the simple mixing model. We set the first half of the fluid parcels an initial value of 0 and the second half of the fluid parcels a value of 1. They simply become mixed to the average value.</p>
 <p ><code><a class="el" href="ex__2_8cc.html">ex_2.cc</a></code> and <code><a class="el" href="ex__3_8cc.html">ex_3.cc</a></code> are designed to facilitate the HiPS mixing with a focus on chemical reactions, specifically targeting the combustion process. In the second case, a turbulent premixed flame was simulated using a stoichiometric ethylene/air mixture. The Chemical mechanism was `&lsquo;gri30&rsquo;' which is advanced. A HiPS domain with nine levels was initialized with 50% of the parcels burnt and the other 50% being fresh reactants. The mixing rate is varied through $\tau_0$. The HiPS library supports two integrators for simulating chemical reactions within the framework. In the first integrator, embedded in the <code><a class="el" href="classbatch_reactor__cvode.html">batchReactor_cvode</a></code> class, the CVODE solver seamlessly incorporates chemical kinetics. The class's constructor establishes essential components, including the Cantera solution for thermodynamics and kinetics. The <code>react</code> function adeptly oversees the reaction simulation, considering parameters like enthalpy and species concentrations, while the underlying <code>rhsf</code> function computes reaction rates for a smooth integration process. Simultaneously, the second integrator within the <code><a class="el" href="classbatch_reactor__cantera.html">batchReactor_cantera</a></code> class offers an alternative approach, utilizing Cantera's built-in capabilities. Users can set tolerances and maximum steps for a customized simulation experience. Whether opting for the CVODE solver or Cantera's integrator, this choice provides a versatile and confident approach to efficiently simulate chemical reactions within the HiPS library. </p>

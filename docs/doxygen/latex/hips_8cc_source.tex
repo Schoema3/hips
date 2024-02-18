@@ -1,5 +1,5 @@
 \hypertarget{hips_8cc_source}{}\doxysection{hips.\+cc}
-\label{hips_8cc_source}\index{/Users/maisy/codeHips/hips/src/hips.cc@{/Users/maisy/codeHips/hips/src/hips.cc}}
+\label{hips_8cc_source}\index{/Users/maisy/hips-\/lib-\/final/hips/src/hips.cc@{/Users/maisy/hips-\/lib-\/final/hips/src/hips.cc}}
 \mbox{\hyperlink{hips_8cc}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
 \DoxyCodeLine{\Hypertarget{hips_8cc_source_l00001}00001 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{hips_8h}{hips.h}}"{}}}
@@ -100,465 +100,464 @@
 \DoxyCodeLine{\Hypertarget{hips_8cc_source_l00113}00113     \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{levelRates}}   = vector<double>(\mbox{\hyperlink{clasships_af05ebcf315fa2b5c627f9d38395f576e}{nLevels}});}
 \DoxyCodeLine{\Hypertarget{hips_8cc_source_l00114}00114 }
 \DoxyCodeLine{\Hypertarget{hips_8cc_source_l00115}00115     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<\mbox{\hyperlink{clasships_af05ebcf315fa2b5c627f9d38395f576e}{nLevels}}; i++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00116}00116         cout<<\textcolor{stringliteral}{"{}Afac behore level  "{}}<<\mbox{\hyperlink{clasships_a5d68e2f3f805f6c419ab606fb1bb9c91}{Afac}}<<endl;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00117}00117         levelLengths[i] = \mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{domainLength}} * pow(\mbox{\hyperlink{clasships_a5d68e2f3f805f6c419ab606fb1bb9c91}{Afac}},i);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00118}00118         levelTaus[i] = \mbox{\hyperlink{clasships_aefdec9ee971fd921a9edae48e5fee8e0}{tau0}} * pow(levelLengths[i]/\mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{domainLength}}, 2.0/3.0) / \mbox{\hyperlink{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}{C\_param}};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00119}00119         \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{levelRates}}[i] = 1.0/levelTaus[i] * pow(2.0,i);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00120}00120     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00121}00121     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00122}00122     \mbox{\hyperlink{clasships_af0693b6587b038be50f185a0a8e1d67e}{LScHips}} = \mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}}.size() > 0 ? true : \textcolor{keyword}{false};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00123}00123     \textcolor{keywordflow}{if} (\mbox{\hyperlink{clasships_af0693b6587b038be50f185a0a8e1d67e}{LScHips}}) \{                             \textcolor{comment}{// correct levels for high Sc (levels > Kolmogorov)}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00124}00124         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=\mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1; i<\mbox{\hyperlink{clasships_af05ebcf315fa2b5c627f9d38395f576e}{nLevels}}; i++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00125}00125             levelTaus[i] = \mbox{\hyperlink{clasships_aefdec9ee971fd921a9edae48e5fee8e0}{tau0}} *}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00126}00126             pow(levelLengths[\mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}]/\mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{domainLength}}, 2.0/3.0) /}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00127}00127             \mbox{\hyperlink{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}{C\_param}};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00128}00128             \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{levelRates}}[i] = 1.0/levelTaus[i] * pow(2.0,i);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00129}00129         \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00130}00130     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00131}00131 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00132}00132     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00133}00133 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00134}00134     \mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddyRate\_total}} = 0.0;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00135}00135     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<=\mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}}; i++)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00136}00136         \mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddyRate\_total}} += \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{levelRates}}[i];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00137}00137     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00138}00138     \mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{eddyRate\_inertial}} = 0.0;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00139}00139     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<=\mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}; i++)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00140}00140         \mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{eddyRate\_inertial}} += \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{levelRates}}[i];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00141}00141     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00142}00142     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00143}00143     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00144}00144     \mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}}.resize(\mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{nVar}});}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00145}00145     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{nVar}}; k++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00146}00146         \textcolor{keywordflow}{if} (\mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}}[k] < 1.0)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00147}00147             \mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}}[k] = \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}} + 1.5*log(\mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}}[k])/log(4);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00148}00148         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}}[k] > 1.0)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00149}00149             \mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}}[k] = \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}} +     log(\mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}}[k])/log(4);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00150}00150         \textcolor{keywordflow}{else}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00151}00151             \mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}}[k] = \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00152}00152 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00153}00153         \mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}}[k] = ceil(\mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}}[k]);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00154}00154     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00155}00155     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00156}00156     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Set the parcel addresses (index array)}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00157}00157     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00158}00158     \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.resize(\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}});}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00159}00159     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}}; i++)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00160}00160         \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i] = i;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00161}00161 \} }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00163}00163 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00170}\mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{00170}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{hips::set\_varData}}(std::vector<double> \&v, std::vector<double> \&w, \textcolor{keyword}{const} std::string \&varN, \textcolor{keywordtype}{int} i) \{  }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00171}00171 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00172}00172     \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[i] = \textcolor{keyword}{new} vector<double>(\mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{projection}}(v, w));}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00173}00173     \mbox{\hyperlink{clasships_a998b5a76ecd9d451115b96702b914096}{varName}}[i] = varN;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00174}00174 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00176}00176 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00185}\mbox{\hyperlink{clasships_ac563a03328850c5a4413e48feed9dc40}{00185}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{hips::set\_varData}}(std::vector<double> \&v, std::vector<double> \&w, \textcolor{keyword}{const} std::string \&varN, \textcolor{keyword}{const} std::vector<double> \&rho, \textcolor{keywordtype}{int} i) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00186}00186     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00187}00187     std::pair<std::vector<double>, std::vector<double>> results = \mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{projection}}(v, w, rho);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00188}00188     std::vector<double> vh = results.first;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00189}00189     std::vector<double> rho\_h = results.second;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00190}00190 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00191}00191     \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[i] = \textcolor{keyword}{new} std::vector<double>(vh);            }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00192}00192     \mbox{\hyperlink{clasships_a8f22f735022a7d81c44a714b44a62694}{varRho}} =  std::vector<double>(rho\_h);                 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00193}00193 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00194}00194 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00196}00196 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00202}\mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{00202}} std::vector<double> \mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{hips::projection}}(std::vector<double> \&vcfd, std::vector<double> \&weight) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00203}00203     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00204}00204     std::vector<double> xc = \mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{setGridCfd}}(weight);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00205}00205     std::vector<double> xh = \mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{setGridHips}}(\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}});}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00206}00206 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00207}00207     \textcolor{keywordtype}{int} nc = xc.size() -\/ 1;                 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00208}00208     \textcolor{keywordtype}{int} nh = xh.size() -\/ 1; }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00209}00209 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00210}00210     std::vector<double> vh(nh, 0.0);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00211}00211     \textcolor{keywordtype}{int} jprev = 0;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00212}00212 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00213}00213     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < nh; i++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00214}00214         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} j = jprev + 1; j <= nc; ++j) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00215}00215             \textcolor{keywordflow}{if}(xc[j] <= xh[i + 1]) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00216}00216                 \textcolor{keywordtype}{double} d1 = xc[j] -\/ xc[j -\/ 1];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00217}00217                 \textcolor{keywordtype}{double} d2 = xc[j] -\/ xh[i];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00218}00218                 \textcolor{keywordtype}{double} d = std::min(d1, d2);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00219}00219 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00220}00220                 vh[i] += vcfd[j -\/ 1] * d;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00221}00221             \} }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00222}00222 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00223}00223         \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00224}00224                 \textcolor{keywordtype}{double} d1 = xh[i + 1] -\/ xc[j -\/ 1];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00225}00225                 \textcolor{keywordtype}{double} d2 = xh[i + 1] -\/ xh[i];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00226}00226                 \textcolor{keywordtype}{double} d = std::min(d1, d2);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00227}00227 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00228}00228                 vh[i] += vcfd[j -\/ 1] * d;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00229}00229                 jprev = j -\/ 1;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00230}00230                 \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00231}00231             \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00232}00232         \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00233}00233         }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00234}00234         vh[i] /= (xh[i + 1] -\/ xh[i]);           }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00235}00235     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00236}00236     \textcolor{keywordflow}{return} vh;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00237}00237 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00238}00238 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00240}00240 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00252}\mbox{\hyperlink{clasships_af7d9fc8b48ce945bccf4b397102a3ee3}{00252}} std::pair<std::vector<double>, std::vector<double>> \mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{hips::projection}}(std::vector<double> \&vcfd, std::vector<double> \&weight, \textcolor{keyword}{const} std::vector<double> \&density) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00253}00253     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00254}00254     std::vector<double> xc = \mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{setGridCfd}}(weight);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00255}00255     std::vector<double> xh = \mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{setGridHips}}(\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}});}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00256}00256 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00257}00257     \textcolor{comment}{// Initialize variables}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00258}00258     \textcolor{keywordtype}{int} nc = xc.size() -\/ 1;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00259}00259     \textcolor{keywordtype}{int} nh = xh.size() -\/ 1;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00260}00260 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00261}00261     std::vector<double> vh(nh, 0.0);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00262}00262     std::vector<double> rho\_h(nh, 0.0);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00263}00263     \textcolor{keywordtype}{int} jprev = 0;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00264}00264 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00265}00265     \textcolor{comment}{// Main loop}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00266}00266     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nh; i++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00267}00267         \textcolor{keywordtype}{double} total\_dx = 0.0;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00268}00268 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00269}00269         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j = jprev + 1; j <= nc; ++j) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00270}00270             \textcolor{keywordflow}{if} (xc[j] <= xh[i + 1]) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00271}00271                 \textcolor{keywordtype}{double} d = std::min(xc[j] -\/ xc[j -\/ 1], xc[j] -\/ xh[i]);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00272}00272                 total\_dx += d;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00273}00273                 rho\_h[i] += density[j -\/ 1] * d;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00274}00274                 vh[i] += density[j -\/ 1] * vcfd[j -\/ 1] * d;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00275}00275             \} }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00276}00276 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00277}00277         \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00278}00278                 \textcolor{keywordtype}{double} d = std::min(xh[i + 1] -\/ xc[j -\/ 1], xh[i + 1] -\/ xh[i]);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00279}00279                 total\_dx += d;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00280}00280                 rho\_h[i] += density[j -\/ 1] * d;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00281}00281                 vh[i] += density[j -\/ 1] * vcfd[j -\/ 1] * d;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00282}00282                 jprev = j -\/ 1;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00283}00283                 \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00284}00284             \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00285}00285         \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00286}00286 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00287}00287         \textcolor{comment}{// Normalize results}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00288}00288         rho\_h[i] /= (xh[i + 1] -\/ xh[i]);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00289}00289         vh[i] /= rho\_h[i] * (xh[i + 1] -\/ xh[i]);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00290}00290     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00291}00291 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00292}00292     \textcolor{keywordflow}{return} \{vh, rho\_h\};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00293}00293 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00116}00116         levelLengths[i] = \mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{domainLength}} * pow(\mbox{\hyperlink{clasships_a5d68e2f3f805f6c419ab606fb1bb9c91}{Afac}},i);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00117}00117         levelTaus[i] = \mbox{\hyperlink{clasships_aefdec9ee971fd921a9edae48e5fee8e0}{tau0}} * pow(levelLengths[i]/\mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{domainLength}}, 2.0/3.0) / \mbox{\hyperlink{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}{C\_param}};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00118}00118         \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{levelRates}}[i] = 1.0/levelTaus[i] * pow(2.0,i);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00119}00119     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00120}00120     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00121}00121     \mbox{\hyperlink{clasships_af0693b6587b038be50f185a0a8e1d67e}{LScHips}} = \mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}}.size() > 0 ? true : \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00122}00122     \textcolor{keywordflow}{if} (\mbox{\hyperlink{clasships_af0693b6587b038be50f185a0a8e1d67e}{LScHips}}) \{                             \textcolor{comment}{// correct levels for high Sc (levels > Kolmogorov)}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00123}00123         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=\mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1; i<\mbox{\hyperlink{clasships_af05ebcf315fa2b5c627f9d38395f576e}{nLevels}}; i++) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00124}00124             levelTaus[i] = \mbox{\hyperlink{clasships_aefdec9ee971fd921a9edae48e5fee8e0}{tau0}} *}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00125}00125             pow(levelLengths[\mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}]/\mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{domainLength}}, 2.0/3.0) /}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00126}00126             \mbox{\hyperlink{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}{C\_param}};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00127}00127             \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{levelRates}}[i] = 1.0/levelTaus[i] * pow(2.0,i);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00128}00128         \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00129}00129     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00130}00130 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00131}00131     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00132}00132 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00133}00133     \mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddyRate\_total}} = 0.0;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00134}00134     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<=\mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}}; i++)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00135}00135         \mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddyRate\_total}} += \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{levelRates}}[i];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00136}00136     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00137}00137     \mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{eddyRate\_inertial}} = 0.0;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00138}00138     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<=\mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}; i++)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00139}00139         \mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{eddyRate\_inertial}} += \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{levelRates}}[i];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00140}00140     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00141}00141     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00142}00142     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00143}00143     \mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}}.resize(\mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{nVar}});}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00144}00144     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{nVar}}; k++) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00145}00145         \textcolor{keywordflow}{if} (\mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}}[k] < 1.0)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00146}00146             \mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}}[k] = \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}} + 1.5*log(\mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}}[k])/log(4);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00147}00147         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} (\mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}}[k] > 1.0)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00148}00148             \mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}}[k] = \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}} +     log(\mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}}[k])/log(4);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00149}00149         \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00150}00150             \mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}}[k] = \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00151}00151 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00152}00152         \mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}}[k] = ceil(\mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}}[k]);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00153}00153     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00154}00154     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00155}00155     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Set the parcel addresses (index array)}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00156}00156     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00157}00157     \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.resize(\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}});}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00158}00158     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=0; i<\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}}; i++)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00159}00159         \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i] = i;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00160}00160 \} }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00162}00162 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00169}\mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{00169}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{hips::set\_varData}}(std::vector<double> \&v, std::vector<double> \&w, \textcolor{keyword}{const} std::string \&varN, \textcolor{keywordtype}{int} i) \{  }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00170}00170 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00171}00171     \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[i] = \textcolor{keyword}{new} vector<double>(\mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{projection}}(v, w));}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00172}00172     \mbox{\hyperlink{clasships_a998b5a76ecd9d451115b96702b914096}{varName}}[i] = varN;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00173}00173 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00175}00175 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00184}\mbox{\hyperlink{clasships_ac563a03328850c5a4413e48feed9dc40}{00184}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{hips::set\_varData}}(std::vector<double> \&v, std::vector<double> \&w, \textcolor{keyword}{const} std::string \&varN, \textcolor{keyword}{const} std::vector<double> \&rho, \textcolor{keywordtype}{int} i) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00185}00185     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00186}00186     std::pair<std::vector<double>, std::vector<double>> results = \mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{projection}}(v, w, rho);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00187}00187     std::vector<double> vh = results.first;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00188}00188     std::vector<double> rho\_h = results.second;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00189}00189 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00190}00190     \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[i] = \textcolor{keyword}{new} std::vector<double>(vh);            }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00191}00191     \mbox{\hyperlink{clasships_a8f22f735022a7d81c44a714b44a62694}{varRho}} =  std::vector<double>(rho\_h);                 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00192}00192 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00193}00193 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00195}00195 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00201}\mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{00201}} std::vector<double> \mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{hips::projection}}(std::vector<double> \&vcfd, std::vector<double> \&weight) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00202}00202     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00203}00203     std::vector<double> xc = \mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{setGridCfd}}(weight);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00204}00204     std::vector<double> xh = \mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{setGridHips}}(\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}});}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00205}00205 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00206}00206     \textcolor{keywordtype}{int} nc = xc.size() -\/ 1;                 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00207}00207     \textcolor{keywordtype}{int} nh = xh.size() -\/ 1; }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00208}00208 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00209}00209     std::vector<double> vh(nh, 0.0);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00210}00210     \textcolor{keywordtype}{int} jprev = 0;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00211}00211 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00212}00212     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i < nh; i++) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00213}00213         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} j = jprev + 1; j <= nc; ++j) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00214}00214             \textcolor{keywordflow}{if}(xc[j] <= xh[i + 1]) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00215}00215                 \textcolor{keywordtype}{double} d1 = xc[j] -\/ xc[j -\/ 1];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00216}00216                 \textcolor{keywordtype}{double} d2 = xc[j] -\/ xh[i];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00217}00217                 \textcolor{keywordtype}{double} d = std::min(d1, d2);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00218}00218 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00219}00219                 vh[i] += vcfd[j -\/ 1] * d;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00220}00220             \} }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00221}00221 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00222}00222         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00223}00223                 \textcolor{keywordtype}{double} d1 = xh[i + 1] -\/ xc[j -\/ 1];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00224}00224                 \textcolor{keywordtype}{double} d2 = xh[i + 1] -\/ xh[i];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00225}00225                 \textcolor{keywordtype}{double} d = std::min(d1, d2);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00226}00226 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00227}00227                 vh[i] += vcfd[j -\/ 1] * d;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00228}00228                 jprev = j -\/ 1;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00229}00229                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00230}00230             \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00231}00231         \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00232}00232         }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00233}00233         vh[i] /= (xh[i + 1] -\/ xh[i]);           }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00234}00234     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00235}00235     \textcolor{keywordflow}{return} vh;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00236}00236 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00237}00237 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00239}00239 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00251}\mbox{\hyperlink{clasships_af7d9fc8b48ce945bccf4b397102a3ee3}{00251}} std::pair<std::vector<double>, std::vector<double>> \mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{hips::projection}}(std::vector<double> \&vcfd, std::vector<double> \&weight, \textcolor{keyword}{const} std::vector<double> \&density) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00252}00252     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00253}00253     std::vector<double> xc = \mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{setGridCfd}}(weight);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00254}00254     std::vector<double> xh = \mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{setGridHips}}(\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}});}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00255}00255 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00256}00256     \textcolor{comment}{// Initialize variables}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00257}00257     \textcolor{keywordtype}{int} nc = xc.size() -\/ 1;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00258}00258     \textcolor{keywordtype}{int} nh = xh.size() -\/ 1;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00259}00259 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00260}00260     std::vector<double> vh(nh, 0.0);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00261}00261     std::vector<double> rho\_h(nh, 0.0);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00262}00262     \textcolor{keywordtype}{int} jprev = 0;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00263}00263 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00264}00264     \textcolor{comment}{// Main loop}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00265}00265     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nh; i++) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00266}00266         \textcolor{keywordtype}{double} total\_dx = 0.0;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00267}00267 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00268}00268         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j = jprev + 1; j <= nc; ++j) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00269}00269             \textcolor{keywordflow}{if} (xc[j] <= xh[i + 1]) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00270}00270                 \textcolor{keywordtype}{double} d = std::min(xc[j] -\/ xc[j -\/ 1], xc[j] -\/ xh[i]);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00271}00271                 total\_dx += d;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00272}00272                 rho\_h[i] += density[j -\/ 1] * d;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00273}00273                 vh[i] += density[j -\/ 1] * vcfd[j -\/ 1] * d;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00274}00274             \} }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00275}00275 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00276}00276         \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00277}00277                 \textcolor{keywordtype}{double} d = std::min(xh[i + 1] -\/ xc[j -\/ 1], xh[i + 1] -\/ xh[i]);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00278}00278                 total\_dx += d;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00279}00279                 rho\_h[i] += density[j -\/ 1] * d;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00280}00280                 vh[i] += density[j -\/ 1] * vcfd[j -\/ 1] * d;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00281}00281                 jprev = j -\/ 1;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00282}00282                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00283}00283             \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00284}00284         \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00285}00285 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00286}00286         \textcolor{comment}{// Normalize results}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00287}00287         rho\_h[i] /= (xh[i + 1] -\/ xh[i]);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00288}00288         vh[i] /= rho\_h[i] * (xh[i + 1] -\/ xh[i]);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00289}00289     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00290}00290 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00291}00291     \textcolor{keywordflow}{return} \{vh, rho\_h\};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00292}00292 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00293}00293 }
 \DoxyCodeLine{\Hypertarget{hips_8cc_source_l00294}00294 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00295}00295 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00297}00297 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00305}\mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{00305}} std::vector<double> \mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{hips::setGridCfd}}(std::vector<double> \&w) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00306}00306     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00307}00307     std::vector<double> pos;                               \textcolor{comment}{// Initializing a vector to hold the grid positions}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00308}00308     \textcolor{keywordtype}{double} posL = 0.0;                                     \textcolor{comment}{// Initializing the starting position}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00309}00309 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00310}00310     \textcolor{keywordtype}{int} i = 0;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00311}00311 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00312}00312     \textcolor{keywordflow}{while} (i <= w.size()) \{                                \textcolor{comment}{// Generate the grid positions based on the weights}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00313}00313         pos.push\_back(posL);                               \textcolor{comment}{// Add the current position to the grid}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00314}00314         posL += w[i];                                      \textcolor{comment}{// Move to the next position by adding the corresponding weight}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00315}00315         i++;                                              }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00316}00316                                                    }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00317}00317     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00318}00318 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00319}00319     \textcolor{keywordflow}{return} pos;                                          \textcolor{comment}{// Return the generated grid positions}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00320}00320 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00321}00321 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00323}00323 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00331}\mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{00331}} std::vector<double> \mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{hips::setGridHips}}(\textcolor{keywordtype}{int} N)\{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00332}00332 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00333}00333     std::vector<double> xh(N + 1);                               \textcolor{comment}{// Initialize a vector to hold the grid points}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00334}00334     \textcolor{keywordtype}{double} step = 1.0 / N;                                       \textcolor{comment}{// Calculate the step size}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00335}00335 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00336}00336     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i <= N; i++)\{                                \textcolor{comment}{// Populate the grid with evenly spaced points}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00337}00337         xh[i] = i * step;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00338}00338     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00339}00339         }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00340}00340     \textcolor{keywordflow}{return} xh;                                                  \textcolor{comment}{// Return the generated grid}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00341}00341 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00342}00342 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00344}00344 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00354}\mbox{\hyperlink{clasships_ad6c3df079ecab73ae445d7e29069ab63}{00354}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_ad6c3df079ecab73ae445d7e29069ab63}{hips::calculateSolution}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} tRun) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00355}00355 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00356}00356     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} \textcolor{keywordtype}{long} nEddies = 0;                                        \textcolor{comment}{// number of eddy events}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00357}00357     \textcolor{keywordtype}{int}    fileCounter = 0;                                                \textcolor{comment}{// number of data files written}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00358}00358     \textcolor{keywordtype}{int}    iLevel;                                                         \textcolor{comment}{// tree level of EE with top at iLevel=0}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00359}00359     \textcolor{keywordtype}{int}    iTree;                                                          \textcolor{comment}{// one of two subtrees involved in swap at iLevel}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00360}00360     \textcolor{keywordtype}{double} dtEE;                                                           \textcolor{comment}{// time increment to next eddy event }}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00361}00361     \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}} = 0.0;                        \textcolor{comment}{// initialize simulation time}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00362}00362 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00363}00363     \mbox{\hyperlink{clasships_a8b2206a09dc03321585fbbcf94fbbb14}{sample\_hips\_eddy}}(dtEE, iLevel);    \textcolor{comment}{// get first EE at time 0+dtEE}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00364}00364     nEddies++;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00365}00365 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00366}00366     \textcolor{keywordflow}{while} (\mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}}+dtEE<=tRun) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00367}00367         \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}} += dtEE;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00368}00368         \mbox{\hyperlink{clasships_a672cc0cc3879ccf71023a059739ab547}{selectAndSwapTwoSubtrees}}(iLevel, iTree);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00369}00369         \mbox{\hyperlink{clasships_ae794eac94488c12cc1aa0a321de471b9}{advanceHips}}(iLevel, iTree);    \textcolor{comment}{// reaction and micromixing (if needed) to t=time}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00370}00370 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00371}00371         \mbox{\hyperlink{clasships_a8b2206a09dc03321585fbbcf94fbbb14}{sample\_hips\_eddy}}(dtEE, iLevel);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00372}00372 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00373}00373         nEddies++;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00374}00374         \textcolor{comment}{//cout<<"{}-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/"{}<<nEddies<<endl;}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00375}00375         \textcolor{keywordflow}{if}(nEddies \%2 == 0) \mbox{\hyperlink{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}{writeData}}(++fileCounter, \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}});}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00376}00376     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00377}00377     \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}} = tRun;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00378}00378     iLevel = 0; iTree  = 0;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00379}00379     \textcolor{keywordflow}{if}(\mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{performReaction}})}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00380}00380     \mbox{\hyperlink{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}{reactParcels\_LevelTree}}(iLevel, iTree);      \textcolor{comment}{// react all parcels up to end time}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00381}00381 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00296}00296 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00304}\mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{00304}} std::vector<double> \mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{hips::setGridCfd}}(std::vector<double> \&w) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00305}00305     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00306}00306     std::vector<double> pos;                               \textcolor{comment}{// Initializing a vector to hold the grid positions}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00307}00307     \textcolor{keywordtype}{double} posL = 0.0;                                     \textcolor{comment}{// Initializing the starting position}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00308}00308 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00309}00309     \textcolor{keywordtype}{int} i = 0;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00310}00310 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00311}00311     \textcolor{keywordflow}{while} (i <= w.size()) \{                                \textcolor{comment}{// Generate the grid positions based on the weights}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00312}00312         pos.push\_back(posL);                               \textcolor{comment}{// Add the current position to the grid}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00313}00313         posL += w[i];                                      \textcolor{comment}{// Move to the next position by adding the corresponding weight}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00314}00314         i++;                                              }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00315}00315                                                    }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00316}00316     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00317}00317 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00318}00318     \textcolor{keywordflow}{return} pos;                                          \textcolor{comment}{// Return the generated grid positions}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00319}00319 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00320}00320 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00322}00322 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00330}\mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{00330}} std::vector<double> \mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{hips::setGridHips}}(\textcolor{keywordtype}{int} N)\{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00331}00331 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00332}00332     std::vector<double> xh(N + 1);                               \textcolor{comment}{// Initialize a vector to hold the grid points}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00333}00333     \textcolor{keywordtype}{double} step = 1.0 / N;                                       \textcolor{comment}{// Calculate the step size}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00334}00334 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00335}00335     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i = 0; i <= N; i++)\{                                \textcolor{comment}{// Populate the grid with evenly spaced points}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00336}00336         xh[i] = i * step;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00337}00337     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00338}00338         }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00339}00339     \textcolor{keywordflow}{return} xh;                                                  \textcolor{comment}{// Return the generated grid}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00340}00340 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00341}00341 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00343}00343 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00353}\mbox{\hyperlink{clasships_a8dd010962442d98a3959ea336670c8db}{00353}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a8dd010962442d98a3959ea336670c8db}{hips::calculateSolution}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} tRun, \textcolor{keywordtype}{bool} shouldWriteData) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00354}00354 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00355}00355     \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{long} \textcolor{keywordtype}{long} nEddies = 0;                                        \textcolor{comment}{// number of eddy events}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00356}00356     \textcolor{keywordtype}{int}    fileCounter = 0;                                                \textcolor{comment}{// number of data files written}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00357}00357     \textcolor{keywordtype}{int}    iLevel;                                                         \textcolor{comment}{// tree level of EE with top at iLevel=0}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00358}00358     \textcolor{keywordtype}{int}    iTree;                                                          \textcolor{comment}{// one of two subtrees involved in swap at iLevel}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00359}00359     \textcolor{keywordtype}{double} dtEE;                                                           \textcolor{comment}{// time increment to next eddy event }}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00360}00360     \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}} = 0.0;                        \textcolor{comment}{// initialize simulation time}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00361}00361 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00362}00362     \mbox{\hyperlink{clasships_a8b2206a09dc03321585fbbcf94fbbb14}{sample\_hips\_eddy}}(dtEE, iLevel);    \textcolor{comment}{// get first EE at time 0+dtEE}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00363}00363     nEddies++;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00364}00364 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00365}00365     \textcolor{keywordflow}{while} (\mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}}+dtEE<=tRun) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00366}00366         \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}} += dtEE;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00367}00367         \mbox{\hyperlink{clasships_a672cc0cc3879ccf71023a059739ab547}{selectAndSwapTwoSubtrees}}(iLevel, iTree);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00368}00368         \mbox{\hyperlink{clasships_ae794eac94488c12cc1aa0a321de471b9}{advanceHips}}(iLevel, iTree);    \textcolor{comment}{// reaction and micromixing (if needed) to t=time}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00369}00369 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00370}00370         \mbox{\hyperlink{clasships_a8b2206a09dc03321585fbbcf94fbbb14}{sample\_hips\_eddy}}(dtEE, iLevel);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00371}00371 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00372}00372         nEddies++;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00373}00373         \textcolor{comment}{//cout<<"{}-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/"{}<<nEddies<<endl;}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00374}00374         \textcolor{keywordflow}{if}(shouldWriteData \&\& nEddies \%2 == 0) \mbox{\hyperlink{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}{writeData}}(++fileCounter, \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}});}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00375}00375     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00376}00376     \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}} = tRun;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00377}00377     iLevel = 0; iTree  = 0;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00378}00378     \textcolor{keywordflow}{if}(\mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{performReaction}})}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00379}00379     \mbox{\hyperlink{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}{reactParcels\_LevelTree}}(iLevel, iTree);      \textcolor{comment}{// react all parcels up to end time}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00380}00380 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00381}00381 }
 \DoxyCodeLine{\Hypertarget{hips_8cc_source_l00382}00382 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00383}00383 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00385}00385 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00390}\mbox{\hyperlink{clasships_a8b2206a09dc03321585fbbcf94fbbb14}{00390}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a8b2206a09dc03321585fbbcf94fbbb14}{hips::sample\_hips\_eddy}}(\textcolor{keywordtype}{double} \&dtEE, \textcolor{keywordtype}{int} \&iLevel) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00391}00391 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00392}00392     \textcolor{keyword}{static} \textcolor{keywordtype}{double} c1 = 1.0 -\/ pow(2.0, 5.0/3.0*(\mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1));}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00393}00393     \textcolor{keyword}{static} \textcolor{keywordtype}{double} c2 = pow(2.0, \mbox{\hyperlink{clasships_a0a59c28db4e081ee7c4afa2ba051dc64}{Nm2}}) -\/ pow(2.0, \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00394}00394     \textcolor{keyword}{static} \textcolor{keywordtype}{double} c3 = pow(2.0, \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00395}00395 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00396}00396     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ time to next eddy}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00397}00397 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00398}00398     \textcolor{keywordtype}{double} r = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a2b7548422caaa032387e3b58feb6f474}{getRand}}();}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00399}00399     dtEE = -\/log(r)/\mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddyRate\_total}};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00400}00400 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00401}00401     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ get eddy level}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00402}00402 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00403}00403     r = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a2b7548422caaa032387e3b58feb6f474}{getRand}}();}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00404}00404 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00405}00405     \textcolor{keywordflow}{if} ( r <= \mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{eddyRate\_inertial}}/\mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddyRate\_total}}) \{     \textcolor{comment}{// inertial region}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00406}00406         r = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a2b7548422caaa032387e3b58feb6f474}{getRand}}();}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00407}00407         iLevel = ceil(3.0/5.0*log2(1.0-\/r*c1) -\/ 1.0);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00408}00408         \textcolor{keywordflow}{if} (iLevel < 0)    iLevel = 0;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00409}00409         \textcolor{keywordflow}{if} (iLevel > \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}) iLevel = \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00410}00410     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00411}00411 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00412}00412     \textcolor{keywordflow}{else} \{                                            \textcolor{comment}{// "{}Batchelor"{} region}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00413}00413         r = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a2b7548422caaa032387e3b58feb6f474}{getRand}}();}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00414}00414         iLevel = ceil(log2(r*c2 + c3) -\/ 1.0);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00415}00415         \textcolor{keywordflow}{if}(iLevel < \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1) iLevel = \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00416}00416         \textcolor{keywordflow}{if}(iLevel > \mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}}) iLevel = \mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00417}00417     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00418}00418 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00419}00419     \textcolor{keywordflow}{return};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00420}00420 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00421}00421 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00423}00423 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00472}\mbox{\hyperlink{clasships_a672cc0cc3879ccf71023a059739ab547}{00472}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a672cc0cc3879ccf71023a059739ab547}{hips::selectAndSwapTwoSubtrees}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} iLevel, \textcolor{keywordtype}{int} \&iTree) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00473}00473 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00474}00474     iTree = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a3b6451ebf7eea0e796dd1aba501f7613}{getRandInt}}((1 << iLevel)-\/1);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00475}00475     \textcolor{keywordtype}{int} zero\_q = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a3b6451ebf7eea0e796dd1aba501f7613}{getRandInt}}(1);                                    \textcolor{comment}{// 0q where q is 0 or 1}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00476}00476     \textcolor{keywordtype}{int} one\_r  = 2 + \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a3b6451ebf7eea0e796dd1aba501f7613}{getRandInt}}(1);                                \textcolor{comment}{// 1r where r is 0 or 1}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00477}00477 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00478}00478     \textcolor{keywordtype}{int} Qstart = (zero\_q << (\mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}}-\/iLevel)) + (iTree << (\mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{Nm1}}-\/iLevel));     \textcolor{comment}{// starting index of Q parcels}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00479}00479     \textcolor{keywordtype}{int} Rstart = (one\_r  << (\mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}}-\/iLevel)) + (iTree << (\mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{Nm1}}-\/iLevel));     \textcolor{comment}{// starting index of R parcels}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00480}00480     \textcolor{keywordtype}{int} nPswap = 1 << (\mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}}-\/iLevel);                                      \textcolor{comment}{// number of parcels that will be swapped}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00481}00481 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00482}00482     \textcolor{keywordtype}{int} Qend = Qstart + nPswap;                                          \textcolor{comment}{// inclusive indices are Qstart to Qend-\/1}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00483}00483     \textcolor{keywordtype}{int} Rend = Rstart + nPswap;                                          \textcolor{comment}{// inclusive indices are Rstart to Rend-\/1}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00484}00484     vector<int> aa(\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Qstart, \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Qend);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00485}00485     copy(\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Rstart, \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Rend, \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Qstart);   \textcolor{comment}{// python: pLoc[Qstart:Qend]=pLoc[Rstart:Rend]}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00486}00486     copy(aa.begin(), aa.end(), \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Rstart);                     \textcolor{comment}{// python: pLoc[Rstart:Rend]=aa}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00487}00487 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00384}00384 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00389}\mbox{\hyperlink{clasships_a8b2206a09dc03321585fbbcf94fbbb14}{00389}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a8b2206a09dc03321585fbbcf94fbbb14}{hips::sample\_hips\_eddy}}(\textcolor{keywordtype}{double} \&dtEE, \textcolor{keywordtype}{int} \&iLevel) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00390}00390 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00391}00391     \textcolor{keyword}{static} \textcolor{keywordtype}{double} c1 = 1.0 -\/ pow(2.0, 5.0/3.0*(\mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1));}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00392}00392     \textcolor{keyword}{static} \textcolor{keywordtype}{double} c2 = pow(2.0, \mbox{\hyperlink{clasships_a0a59c28db4e081ee7c4afa2ba051dc64}{Nm2}}) -\/ pow(2.0, \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00393}00393     \textcolor{keyword}{static} \textcolor{keywordtype}{double} c3 = pow(2.0, \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00394}00394 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00395}00395     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ time to next eddy}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00396}00396 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00397}00397     \textcolor{keywordtype}{double} r = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a2b7548422caaa032387e3b58feb6f474}{getRand}}();}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00398}00398     dtEE = -\/log(r)/\mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddyRate\_total}};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00399}00399 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00400}00400     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ get eddy level}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00401}00401 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00402}00402     r = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a2b7548422caaa032387e3b58feb6f474}{getRand}}();}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00403}00403 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00404}00404     \textcolor{keywordflow}{if} ( r <= \mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{eddyRate\_inertial}}/\mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddyRate\_total}}) \{     \textcolor{comment}{// inertial region}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00405}00405         r = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a2b7548422caaa032387e3b58feb6f474}{getRand}}();}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00406}00406         iLevel = ceil(3.0/5.0*log2(1.0-\/r*c1) -\/ 1.0);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00407}00407         \textcolor{keywordflow}{if} (iLevel < 0)    iLevel = 0;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00408}00408         \textcolor{keywordflow}{if} (iLevel > \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}) iLevel = \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00409}00409     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00410}00410 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00411}00411     \textcolor{keywordflow}{else} \{                                            \textcolor{comment}{// "{}Batchelor"{} region}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00412}00412         r = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a2b7548422caaa032387e3b58feb6f474}{getRand}}();}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00413}00413         iLevel = ceil(log2(r*c2 + c3) -\/ 1.0);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00414}00414         \textcolor{keywordflow}{if}(iLevel < \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1) iLevel = \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}}+1;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00415}00415         \textcolor{keywordflow}{if}(iLevel > \mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}}) iLevel = \mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00416}00416     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00417}00417 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00418}00418     \textcolor{keywordflow}{return};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00419}00419 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00420}00420 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00422}00422 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00471}\mbox{\hyperlink{clasships_a672cc0cc3879ccf71023a059739ab547}{00471}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a672cc0cc3879ccf71023a059739ab547}{hips::selectAndSwapTwoSubtrees}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} iLevel, \textcolor{keywordtype}{int} \&iTree) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00472}00472 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00473}00473     iTree = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a3b6451ebf7eea0e796dd1aba501f7613}{getRandInt}}((1 << iLevel)-\/1);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00474}00474     \textcolor{keywordtype}{int} zero\_q = \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a3b6451ebf7eea0e796dd1aba501f7613}{getRandInt}}(1);                                    \textcolor{comment}{// 0q where q is 0 or 1}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00475}00475     \textcolor{keywordtype}{int} one\_r  = 2 + \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a3b6451ebf7eea0e796dd1aba501f7613}{getRandInt}}(1);                                \textcolor{comment}{// 1r where r is 0 or 1}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00476}00476 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00477}00477     \textcolor{keywordtype}{int} Qstart = (zero\_q << (\mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}}-\/iLevel)) + (iTree << (\mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{Nm1}}-\/iLevel));     \textcolor{comment}{// starting index of Q parcels}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00478}00478     \textcolor{keywordtype}{int} Rstart = (one\_r  << (\mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}}-\/iLevel)) + (iTree << (\mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{Nm1}}-\/iLevel));     \textcolor{comment}{// starting index of R parcels}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00479}00479     \textcolor{keywordtype}{int} nPswap = 1 << (\mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}}-\/iLevel);                                      \textcolor{comment}{// number of parcels that will be swapped}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00480}00480 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00481}00481     \textcolor{keywordtype}{int} Qend = Qstart + nPswap;                                          \textcolor{comment}{// inclusive indices are Qstart to Qend-\/1}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00482}00482     \textcolor{keywordtype}{int} Rend = Rstart + nPswap;                                          \textcolor{comment}{// inclusive indices are Rstart to Rend-\/1}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00483}00483     vector<int> aa(\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Qstart, \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Qend);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00484}00484     copy(\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Rstart, \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Rend, \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Qstart);   \textcolor{comment}{// python: pLoc[Qstart:Qend]=pLoc[Rstart:Rend]}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00485}00485     copy(aa.begin(), aa.end(), \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}.begin()+Rstart);                     \textcolor{comment}{// python: pLoc[Rstart:Rend]=aa}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00486}00486 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00487}00487 }
 \DoxyCodeLine{\Hypertarget{hips_8cc_source_l00488}00488 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00489}00489 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00491}00491 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00498}\mbox{\hyperlink{clasships_ae794eac94488c12cc1aa0a321de471b9}{00498}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_ae794eac94488c12cc1aa0a321de471b9}{hips::advanceHips}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} iLevel, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iTree) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00499}00499      }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00500}00500     \textcolor{keywordflow}{if} (\mbox{\hyperlink{clasships_a61569cff2835802d3daca4fb71e11b76}{forceTurb}}==2 \&\& iLevel==0)              \textcolor{comment}{// forcing for statistically stationary}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00501}00501         \mbox{\hyperlink{clasships_a2e1bb3550fb08551e13609f028a10712}{forceProfile}}();}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00502}00502 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00503}00503     \textcolor{keywordtype}{bool} rxnDone = \textcolor{keyword}{false};                       \textcolor{comment}{// react all variables once}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00504}00504     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{nVar}}; k++) \{                \textcolor{comment}{// upon finding first variable needing micromixing}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00505}00505         \textcolor{keywordflow}{if} ( (iLevel >= \mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}}[k]) || }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00506}00506              (iLevel==\mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}}[k]-\/1 \&\& \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a2b7548422caaa032387e3b58feb6f474}{getRand}}() <= \mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}}[k]-\/\mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}}[k]) ) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00507}00507                 \textcolor{keywordflow}{if}(!rxnDone \&\& \mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{performReaction}}) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00508}00508                    \mbox{\hyperlink{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}{reactParcels\_LevelTree}}(iLevel, iTree);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00509}00509                    rxnDone = \textcolor{keyword}{true};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00510}00510              \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00511}00511             \mbox{\hyperlink{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}{mixAcrossLevelTree}}(k, iLevel, iTree);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00512}00512         \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00513}00513     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00514}00514 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00515}00515 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00517}00517 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00524}\mbox{\hyperlink{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}{00524}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}{hips::reactParcels\_LevelTree}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} iLevel, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iTree) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00525}00525     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00526}00526     \textcolor{keywordtype}{int} nP  = 1 << (\mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{Nm1}} -\/ iLevel);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00527}00527     \textcolor{comment}{//int istart = iTree << nP;}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00528}00528     \textcolor{keywordtype}{int} istart = iTree * nP;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00529}00529     \textcolor{keywordtype}{int} iend = istart + nP;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00530}00530     \textcolor{keywordtype}{int} ime;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00531}00531     \textcolor{keywordtype}{double} dt;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00532}00532     \textcolor{keywordtype}{double} h;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00533}00533     vector<double> y(\mbox{\hyperlink{clasships_a61dca70748931a42d50254435f36e5e8}{nsp}});}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00534}00534 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00535}00535     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=istart; i<iend; i++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00536}00536         ime = \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00537}00537         \textcolor{comment}{//cout<<"{}pLoc "{}<<pLoc[i]<<"{}  gas "{}<<gas-\/>density()<<"{}\(\backslash\)n\(\backslash\)n"{}<<endl;}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00538}00538         dt = \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}}-\/\mbox{\hyperlink{clasships_a02e76a9b13872dff1fb000a751198330}{parcelTimes}}[ime];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00539}00539         h = \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[0][0][ime]; }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00540}00540         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{clasships_a61dca70748931a42d50254435f36e5e8}{nsp}}; k++)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00541}00541             y[k] = \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k+1][0][ime];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00542}00542 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00543}00543         \mbox{\hyperlink{clasships_a8712aef5b4f2678ec42d5230b32aad4a}{bRxr}}-\/>react(h, y, dt);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00544}00544         \mbox{\hyperlink{clasships_a8f22f735022a7d81c44a714b44a62694}{varRho}}[ime] =  \mbox{\hyperlink{clasships_a8712aef5b4f2678ec42d5230b32aad4a}{bRxr}}-\/>getDensity();             \textcolor{comment}{//Mb}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00545}00545          \textcolor{comment}{//cout<<"{}h    "{}<<h<<endl;}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00546}00546         \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[0][0][ime] = h;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00547}00547         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{clasships_a61dca70748931a42d50254435f36e5e8}{nsp}}; k++)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00548}00548             \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k+1][0][ime] = y[k];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00549}00549     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00550}00550 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00551}00551 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00552}00552 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00554}00554 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00580}\mbox{\hyperlink{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}{00580}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}{hips::mixAcrossLevelTree}}(\textcolor{keywordtype}{int} kVar, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iLevel, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iTree) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00581}00581     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00582}00582     \textcolor{keywordtype}{int} istart;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00583}00583     \textcolor{keywordtype}{int} iend;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00584}00584 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00585}00585     \textcolor{keywordtype}{int} nPmix = 1 << (\mbox{\hyperlink{clasships_af05ebcf315fa2b5c627f9d38395f576e}{nLevels}} -\/ iLevel -\/ 2);                   \textcolor{comment}{// number of parcels mixed together}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00586}00586 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00587}00587     \textcolor{keywordtype}{int} ime;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00588}00588 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00589}00589     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Mix left branch of iTree}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00590}00590 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00591}00591     istart = iTree << (\mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{Nm1}}-\/iLevel);  }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00592}00592     iend = istart + nPmix;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00593}00593 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00594}00594     \textcolor{keywordtype}{double} s = 0;                                               \textcolor{comment}{// initialize sum to 0}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00595}00595     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=istart; i<iend; i++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00596}00596         ime = \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00597}00597         s += \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[kVar][0][ime];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00598}00598     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00599}00599     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=istart; i<iend; i++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00600}00600         ime = \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00601}00601         \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[kVar][0][ime] = s / nPmix; }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00602}00602     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00603}00603 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00604}00604     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/ Mix right branch of iTree}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00605}00605 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00606}00606     istart = iend;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00607}00607     iend = istart + nPmix;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00608}00608 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00609}00609     s = 0;                   \textcolor{comment}{// initialize sum to 0}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00610}00610     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=istart; i<iend; i++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00611}00611         ime = \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00612}00612         s += \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[kVar][0][ime];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00613}00613     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00614}00614     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=istart; i<iend; i++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00615}00615         ime = \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00616}00616         \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[kVar][0][ime] = s / nPmix; }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00617}00617 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00618}00618         \textcolor{comment}{//cout<<"{}var Data in mixxx "{}<<varData[0][0][ime]<<endl;}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00619}00619         }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00620}00620     \}   }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00621}00621 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00622}00622 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00624}00624 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00632}\mbox{\hyperlink{clasships_a2e1bb3550fb08551e13609f028a10712}{00632}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a2e1bb3550fb08551e13609f028a10712}{hips::forceProfile}}() \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00633}00633     \textcolor{comment}{// Loop through each variable in the HiPS profile}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00634}00634     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 0; k < \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}.size(); k++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00635}00635         \textcolor{keywordtype}{double} s;                                                    \textcolor{comment}{// Temporary variable for summation}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00636}00636 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00637}00637         \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Force the left half of parcels to average 0 -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00638}00638 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00639}00639         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nparcels >> 1; i++)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00640}00640             s += \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k][0][\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i]];                             \textcolor{comment}{// Calculate the sum of values in the left half of parcels}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00641}00641         }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00642}00642         s /= (\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}} >> 1); \textcolor{comment}{// Calculate the average of values in the left half of parcels}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00643}00643         }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00644}00644         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nparcels >> 1; i++)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00645}00645             \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k][0][\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i]] += (-\/s -\/ 0.0);                    \textcolor{comment}{// Adjust values in the left half of parcels to achieve an average of 0}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00646}00646 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00647}00647         \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Force the right half of parcels to average 1 -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00648}00648         s = 0.0;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00649}00649 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00650}00650         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}} >> 1; i < \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}}; i++)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00651}00651             s += \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k][0][\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i]];                             \textcolor{comment}{// Calculate the sum of values in the right half of parcels}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00652}00652         }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00653}00653         s /= (\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}} >> 1);                                        \textcolor{comment}{// Calculate the average of values in the right half of parcels}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00654}00654         }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00655}00655         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}} >> 1; i < \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}}; i++)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00656}00656             \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k][0][\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i]] += (-\/s + 1.0);                    \textcolor{comment}{// Adjust values in the right half of parcels to achieve an average of 1}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00657}00657     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00658}00658 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00659}00659 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00661}00661 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00670}\mbox{\hyperlink{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}{00670}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}{hips::writeData}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} ifile, \textcolor{keyword}{const} \textcolor{keywordtype}{double} outputTime) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00671}00671     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00672}00672     stringstream ss1;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00673}00673     \textcolor{keywordtype}{string} s1;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00674}00674     ss1 << setfill(\textcolor{charliteral}{'0'}) << setw(5) << ifile;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00675}00675     ss1 >> s1;                                                                  \textcolor{comment}{// Convert the index into a string with leading zeros for filename}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00676}00676 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00677}00677     \textcolor{keywordtype}{string} fname = \textcolor{stringliteral}{"{}../data/Data\_"{}} + s1 + \textcolor{stringliteral}{"{}.dat"{}};                               \textcolor{comment}{// Construct the filename}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00678}00678 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00679}00679     ofstream ofile(fname.c\_str());                                              \textcolor{comment}{// Open the file for writing}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00680}00680 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00681}00681     ofile << \textcolor{stringliteral}{"{}\# time = "{}} << outputTime << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};                                  \textcolor{comment}{// Write the time and number of grid points into the file}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00682}00682     ofile << \textcolor{stringliteral}{"{}\# Grid Points = "{}} << \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}} << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00683}00683 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00684}00684     \textcolor{keywordflow}{for} (\textcolor{keyword}{const} \textcolor{keyword}{auto}\& name : \mbox{\hyperlink{clasships_a998b5a76ecd9d451115b96702b914096}{varName}})}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00685}00685         ofile << setw(14) << name;                                              \textcolor{comment}{// Write variable names into the file}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00686}00686     ofile << scientific << setprecision(10);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00687}00687 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00688}00688     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}}; i++) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00689}00689         ofile << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};                                                          \textcolor{comment}{// Start a new line for each parcel}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00690}00690 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00691}00691         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 0; k < \mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{nVar}}; k++)}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00692}00692             ofile << setw(19) << \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k][0][\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i]];                       \textcolor{comment}{// Write data for each variable}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00693}00693     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00694}00694 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00695}00695     ofile.close();                                                              \textcolor{comment}{// Close the file}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00696}00696 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00698}00698 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00702}\mbox{\hyperlink{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}{00702}} std::vector<double> \mbox{\hyperlink{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}{hips::projection\_back}}(std::vector<double> \&vb)\{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00703}00703     }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00704}00704     \textcolor{keywordtype}{int} jprev = 0;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00705}00705 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00706}00706     std::vector<double> xh = \mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{setGridHips}}(\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}});}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00707}00707     std::vector<double> xc = \mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{setGridCfd}}(vb);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00708}00708 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00709}00709     \textcolor{keywordtype}{int} nh = xh.size() -\/ 1;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00710}00710     \textcolor{keywordtype}{int} nc = xc.size() -\/ 1;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00711}00711     std::vector<double> vc(nc, 0);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00712}00712 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00713}00713     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nc; ++i) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00714}00714         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j = jprev + 1; j < xh.size(); ++j) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00715}00715             \textcolor{keywordtype}{double} d1 = xh[j] -\/ xh[j -\/ 1];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00716}00716             \textcolor{keywordtype}{double} d2 = xh[j] -\/ xc[i];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00717}00717             \textcolor{keywordtype}{double} d = (d1 < d2) ? d1 : d2;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00718}00718 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00719}00719             \textcolor{keywordflow}{if} (xh[j] <= xc[i + 1]) \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00720}00720                 vc[i] += vb[j -\/ 1] * d;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00721}00721             \} \textcolor{keywordflow}{else} \{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00722}00722                 \textcolor{keywordtype}{double} d1 = xc[i + 1] -\/ xh[j -\/ 1];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00723}00723                 \textcolor{keywordtype}{double} d2 = xc[i + 1] -\/ xc[i];}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00724}00724                 d = (d1 < d2) ? d1 : d2;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00725}00725                 vc[i] += vb[j -\/ 1] * d;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00726}00726                 jprev = j -\/ 1;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00727}00727                 \textcolor{keywordflow}{break};}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00728}00728             \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00729}00729         \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00730}00730         vc[i] /= (xc[i + 1] -\/ xc[i]);}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00731}00731     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00732}00732 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00733}00733     \textcolor{keywordflow}{return} vc;}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00734}00734 \}    }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00735}00735 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00737}00737 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00745}\mbox{\hyperlink{clasships_a4f12ec17e2983edef734832203570c87}{00745}} std::vector<std::vector<double>> \mbox{\hyperlink{clasships_a4f12ec17e2983edef734832203570c87}{hips::get\_varData}}()\{}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00746}00746 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00747}00747     std::vector<std::vector<double>> varDataProjections;                             \textcolor{comment}{// Vector to store modified data projections}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00748}00748 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00749}00749     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}.size(); i++) \{                                        \textcolor{comment}{// Loop through each element of varData and project the data back}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00750}00750         varDataProjections.push\_back(\mbox{\hyperlink{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}{projection\_back}}(\mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[i][0]));                 \textcolor{comment}{// Project the data back and store it in vh}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00751}00751     \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00752}00752 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00753}00753     \textcolor{keywordflow}{return} varDataProjections;                                                         \textcolor{comment}{// Return the vector containing modified data projections}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00754}00754 \}}
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00755}00755 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00757}00757  }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00490}00490 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00497}\mbox{\hyperlink{clasships_ae794eac94488c12cc1aa0a321de471b9}{00497}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_ae794eac94488c12cc1aa0a321de471b9}{hips::advanceHips}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} iLevel, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iTree) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00498}00498      }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00499}00499     \textcolor{keywordflow}{if} (\mbox{\hyperlink{clasships_a61569cff2835802d3daca4fb71e11b76}{forceTurb}}==2 \&\& iLevel==0)              \textcolor{comment}{// forcing for statistically stationary}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00500}00500         \mbox{\hyperlink{clasships_a2e1bb3550fb08551e13609f028a10712}{forceProfile}}();}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00501}00501 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00502}00502     \textcolor{keywordtype}{bool} rxnDone = \textcolor{keyword}{false};                       \textcolor{comment}{// react all variables once}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00503}00503     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{nVar}}; k++) \{                \textcolor{comment}{// upon finding first variable needing micromixing}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00504}00504         \textcolor{keywordflow}{if} ( (iLevel >= \mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}}[k]) || }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00505}00505              (iLevel==\mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}}[k]-\/1 \&\& \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}}.\mbox{\hyperlink{classrandom_generator_a2b7548422caaa032387e3b58feb6f474}{getRand}}() <= \mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}}[k]-\/\mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}}[k]) ) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00506}00506                 \textcolor{keywordflow}{if}(!rxnDone \&\& \mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{performReaction}}) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00507}00507                    \mbox{\hyperlink{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}{reactParcels\_LevelTree}}(iLevel, iTree);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00508}00508                    rxnDone = \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00509}00509              \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00510}00510             \mbox{\hyperlink{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}{mixAcrossLevelTree}}(k, iLevel, iTree);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00511}00511         \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00512}00512     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00513}00513 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00514}00514 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00516}00516 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00523}\mbox{\hyperlink{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}{00523}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}{hips::reactParcels\_LevelTree}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} iLevel, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iTree) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00524}00524     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00525}00525     \textcolor{keywordtype}{int} nP  = 1 << (\mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{Nm1}} -\/ iLevel);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00526}00526     \textcolor{comment}{//int istart = iTree << nP;}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00527}00527     \textcolor{keywordtype}{int} istart = iTree * nP;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00528}00528     \textcolor{keywordtype}{int} iend = istart + nP;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00529}00529     \textcolor{keywordtype}{int} ime;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00530}00530     \textcolor{keywordtype}{double} dt;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00531}00531     \textcolor{keywordtype}{double} h;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00532}00532     vector<double> y(\mbox{\hyperlink{clasships_a61dca70748931a42d50254435f36e5e8}{nsp}});}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00533}00533 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00534}00534     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=istart; i<iend; i++) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00535}00535         ime = \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00536}00536         \textcolor{comment}{//cout<<"{}pLoc "{}<<pLoc[i]<<"{}  gas "{}<<gas-\/>density()<<"{}\(\backslash\)n\(\backslash\)n"{}<<endl;}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00537}00537         dt = \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}}-\/\mbox{\hyperlink{clasships_a02e76a9b13872dff1fb000a751198330}{parcelTimes}}[ime];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00538}00538         h = \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[0][0][ime]; }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00539}00539         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{clasships_a61dca70748931a42d50254435f36e5e8}{nsp}}; k++)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00540}00540             y[k] = \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k+1][0][ime];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00541}00541 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00542}00542         \mbox{\hyperlink{clasships_a8712aef5b4f2678ec42d5230b32aad4a}{bRxr}}-\/>react(h, y, dt);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00543}00543         \mbox{\hyperlink{clasships_a8f22f735022a7d81c44a714b44a62694}{varRho}}[ime] =  \mbox{\hyperlink{clasships_a8712aef5b4f2678ec42d5230b32aad4a}{bRxr}}-\/>getDensity();             \textcolor{comment}{//Mb}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00544}00544          \textcolor{comment}{//cout<<"{}h    "{}<<h<<endl;}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00545}00545         \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[0][0][ime] = h;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00546}00546         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{clasships_a61dca70748931a42d50254435f36e5e8}{nsp}}; k++)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00547}00547             \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k+1][0][ime] = y[k];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00548}00548     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00549}00549 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00550}00550 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00551}00551 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00553}00553 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00579}\mbox{\hyperlink{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}{00579}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}{hips::mixAcrossLevelTree}}(\textcolor{keywordtype}{int} kVar, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iLevel, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iTree) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00580}00580     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00581}00581     \textcolor{keywordtype}{int} istart;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00582}00582     \textcolor{keywordtype}{int} iend;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00583}00583 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00584}00584     \textcolor{keywordtype}{int} nPmix = 1 << (\mbox{\hyperlink{clasships_af05ebcf315fa2b5c627f9d38395f576e}{nLevels}} -\/ iLevel -\/ 2);                   \textcolor{comment}{// number of parcels mixed together}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00585}00585 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00586}00586     \textcolor{keywordtype}{int} ime;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00587}00587 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00588}00588     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Mix left branch of iTree}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00589}00589 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00590}00590     istart = iTree << (\mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{Nm1}}-\/iLevel);  }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00591}00591     iend = istart + nPmix;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00592}00592 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00593}00593     \textcolor{keywordtype}{double} s = 0;                                               \textcolor{comment}{// initialize sum to 0}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00594}00594     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=istart; i<iend; i++) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00595}00595         ime = \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00596}00596         s += \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[kVar][0][ime];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00597}00597     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00598}00598     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=istart; i<iend; i++) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00599}00599         ime = \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00600}00600         \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[kVar][0][ime] = s / nPmix; }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00601}00601     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00602}00602 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00603}00603     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/ Mix right branch of iTree}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00604}00604 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00605}00605     istart = iend;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00606}00606     iend = istart + nPmix;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00607}00607 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00608}00608     s = 0;                   \textcolor{comment}{// initialize sum to 0}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00609}00609     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=istart; i<iend; i++) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00610}00610         ime = \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00611}00611         s += \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[kVar][0][ime];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00612}00612     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00613}00613     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i=istart; i<iend; i++) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00614}00614         ime = \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00615}00615         \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[kVar][0][ime] = s / nPmix; }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00616}00616 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00617}00617         \textcolor{comment}{//cout<<"{}var Data in mixxx "{}<<varData[0][0][ime]<<endl;}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00618}00618         }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00619}00619     \}   }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00620}00620 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00621}00621 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00623}00623 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00631}\mbox{\hyperlink{clasships_a2e1bb3550fb08551e13609f028a10712}{00631}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a2e1bb3550fb08551e13609f028a10712}{hips::forceProfile}}() \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00632}00632     \textcolor{comment}{// Loop through each variable in the HiPS profile}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00633}00633     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 0; k < \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}.size(); k++) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00634}00634         \textcolor{keywordtype}{double} s;                                                    \textcolor{comment}{// Temporary variable for summation}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00635}00635 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00636}00636         \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Force the left half of parcels to average 0 -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00637}00637 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00638}00638         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nparcels >> 1; i++)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00639}00639             s += \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k][0][\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i]];                             \textcolor{comment}{// Calculate the sum of values in the left half of parcels}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00640}00640         }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00641}00641         s /= (\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}} >> 1); \textcolor{comment}{// Calculate the average of values in the left half of parcels}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00642}00642         }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00643}00643         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nparcels >> 1; i++)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00644}00644             \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k][0][\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i]] += (-\/s -\/ 0.0);                    \textcolor{comment}{// Adjust values in the left half of parcels to achieve an average of 0}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00645}00645 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00646}00646         \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Force the right half of parcels to average 1 -\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00647}00647         s = 0.0;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00648}00648 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00649}00649         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}} >> 1; i < \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}}; i++)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00650}00650             s += \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k][0][\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i]];                             \textcolor{comment}{// Calculate the sum of values in the right half of parcels}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00651}00651         }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00652}00652         s /= (\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}} >> 1);                                        \textcolor{comment}{// Calculate the average of values in the right half of parcels}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00653}00653         }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00654}00654         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}} >> 1; i < \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}}; i++)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00655}00655             \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k][0][\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i]] += (-\/s + 1.0);                    \textcolor{comment}{// Adjust values in the right half of parcels to achieve an average of 1}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00656}00656     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00657}00657 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00658}00658 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00660}00660 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00669}\mbox{\hyperlink{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}{00669}} \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}{hips::writeData}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} ifile, \textcolor{keyword}{const} \textcolor{keywordtype}{double} outputTime) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00670}00670     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00671}00671     stringstream ss1;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00672}00672     \textcolor{keywordtype}{string} s1;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00673}00673     ss1 << setfill(\textcolor{charliteral}{'0'}) << setw(5) << ifile;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00674}00674     ss1 >> s1;                                                                  \textcolor{comment}{// Convert the index into a string with leading zeros for filename}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00675}00675 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00676}00676     \textcolor{keywordtype}{string} fname = \textcolor{stringliteral}{"{}../data/Data\_"{}} + s1 + \textcolor{stringliteral}{"{}.dat"{}};                               \textcolor{comment}{// Construct the filename}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00677}00677 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00678}00678     ofstream ofile(fname.c\_str());                                              \textcolor{comment}{// Open the file for writing}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00679}00679 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00680}00680     ofile << \textcolor{stringliteral}{"{}\# time = "{}} << outputTime << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};                                  \textcolor{comment}{// Write the time and number of grid points into the file}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00681}00681     ofile << \textcolor{stringliteral}{"{}\# Grid Points = "{}} << \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}} << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00682}00682 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00683}00683     \textcolor{keywordflow}{for} (\textcolor{keyword}{const} \textcolor{keyword}{auto}\& name : \mbox{\hyperlink{clasships_a998b5a76ecd9d451115b96702b914096}{varName}})}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00684}00684         ofile << setw(14) << name;                                              \textcolor{comment}{// Write variable names into the file}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00685}00685     ofile << scientific << setprecision(10);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00686}00686 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00687}00687     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}}; i++) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00688}00688         ofile << \textcolor{stringliteral}{"{}\(\backslash\)n"{}};                                                          \textcolor{comment}{// Start a new line for each parcel}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00689}00689 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00690}00690         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k = 0; k < \mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{nVar}}; k++)}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00691}00691             ofile << setw(19) << \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[k][0][\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}}[i]];                       \textcolor{comment}{// Write data for each variable}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00692}00692     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00693}00693 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00694}00694     ofile.close();                                                              \textcolor{comment}{// Close the file}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00695}00695 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00697}00697 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00701}\mbox{\hyperlink{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}{00701}} std::vector<double> \mbox{\hyperlink{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}{hips::projection\_back}}(std::vector<double> \&vb)\{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00702}00702     }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00703}00703     \textcolor{keywordtype}{int} jprev = 0;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00704}00704 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00705}00705     std::vector<double> xh = \mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{setGridHips}}(\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}});}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00706}00706     std::vector<double> xc = \mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{setGridCfd}}(vb);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00707}00707 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00708}00708     \textcolor{keywordtype}{int} nh = xh.size() -\/ 1;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00709}00709     \textcolor{keywordtype}{int} nc = xc.size() -\/ 1;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00710}00710     std::vector<double> vc(nc, 0);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00711}00711 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00712}00712     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < nc; ++i) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00713}00713         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} j = jprev + 1; j < xh.size(); ++j) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00714}00714             \textcolor{keywordtype}{double} d1 = xh[j] -\/ xh[j -\/ 1];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00715}00715             \textcolor{keywordtype}{double} d2 = xh[j] -\/ xc[i];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00716}00716             \textcolor{keywordtype}{double} d = (d1 < d2) ? d1 : d2;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00717}00717 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00718}00718             \textcolor{keywordflow}{if} (xh[j] <= xc[i + 1]) \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00719}00719                 vc[i] += vb[j -\/ 1] * d;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00720}00720             \} \textcolor{keywordflow}{else} \{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00721}00721                 \textcolor{keywordtype}{double} d1 = xc[i + 1] -\/ xh[j -\/ 1];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00722}00722                 \textcolor{keywordtype}{double} d2 = xc[i + 1] -\/ xc[i];}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00723}00723                 d = (d1 < d2) ? d1 : d2;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00724}00724                 vc[i] += vb[j -\/ 1] * d;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00725}00725                 jprev = j -\/ 1;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00726}00726                 \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00727}00727             \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00728}00728         \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00729}00729         vc[i] /= (xc[i + 1] -\/ xc[i]);}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00730}00730     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00731}00731 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00732}00732     \textcolor{keywordflow}{return} vc;}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00733}00733 \}    }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00734}00734 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00736}00736 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00744}\mbox{\hyperlink{clasships_a4f12ec17e2983edef734832203570c87}{00744}} std::vector<std::vector<double>> \mbox{\hyperlink{clasships_a4f12ec17e2983edef734832203570c87}{hips::get\_varData}}()\{}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00745}00745 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00746}00746     std::vector<std::vector<double>> varDataProjections;                             \textcolor{comment}{// Vector to store modified data projections}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00747}00747 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00748}00748     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}.size(); i++) \{                                        \textcolor{comment}{// Loop through each element of varData and project the data back}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00749}00749         varDataProjections.push\_back(\mbox{\hyperlink{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}{projection\_back}}(\mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}}[i][0]));                 \textcolor{comment}{// Project the data back and store it in vh}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00750}00750     \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00751}00751 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00752}00752     \textcolor{keywordflow}{return} varDataProjections;                                                         \textcolor{comment}{// Return the vector containing modified data projections}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00753}00753 \}}
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00754}00754 }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00756}00756  }
+\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00757}00757 }
 \DoxyCodeLine{\Hypertarget{hips_8cc_source_l00758}00758 }
-\DoxyCodeLine{\Hypertarget{hips_8cc_source_l00759}00759 }
 
 \end{DoxyCode}

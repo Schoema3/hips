@@ -93,7 +93,7 @@ public:
 
     std::vector<double>  projection_back(std::vector<double> &vb);
 
-    void calculateSolution(const double tRun);                                ///< Running simulations 
+    void calculateSolution(const double tRun, bool shouldWriteData =false);                                ///< Running simulations 
 
 private:
     void sample_hips_eddy(double &dt, int &iLevel);                           ///< Sample hips eddy with specified time step and level                                                
