@@ -28,17 +28,20 @@ if(APPLE)
 endif()
 
 find_library(CVODES sundials_cvodes)
-find_library(CANTERA cantera_shared HINTS "/usr/local/cantera/lib/")
+find_library(CANTERA NAMES cantera_shared cantera)
+get_filename_component(cantera_path ${CANTERA} DIRECTORY)
+set_property(TARGET hips APPEND PROPERTY INSTALL_RPATH ${cantera_path})
 find_package(Python COMPONENTS Interpreter Development)
-find_package(LAPACK REQUIRED)
 
 #----------
 
+target_include_directories(hips PRIVATE "/Users/mbehrang/miniconda3/envs/py312ct/include")
 target_include_directories(hips PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(hips PRIVATE "/usr/local/include")
 target_link_directories(   hips PRIVATE "/usr/local/lib")
+
+target_link_libraries(hips ${CANTERA})
 target_link_libraries(hips ${CANTERA} ${YAML} ${CVODES} ${Python_LIBRARIES} ${Python} ${ACCELERATE})
-target_link_libraries(hips LAPACK::LAPACK)
 
 ############# INSTALLATION ################
 

@@ -10,12 +10,20 @@ find_library(CVODES sundials_cvodes)
 find_library(CANTERA cantera)
 find_package(Python COMPONENTS Interpreter Development)
 
+find_library(CANTERA NAMES cantera_shared cantera)
+get_filename_component(cantera_path ${CANTERA} DIRECTORY)
+
 #----------
 
 add_executable(ex_1.x ex_1.cc)
+set_property(TARGET ex_1.x APPEND PROPERTY INSTALL_RPATH ${cantera_path})
 target_include_directories(ex_1.x PRIVATE "${CMAKE_SOURCE_DIR}/src" "/usr/local/include")
+target_include_directories(ex_1.x PRIVATE "/Users/mbehrang/miniconda3/envs/py312ct/include")
 target_link_libraries(ex_1.x PRIVATE hips ${CANTERA} ${YAML} ${CVODES} ${Python} ${ACCELERATE})
 install(TARGETS ex_1.x DESTINATION "${CMAKE_SOURCE_DIR}/run")
+
+#----------
+
 
 #----------
 

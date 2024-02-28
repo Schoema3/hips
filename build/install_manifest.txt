@@ -1,0 +1,3 @@
+/Users/mbehrang/hips-folders/hips-build/hips/installed/lib/libhips.a
+/Users/mbehrang/hips-folders/hips-build/hips/installed/include/hips.h
+/Users/mbehrang/hips-folders/hips-build/hips/run/ex_1.x
