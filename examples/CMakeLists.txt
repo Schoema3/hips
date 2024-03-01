@@ -24,18 +24,19 @@ install(TARGETS ex_1.x DESTINATION "${CMAKE_SOURCE_DIR}/run")
 
 #----------
 
-
-#----------
-
 #add_executable(ex_2.x ex_2.cc)
+#set_property(TARGET ex_2.x APPEND PROPERTY INSTALL_RPATH ${cantera_path})
 #target_include_directories(ex_2.x PRIVATE "${CMAKE_SOURCE_DIR}/src" "/usr/local/include")
+#target_include_directories(ex_2.x PRIVATE "/Users/mbehrang/miniconda3/envs/py312ct/include")
 #target_link_libraries(ex_2.x PRIVATE hips ${CANTERA} ${YAML} ${CVODES} ${Python} ${ACCELERATE})
 #install(TARGETS ex_2.x DESTINATION "${CMAKE_SOURCE_DIR}/run")
 #
-###----------
+##----------
 #
 #add_executable(ex_3.x ex_3.cc)
+#set_property(TARGET ex_3.x APPEND PROPERTY INSTALL_RPATH ${cantera_path})
 #target_include_directories(ex_3.x PRIVATE "${CMAKE_SOURCE_DIR}/src" "/usr/local/include")
+#target_include_directories(ex_3.x PRIVATE "/Users/mbehrang/miniconda3/envs/py312ct/include")
 #target_link_libraries(ex_3.x PRIVATE hips ${CANTERA} ${YAML} ${CVODES} ${Python} ${ACCELERATE})
 #install(TARGETS ex_3.x DESTINATION "${CMAKE_SOURCE_DIR}/run")
 #

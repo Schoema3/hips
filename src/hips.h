@@ -1,22 +1,26 @@
 #pragma once
 
-#include "cantera/base/Solution.h"
-#include "cantera/thermo.h"
+#ifdef  REACTIONS_ENABLED
+    #include "cantera/base/Solution.h"
+    #include "cantera/thermo.h"
+    #include "batchReactor.h"
+#endif
 
 #include <iostream>
 #include <vector>
 #include <string>
 #include <vector>
 #include "randomGenerator.h"
-#include "batchReactor.h"
 
 class hips {
 public:
     // DATA MEMBERS
     int nparcels;                                                       ///< number of parcels
     std::vector<std::vector<double>*> varData;                          ///< vector of pointers to vector
-    std::shared_ptr<Cantera::ThermoPhase> gas;                          ///< cantera thermo object
-    std::unique_ptr<batchReactor> bRxr;                                 ///< chemistry integrator (constant pressure)
+    #ifdef REACTIONS_ENABLED
+        std::shared_ptr<Cantera::ThermoPhase> gas;
+        std::unique_ptr<batchReactor> bRxr;
+    #endif
 
     // MEMBER VARIABLES
     int nL;                                                              ///< adjusted number of levels based on Reynolds.
@@ -66,7 +70,9 @@ public:
          int forceTurb_,
          int nVar_,
          std::vector<double> &ScHips_,
-         std::shared_ptr<Cantera::Solution> cantSol,
+         #ifdef REACTIONS_ENABLED
+            std::shared_ptr<Cantera::Solution> cantSol,
+         #endif
          bool performReaction,
          int seed = 10);
 

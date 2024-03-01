@@ -1,11 +1,11 @@
 
+#ifdef REACTIONS_ENABLED
+#include "cantera/base/Solution.h"
+#include "cantera/thermo.h"
+#endif
 #include <iostream>
 #include <vector>
 #include "hips.h"
-#include "cantera/thermo.h"
-#include "cantera/base/Solution.h"
-#include "cantera/numerics/Integrator.h"
-
 using namespace std;
 
 // Function to initialize mixing fractions
@@ -48,13 +48,22 @@ int main() {
     vector<double> ScHips(2, 1 );
 
     // Gas solution setup
+
+#ifdef REACTIONS_ENABLED
     auto cantSol = Cantera::newSolution("gri30.yaml");
     auto gas = cantSol->thermo();
     size_t numSpecies = gas->nSpecies();
+ #endif
+  
+
     int numVariables = 2;
 
     // HiPS tree creation
-    hips HiPS(numLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips, cantSol, false);
+    hips HiPS(numLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips,
+              #ifdef REACTIONS_ENABLED
+                 cantSol,
+              #endif
+              false);
     int numParcels = HiPS.nparcels;
 
 

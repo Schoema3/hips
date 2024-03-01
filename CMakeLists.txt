@@ -12,13 +12,16 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # ---- Set C++ language standard ----
+option(REACTIONS_ENABLED "Enable reactions" OFF)
+if(REACTIONS_ENABLED)
+    add_compile_definitions(REACTIONS_ENABLED)
+endif()
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 
-# ---- Installation location ----
 
 set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}/installed")
 

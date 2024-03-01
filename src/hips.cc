@@ -1,6 +1,10 @@
 #include "hips.h"
-#include "batchReactor_cvode.h"
-#include "batchReactor_cantera.h"
+
+#ifdef REACTIONS_ENABLED
+    #include "batchReactor_cvode.h"
+    #include "batchReactor_cantera.h"
+#endif
+
 #include "randomGenerator.h"
 
 #include <iostream>
@@ -40,7 +44,7 @@ hips::hips(double Re) {
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * \brief Constructor for initializing required parameters to create the HiPS tree. 
+ * \Constructor for initializing required parameters to create the HiPS tree. 
  * \param nLevels_                     Input number of tree levels.
  * \param domainLength_                Input length scale of the domain.
  * \param tau0_                        Input time scale of the domain.
@@ -59,7 +63,10 @@ hips::hips(int nLevels_,
            int forceTurb_,
            int nVar_,
            vector<double> &ScHips_,
+        #ifdef REACTIONS_ENABLED
            shared_ptr<Cantera::Solution> cantSol,
+        #endif
+
            bool performReaction_,
            int seed) : 
 
@@ -74,16 +81,15 @@ hips::hips(int nLevels_,
     rand(seed),
     performReaction(performReaction_) { 
     
-    gas = cantSol->thermo(); 
-    nsp = gas->nSpecies();
+    #ifdef REACTIONS_ENABLED
+        gas = cantSol->thermo(); 
+        nsp = gas->nSpecies();
+        bRxr = make_unique<batchReactor_cvode>(cantSol);                  
+        //bRxr = make_unique<batchReactor_cantera>(cantSol);
+    #endif
 
     varData.resize(nVar);
-    varRho.resize(nparcels);
-    varName.resize(nVar);
-
-    bRxr = make_unique<batchReactor_cvode>(cantSol);                  // initialize integrator pointer(cvode)
-    //bRxr = make_unique<batchReactor_cantera>(cantSol);                // initialize integrator pointer(cantera)
-              
+    varName.resize(nVar);        
     
     //-------------------------- Set number of parcels, level lengthscales, timescales, and rates, and i_plus && i_batchelor
      
@@ -152,7 +158,8 @@ hips::hips(int nLevels_,
     }
     
     //------------------- Set the parcel addresses (index array)
-    
+   varRho.resize(nparcels);
+ 
     pLoc.resize(nparcels);
     for (int i=0; i<nparcels; i++)
         pLoc[i] = i;
@@ -163,7 +170,7 @@ hips::hips(int nLevels_,
  * \param v                            Input vector consisting of variables passed to the HiPS tree.
  * \param w                            Input vector containing weights for each flow particle.
  * \param varN                         Input vector containing names corresponding to each variable.
- * \param i                            Index indicating where the data should be assigned in the vectors varData and varName.
+ * \param i                             Index indicating where the data should be assigned in the vectors varData and varName.
  */
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, int i) {  
 
@@ -192,15 +199,10 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
 /////////////////////////////////////////i/////////////////////////////////////////////
 /**
- * \brief Function for projecting a vector onto a grid.
- *
- * This function projects vectors onto a grid. It takes a vector of variables, a weight vector, and a vector of density as input parameters,
- * and returns the projected vector.
- *
- * \param vcfd                  Vector to be projected.
- * \param weight                Weight vector used for the determing the size of each grid cell.
+ * \brief Function for projecting vectors onto a grid.
+ * \param v                              Vector to be projected.
+ * \param w                              Weight vector.
  * \return Projected vector.
- *
  */
 std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight) {
     
@@ -241,7 +243,7 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 
 /////////////////////////////////////////i/////////////////////////////////////////////
 /**
- * \brief Function for projecting vectors onto a grid.
+ * \brief Project vectors onto a grid.
  *
  * This function projects vectors onto a grid. It takes a vector of variables, a weight vector, and a vector of density as input parameters,
  * and returns the projected vector.
@@ -298,7 +300,7 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
 
 /////////////////////////////////////////////////////////////////////////////////
 /**
- * \brief Function for setting-up a grid for CFD simulation.
+ * \brief Set up a grid for CFD simulation.
  *
  * This function generates a grid for CFD simulation based on a given weight vector.
  *
@@ -324,7 +326,7 @@ std::vector<double> hips::setGridCfd(std::vector<double> &w) {
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * \brief Function for setting-up a grid for HIPS simulation.
+ * \brief Set up a grid for HIPS simulation.
  *
  * This function generates a grid for HIPS simulation with a specified number of grid points.
  *
@@ -423,10 +425,10 @@ void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
     return;
 }
 
-///////////////////////////////////////////////////////////////////////
-/** Function for performing eddy events: parcel swaps.
-    \param iLevel                          Input  level of the tree for the base of the swap.
-    \param iTree                           Output which subtree on the level is selected
+///////////////////////////////////////////////////////////////////////////////
+/** Function performs eddy events: parcel swaps.
+    @param iLevel                          Input  level of the tree for the base of the swap.
+    @param iTree                           Output which subtree on the level is selected
 
     Randomly select a node on iLevel.
     Go down two levels and select nodes 0q and 1r, where q, r are randomly 0 or 1
@@ -492,7 +494,7 @@ void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
 
 
 ///////////////////////////////////////////////////////////////////////////////
-/** \brief Fundtion for reacting and mixing parcels that are involved in a micromixing process.
+/** React and mix parcels that are involved in a micromixing process.
   * This is determined by the level and the tree within that level.
   * Might not do anything if the eddy doesn't cause micromixing.
   * \param iLevel                    Input level that the eddy event occurred.
@@ -518,11 +520,11 @@ void hips::advanceHips(const int iLevel, const int iTree) {
 
 }
 ///////////////////////////////////////////////////////////////////////////////
-/** \brief Function for reacting parcels that are involved in a micromixing process.
+/** React parcels that are involved in a micromixing process.
   * Parcels might react for different amounts of time depending on when they last
   * reacted, which is stored in the parcelTimes array.
-  * \param iLevel                    Input level that the eddy event occurred.
-  * \param iTree                     Input root note of the eddy event at iLevel.
+  * @param iLevel                    Input level that the eddy event occurred.
+  * @param iTree                     Input root note of the eddy event at iLevel.
   */
 
 void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
@@ -543,10 +545,11 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
         h = varData[0][0][ime]; 
         for (int k=0; k<nsp; k++)
             y[k] = varData[k+1][0][ime];
-
-        bRxr->react(h, y, dt);
-        varRho[ime] =  bRxr->getDensity();             //Mb
+        #ifdef REACTIONS_ENABLED
+             bRxr->react(h, y, dt);
+            varRho[ime] =  bRxr->getDensity();             //Mb
          //cout<<"h    "<<h<<endl;
+        #endif
         varData[0][0][ime] = h;
         for (int k=0; k<nsp; k++)
             varData[k+1][0][ime] = y[k];
@@ -555,11 +558,11 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/** \brief function for mixing parcels uniformly (using average) at given level and tree
+/** Mix parcels uniformly (using average) at given level and tree
   * Mixing at levels above the lowest enables low Sc variables.
-  * \param kVar                  Input  variable index to mix (normally a transported var as determined by caller)
-  * \param iLevel                Input  grandchildren of this iLevel will be mixed
-  * \param iTree                 Input  at the given iLevel, mix only this subtree
+  * @param kVar   \input  variable index to mix (normally a transported var as determined by caller)
+  * @param iLevel \input  grandchildren of this iLevel will be mixed
+  * @param iTree  \input  at the given iLevel, mix only this subtree
   *
   * Example: For a 5 level tree, we have levels 0, 1, 2, 3, 4 (top to bottom).
   *   
@@ -626,12 +629,12 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * \brief Function for forcing the HiPS profile to achieve statistical stationarity.
+ * @brief Force the HiPS profile to achieve statistical stationarity.
  *
  * This function is meant to demonstrate forcing for simple scalars, such as a mixture fraction variable that varies between 0 and 1.
  * The code within this function is configured to force the left half of parcels to average 0 and the right half of parcels to average 1.
  * 
- * \note This function modifies the data stored in the HiPS profile.
+ * @note This function modifies the data stored in the HiPS profile.
  */
 void hips::forceProfile() {
     // Loop through each variable in the HiPS profile
@@ -663,14 +666,14 @@ void hips::forceProfile() {
 
 ///////////////////////////////////////////////////////////////////////////////
 /**
- * \brief Function for writing data to a file with a specific index and output time.
+ * @brief Write data to a file with a specific index and output time.
  *
  * This function writes data to a file with a filename following a sequential incrementing index pattern 
  * (e.g., Data_00001.dat, Data_00002.dat, etc.). The time of the data file is also written into the file.
  *
- * \param ifile                           The sequential index used in the file name.
- * \param outputTime                      The time associated with the data, written into the file.
- */ 
+ * @param ifile The sequential index used in the file name.
+ * @param outputTime The time associated with the data, written into the file.
+ */
 void hips::writeData(const int ifile, const double outputTime) {
     // Create the "data" directory if it doesn't exist
     system("mkdir -p ../data");
@@ -769,12 +772,12 @@ std::vector<double> hips::projection_back(std::vector<double> &vb){
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /**
- * \brief Function for retrieving modified data from the Hierarchical Progressive Survey (HiPS) library.
+ * @brief Retrieve modified data from the Hierarchical Progressive Survey (HiPS) library.
  *
  * This function retrieves modified data from the HiPS library and stores it in the provided vector.
  * Each element of the returned vector contains a vector representing a single data projection.
  *
- * \return A vector of vectors containing modified data retrieved from the HiPS library.
+ * @return A vector of vectors containing modified data retrieved from the HiPS library.
  */
 std::vector<std::vector<double>> hips::get_varData(){
 

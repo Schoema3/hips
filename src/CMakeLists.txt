@@ -1,56 +1,77 @@
-##################### HiPS LIBRARY #####################
+
+
+
+
+cmake_minimum_required(VERSION 3.15)
+project(hips)
+
+##################### hips library #####################
 
 add_library(hips)
+option(reactions_enabled "Enable reactions" ON)
+if(reactions_enabled)
+    add_compile_definitions(reactions_enabled)
+endif()
+target_sources(hips PRIVATE 
+    hips.cc                 
+    hips.h 
+)
 
-target_sources(hips PRIVATE hips.cc                 hips.h 
-                            batchReactor_cvode.cc   batchReactor_cvode.h   integrator_cvode.h
-                            batchReactor_cantera.cc batchReactor_cantera.h
-                            batchReactor.h
-              )
-
-# option(USE_CUSTOM_INTEGRATOR "Use a custom integrator" OFF){{{
-# set(CUSTOM_INTEGRATOR_PATH "" CACHE STRING "Path to custom integrator library")
-
-# if(USE_CUSTOM_INTEGRATOR)
-#     target_sources(hips PRIVATE ${CUSTOM_INTEGRATOR_PATH}/customIntegrator.cc)
-#     target_include_directories(hips PRIVATE ${CUSTOM_INTEGRATOR_PATH})
-# else()
-#     target_sources(hips PRIVATE cvodeDriver.cc cvodeDriver.h)
-# endif()}}}
-
-#----------
-
-set_target_properties(hips PROPERTIES PUBLIC_HEADER "hips.h")
-
-if(APPLE)
-    find_library(ACCELERATE Accelerate)
-    find_library(YAML yaml-cpp)
+if(REACTIONS_ENABLED)
+    target_sources(hips PRIVATE
+        hips.cc                 
+        hips.h 
+        batchreactor_cvode.cc   
+        batchreactor_cvode.h   
+        integrator_cvode.h
+        batchreactor_cantera.cc 
+        batchreactor_cantera.h
+        batchreactor.h
+    )
 endif()
 
-find_library(CVODES sundials_cvodes)
-find_library(CANTERA NAMES cantera_shared cantera)
-get_filename_component(cantera_path ${CANTERA} DIRECTORY)
-set_property(TARGET hips APPEND PROPERTY INSTALL_RPATH ${cantera_path})
-find_package(Python COMPONENTS Interpreter Development)
 
-#----------
+# Option to enable reactions
 
-target_include_directories(hips PRIVATE "/Users/mbehrang/miniconda3/envs/py312ct/include")
-target_include_directories(hips PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(hips PRIVATE "/usr/local/include")
-target_link_directories(   hips PRIVATE "/usr/local/lib")
 
-target_link_libraries(hips ${CANTERA})
-target_link_libraries(hips ${CANTERA} ${YAML} ${CVODES} ${Python_LIBRARIES} ${Python} ${ACCELERATE})
+# Setting target properties
+set_target_properties(hips PROPERTIES 
+    PUBLIC_HEADER "hips.h"
+)
 
-############# INSTALLATION ################
+# Find necessary libraries
+find_package(Threads REQUIRED)
+find_package(Python REQUIRED COMPONENTS Interpreter Development)
+find_package(LAPACK REQUIRED)
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+target_link_libraries(hips ${Python_LIBRARIES} ${Python} ${ACCELERATE})
+
+
+# Include boost if necessary
+if(reactions_enabled)
+    find_library(CVODES sundials_cvodes)
+    find_library(CANTERA NAMES cantera_shared cantera)
+    get_filename_component(cantera_path ${CANTERA} DIRECTORY)
+    set_property(TARGET hips APPEND PROPERTY INSTALL_RPATH ${cantera_path})
+    target_link_libraries(hips ${CANTERA})
+    target_link_libraries(hips ${CANTERA} ${YAML} ${CVODES} ${Python_LIBRARIES} ${Python} ${ACCELERATE})
+
+endif()
+
+# Link libraries
+include_directories("/usr/local/include")
+target_link_directories(hips PRIVATE "/usr/local/lib")
+
+
+############# Installation ################
 
 include(GNUInstallDirs)
 
 install(TARGETS hips
-        RUNTIME DESTINATION       "${CMAKE_INSTALL_BINDIR}"
-        LIBRARY DESTINATION       "${CMAKE_INSTALL_LIBDIR}"
-        ARCHIVE DESTINATION       "${CMAKE_INSTALL_LIBDIR}"
-        PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" 
-       )
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+    PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" 
+)
 
