@@ -55,6 +55,8 @@ private:
     std::vector<double> parcelTimes;                                     ///< current times corresponding to the parcel states
     std::vector<double> levelRates;                                      ///< list of eddy event rates at each level
     std::vector<double> i_batchelor;                                     ///< Batchelor level for variable Sc scalars; NOTE: double, as in, between levels
+    std::vector<double> xc;                                              ///< Vector containing physical domain of flow particles
+    std::vector<double> xh;                                              ///< Vector containing physical domain of HiPS parcels
 
 public:
     // MEMBER FUNCTIONS

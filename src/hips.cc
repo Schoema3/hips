@@ -206,8 +206,8 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
  */
 std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight) {
     
-    std::vector<double> xc = setGridCfd(weight);
-    std::vector<double> xh = setGridHips(nparcels);
+    xc = setGridCfd(weight);                              //populate the physical domain for flow particles
+    xh = setGridHips(nparcels);                           //populate the physical domain for hips parcels
 
     int nc = xc.size() - 1;                 
     int nh = xh.size() - 1; 
@@ -736,39 +736,44 @@ void hips::writeData(const int ifile, const double outputTime) {
  * \brief Function for projecting vectors onto a grid.
  * \param vb Vector to be projected back.
  */
-std::vector<double> hips::projection_back(std::vector<double> &vb){
-    
-    int jprev = 0;
-
-    std::vector<double> xh = setGridHips(nparcels);
-    std::vector<double> xc = setGridCfd(vb);
-
+std::vector<double> hips::projection_back(std::vector<double> &vh) {
     int nh = xh.size() - 1;
     int nc = xc.size() - 1;
-    std::vector<double> vc(nc, 0);
+
+    std::vector<double> vc(nc, 0.0);
+    int jprev = 0;
+
+    for (double val : vc)
+        std::cout << val << " ";
+    std::cout << std::endl;
 
     for (int i = 0; i < nc; ++i) {
-        for (int j = jprev + 1; j < xh.size(); ++j) {
-            double d1 = xh[j] - xh[j - 1];
-            double d2 = xh[j] - xc[i];
-            double d = (d1 < d2) ? d1 : d2;
-
+        for (int j = jprev + 1; j <= nh; ++j) {
+            std::cout << "first.    i. " << i << "  j. " << j << std::endl;
             if (xh[j] <= xc[i + 1]) {
-                vc[i] += vb[j - 1] * d;
+                double Δ1 = xh[j] - xh[j - 1];
+                double Δ2 = xh[j] - xc[i];
+                double Δ = std::min(Δ1, Δ2);
+
+                vc[i] += vh[j - 1] * Δ;
             } else {
-                double d1 = xc[i + 1] - xh[j - 1];
-                double d2 = xc[i + 1] - xc[i];
-                d = (d1 < d2) ? d1 : d2;
-                vc[i] += vb[j - 1] * d;
+                double Δ1 = xc[i + 1] - xh[j - 1];
+                double Δ2 = xc[i + 1] - xc[i];
+                double Δ = std::min(Δ1, Δ2);
+
+                vc[i] += vh[j - 1] * Δ;
+
                 jprev = j - 1;
                 break;
             }
         }
         vc[i] /= (xc[i + 1] - xc[i]);
+        std::cout << "vc[" << i << "] after dividing by the value " << vc[i] << std::endl;
     }
-
     return vc;
-}    
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /**
