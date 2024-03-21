@@ -14,31 +14,23 @@
 #include <cmath>
 #include <vector>
 using namespace std;
+////////////////////////////////////////////////////////////////////////////////
+
+int hips::nL = 0;
+//double hips::Prob = 0;
+
 
 ////////////////////////////////////////////////////////////////////////////////
 /**
  * \brief Constructor for initializing 'nLevels_' based on Reynolds number.
  * \param Re                Reynolds number for turbulence simulation.
  */
-hips::hips(double Re) {
+hips::hips(double Re_):
+           Re(Re_)  {
 
-    double original_N = (3.0/4) * log(1/Re) / log(Afac);                            // Calculate the original N
-
-    double closest_N = round(original_N);                                           // Round the original N to the closest integer
-
-    double desired_exponent = ceil(log(1/Re) / log(Afac));                          // Calculate the desired exponent that makes log_A(1/Re) an integer
-
-    Afac = pow(1/Re, 1/desired_exponent);                                           // Calculate the adjusted A
-
-    nL = (3.0/4) * log(1/Re) / log(Afac) + 3;                                       // Recalculate N
-
-    if (abs(nL - original_N) > abs(closest_N - original_N)) {                        // Check if adjusting A to a lower exponent brings N closer to the original N
-        desired_exponent -= 1;
-        Afac = pow(1/Re, 1/desired_exponent);
-        nL = (3.0/4) * log(1/Re) / log(Afac);
-        nL = nL + 3;
-    }
-
+    // Calculate original_N based on Re
+    double original_N = std::log(Re) / (std::log(2) * 4.0 / 3.0);
+    nL = ceil(original_N) + 3;
       
 }
 
@@ -79,7 +71,10 @@ hips::hips(int nLevels_,
     nVar(nVar_),                       
     LrandSet(true),              
     rand(seed),
-    performReaction(performReaction_) { 
+    performReaction(performReaction_) {
+
+    if (nLevels == -1)  
+        nLevels = nL; 
     
     #ifdef REACTIONS_ENABLED
         gas = cantSol->thermo(); 
@@ -121,6 +116,7 @@ hips::hips(int nLevels_,
         levelLengths[i] = domainLength * pow(Afac,i);
         levelTaus[i] = tau0 * pow(levelLengths[i]/domainLength, 2.0/3.0) / C_param;
         levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
+
     }
     
     LScHips = ScHips.size() > 0 ? true : false;
@@ -548,7 +544,6 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
         #ifdef REACTIONS_ENABLED
              bRxr->react(h, y, dt);
             varRho[ime] =  bRxr->getDensity();             //Mb
-         //cout<<"h    "<<h<<endl;
         #endif
         varData[0][0][ime] = h;
         for (int k=0; k<nsp; k++)
@@ -621,8 +616,6 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
     for (int i=istart; i<iend; i++) {
         ime = pLoc[i];
         varData[kVar][0][ime] = s / nPmix; 
-
-        //cout<<"var Data in mixxx "<<varData[0][0][ime]<<endl;
         
     }   
 }
@@ -749,7 +742,7 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 
     for (int i = 0; i < nc; ++i) {
         for (int j = jprev + 1; j <= nh; ++j) {
-            std::cout << "first.    i. " << i << "  j. " << j << std::endl;
+            //std::cout << "first.    i. " << i << "  j. " << j << std::endl;
             if (xh[j] <= xc[i + 1]) {
                 double Δ1 = xh[j] - xh[j - 1];
                 double Δ2 = xh[j] - xc[i];
@@ -768,7 +761,7 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
             }
         }
         vc[i] /= (xc[i + 1] - xc[i]);
-        std::cout << "vc[" << i << "] after dividing by the value " << vc[i] << std::endl;
+        //std::cout << "vc[" << i << "] after dividing by the value " << vc[i] << std::endl;
     }
     return vc;
 }

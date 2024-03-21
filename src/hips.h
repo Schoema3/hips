@@ -23,15 +23,15 @@ public:
     #endif
 
     // MEMBER VARIABLES
-    int nL;                                                              ///< adjusted number of levels based on Reynolds.
+    static int nL;                                                              ///< adjusted number of levels based on Reynolds.
     double domainLength;                                                 ///< length of domain (m)
     double tau0;                                                         ///< integral timescale
     double C_param;                                                      ///< Eddy frequency parameter
     double time;                                                         ///< current simulation time
     double eddyRate_total;                                               ///< total rate of all eddies 0 through nLevels-3
     double eddyRate_inertial;                                            ///< ?????
-    double Afac;                                                         ///< level lengthscale reduction factor (0.5)
-
+    double Afac = 0.5;                                                   ///< level lengthscale reduction factor (0.5)
+    double Re;                                                           ///< Reynolds number
 private:
     // Private data members
     int nLevels;                                                         ///< number of tree levels
@@ -78,7 +78,7 @@ public:
          bool performReaction,
          int seed = 10);
 
-    hips(double Re);                                                       ///< Constructor for the hips class with a Reynolds number parameter
+    hips(double Re_);                                                       ///< Constructor for the hips class with a Reynolds number parameter
 
     virtual ~hips() {
         for(auto& data : varData)

@@ -38,8 +38,8 @@ std::vector<std::string> variableNames={"mixf_00","mixf_01"};
 
 int main() {
     // HiPS tree and constructor parameters
-    //hips Hi(200.08);
-    int numLevels = 4;
+    hips Hi(101.0);
+    //int numLevels = 4;
     double domainLength = 1.0;
     double tau0 = 1.0;
     double C_param = 0.5;
@@ -59,7 +59,7 @@ int main() {
     int numVariables = 2;
 
     // HiPS tree creation
-    hips HiPS(numLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips,
+    hips HiPS(-1, domainLength, tau0, C_param, forceTurb, numVariables, ScHips,
               #ifdef REACTIONS_ENABLED
                  cantSol,
               #endif
@@ -89,9 +89,9 @@ int main() {
 
     HiPS.calculateSolution(tRun);
 
-    for (int i = 0; i < tot_vec.size(); i++) 
-        HiPS.get_varData();
-
+//    for (int i = 0; i < tot_vec.size(); i++) 
+//        HiPS.get_varData();
+//
     return 0;
 }
 
