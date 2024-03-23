@@ -55,11 +55,10 @@ hips::hips(int nLevels_,
            int forceTurb_,
            int nVar_,
            vector<double> &ScHips_,
-        #ifdef REACTIONS_ENABLED
-           shared_ptr<Cantera::Solution> cantSol,
-        #endif
-
            bool performReaction_,
+          #ifdef REACTIONS_ENABLED
+                shared_ptr<Cantera::Solution> cantSol,
+          #endif
            int seed) : 
 
     nLevels(nLevels_), 
@@ -82,7 +81,6 @@ hips::hips(int nLevels_,
         bRxr = make_unique<batchReactor_cvode>(cantSol);                  
         //bRxr = make_unique<batchReactor_cantera>(cantSol);
     #endif
-
     varData.resize(nVar);
     varName.resize(nVar);        
     
@@ -354,7 +352,7 @@ std::vector<double> hips::setGridHips(int N){
  */
 
 void hips::calculateSolution(const double tRun, bool shouldWriteData) {
-
+    
     unsigned long long nEddies = 0;                                        // number of eddy events
     int    fileCounter = 0;                                                // number of data files written
     int    iLevel;                                                         // tree level of EE with top at iLevel=0
@@ -532,8 +530,7 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
     int ime;
     double dt;
     double h;
-    vector<double> y(nsp);
-
+    vector<double> y(nsp); 
     for (int i=istart; i<iend; i++) {
         ime = pLoc[i];
         //cout<<"pLoc "<<pLoc[i]<<"  gas "<<gas->density()<<"\n\n"<<endl;
