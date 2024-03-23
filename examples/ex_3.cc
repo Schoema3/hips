@@ -52,64 +52,55 @@ int main() {
           nVar,
           ScHips, 
           true
-    #ifdef REACTIONS_ENABLED
+#ifdef REACTIONS_ENABLED
           , cantSol
-    #endif
+#endif
         );
-
-
 
     int nparcels = HiPS.nparcels;
 
     //------------- declaring state vectors
 
     vector<vector <double > > ysp(nsp, vector<double> (nparcels, 0));
-    vector<double>            h(nparcels); 
-
     vector<double>            y0(nsp);
-    double                    T0;
-    double                    h0;
-
     vector<double>            y1(nsp);
+    double                    h0;
+    
+    vector<double>            T(nparcels); 
+    double                    T0;
     double                    T1;
     double                    h1;
+
     vector<string>            variableNames(nsp+1);
 
     //-------------- set state vectors in each parcel
 
-    T0 = 300.0;
+    T0 = 700.0;
     gas->setState_TPX(T0, Cantera::OneAtm, "CH4:1");
     gas->getMassFractions(&y0[0]);
     h0 = gas->enthalpy_mass();
 
-    T1 = 300;
+
+    T1 = 1200;
     gas->setState_TPX(T1, Cantera::OneAtm, "O2:2, N2:7.52");
     gas->getMassFractions(&y1[0]);
     h1 = gas->enthalpy_mass();
 
-    double mixf = 16/(16+29*9.52);  // stoichiometric
-    vector<double> ymix(nsp);
-    for(int k=0; k<nsp; k++)
-        ymix[k] = y0[k]*(1-mixf) + y1[k]*mixf;
-    double hmix = h0*(1-mixf) + h1*mixf;
-    vector<double> yeq(nsp);
-    gas->setMassFractions(&ymix[0]);
-    gas->setState_HP(hmix, gas->pressure());
-    gas->equilibrate("HP");
+    for (int i=0; i<nparcels/2; i++) {       // left parcels are stream 0 (air)
+        T[i] = T0;
+        for (int k=0; k<nsp; k++)
+            ysp[k][i] = y0[k];
+    }
 
-    double fracBurn = 0.5;
-    for(int i=0; i<fracBurn*nparcels; i++) {
-        h[i] = hmix;
+    for (int i=nparcels/2; i<nparcels; i++) { // right parcels are stream 1 (fuel)
+        T[i] = T1;
         for (int k=0; k<nsp; k++)
-            ysp[k][i] = gas->massFraction(k);
+            ysp[k][i] = y1[k];
     }
-    for(int i=fracBurn*nparcels; i<nparcels; i++) {
-        h[i] = hmix;
-        for (int k=0; k<nsp; k++)
-            ysp[k][i] = ymix[k];
-    }
+
+    //----------------- set array of hips variables from state variables
      
-   variableNames[0] = "enthalpy";
+   variableNames[0] = "Temperature";
    for(int i=0; i<ysp.size(); i++)
        variableNames[i+1] = gas->speciesName(i);
 
@@ -117,12 +108,12 @@ int main() {
 
     //----------------- set array of hips variables from state variables
 
-    HiPS.set_varData(h, weight, variableNames[0],  0);
+    HiPS.set_varData(T,weight, variableNames[0],  0);
     for (int k=0; k<ysp.size(); k++) 
         HiPS.set_varData(ysp[k],weight, variableNames[k+1], k+1);
 
-    //----------------- advancing HiPS to do rxn and mixing
-     HiPS.calculateSolution(tRun);
+    //----------------- advancing HiPS to do rxn and mixing 
+    HiPS.calculateSolution(tRun);
 
     return 0;
 
