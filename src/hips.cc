@@ -55,11 +55,11 @@ hips::hips(int nLevels_,
            int forceTurb_,
            int nVar_,
            vector<double> &ScHips_,
-           bool performReaction_,
-          #ifdef REACTIONS_ENABLED
-                shared_ptr<Cantera::Solution> cantSol,
+           bool performReaction_
+         #ifdef REACTIONS_ENABLED
+                , shared_ptr<Cantera::Solution> cantSol,
           #endif
-           int seed) : 
+         int seed) : 
 
     nLevels(nLevels_), 
     domainLength(domainLength_), 
@@ -72,6 +72,8 @@ hips::hips(int nLevels_,
     rand(seed),
     performReaction(performReaction_) {
 
+    // If the number of tree levels is set to -1, it is automatically assigned 
+    // the default number of levels 'nL'.
     if (nLevels == -1)  
         nLevels = nL; 
     
@@ -81,6 +83,7 @@ hips::hips(int nLevels_,
         bRxr = make_unique<batchReactor_cvode>(cantSol);                  
         //bRxr = make_unique<batchReactor_cantera>(cantSol);
     #endif
+
     varData.resize(nVar);
     varName.resize(nVar);        
     
@@ -193,11 +196,21 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
 /////////////////////////////////////////i/////////////////////////////////////////////
 /**
- * \brief Function for projecting vectors onto a grid.
- * \param v                              Vector to be projected.
- * \param w                              Weight vector.
- * \return Projected vector.
+ * \brief Project vectors onto a grid.
+ *
+ * This function projects vectors onto a grid. It aligns the values of flow particles with HiPS parcels
+ * to handle the limitation on the number of particles that the HiPS model can mix, as described in the paper.
+ * The projection is done by scaling the values of flow particles according to their weights and summing them up
+ * to match the number of HiPS parcels required by the Reynolds number.
+ *
+ * \param vcfd      Vector of variables passed to the HiPS tree.
+ * \param weight    Weight vector; each flow particle has a weight.
+ * \return A pair of vectors representing the projected vector and the density on the grid.
+ *
+ * \remarks This function assumes that the number of HiPS parcels is determined by the Reynolds number.
+ * It aligns the flow particles with these parcels to address the disparity
  */
+
 std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight) {
     
     xc = setGridCfd(weight);                              //populate the physical domain for flow particles
@@ -239,15 +252,23 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 /**
  * \brief Project vectors onto a grid.
  *
- * This function projects vectors onto a grid. It takes a vector of variables, a weight vector, and a vector of density as input parameters,
- * and returns the projected vector.
+ * This function projects vectors onto a grid. It aligns the values of flow particles with HiPS parcels
+ * to handle the limitation on the number of particles that the HiPS model can mix, as described in the paper.
+ * The projection is done by scaling the values of flow particles according to their weights and summing them up
+ * to match the number of HiPS parcels required by the Reynolds number.
  *
- * \param vcfd                          Vector of variables passed to the HiPS tree.
- * \param weight                        Weight vector; each flow particle has a weight.
- * \param density                       Vector of density.
+ * \param vcfd      Vector of variables passed to the HiPS tree.
+ * \param weight    Weight vector; each flow particle has a weight.
+ * \param density   Vector of density.
  * \return A pair of vectors representing the projected vector and the density on the grid.
-  * \note This function is overloaded. This version considers particle density.
+ *
+ * \note This function is overloaded. This version considers particle density.
+ *
+ * \remarks This function assumes that the number of HiPS parcels is determined by the Reynolds number.
+ * It aligns the flow particles with these parcels to address the disparity
  */
+
+
 std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight, const std::vector<double> &density) {
     
     std::vector<double> xc = setGridCfd(weight);

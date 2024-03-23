@@ -17,19 +17,20 @@ public:
     // DATA MEMBERS
     int nparcels;                                                       ///< number of parcels
     std::vector<std::vector<double>*> varData;                          ///< vector of pointers to vector
+ 
     #ifdef REACTIONS_ENABLED
-        std::shared_ptr<Cantera::ThermoPhase> gas;
-        std::unique_ptr<batchReactor> bRxr;
+        std::shared_ptr<Cantera::ThermoPhase> gas;                     ///< Shared pointer to a Cantera thermochemistry object
+        std::unique_ptr<batchReactor> bRxr;                            ///< Unique pointer to the integrator object
     #endif
 
     // MEMBER VARIABLES
-    static int nL;                                                              ///< adjusted number of levels based on Reynolds.
+    static int nL;                                                       ///< adjusted number of levels based on Reynolds
     double domainLength;                                                 ///< length of domain (m)
     double tau0;                                                         ///< integral timescale
     double C_param;                                                      ///< Eddy frequency parameter
     double time;                                                         ///< current simulation time
     double eddyRate_total;                                               ///< total rate of all eddies 0 through nLevels-3
-    double eddyRate_inertial;                                            ///< ?????
+    double eddyRate_inertial;                                            ///< total rate of all eddies 0 through iEta (= eddyRate_total if Sc=1) 
     double Afac = 0.5;                                                   ///< level lengthscale reduction factor (0.5)
     double Re;                                                           ///< Reynolds number
 private:
@@ -72,10 +73,10 @@ public:
          int forceTurb_,
          int nVar_,
          std::vector<double> &ScHips_,
+         bool performReaction
          #ifdef REACTIONS_ENABLED
-            std::shared_ptr<Cantera::Solution> cantSol,
+            , std::shared_ptr<Cantera::Solution> cantSol = nullptr,
          #endif
-         bool performReaction,
          int seed = 10);
 
     hips(double Re_);                                                       ///< Constructor for the hips class with a Reynolds number parameter
@@ -88,19 +89,15 @@ public:
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, int i);    ///< passing all variables to vector of pointer 
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN,
                      const std::vector<double> &rho, int i);                                             ///< passing all variables to vector of pointer                                            
-    std::vector<double> projection(std::vector<double> &vcfd, std::vector<double> &weight);              ///< Perform vector projection operation without density 
+    std::vector<double> projection(std::vector<double> &vcfd, std::vector<double> &weight);              ///< Perform vector projection of flow particles onto hips parcels operation without density 
 
     std::pair<std::vector<double>, std::vector<double>>  projection(std::vector<double> &vcfd, std::vector<double> &weight,                     
-                                   const std::vector<double> &density);                                   ///< Perform vector projection operation with density 
+                                   const std::vector<double> &density);                                   ///< Perform vector projection flow particles onto hips parcels operation with density 
 
     std::vector<double> setGridHips(int N);                                  ///< Set Hips grid with a specified number of grid points equal to number of parcels   
-
     std::vector<double> setGridCfd(std::vector<double> &w);                  ///< Set CFD grid using provided weight vector
-
     std::vector<std::vector<double>> get_varData();                          ///< Retrieves modified data from the HiPS library and stores it in the provided vector. 
-
-    std::vector<double>  projection_back(std::vector<double> &vb);
-
+    std::vector<double>  projection_back(std::vector<double> &vb);           ///< Perform vector projection of hips parcels onto flow particles operation without density
     void calculateSolution(const double tRun, bool shouldWriteData =false);                                ///< Running simulations 
 
 private:
