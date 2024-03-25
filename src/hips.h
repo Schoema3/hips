@@ -73,9 +73,9 @@ public:
          int forceTurb_,
          int nVar_,
          std::vector<double> &ScHips_,
-         bool performReaction
+         bool performReaction,
          #ifdef REACTIONS_ENABLED
-            , std::shared_ptr<Cantera::Solution> cantSol = nullptr,
+             std::shared_ptr<Cantera::Solution> cantSol = nullptr,
          #endif
          int seed = 10);
 

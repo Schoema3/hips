@@ -55,9 +55,9 @@ hips::hips(int nLevels_,
            int forceTurb_,
            int nVar_,
            vector<double> &ScHips_,
-           bool performReaction_
+           bool performReaction_,
          #ifdef REACTIONS_ENABLED
-                , shared_ptr<Cantera::Solution> cantSol,
+                 shared_ptr<Cantera::Solution> cantSol,
           #endif
          int seed) : 
 
