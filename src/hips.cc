@@ -194,7 +194,8 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
     varData[currentIndex] = new std::vector<double>(vh);            
     varRho =  std::vector<double>(rho_h);
-    
+    varName[currentIndex] = varN;
+ 
     currentIndex++; 
 
 }
@@ -720,33 +721,6 @@ void hips::writeData(const int ifile, const double outputTime) {
     ofile.close();                                                              // Close the file
 }
 
-//void hips::writeDataiconst int ifile, const double outputTime) {
-//    
-//    stringstream ss1;
-//    string s1;
-//    ss1 << setfill('0') << setw(5) << ifile;
-//    ss1 >> s1;                                                                  // Convert the index into a string with leading zeros for filename
-//
-//    string fname = "../data/Data_" + s1 + ".dat";                               // Construct the filename
-//
-//    ofstream ofile(fname.c_str());                                              // Open the file for writing
-//
-//    ofile << "# time = " << outputTime << "\n";                                  // Write the time and number of grid points into the file
-//    ofile << "# Grid Points = " << nparcels << "\n";
-//
-//    for (const auto& name : varName)
-//        ofile << setw(14) << name;                                              // Write variable names into the file
-//    ofile << scientific << setprecision(10);
-//
-//    for (int i = 0; i < nparcels; i++) {
-//        ofile << "\n";                                                          // Start a new line for each parcel
-//
-//        for (int k = 0; k < nVar; k++)
-//            ofile << setw(19) << varData[k][0][pLoc[i]];                       // Write data for each variable
-//    }
-//
-//    ofile.close();                                                              // Close the file
-//}
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * \brief Function for projecting vectors onto a grid.
@@ -811,7 +785,7 @@ std::vector<std::vector<double>> hips::get_varData(){
     return varDataProjections;                                                         // Return the vector containing modified data projections
 }
 
-////////////////////////////////////////////////////////
+
  
 
 
