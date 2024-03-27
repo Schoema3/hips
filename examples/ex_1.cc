@@ -85,9 +85,9 @@ int main() {
 
     // Set state vectors in each parcel
     for (int i = 0; i < tot_vec.size(); i++) 
-        HiPS.set_varData(tot_vec[i],weight, variableNames[i], i);
+        HiPS.set_varData(tot_vec[i],weight, variableNames[i]);
 
-    HiPS.calculateSolution(tRun);
+    HiPS.calculateSolution(tRun, true);
 
 //    for (int i = 0; i < tot_vec.size(); i++) 
 //        HiPS.get_varData();

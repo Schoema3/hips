@@ -169,10 +169,12 @@ hips::hips(int nLevels_,
  * \param varN                         Input vector containing names corresponding to each variable.
  * \param i                             Index indicating where the data should be assigned in the vectors varData and varName.
  */
-void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, int i) {  
+void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN) {  
 
-    varData[i] = new vector<double>(projection(v, w));
-    varName[i] = varN;
+    varData[currentIndex] = new vector<double>(projection(v, w));
+    varName[currentIndex] = varN;
+
+    currentIndex++; 
 }
 ///////////////////////////////////////i///////////////////////////////////////
 /**
@@ -184,14 +186,17 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
  * \param i                              index indicating where the data should be assigned in the vectors varData and varName.
  * \note This function is overloaded. This version considers particle density.
  */
-void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho, int i) {
+void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho) {
     
     std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
     std::vector<double> vh = results.first;
     std::vector<double> rho_h = results.second;
 
-    varData[i] = new std::vector<double>(vh);            
-    varRho =  std::vector<double>(rho_h);                 
+    varData[currentIndex] = new std::vector<double>(vh);            
+    varRho =  std::vector<double>(rho_h);
+    
+    currentIndex++; 
+
 }
 
 /////////////////////////////////////////i/////////////////////////////////////////////
@@ -393,7 +398,7 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
 
         nEddies++;
         //cout<<"-------------------------------------"<<nEddies<<endl;
-        if(shouldWriteData && nEddies %200000 == 0) writeData(++fileCounter, time);
+        if(shouldWriteData && nEddies %20 == 0) writeData(++fileCounter, time);
     }
     time = tRun;
     iLevel = 0; iTree  = 0;

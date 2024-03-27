@@ -25,6 +25,7 @@ public:
 
     // MEMBER VARIABLES
     static int nL;                                                       ///< adjusted number of levels based on Reynolds
+    int currentIndex = 0;                                                    ///< Member variable to keep track of current index of variables
     double domainLength;                                                 ///< length of domain (m)
     double tau0;                                                         ///< integral timescale
     double C_param;                                                      ///< Eddy frequency parameter
@@ -86,9 +87,9 @@ public:
             delete data;
     }                                                                      ///< Destructor for the hips class
 
-    void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, int i);    ///< passing all variables to vector of pointer 
+    void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN);    ///< passing all variables to vector of pointer 
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN,
-                     const std::vector<double> &rho, int i);                                             ///< passing all variables to vector of pointer                                            
+                     const std::vector<double> &rho);                                             ///< passing all variables to vector of pointer                                            
     std::vector<double> projection(std::vector<double> &vcfd, std::vector<double> &weight);              ///< Perform vector projection of flow particles onto hips parcels operation without density 
 
     std::pair<std::vector<double>, std::vector<double>>  projection(std::vector<double> &vcfd, std::vector<double> &weight,                     
