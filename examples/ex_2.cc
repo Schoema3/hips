@@ -117,7 +117,7 @@ int main() {
 
     //----------------- set array of hips variables from state variables
 
-    HiPS.set_varData(h, weight, variableNames[0],  0);
+    HiPS.set_varData(h, weight, variableNames[0]);
     for (int k=0; k<ysp.size(); k++) 
         HiPS.set_varData(ysp[k],weight, variableNames[k+1]);
 

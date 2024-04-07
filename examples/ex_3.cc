@@ -66,7 +66,7 @@ int main() {
     vector<double>            y1(nsp);
     double                    h0;
     
-    vector<double>            T(nparcels); 
+    vector<double>            h(nparcels); 
     double                    T0;
     double                    T1;
     double                    h1;
@@ -87,20 +87,20 @@ int main() {
     h1 = gas->enthalpy_mass();
 
     for (int i=0; i<nparcels/2; i++) {       // left parcels are stream 0 (air)
-        T[i] = T0;
+        h[i] = h0;
         for (int k=0; k<nsp; k++)
             ysp[k][i] = y0[k];
     }
 
     for (int i=nparcels/2; i<nparcels; i++) { // right parcels are stream 1 (fuel)
-        T[i] = T1;
+        h[i] = h1;
         for (int k=0; k<nsp; k++)
             ysp[k][i] = y1[k];
     }
 
     //----------------- set array of hips variables from state variables
      
-   variableNames[0] = "Temperature";
+   variableNames[0] = "Enthalpy";
    for(int i=0; i<ysp.size(); i++)
        variableNames[i+1] = gas->speciesName(i);
 
@@ -108,12 +108,12 @@ int main() {
 
     //----------------- set array of hips variables from state variables
 
-    HiPS.set_varData(T,weight, variableNames[0],  0);
+    HiPS.set_varData(h,weight, variableNames[0]);
     for (int k=0; k<ysp.size(); k++) 
         HiPS.set_varData(ysp[k],weight, variableNames[k+1]);
 
     //----------------- advancing HiPS to do rxn and mixing 
-    HiPS.calculateSolution(tRun);
+    HiPS.calculateSolution(tRun, true);
 
     return 0;
 
