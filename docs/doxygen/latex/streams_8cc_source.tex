@@ -1,335 +1,335 @@
-\hypertarget{streams_8cc_source}{}\doxysection{streams.\+cc}
-\label{streams_8cc_source}\index{/Users/maisy/hips-\/lib-\/final/hips/src/streams.cc@{/Users/maisy/hips-\/lib-\/final/hips/src/streams.cc}}
+\doxysection{streams.\+cc}
+\hypertarget{streams_8cc_source}{}\label{streams_8cc_source}\index{/Users/mbehrang/hips-\/final/hips/src/streams.cc@{/Users/mbehrang/hips-\/final/hips/src/streams.cc}}
 \mbox{\hyperlink{streams_8cc}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00001}00001 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{streams_8h}{streams.h}}"{}}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00002}00002 \textcolor{preprocessor}{\#include <cassert>}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00003}00003 \textcolor{preprocessor}{\#include <iostream>}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00004}00004 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00005}00005 \textcolor{keyword}{using namespace }std;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00006}00006 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00008}00008 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00011}00011 \mbox{\hyperlink{classstreams_a30bf5c7e8dd1d2c111118b87fd9f6057}{streams::streams}}(shared\_ptr<Cantera::Solution> csol,}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00012}00012                  \textcolor{keyword}{const} \textcolor{keywordtype}{double} \_P, }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00013}00013                  \textcolor{keyword}{const} \textcolor{keywordtype}{double} \_h0, }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00014}00014                  \textcolor{keyword}{const} \textcolor{keywordtype}{double} \_h1,}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00015}00015                  \textcolor{keyword}{const} vector<double> \&\_y0, }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00016}00016                  \textcolor{keyword}{const} vector<double> \&\_y1) :}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00017}00017     P(\_P),}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00018}00018     h0(\_h0),}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00019}00019     h1(\_h1),}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00020}00020     y0(\_y0),}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00021}00021     y1(\_y1) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00022}00022 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00023}00023     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00024}00024 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00025}00025     gas  = csol-\/>thermo(); }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00026}00026     nspc = gas-\/>nSpecies();}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00027}00027 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00028}00028     gCHON.resize(4);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00029}00029     gCHON[0] =  2.0/gas-\/>atomicWeight(gas-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}}));}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00030}00030     gCHON[1] =  0.5/gas-\/>atomicWeight(gas-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}}));}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00031}00031     gCHON[2] = -\/1.0/gas-\/>atomicWeight(gas-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}}));}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00032}00032     gCHON[3] = 0.0;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00033}00033 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00034}00034     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00035}00035 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00036}00036     setStoicMixf();}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00037}00037 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00038}00038     getMixtureFraction(\&y0[0], \textcolor{keyword}{true});    \textcolor{comment}{// set beta0 and beta1}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00039}00039 \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00040}00040 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00042}00042 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00050}\mbox{\hyperlink{classstreams_aebccdb0fdffb04228f87d73d506d96c5}{00050}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classstreams_aebccdb0fdffb04228f87d73d506d96c5}{streams::getMixingState}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} mixf, vector<double> \&ymix,}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00051}00051                              \textcolor{keywordtype}{double} \&hmix, \textcolor{keywordtype}{double} \&Tmix) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00052}00052 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00053}00053     hmix = \mbox{\hyperlink{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}{h1}}*mixf + \mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{h0}}*(1.0-\/mixf);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00054}00054     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}; k++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00055}00055         ymix[k] = \mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[k]*mixf + \mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[k]*(1.0-\/mixf);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00056}00056 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00057}00057     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setMassFractions( \&ymix[0] );}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00058}00058     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setState\_HP(hmix, \mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}}, 1.E-\/10);    \textcolor{comment}{// get temperature as Tadiabatic}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00059}00059 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00060}00060     Tmix = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>temperature();}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00061}00061 \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00062}00062 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00064}00064 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00072}\mbox{\hyperlink{classstreams_a6dbf93fbcde09e925bead7ce9c0113e9}{00072}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classstreams_a6dbf93fbcde09e925bead7ce9c0113e9}{streams::getEquilibrium\_HP}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} mixf, vector<double> \&yeq,}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00073}00073                                       \textcolor{keywordtype}{double} \&heq, \textcolor{keywordtype}{double} \&Teq) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00074}00074 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00075}00075     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Compute the mixing mass fractions and enthalpy}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00076}00076 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00077}00077     yeq.resize(\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00078}00078     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}; k++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00079}00079         yeq[k] = \mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[k]*mixf + \mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[k]*(1.0-\/mixf);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00080}00080     heq = \mbox{\hyperlink{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}{h1}}*mixf + \mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{h0}}*(1.0-\/mixf);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00081}00081 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00082}00082     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setState\_PY(\mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}}, \&yeq[0]);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00083}00083     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setState\_HP(heq, \mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}}, 1.E-\/10);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00084}00084 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00085}00085     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>equilibrate(\textcolor{stringliteral}{"{}HP"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00086}00086     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getMassFractions(\&yeq[0]);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00087}00087 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00088}00088     Teq = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>temperature();}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00089}00089 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00090}00090 \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00091}00091 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00093}00093 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00101}\mbox{\hyperlink{classstreams_afb9231a9360300ec0688d1c1e404ca78}{00101}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classstreams_afb9231a9360300ec0688d1c1e404ca78}{streams::getEquilibrium\_TP}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} mixf, \textcolor{keywordtype}{double} Teq, }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00102}00102                                       vector<double> \&yeq, \textcolor{keywordtype}{double} \&heq ) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00103}00103 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00104}00104     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Compute the mixing mass fractions and enthalpy}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00105}00105 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00106}00106     yeq.resize(\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00107}00107     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}; k++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00108}00108         yeq[k] = \mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[k]*mixf + \mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[k]*(1.0-\/mixf);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00109}00109 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00110}00110     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setState\_TPY(Teq, \mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}}, \&yeq[0]);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00111}00111 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00112}00112     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>equilibrate(\textcolor{stringliteral}{"{}TP"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00113}00113     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getMassFractions(\&yeq[0]);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00114}00114 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00115}00115     heq = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>enthalpy\_mass();}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00116}00116 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00117}00117 \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00118}00118 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00120}00120 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00129}\mbox{\hyperlink{classstreams_ae1acfdaebac0b26841c76d9aaacc4b31}{00129}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classstreams_ae1acfdaebac0b26841c76d9aaacc4b31}{streams::getProdOfCompleteComb}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} mixf, vector<double> \&ypcc,}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00130}00130                                     \textcolor{keywordtype}{double} \&hpcc, \textcolor{keywordtype}{double} \&Tpcc) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00131}00131 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00132}00132     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Compute the mixing mass fractions and enthalpy}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00133}00133 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00134}00134     ypcc.resize(\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00135}00135     \textcolor{keywordtype}{double} d1 = 1.0-\/mixf;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00136}00136     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}; k++) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00137}00137         ypcc[k] = \mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[k]*mixf + \mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[k]*d1;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00138}00138     \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00139}00139     hpcc = \mbox{\hyperlink{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}{h1}}*mixf + \mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{h0}}*d1;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00140}00140 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00141}00141     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/ Set gas and element indicicies}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00142}00142 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00143}00143     \textcolor{keywordtype}{int} iC = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00144}00144     \textcolor{keywordtype}{int} iH = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00145}00145     \textcolor{keywordtype}{int} iN = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}N"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00146}00146     \textcolor{keywordtype}{int} iCO2 = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}CO2"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00147}00147     \textcolor{keywordtype}{int} iH2O = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}H2O"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00148}00148     \textcolor{keywordtype}{int} iN2  = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}N2"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00149}00149     \textcolor{keywordtype}{int} iO2  = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}O2"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00150}00150 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00151}00151     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Set ypcc as the mixing mole fractions: Take a basis of one mole:}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00152}00152     \textcolor{comment}{// now we are working in moles}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00153}00153     \textcolor{comment}{// elemM are moles of each element}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00154}00154     \textcolor{comment}{// when stoic:}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00155}00155     \textcolor{comment}{// CxHyNz   + (x+y/4)O2  ==>  (z/2)N2 + (x)CO2 + (y/2)H2O}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00156}00156     \textcolor{comment}{// otherwise:}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00157}00157     \textcolor{comment}{// CxHyNz   + (beta)O2   ==>  (z/2)N2 + (x)CO2 + (y/2)H2O}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00158}00158     \textcolor{comment}{// Note this allows fuels with nitrogen and oxygen}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00159}00159 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00160}00160     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setMassFractions( \&ypcc[0] );}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00161}00161     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getMoleFractions( \&ypcc[0] );}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00162}00162 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00163}00163     \textcolor{keywordtype}{double} nOnotFromO2  = 0.0;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00164}00164     \textcolor{keywordtype}{double} nHnotFromH2O = 0.0;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00165}00165     \textcolor{keywordtype}{double} nCnotFromCO2 = 0.0;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00166}00166     vector<double> elemM = \mbox{\hyperlink{classstreams_a45695a5c046ae2a7de87af1654996ce8}{getElementMoles}}( \&ypcc[0], nOnotFromO2,}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00167}00167             nHnotFromH2O, nCnotFromCO2 );}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00168}00168 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00169}00169     \textcolor{keywordtype}{double} x    = elemM[iC];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00170}00170     \textcolor{keywordtype}{double} y    = elemM[iH];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00171}00171     \textcolor{keywordtype}{double} z    = elemM[iN];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00172}00172     \textcolor{keywordtype}{double} beta = elemM[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})] * 0.5;        \textcolor{comment}{// moles of O as O2}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00173}00173 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00174}00174     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00175}00175 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00176}00176     \textcolor{keywordflow}{if}(mixf < \mbox{\hyperlink{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}{mixfStoic}}) \{                        \textcolor{comment}{// lean: burn all fuel, leftover O2}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00177}00177 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00178}00178         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}; k++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00179}00179             ypcc[k] = 0.0;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00180}00180 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00181}00181         \textcolor{keywordflow}{if}(iCO2 > 0)                              \textcolor{comment}{// CO2 is not in the H2 mechs}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00182}00182             ypcc[iCO2] = x;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00183}00183         ypcc[iH2O] = y*0.5;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00184}00184         ypcc[iN2]  = z*0.5;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00185}00185         ypcc[iO2]  = beta -\/ (x+y/4.0);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00186}00186 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00187}00187     \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00188}00188     \textcolor{keywordflow}{else}\{                                         \textcolor{comment}{// rich: burn all O2, leftover fuel}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00189}00189 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00190}00190         \textcolor{comment}{//double eta = beta/(x+y/4.0); // extent of reaction}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00191}00191         \textcolor{keywordtype}{double} eta = (beta-\/nOnotFromO2/2)/(x+y/4-\/nOnotFromO2/2); \textcolor{comment}{// extent of reaction}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00192}00192         \textcolor{keywordflow}{if}(eta > 1.0)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00193}00193             cout << endl << \textcolor{stringliteral}{"{}eta > 1.0"{}} << endl;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00194}00194         d1 = 1.0-\/eta;                            \textcolor{comment}{// fraction of fuel unburnt}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00195}00195 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00196}00196         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}; k++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00197}00197             ypcc[k] *= d1;                       \textcolor{comment}{// initialize everything then correct}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00198}00198         \textcolor{keywordflow}{if}(iCO2 > 0)                             \textcolor{comment}{// CO2 is not in the H2 mechs}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00199}00199             ypcc[iCO2] = (x-\/nCnotFromCO2) + nCnotFromCO2*eta;       \textcolor{comment}{// init + formed}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00200}00200         ypcc[iH2O] = (y-\/nHnotFromH2O)*0.5 + nHnotFromH2O*0.5*eta;   \textcolor{comment}{// init + formed}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00201}00201         ypcc[iN2]  = z*0.5;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00202}00202         ypcc[iO2]  = 0.0;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00203}00203 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00204}00204     \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00205}00205 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00206}00206     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00207}00207 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00208}00208     \textcolor{keywordtype}{double} sum = 0.0;                       \textcolor{comment}{// normalize moles}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00209}00209     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}; k++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00210}00210         sum += ypcc[k];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00211}00211     assert(sum != 0.0);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00212}00212     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}; k++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00213}00213         ypcc[k] /= sum;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00214}00214     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setMoleFractions( \&ypcc[0] );      \textcolor{comment}{// set mole fractions}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00215}00215     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getMassFractions( \&ypcc[0] );      \textcolor{comment}{// set ypcc as mass fractions}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00216}00216 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00217}00217 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00218}00218     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00219}00219 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00220}00220     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setState\_HP(hpcc, \mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}}, 1.E-\/10);    \textcolor{comment}{// get temperature as Tadiabatic}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00221}00221     \textcolor{comment}{//gas-\/>setState\_HP(hpcc, P);    // get temperature as Tadiabatic}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00222}00222     Tpcc = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>temperature();}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00223}00223 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00224}00224 \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00225}00225 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00227}00227 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00229}\mbox{\hyperlink{classstreams_a346c56671eabbde2eecfaf60f5b5b0f9}{00229}} \textcolor{keywordtype}{void} \mbox{\hyperlink{classstreams_a346c56671eabbde2eecfaf60f5b5b0f9}{streams::setStoicMixf}}() \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00230}00230 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00231}00231     vector<double> x\_c(\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}},0.0);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00232}00232 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00233}00233     \textcolor{keywordtype}{double} mc0, mc1, mo0, mo1, mh0, mh1;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00234}00234 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00235}00235     vector<double> elemMassFrac0 = \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(\&\mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[0]);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00236}00236     vector<double> elemMassFrac1 = \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(\&\mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[0]);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00237}00237 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00238}00238     mc0 = elemMassFrac0[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}})]/}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00239}00239         \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}}));}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00240}00240     mc1 = elemMassFrac1[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}})]/}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00241}00241         \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}}));}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00242}00242     mh0 = elemMassFrac0[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}})]/}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00243}00243         \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}}));}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00244}00244     mh1 = elemMassFrac1[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}})]/}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00245}00245         \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}}));}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00246}00246     mo0 = elemMassFrac0[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})]/}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00247}00247         \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}}));}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00248}00248     mo1 = elemMassFrac1[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})]/}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00249}00249         \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}}));}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00250}00250 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00251}00251     \mbox{\hyperlink{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}{mixfStoic}} = (2.0*mc0 + 0.5*mh0 -\/ mo0) /}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00252}00252         (mo1-\/mo0 + 2.0*(mc0-\/mc1) + 0.5*(mh0-\/mh1));}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00253}00253 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00254}00254     cout << endl << \textcolor{stringliteral}{"{}\# mixfStoic = m\_fuel/(m\_fuel+m\_air) = "{}} << \mbox{\hyperlink{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}{mixfStoic}} << endl;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00255}00255 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00256}00256 \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00257}00257 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00259}00259 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00264}\mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{00264}} vector<double> \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{streams::setElementMassFracs}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} *y) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00265}00265 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00266}00266 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00267}00267     vector<double> atomArr(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements());}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00268}00268     vector<double> elemMassFrac(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements(), 0.0);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00269}00269     \textcolor{keywordtype}{double} sum = 0.0;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00270}00270 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00271}00271     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setMassFractions( \&y[0] );}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00272}00272 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00273}00273     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}; k++) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00274}00274         sum=0.0;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00275}00275         \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getAtoms(k, \&atomArr[0]);           \textcolor{comment}{// [nelements] in sp k}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00276}00276         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} m=0; m<(int)atomArr.size(); m++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00277}00277             sum += atomArr[m] * \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(m);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00278}00278         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} m=0; m<(int)atomArr.size(); m++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00279}00279             elemMassFrac[m] += y[k] * atomArr[m]/sum * \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(m);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00280}00280                               \textcolor{comment}{// is * mass frac of elem in sp}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00281}00281     \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00282}00282 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00283}00283     \textcolor{keywordflow}{return} elemMassFrac;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00284}00284 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00285}00285 \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00286}00286 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00288}00288 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00293}\mbox{\hyperlink{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa}{00293}} vector<double> \mbox{\hyperlink{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa}{streams::setElementMoleFracs}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} *y) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00294}00294 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00295}00295 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00296}00296     vector<double> atomArr(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements());}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00297}00297     vector<double> elemMoleFrac(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements(), 0.0);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00298}00298 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00299}00299     \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setMassFractions( \&y[0] );}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00300}00300 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00301}00301     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}; k++) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00302}00302         \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getAtoms(k, \&atomArr[0]);           \textcolor{comment}{// [nelements] in sp k}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00303}00303         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} m=0; m<(int)atomArr.size(); m++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00304}00304             elemMoleFrac[m] += \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>moleFraction(k) * atomArr[m];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00305}00305     \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00306}00306     \textcolor{keywordtype}{double} sum = 0.0;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00307}00307     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} m=0; m<(int)atomArr.size(); m++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00308}00308         sum += elemMoleFrac[m];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00309}00309     assert(sum != 0.0);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00310}00310     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} m=0; m<(int)atomArr.size(); m++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00311}00311         elemMoleFrac[m] /= sum;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00312}00312 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00313}00313     \textcolor{keywordflow}{return} elemMoleFrac;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00314}00314 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00315}00315 \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00316}00316 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00318}00318 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00326}\mbox{\hyperlink{classstreams_a45695a5c046ae2a7de87af1654996ce8}{00326}} vector<double> \mbox{\hyperlink{classstreams_a45695a5c046ae2a7de87af1654996ce8}{streams::getElementMoles}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} *x,}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00327}00327                                         \textcolor{keywordtype}{double} \&nOnotFromO2,}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00328}00328                                         \textcolor{keywordtype}{double} \&nHnotFromH2O,}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00329}00329                                         \textcolor{keywordtype}{double} \&nCnotFromCO2) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00330}00330 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00331}00331 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00332}00332     vector<double> atomArr(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements());}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00333}00333     vector<double> elemM(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements(), 0.0);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00334}00334     \textcolor{keywordtype}{int} iO2  = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}O2"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00335}00335     \textcolor{keywordtype}{int} iO   = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00336}00336     \textcolor{keywordtype}{int} iCO2 = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}CO2"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00337}00337     \textcolor{keywordtype}{int} iC   = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00338}00338     \textcolor{keywordtype}{int} iH2O = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}H2O"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00339}00339     \textcolor{keywordtype}{int} iH   = \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00340}00340 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00341}00341     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}}; k++) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00342}00342         \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getAtoms(k, \&atomArr[0]);           \textcolor{comment}{// [nelements] in sp k}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00343}00343         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} m=0; m<(int)atomArr.size(); m++)}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00344}00344             elemM[m] += x[k] * atomArr[m];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00345}00345         \textcolor{keywordflow}{if}(k != iO2)  nOnotFromO2  += atomArr[iO] * x[k];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00346}00346         \textcolor{keywordflow}{if}(k != iCO2) nCnotFromCO2 += atomArr[iC] * x[k];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00347}00347         \textcolor{keywordflow}{if}(k != iH2O) nHnotFromH2O += atomArr[iH] * x[k];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00348}00348     \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00349}00349     \textcolor{keywordflow}{return} elemM;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00350}00350 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00351}00351 \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00352}00352 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00354}00354 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00363}\mbox{\hyperlink{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}{00363}} \textcolor{keywordtype}{double} \mbox{\hyperlink{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}{streams::getMixtureFraction}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} *y, \textcolor{keyword}{const} \textcolor{keywordtype}{bool} doBeta01) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00364}00364 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00365}00365     vector<double> elemMF;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00366}00366     \textcolor{keywordtype}{double}         beta;}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00367}00367 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00368}00368     elemMF = \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(y);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00369}00369     beta   = \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[0] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}})] +}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00370}00370              \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[1] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}})] +}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00371}00371              \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[2] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})] +}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00372}00372              \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[3] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}N"{}})];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00373}00373 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00374}00374     \textcolor{keywordflow}{if}(doBeta01) \{}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00375}00375         elemMF = \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(\&\mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[0]);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00376}00376         \mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}}  = \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[0] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}})] +}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00377}00377                  \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[1] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}})] +}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00378}00378                  \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[2] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})] +}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00379}00379                  \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[3] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}N"{}})];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00380}00380 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00381}00381         elemMF = \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(\&\mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[0]);}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00382}00382         \mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{beta1}}  = \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[0] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}})] +}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00383}00383                  \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[1] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}})] +}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00384}00384                  \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[2] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})] +}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00385}00385                  \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[3] * elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}N"{}})];}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00386}00386     \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00387}00387 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00388}00388     \textcolor{keywordflow}{if}( \mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{beta1}}-\/\mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}} == 0 )}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00389}00389         \textcolor{keywordflow}{return} 0.0;            \textcolor{comment}{// to avoid division by zero}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00390}00390     \textcolor{keywordflow}{else}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00391}00391         \textcolor{keywordflow}{return} (beta -\/ \mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}})/(\mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{beta1}} -\/ \mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}});}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00392}00392 }
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00393}00393 \}}
-\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00394}00394 }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00001}00001\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{streams_8h}{streams.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <cassert>}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00005}00005\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00011}00011\ \mbox{\hyperlink{classstreams_a30bf5c7e8dd1d2c111118b87fd9f6057}{streams::streams}}(shared\_ptr<Cantera::Solution>\ csol,}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00012}00012\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \_P,\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00013}00013\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \_h0,\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00014}00014\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \_h1,}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00015}00015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ vector<double>\ \&\_y0,\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00016}00016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ vector<double>\ \&\_y1)\ :}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00017}00017\ \ \ \ \ P(\_P),}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00018}00018\ \ \ \ \ h0(\_h0),}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00019}00019\ \ \ \ \ h1(\_h1),}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00020}00020\ \ \ \ \ y0(\_y0),}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00021}00021\ \ \ \ \ y1(\_y1)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00023}00023\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00025}00025\ \ \ \ \ gas\ \ =\ csol-\/>thermo();\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00026}00026\ \ \ \ \ nspc\ =\ gas-\/>nSpecies();}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00027}00027\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00028}00028\ \ \ \ \ gCHON.resize(4);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00029}00029\ \ \ \ \ gCHON[0]\ =\ \ 2.0/gas-\/>atomicWeight(gas-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}}));}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00030}00030\ \ \ \ \ gCHON[1]\ =\ \ 0.5/gas-\/>atomicWeight(gas-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}}));}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00031}00031\ \ \ \ \ gCHON[2]\ =\ -\/1.0/gas-\/>atomicWeight(gas-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}}));}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00032}00032\ \ \ \ \ gCHON[3]\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00034}00034\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00036}00036\ \ \ \ \ setStoicMixf();}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00038}00038\ \ \ \ \ getMixtureFraction(\&y0[0],\ \textcolor{keyword}{true});\ \ \ \ \textcolor{comment}{//\ set\ beta0\ and\ beta1}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00039}00039\ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00050}\mbox{\hyperlink{classstreams_aebccdb0fdffb04228f87d73d506d96c5}{00050}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classstreams_aebccdb0fdffb04228f87d73d506d96c5}{streams::getMixingState}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ mixf,\ vector<double>\ \&ymix,}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&hmix,\ \textcolor{keywordtype}{double}\ \&Tmix)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00053}00053\ \ \ \ \ hmix\ =\ \mbox{\hyperlink{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}{h1}}*mixf\ +\ \mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{h0}}*(1.0-\/mixf);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00054}00054\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ k++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00055}00055\ \ \ \ \ \ \ \ \ ymix[k]\ =\ \mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[k]*mixf\ +\ \mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[k]*(1.0-\/mixf);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00057}00057\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setMassFractions(\ \&ymix[0]\ );}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00058}00058\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setState\_HP(hmix,\ \mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}},\ 1.E-\/10);\ \ \ \ \textcolor{comment}{//\ get\ temperature\ as\ Tadiabatic}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00060}00060\ \ \ \ \ Tmix\ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>temperature();}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00061}00061\ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00062}00062\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00072}\mbox{\hyperlink{classstreams_a6dbf93fbcde09e925bead7ce9c0113e9}{00072}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classstreams_a6dbf93fbcde09e925bead7ce9c0113e9}{streams::getEquilibrium\_HP}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ mixf,\ vector<double>\ \&yeq,}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00073}00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&heq,\ \textcolor{keywordtype}{double}\ \&Teq)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00075}00075\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Compute\ the\ mixing\ mass\ fractions\ and\ enthalpy}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00077}00077\ \ \ \ \ yeq.resize(\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00078}00078\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ k++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00079}00079\ \ \ \ \ \ \ \ \ yeq[k]\ =\ \mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[k]*mixf\ +\ \mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[k]*(1.0-\/mixf);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00080}00080\ \ \ \ \ heq\ =\ \mbox{\hyperlink{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}{h1}}*mixf\ +\ \mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{h0}}*(1.0-\/mixf);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00082}00082\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setState\_PY(\mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}},\ \&yeq[0]);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00083}00083\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setState\_HP(heq,\ \mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}},\ 1.E-\/10);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00084}00084\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00085}00085\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>equilibrate(\textcolor{stringliteral}{"{}HP"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00086}00086\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getMassFractions(\&yeq[0]);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00088}00088\ \ \ \ \ Teq\ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>temperature();}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00090}00090\ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00101}\mbox{\hyperlink{classstreams_afb9231a9360300ec0688d1c1e404ca78}{00101}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classstreams_afb9231a9360300ec0688d1c1e404ca78}{streams::getEquilibrium\_TP}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ mixf,\ \textcolor{keywordtype}{double}\ Teq,\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00102}00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ vector<double>\ \&yeq,\ \textcolor{keywordtype}{double}\ \&heq\ )\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00103}00103\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00104}00104\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Compute\ the\ mixing\ mass\ fractions\ and\ enthalpy}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00105}00105\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00106}00106\ \ \ \ \ yeq.resize(\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00107}00107\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ k++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00108}00108\ \ \ \ \ \ \ \ \ yeq[k]\ =\ \mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[k]*mixf\ +\ \mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[k]*(1.0-\/mixf);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00110}00110\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setState\_TPY(Teq,\ \mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}},\ \&yeq[0]);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00112}00112\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>equilibrate(\textcolor{stringliteral}{"{}TP"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00113}00113\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getMassFractions(\&yeq[0]);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00115}00115\ \ \ \ \ heq\ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>enthalpy\_mass();}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00116}00116\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00117}00117\ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00129}\mbox{\hyperlink{classstreams_ae1acfdaebac0b26841c76d9aaacc4b31}{00129}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classstreams_ae1acfdaebac0b26841c76d9aaacc4b31}{streams::getProdOfCompleteComb}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ mixf,\ vector<double>\ \&ypcc,}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00130}00130\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&hpcc,\ \textcolor{keywordtype}{double}\ \&Tpcc)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00132}00132\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Compute\ the\ mixing\ mass\ fractions\ and\ enthalpy}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00134}00134\ \ \ \ \ ypcc.resize(\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00135}00135\ \ \ \ \ \textcolor{keywordtype}{double}\ d1\ =\ 1.0-\/mixf;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00136}00136\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ k++)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00137}00137\ \ \ \ \ \ \ \ \ ypcc[k]\ =\ \mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[k]*mixf\ +\ \mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[k]*d1;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00138}00138\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00139}00139\ \ \ \ \ hpcc\ =\ \mbox{\hyperlink{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}{h1}}*mixf\ +\ \mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{h0}}*d1;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00140}00140\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00141}00141\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Set\ gas\ and\ element\ indicicies}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00142}00142\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00143}00143\ \ \ \ \ \textcolor{keywordtype}{int}\ iC\ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00144}00144\ \ \ \ \ \textcolor{keywordtype}{int}\ iH\ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00145}00145\ \ \ \ \ \textcolor{keywordtype}{int}\ iN\ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}N"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00146}00146\ \ \ \ \ \textcolor{keywordtype}{int}\ iCO2\ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}CO2"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00147}00147\ \ \ \ \ \textcolor{keywordtype}{int}\ iH2O\ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}H2O"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00148}00148\ \ \ \ \ \textcolor{keywordtype}{int}\ iN2\ \ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}N2"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00149}00149\ \ \ \ \ \textcolor{keywordtype}{int}\ iO2\ \ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}O2"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00150}00150\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00151}00151\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ Set\ ypcc\ as\ the\ mixing\ mole\ fractions:\ Take\ a\ basis\ of\ one\ mole:}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00152}00152\ \ \ \ \ \textcolor{comment}{//\ now\ we\ are\ working\ in\ moles}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00153}00153\ \ \ \ \ \textcolor{comment}{//\ elemM\ are\ moles\ of\ each\ element}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00154}00154\ \ \ \ \ \textcolor{comment}{//\ when\ stoic:}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00155}00155\ \ \ \ \ \textcolor{comment}{//\ CxHyNz\ \ \ +\ (x+y/4)O2\ \ ==>\ \ (z/2)N2\ +\ (x)CO2\ +\ (y/2)H2O}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00156}00156\ \ \ \ \ \textcolor{comment}{//\ otherwise:}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00157}00157\ \ \ \ \ \textcolor{comment}{//\ CxHyNz\ \ \ +\ (beta)O2\ \ \ ==>\ \ (z/2)N2\ +\ (x)CO2\ +\ (y/2)H2O}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00158}00158\ \ \ \ \ \textcolor{comment}{//\ Note\ this\ allows\ fuels\ with\ nitrogen\ and\ oxygen}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00159}00159\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00160}00160\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setMassFractions(\ \&ypcc[0]\ );}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00161}00161\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getMoleFractions(\ \&ypcc[0]\ );}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00162}00162\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00163}00163\ \ \ \ \ \textcolor{keywordtype}{double}\ nOnotFromO2\ \ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00164}00164\ \ \ \ \ \textcolor{keywordtype}{double}\ nHnotFromH2O\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00165}00165\ \ \ \ \ \textcolor{keywordtype}{double}\ nCnotFromCO2\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00166}00166\ \ \ \ \ vector<double>\ elemM\ =\ \mbox{\hyperlink{classstreams_a45695a5c046ae2a7de87af1654996ce8}{getElementMoles}}(\ \&ypcc[0],\ nOnotFromO2,}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00167}00167\ \ \ \ \ \ \ \ \ \ \ \ \ nHnotFromH2O,\ nCnotFromCO2\ );}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00168}00168\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00169}00169\ \ \ \ \ \textcolor{keywordtype}{double}\ x\ \ \ \ =\ elemM[iC];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00170}00170\ \ \ \ \ \textcolor{keywordtype}{double}\ y\ \ \ \ =\ elemM[iH];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00171}00171\ \ \ \ \ \textcolor{keywordtype}{double}\ z\ \ \ \ =\ elemM[iN];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00172}00172\ \ \ \ \ \textcolor{keywordtype}{double}\ beta\ =\ elemM[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})]\ *\ 0.5;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ moles\ of\ O\ as\ O2}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00173}00173\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00174}00174\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00175}00175\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00176}00176\ \ \ \ \ \textcolor{keywordflow}{if}(mixf\ <\ \mbox{\hyperlink{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}{mixfStoic}})\ \{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ lean:\ burn\ all\ fuel,\ leftover\ O2}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00177}00177\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00178}00178\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ k++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00179}00179\ \ \ \ \ \ \ \ \ \ \ \ \ ypcc[k]\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00180}00180\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00181}00181\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(iCO2\ >\ 0)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CO2\ is\ not\ in\ the\ H2\ mechs}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00182}00182\ \ \ \ \ \ \ \ \ \ \ \ \ ypcc[iCO2]\ =\ x;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00183}00183\ \ \ \ \ \ \ \ \ ypcc[iH2O]\ =\ y*0.5;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00184}00184\ \ \ \ \ \ \ \ \ ypcc[iN2]\ \ =\ z*0.5;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00185}00185\ \ \ \ \ \ \ \ \ ypcc[iO2]\ \ =\ beta\ -\/\ (x+y/4.0);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00186}00186\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00187}00187\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00188}00188\ \ \ \ \ \textcolor{keywordflow}{else}\{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ rich:\ burn\ all\ O2,\ leftover\ fuel}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00189}00189\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00190}00190\ \ \ \ \ \ \ \ \ \textcolor{comment}{//double\ eta\ =\ beta/(x+y/4.0);\ //\ extent\ of\ reaction}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00191}00191\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ eta\ =\ (beta-\/nOnotFromO2/2)/(x+y/4-\/nOnotFromO2/2);\ \textcolor{comment}{//\ extent\ of\ reaction}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00192}00192\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(eta\ >\ 1.0)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00193}00193\ \ \ \ \ \ \ \ \ \ \ \ \ cout\ <<\ endl\ <<\ \textcolor{stringliteral}{"{}eta\ >\ 1.0"{}}\ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00194}00194\ \ \ \ \ \ \ \ \ d1\ =\ 1.0-\/eta;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ fraction\ of\ fuel\ unburnt}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00195}00195\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00196}00196\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ k++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00197}00197\ \ \ \ \ \ \ \ \ \ \ \ \ ypcc[k]\ *=\ d1;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ initialize\ everything\ then\ correct}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00198}00198\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(iCO2\ >\ 0)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ CO2\ is\ not\ in\ the\ H2\ mechs}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00199}00199\ \ \ \ \ \ \ \ \ \ \ \ \ ypcc[iCO2]\ =\ (x-\/nCnotFromCO2)\ +\ nCnotFromCO2*eta;\ \ \ \ \ \ \ \textcolor{comment}{//\ init\ +\ formed}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00200}00200\ \ \ \ \ \ \ \ \ ypcc[iH2O]\ =\ (y-\/nHnotFromH2O)*0.5\ +\ nHnotFromH2O*0.5*eta;\ \ \ \textcolor{comment}{//\ init\ +\ formed}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00201}00201\ \ \ \ \ \ \ \ \ ypcc[iN2]\ \ =\ z*0.5;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00202}00202\ \ \ \ \ \ \ \ \ ypcc[iO2]\ \ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00203}00203\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00204}00204\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00205}00205\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00206}00206\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00207}00207\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00208}00208\ \ \ \ \ \textcolor{keywordtype}{double}\ sum\ =\ 0.0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ normalize\ moles}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00209}00209\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ k++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00210}00210\ \ \ \ \ \ \ \ \ sum\ +=\ ypcc[k];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00211}00211\ \ \ \ \ assert(sum\ !=\ 0.0);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00212}00212\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ k++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00213}00213\ \ \ \ \ \ \ \ \ ypcc[k]\ /=\ sum;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00214}00214\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setMoleFractions(\ \&ypcc[0]\ );\ \ \ \ \ \ \textcolor{comment}{//\ set\ mole\ fractions}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00215}00215\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getMassFractions(\ \&ypcc[0]\ );\ \ \ \ \ \ \textcolor{comment}{//\ set\ ypcc\ as\ mass\ fractions}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00216}00216\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00217}00217\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00218}00218\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00219}00219\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00220}00220\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setState\_HP(hpcc,\ \mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}},\ 1.E-\/10);\ \ \ \ \textcolor{comment}{//\ get\ temperature\ as\ Tadiabatic}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00221}00221\ \ \ \ \ \textcolor{comment}{//gas-\/>setState\_HP(hpcc,\ P);\ \ \ \ //\ get\ temperature\ as\ Tadiabatic}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00222}00222\ \ \ \ \ Tpcc\ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>temperature();}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00223}00223\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00224}00224\ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00225}00225\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00227}00227\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00229}\mbox{\hyperlink{classstreams_a346c56671eabbde2eecfaf60f5b5b0f9}{00229}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classstreams_a346c56671eabbde2eecfaf60f5b5b0f9}{streams::setStoicMixf}}()\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00230}00230\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00231}00231\ \ \ \ \ vector<double>\ x\_c(\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}},0.0);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00232}00232\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00233}00233\ \ \ \ \ \textcolor{keywordtype}{double}\ mc0,\ mc1,\ mo0,\ mo1,\ mh0,\ mh1;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00234}00234\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00235}00235\ \ \ \ \ vector<double>\ elemMassFrac0\ =\ \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(\&\mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[0]);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00236}00236\ \ \ \ \ vector<double>\ elemMassFrac1\ =\ \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(\&\mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[0]);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00237}00237\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00238}00238\ \ \ \ \ mc0\ =\ elemMassFrac0[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}})]/}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00239}00239\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}}));}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00240}00240\ \ \ \ \ mc1\ =\ elemMassFrac1[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}})]/}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00241}00241\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}}));}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00242}00242\ \ \ \ \ mh0\ =\ elemMassFrac0[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}})]/}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00243}00243\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}}));}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00244}00244\ \ \ \ \ mh1\ =\ elemMassFrac1[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}})]/}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00245}00245\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}}));}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00246}00246\ \ \ \ \ mo0\ =\ elemMassFrac0[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})]/}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00247}00247\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}}));}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00248}00248\ \ \ \ \ mo1\ =\ elemMassFrac1[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})]/}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00249}00249\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}}));}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00250}00250\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00251}00251\ \ \ \ \ \mbox{\hyperlink{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}{mixfStoic}}\ =\ (2.0*mc0\ +\ 0.5*mh0\ -\/\ mo0)\ /}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00252}00252\ \ \ \ \ \ \ \ \ (mo1-\/mo0\ +\ 2.0*(mc0-\/mc1)\ +\ 0.5*(mh0-\/mh1));}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00253}00253\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00254}00254\ \ \ \ \ cout\ <<\ endl\ <<\ \textcolor{stringliteral}{"{}\#\ mixfStoic\ =\ m\_fuel/(m\_fuel+m\_air)\ =\ "{}}\ <<\ \mbox{\hyperlink{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}{mixfStoic}}\ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00255}00255\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00256}00256\ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00257}00257\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00259}00259\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00264}\mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{00264}}\ vector<double>\ \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{streams::setElementMassFracs}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ *y)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00265}00265\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00266}00266\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00267}00267\ \ \ \ \ vector<double>\ atomArr(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements());}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00268}00268\ \ \ \ \ vector<double>\ elemMassFrac(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements(),\ 0.0);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00269}00269\ \ \ \ \ \textcolor{keywordtype}{double}\ sum\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00270}00270\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00271}00271\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setMassFractions(\ \&y[0]\ );}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00272}00272\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00273}00273\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ k++)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00274}00274\ \ \ \ \ \ \ \ \ sum=0.0;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00275}00275\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getAtoms(k,\ \&atomArr[0]);\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [nelements]\ in\ sp\ k}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00276}00276\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ m=0;\ m<(int)atomArr.size();\ m++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00277}00277\ \ \ \ \ \ \ \ \ \ \ \ \ sum\ +=\ atomArr[m]\ *\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(m);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00278}00278\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ m=0;\ m<(int)atomArr.size();\ m++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00279}00279\ \ \ \ \ \ \ \ \ \ \ \ \ elemMassFrac[m]\ +=\ y[k]\ *\ atomArr[m]/sum\ *\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>atomicWeight(m);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00280}00280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ is\ *\ mass\ frac\ of\ elem\ in\ sp}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00281}00281\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00282}00282\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00283}00283\ \ \ \ \ \textcolor{keywordflow}{return}\ elemMassFrac;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00284}00284\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00285}00285\ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00286}00286\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00288}00288\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00293}\mbox{\hyperlink{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa}{00293}}\ vector<double>\ \mbox{\hyperlink{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa}{streams::setElementMoleFracs}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ *y)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00294}00294\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00295}00295\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00296}00296\ \ \ \ \ vector<double>\ atomArr(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements());}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00297}00297\ \ \ \ \ vector<double>\ elemMoleFrac(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements(),\ 0.0);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00298}00298\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00299}00299\ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>setMassFractions(\ \&y[0]\ );}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00300}00300\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00301}00301\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ k++)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00302}00302\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getAtoms(k,\ \&atomArr[0]);\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [nelements]\ in\ sp\ k}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00303}00303\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ m=0;\ m<(int)atomArr.size();\ m++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00304}00304\ \ \ \ \ \ \ \ \ \ \ \ \ elemMoleFrac[m]\ +=\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>moleFraction(k)\ *\ atomArr[m];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00305}00305\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00306}00306\ \ \ \ \ \textcolor{keywordtype}{double}\ sum\ =\ 0.0;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00307}00307\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ m=0;\ m<(int)atomArr.size();\ m++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00308}00308\ \ \ \ \ \ \ \ \ sum\ +=\ elemMoleFrac[m];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00309}00309\ \ \ \ \ assert(sum\ !=\ 0.0);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00310}00310\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ m=0;\ m<(int)atomArr.size();\ m++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00311}00311\ \ \ \ \ \ \ \ \ elemMoleFrac[m]\ /=\ sum;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00312}00312\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00313}00313\ \ \ \ \ \textcolor{keywordflow}{return}\ elemMoleFrac;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00314}00314\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00315}00315\ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00316}00316\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00318}00318\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00326}\mbox{\hyperlink{classstreams_a45695a5c046ae2a7de87af1654996ce8}{00326}}\ vector<double>\ \mbox{\hyperlink{classstreams_a45695a5c046ae2a7de87af1654996ce8}{streams::getElementMoles}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ *x,}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00327}00327\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&nOnotFromO2,}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00328}00328\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&nHnotFromH2O,}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00329}00329\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&nCnotFromCO2)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00330}00330\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00331}00331\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00332}00332\ \ \ \ \ vector<double>\ atomArr(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements());}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00333}00333\ \ \ \ \ vector<double>\ elemM(\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>nElements(),\ 0.0);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00334}00334\ \ \ \ \ \textcolor{keywordtype}{int}\ iO2\ \ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}O2"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00335}00335\ \ \ \ \ \textcolor{keywordtype}{int}\ iO\ \ \ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00336}00336\ \ \ \ \ \textcolor{keywordtype}{int}\ iCO2\ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}CO2"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00337}00337\ \ \ \ \ \textcolor{keywordtype}{int}\ iC\ \ \ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00338}00338\ \ \ \ \ \textcolor{keywordtype}{int}\ iH2O\ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>speciesIndex(\textcolor{stringliteral}{"{}H2O"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00339}00339\ \ \ \ \ \textcolor{keywordtype}{int}\ iH\ \ \ =\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00340}00340\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00341}00341\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ k=0;\ k<\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ k++)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00342}00342\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>getAtoms(k,\ \&atomArr[0]);\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ [nelements]\ in\ sp\ k}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00343}00343\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ m=0;\ m<(int)atomArr.size();\ m++)}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00344}00344\ \ \ \ \ \ \ \ \ \ \ \ \ elemM[m]\ +=\ x[k]\ *\ atomArr[m];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00345}00345\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(k\ !=\ iO2)\ \ nOnotFromO2\ \ +=\ atomArr[iO]\ *\ x[k];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00346}00346\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(k\ !=\ iCO2)\ nCnotFromCO2\ +=\ atomArr[iC]\ *\ x[k];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00347}00347\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(k\ !=\ iH2O)\ nHnotFromH2O\ +=\ atomArr[iH]\ *\ x[k];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00348}00348\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00349}00349\ \ \ \ \ \textcolor{keywordflow}{return}\ elemM;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00350}00350\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00351}00351\ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00352}00352\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00354}00354\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00363}\mbox{\hyperlink{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}{00363}}\ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}{streams::getMixtureFraction}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ *y,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ doBeta01)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00364}00364\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00365}00365\ \ \ \ \ vector<double>\ elemMF;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00366}00366\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ beta;}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00367}00367\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00368}00368\ \ \ \ \ elemMF\ =\ \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(y);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00369}00369\ \ \ \ \ beta\ \ \ =\ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[0]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}})]\ +}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00370}00370\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[1]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}})]\ +}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00371}00371\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[2]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})]\ +}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00372}00372\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[3]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}N"{}})];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00373}00373\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00374}00374\ \ \ \ \ \textcolor{keywordflow}{if}(doBeta01)\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00375}00375\ \ \ \ \ \ \ \ \ elemMF\ =\ \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(\&\mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}}[0]);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00376}00376\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}}\ \ =\ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[0]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}})]\ +}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00377}00377\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[1]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}})]\ +}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00378}00378\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[2]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})]\ +}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00379}00379\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[3]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}N"{}})];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00380}00380\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00381}00381\ \ \ \ \ \ \ \ \ elemMF\ =\ \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(\&\mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}}[0]);}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00382}00382\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{beta1}}\ \ =\ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[0]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}C"{}})]\ +}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00383}00383\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[1]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}H"{}})]\ +}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00384}00384\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[2]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}O"{}})]\ +}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00385}00385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}}[3]\ *\ elemMF[\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}}-\/>elementIndex(\textcolor{stringliteral}{"{}N"{}})];}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00386}00386\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00387}00387\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00388}00388\ \ \ \ \ \textcolor{keywordflow}{if}(\ \mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{beta1}}-\/\mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}}\ ==\ 0\ )}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00389}00389\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 0.0;\ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ to\ avoid\ division\ by\ zero}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00390}00390\ \ \ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00391}00391\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (beta\ -\/\ \mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}})/(\mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{beta1}}\ -\/\ \mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}});}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00392}00392\ }
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00393}00393\ \}}
+\DoxyCodeLine{\Hypertarget{streams_8cc_source_l00394}00394\ }
 
 \end{DoxyCode}

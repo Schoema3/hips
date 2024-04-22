@@ -1,11 +1,12 @@
 var searchData=
 [
-  ['left_0',['left',['../class_m_t_rand.html#a98eabf568c88f121e44f487397f32495',1,'MTRand']]],
-  ['levelrates_1',['levelRates',['../clasships.html#a9966d2b2baaebd32582c70190c5f3c0c',1,'hips']]],
-  ['load_2',['load',['../class_m_t_rand.html#a8302e9a8cd16d8dfc536a85bf2f68be0',1,'MTRand']]],
-  ['lobit_3',['loBit',['../class_m_t_rand.html#a6e2f7d8bae68dc63f6bcbb954cf4fb29',1,'MTRand']]],
-  ['lobits_4',['loBits',['../class_m_t_rand.html#a1930fa7c242d35be28bb99b18a84a93d',1,'MTRand']]],
-  ['lrandset_5',['LrandSet',['../clasships.html#a3a48aadeba689191761cae9951f83466',1,'hips']]],
-  ['ls_6',['LS',['../classintegrator__cvode.html#a5a2234e49b1f6057b7f041277f115077',1,'integrator_cvode']]],
-  ['lschips_7',['LScHips',['../clasships.html#af0693b6587b038be50f185a0a8e1d67e',1,'hips']]]
+  ['eddyrate_5finertial_0',['eddyRate_inertial',['../clasships.html#a6bb6bdd8027532037b60a56600c3af40',1,'hips']]],
+  ['eddyrate_5ftotal_1',['eddyRate_total',['../clasships.html#ad56769a509f9d0e67a0e609ac5569b4d',1,'hips']]],
+  ['eval_2',['eval',['../classbatch_reactor__cantera.html#af9ad9234676eaf3f4f7a6d20a7de69c5',1,'batchReactor_cantera']]],
+  ['ex_5f1_2ecc_3',['ex_1.cc',['../ex__1_8cc.html',1,'']]],
+  ['ex_5f2_2ecc_4',['ex_2.cc',['../ex__2_8cc.html',1,'']]],
+  ['ex_5f3_2ecc_5',['ex_3.cc',['../ex__3_8cc.html',1,'']]],
+  ['example_20workflow_6',['Example Workflow',['..//Users/mbehrang/hips-final/hips/docs/mainpage.md#autotoc_md15',1,'']]],
+  ['example_20workflow_7',['Example workflow',['../index.html#autotoc_md11',1,'']]],
+  ['examples_8',['Examples',['..//Users/mbehrang/hips-final/hips/docs/mainpage.md#autotoc_md20',1,'Examples'],['../index.html#autotoc_md24',1,'Examples']]]
 ];

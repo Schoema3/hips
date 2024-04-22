@@ -1,5 +1,5 @@
-\hypertarget{classbatch_reactor__cantera}{}\doxysection{batch\+Reactor\+\_\+cantera Class Reference}
-\label{classbatch_reactor__cantera}\index{batchReactor\_cantera@{batchReactor\_cantera}}
+\doxysection{batch\+Reactor\+\_\+cantera Class Reference}
+\hypertarget{classbatch_reactor__cantera}{}\label{classbatch_reactor__cantera}\index{batchReactor\_cantera@{batchReactor\_cantera}}
 
 
 \doxysubsection{Detailed Description}
@@ -11,31 +11,60 @@ Definition at line \mbox{\hyperlink{batch_reactor__cantera_8h_source_l00014}{14}
 
 {\ttfamily \#include $<$batch\+Reactor\+\_\+cantera.\+h$>$}
 
-\doxysubsection*{Public Member Functions}
+\doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classbatch_reactor__cantera_a044cbcdcd2d011a24f2adebe8bfcfaa7}{batch\+Reactor\+\_\+cantera}} (std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$ cant\+Sol)
-\begin{DoxyCompactList}\small\item\em Constructor for \mbox{\hyperlink{classbatch_reactor__cantera}{batch\+Reactor\+\_\+cantera}}. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Constructor for \doxylink{classbatch_reactor__cantera}{batch\+Reactor\+\_\+cantera}. \end{DoxyCompactList}\item 
 virtual void \mbox{\hyperlink{classbatch_reactor__cantera_a8a28338d155ffe76452a04119112021f}{react}} (double \&h, std\+::vector$<$ double $>$ \&y, const double t\+Run)
 \begin{DoxyCompactList}\small\item\em Simulates a reaction in the batch reactor. \end{DoxyCompactList}\item 
-void \mbox{\hyperlink{classbatch_reactor__cantera_af9ad9234676eaf3f4f7a6d20a7de69c5}{eval}} (double t, double $\ast$vars, double $\ast$dvarsdt, double $\ast$not\+\_\+used)
+void \mbox{\hyperlink{classbatch_reactor__cantera_af9ad9234676eaf3f4f7a6d20a7de69c5}{eval}} (double t, double \texorpdfstring{$\ast$}{*}vars, double \texorpdfstring{$\ast$}{*}dvarsdt, double \texorpdfstring{$\ast$}{*}not\+\_\+used)
 \begin{DoxyCompactList}\small\item\em Evaluates the reaction rates. \end{DoxyCompactList}\item 
 size\+\_\+t \mbox{\hyperlink{classbatch_reactor__cantera_af3cc618b57e267c3bb9d732287e46c20}{neq}} ()
 \item 
-void \mbox{\hyperlink{classbatch_reactor__cantera_ad64fdb0dc2da58526e083193723a0189}{get\+State}} (double $\ast$y)
+void \mbox{\hyperlink{classbatch_reactor__cantera_ad64fdb0dc2da58526e083193723a0189}{get\+State}} (double \texorpdfstring{$\ast$}{*}y)
 \item 
-virtual \mbox{\hyperlink{classbatch_reactor__cantera_aaabf68adab8ee349ace4cab540b07e38}{$\sim$batch\+Reactor\+\_\+cantera}} ()
+virtual \mbox{\hyperlink{classbatch_reactor__cantera_aaabf68adab8ee349ace4cab540b07e38}{\texorpdfstring{$\sim$}{\string~}batch\+Reactor\+\_\+cantera}} ()
 \end{DoxyCompactItemize}
-\doxysubsection*{Private Attributes}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classbatch_reactor}{batch\+Reactor}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classbatch_reactor_ae9f39242ba26fa25a06a4cc5ff05472e}{batch\+Reactor}} ()
+\item 
+double \mbox{\hyperlink{classbatch_reactor_a915a784039c36da099fe591c30566d2f}{get\+Density}} () const
+\item 
+virtual \mbox{\hyperlink{classbatch_reactor_ae95e00b784edcb60c91a87eab93584d4}{\texorpdfstring{$\sim$}{\string~}batch\+Reactor}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 std\+::unique\+\_\+ptr$<$ Cantera\+::\+Integrator $>$ \mbox{\hyperlink{classbatch_reactor__cantera_a733f663675700952fa3b3df28fb03ac9}{integrator}}
 \begin{DoxyCompactList}\small\item\em Cantera cvode wrapper. \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Additional Inherited Members}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classbatch_reactor}{batch\+Reactor}}}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{classbatch_reactor_ae957b69e3e933ddcc85a809b8f06c8ad}{temperature}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classbatch_reactor}{batch\+Reactor}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ Cantera\+::\+Thermo\+Phase $>$ \mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{gas}}
+\begin{DoxyCompactList}\small\item\em Cantera thermo object. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ Cantera\+::\+Kinetics $>$ \mbox{\hyperlink{classbatch_reactor_a44101d5defb4ba69474697744cbef158}{kin}}
+\begin{DoxyCompactList}\small\item\em Cantera kinetics object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classbatch_reactor_a25a411dda898478f3c8ff2a5351906e5}{nvar}}
+\begin{DoxyCompactList}\small\item\em number of variables/equations solved \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classbatch_reactor_a8d8d86a997c4e8424063f943ffab033a}{h\+\_\+fixed}}
+\begin{DoxyCompactList}\small\item\em adiabatic h during integrate \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classbatch_reactor_a486da1fa66d5cad76ca4614371dc335a}{P\+\_\+fixed}}
+\begin{DoxyCompactList}\small\item\em pressure during integrate \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classbatch_reactor_a38e600224710a61029e49eb91ab1480d}{rho}}
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classbatch_reactor__cantera_a044cbcdcd2d011a24f2adebe8bfcfaa7}\label{classbatch_reactor__cantera_a044cbcdcd2d011a24f2adebe8bfcfaa7}} 
+\Hypertarget{classbatch_reactor__cantera_a044cbcdcd2d011a24f2adebe8bfcfaa7}\label{classbatch_reactor__cantera_a044cbcdcd2d011a24f2adebe8bfcfaa7} 
 \index{batchReactor\_cantera@{batchReactor\_cantera}!batchReactor\_cantera@{batchReactor\_cantera}}
 \index{batchReactor\_cantera@{batchReactor\_cantera}!batchReactor\_cantera@{batchReactor\_cantera}}
 \doxysubsubsection{\texorpdfstring{batchReactor\_cantera()}{batchReactor\_cantera()}}
@@ -43,7 +72,7 @@ std\+::unique\+\_\+ptr$<$ Cantera\+::\+Integrator $>$ \mbox{\hyperlink{classbatc
 
 
 
-Constructor for \mbox{\hyperlink{classbatch_reactor__cantera}{batch\+Reactor\+\_\+cantera}}. 
+Constructor for \doxylink{classbatch_reactor__cantera}{batch\+Reactor\+\_\+cantera}. 
 
 Initializes a batch reactor object using Cantera solution for simulations.
 
@@ -56,11 +85,11 @@ Initializes a batch reactor object using Cantera solution for simulations.
 
 Definition at line \mbox{\hyperlink{batch_reactor__cantera_8cc_source_l00011}{11}} of file \mbox{\hyperlink{batch_reactor__cantera_8cc_source}{batch\+Reactor\+\_\+cantera.\+cc}}.
 
-\mbox{\Hypertarget{classbatch_reactor__cantera_aaabf68adab8ee349ace4cab540b07e38}\label{classbatch_reactor__cantera_aaabf68adab8ee349ace4cab540b07e38}} 
-\index{batchReactor\_cantera@{batchReactor\_cantera}!````~batchReactor\_cantera@{$\sim$batchReactor\_cantera}}
-\index{````~batchReactor\_cantera@{$\sim$batchReactor\_cantera}!batchReactor\_cantera@{batchReactor\_cantera}}
-\doxysubsubsection{\texorpdfstring{$\sim$batchReactor\_cantera()}{~batchReactor\_cantera()}}
-{\footnotesize\ttfamily virtual batch\+Reactor\+\_\+cantera\+::$\sim$batch\+Reactor\+\_\+cantera (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+\Hypertarget{classbatch_reactor__cantera_aaabf68adab8ee349ace4cab540b07e38}\label{classbatch_reactor__cantera_aaabf68adab8ee349ace4cab540b07e38} 
+\index{batchReactor\_cantera@{batchReactor\_cantera}!````~batchReactor\_cantera@{\texorpdfstring{$\sim$}{\string~}batchReactor\_cantera}}
+\index{````~batchReactor\_cantera@{\texorpdfstring{$\sim$}{\string~}batchReactor\_cantera}!batchReactor\_cantera@{batchReactor\_cantera}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}batchReactor\_cantera()}{\string~batchReactor\_cantera()}}
+{\footnotesize\ttfamily virtual batch\+Reactor\+\_\+cantera\+::\texorpdfstring{$\sim$}{\string~}batch\+Reactor\+\_\+cantera (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
 
 
 
@@ -69,7 +98,7 @@ Definition at line \mbox{\hyperlink{batch_reactor__cantera_8h_source_l00036}{36}
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{classbatch_reactor__cantera_a8a28338d155ffe76452a04119112021f}\label{classbatch_reactor__cantera_a8a28338d155ffe76452a04119112021f}} 
+\Hypertarget{classbatch_reactor__cantera_a8a28338d155ffe76452a04119112021f}\label{classbatch_reactor__cantera_a8a28338d155ffe76452a04119112021f} 
 \index{batchReactor\_cantera@{batchReactor\_cantera}!react@{react}}
 \index{react@{react}!batchReactor\_cantera@{batchReactor\_cantera}}
 \doxysubsubsection{\texorpdfstring{react()}{react()}}
@@ -96,11 +125,11 @@ Implements \mbox{\hyperlink{classbatch_reactor_aec18522d3d27683aee10f482475149e9
 
 Definition at line \mbox{\hyperlink{batch_reactor__cantera_8cc_source_l00032}{32}} of file \mbox{\hyperlink{batch_reactor__cantera_8cc_source}{batch\+Reactor\+\_\+cantera.\+cc}}.
 
-\mbox{\Hypertarget{classbatch_reactor__cantera_af9ad9234676eaf3f4f7a6d20a7de69c5}\label{classbatch_reactor__cantera_af9ad9234676eaf3f4f7a6d20a7de69c5}} 
+\Hypertarget{classbatch_reactor__cantera_af9ad9234676eaf3f4f7a6d20a7de69c5}\label{classbatch_reactor__cantera_af9ad9234676eaf3f4f7a6d20a7de69c5} 
 \index{batchReactor\_cantera@{batchReactor\_cantera}!eval@{eval}}
 \index{eval@{eval}!batchReactor\_cantera@{batchReactor\_cantera}}
 \doxysubsubsection{\texorpdfstring{eval()}{eval()}}
-{\footnotesize\ttfamily void batch\+Reactor\+\_\+cantera\+::eval (\begin{DoxyParamCaption}\item[{double}]{t,  }\item[{double $\ast$}]{vars,  }\item[{double $\ast$}]{dvarsdt,  }\item[{double $\ast$}]{not\+\_\+used }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily void batch\+Reactor\+\_\+cantera\+::eval (\begin{DoxyParamCaption}\item[{double}]{t,  }\item[{double \texorpdfstring{$\ast$}{*}}]{vars,  }\item[{double \texorpdfstring{$\ast$}{*}}]{dvarsdt,  }\item[{double \texorpdfstring{$\ast$}{*}}]{not\+\_\+used }\end{DoxyParamCaption})}
 
 
 
@@ -121,7 +150,7 @@ Evaluates the reaction rates.
 
 Definition at line \mbox{\hyperlink{batch_reactor__cantera_8cc_source_l00061}{61}} of file \mbox{\hyperlink{batch_reactor__cantera_8cc_source}{batch\+Reactor\+\_\+cantera.\+cc}}.
 
-\mbox{\Hypertarget{classbatch_reactor__cantera_af3cc618b57e267c3bb9d732287e46c20}\label{classbatch_reactor__cantera_af3cc618b57e267c3bb9d732287e46c20}} 
+\Hypertarget{classbatch_reactor__cantera_af3cc618b57e267c3bb9d732287e46c20}\label{classbatch_reactor__cantera_af3cc618b57e267c3bb9d732287e46c20} 
 \index{batchReactor\_cantera@{batchReactor\_cantera}!neq@{neq}}
 \index{neq@{neq}!batchReactor\_cantera@{batchReactor\_cantera}}
 \doxysubsubsection{\texorpdfstring{neq()}{neq()}}
@@ -131,11 +160,11 @@ Definition at line \mbox{\hyperlink{batch_reactor__cantera_8cc_source_l00061}{61
 
 Definition at line \mbox{\hyperlink{batch_reactor__cantera_8h_source_l00030}{30}} of file \mbox{\hyperlink{batch_reactor__cantera_8h_source}{batch\+Reactor\+\_\+cantera.\+h}}.
 
-\mbox{\Hypertarget{classbatch_reactor__cantera_ad64fdb0dc2da58526e083193723a0189}\label{classbatch_reactor__cantera_ad64fdb0dc2da58526e083193723a0189}} 
+\Hypertarget{classbatch_reactor__cantera_ad64fdb0dc2da58526e083193723a0189}\label{classbatch_reactor__cantera_ad64fdb0dc2da58526e083193723a0189} 
 \index{batchReactor\_cantera@{batchReactor\_cantera}!getState@{getState}}
 \index{getState@{getState}!batchReactor\_cantera@{batchReactor\_cantera}}
 \doxysubsubsection{\texorpdfstring{getState()}{getState()}}
-{\footnotesize\ttfamily void batch\+Reactor\+\_\+cantera\+::get\+State (\begin{DoxyParamCaption}\item[{double $\ast$}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily void batch\+Reactor\+\_\+cantera\+::get\+State (\begin{DoxyParamCaption}\item[{double \texorpdfstring{$\ast$}{*}}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -144,7 +173,7 @@ Definition at line \mbox{\hyperlink{batch_reactor__cantera_8h_source_l00032}{32}
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{classbatch_reactor__cantera_a733f663675700952fa3b3df28fb03ac9}\label{classbatch_reactor__cantera_a733f663675700952fa3b3df28fb03ac9}} 
+\Hypertarget{classbatch_reactor__cantera_a733f663675700952fa3b3df28fb03ac9}\label{classbatch_reactor__cantera_a733f663675700952fa3b3df28fb03ac9} 
 \index{batchReactor\_cantera@{batchReactor\_cantera}!integrator@{integrator}}
 \index{integrator@{integrator}!batchReactor\_cantera@{batchReactor\_cantera}}
 \doxysubsubsection{\texorpdfstring{integrator}{integrator}}
@@ -162,5 +191,5 @@ Definition at line \mbox{\hyperlink{batch_reactor__cantera_8h_source_l00018}{18}
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/\+Users/maisy/hips-\/lib-\/final/hips/src/\mbox{\hyperlink{batch_reactor__cantera_8h}{batch\+Reactor\+\_\+cantera.\+h}}\item 
-/\+Users/maisy/hips-\/lib-\/final/hips/src/\mbox{\hyperlink{batch_reactor__cantera_8cc}{batch\+Reactor\+\_\+cantera.\+cc}}\end{DoxyCompactItemize}
+/\+Users/mbehrang/hips-\/final/hips/src/\mbox{\hyperlink{batch_reactor__cantera_8h}{batch\+Reactor\+\_\+cantera.\+h}}\item 
+/\+Users/mbehrang/hips-\/final/hips/src/\mbox{\hyperlink{batch_reactor__cantera_8cc}{batch\+Reactor\+\_\+cantera.\+cc}}\end{DoxyCompactItemize}

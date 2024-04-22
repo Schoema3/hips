@@ -10,5 +10,5 @@ var searchData=
   ['nsp_7',['nsp',['../clasships.html#a61dca70748931a42d50254435f36e5e8',1,'hips']]],
   ['nspc_8',['nspc',['../classstreams.html#a5f4ed5333c43b8761758c93d06232357',1,'streams']]],
   ['nvar_9',['nVar',['../clasships.html#a0b8e82059b65e7870c04dd696f930248',1,'hips']]],
-  ['nvar_10',['nvar',['../classbatch_reactor.html#a25a411dda898478f3c8ff2a5351906e5',1,'batchReactor::nvar()'],['../classintegrator__cvode.html#a19a696601751fc7b7b3ad0156517e2d0',1,'integrator_cvode::nvar()']]]
+  ['nvar_10',['nvar',['../classbatch_reactor.html#a25a411dda898478f3c8ff2a5351906e5',1,'batchReactor::nvar'],['../classintegrator__cvode.html#a19a696601751fc7b7b3ad0156517e2d0',1,'integrator_cvode::nvar']]]
 ];

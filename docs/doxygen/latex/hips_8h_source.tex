@@ -1,132 +1,143 @@
-\hypertarget{hips_8h_source}{}\doxysection{hips.\+h}
-\label{hips_8h_source}\index{/Users/maisy/hips-\/lib-\/final/hips/src/hips.h@{/Users/maisy/hips-\/lib-\/final/hips/src/hips.h}}
+\doxysection{hips.\+h}
+\hypertarget{hips_8h_source}{}\label{hips_8h_source}\index{/Users/mbehrang/hips-\/final/hips/src/hips.h@{/Users/mbehrang/hips-\/final/hips/src/hips.h}}
 \mbox{\hyperlink{hips_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00001}00001 \textcolor{preprocessor}{\#pragma once}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00002}00002 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00003}00003 \textcolor{preprocessor}{\#include "{}cantera/base/Solution.h"{}}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00004}00004 \textcolor{preprocessor}{\#include "{}cantera/thermo.h"{}}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00005}00005 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00006}00006 \textcolor{preprocessor}{\#include <iostream>}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00007}00007 \textcolor{preprocessor}{\#include <vector>}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00008}00008 \textcolor{preprocessor}{\#include <string>}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00009}00009 \textcolor{preprocessor}{\#include <vector>}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00010}00010 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{random_generator_8h}{randomGenerator.h}}"{}}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00011}00011 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{batch_reactor_8h}{batchReactor.h}}"{}}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00012}00012 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00013}\mbox{\hyperlink{clasships}{00013}} \textcolor{keyword}{class }\mbox{\hyperlink{clasships}{hips}} \{}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00014}00014 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00015}00015     \textcolor{comment}{// DATA MEMBERS}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00016}\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{00016}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}};                                                       }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00017}\mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{00017}}     std::vector<std::vector<double>*> \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}};                          }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00018}\mbox{\hyperlink{clasships_a4e06e8409d3c1681c718d6d2c9f9a7bf}{00018}}     std::shared\_ptr<Cantera::ThermoPhase> \mbox{\hyperlink{clasships_a4e06e8409d3c1681c718d6d2c9f9a7bf}{gas}};                          }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00019}\mbox{\hyperlink{clasships_a8712aef5b4f2678ec42d5230b32aad4a}{00019}}     std::unique\_ptr<batchReactor> \mbox{\hyperlink{clasships_a8712aef5b4f2678ec42d5230b32aad4a}{bRxr}};                                 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00020}00020 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00021}00021     \textcolor{comment}{// MEMBER VARIABLES}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00022}\mbox{\hyperlink{clasships_a385507f28dfda82ed6d172d8533fb336}{00022}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_a385507f28dfda82ed6d172d8533fb336}{nL}};                                                              }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00023}\mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{00023}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{domainLength}};                                                 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00024}\mbox{\hyperlink{clasships_aefdec9ee971fd921a9edae48e5fee8e0}{00024}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{clasships_aefdec9ee971fd921a9edae48e5fee8e0}{tau0}};                                                         }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00025}\mbox{\hyperlink{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}{00025}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}{C\_param}};                                                      }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00026}\mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{00026}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}};                                                         }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00027}\mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{00027}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddyRate\_total}};                                               }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00028}\mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{00028}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{eddyRate\_inertial}};                                            }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00029}\mbox{\hyperlink{clasships_a5d68e2f3f805f6c419ab606fb1bb9c91}{00029}}     \textcolor{keywordtype}{double} \mbox{\hyperlink{clasships_a5d68e2f3f805f6c419ab606fb1bb9c91}{Afac}};                                                         }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00030}00030 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00031}00031 \textcolor{keyword}{private}:}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00032}00032     \textcolor{comment}{// Private data members}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00033}\mbox{\hyperlink{clasships_af05ebcf315fa2b5c627f9d38395f576e}{00033}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_af05ebcf315fa2b5c627f9d38395f576e}{nLevels}};                                                         }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00034}\mbox{\hyperlink{clasships_a0c7d7ea0e014fe4b34c9db6ad9e19fba}{00034}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_a0c7d7ea0e014fe4b34c9db6ad9e19fba}{nLevels\_}};                                                        }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00035}\mbox{\hyperlink{clasships_a61569cff2835802d3daca4fb71e11b76}{00035}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_a61569cff2835802d3daca4fb71e11b76}{forceTurb}};                                                       }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00036}\mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{00036}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{nVar}};                                                            }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00037}\mbox{\hyperlink{clasships_a61dca70748931a42d50254435f36e5e8}{00037}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_a61dca70748931a42d50254435f36e5e8}{nsp}};                                                             }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00038}\mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{00038}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{Nm1}};                                                             }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00039}\mbox{\hyperlink{clasships_a0a59c28db4e081ee7c4afa2ba051dc64}{00039}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_a0a59c28db4e081ee7c4afa2ba051dc64}{Nm2}};                                                             }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00040}\mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{00040}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}};                                                             }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00041}\mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{00041}}     \textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}};                                                            }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00042}\mbox{\hyperlink{clasships_af0693b6587b038be50f185a0a8e1d67e}{00042}}     \textcolor{keywordtype}{bool} \mbox{\hyperlink{clasships_af0693b6587b038be50f185a0a8e1d67e}{LScHips}};                                                        }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00043}\mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{00043}}     \textcolor{keywordtype}{bool} \mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{performReaction}};                                                }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00044}\mbox{\hyperlink{clasships_a3a48aadeba689191761cae9951f83466}{00044}}     \textcolor{keywordtype}{bool} \mbox{\hyperlink{clasships_a3a48aadeba689191761cae9951f83466}{LrandSet}};                                                       }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00045}\mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{00045}}     \mbox{\hyperlink{classrandom_generator}{randomGenerator}} \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}};}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00046}\mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{00046}}     std::vector<int> \mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}};                                             }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00047}\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{00047}}     std::vector<int> \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}};                                               }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00048}\mbox{\hyperlink{clasships_a8f22f735022a7d81c44a714b44a62694}{00048}}     std::vector<double> \mbox{\hyperlink{clasships_a8f22f735022a7d81c44a714b44a62694}{varRho}};}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00049}\mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{00049}}     std::vector<double> \mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}};                                          }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00050}\mbox{\hyperlink{clasships_a998b5a76ecd9d451115b96702b914096}{00050}}     std::vector<std::string> \mbox{\hyperlink{clasships_a998b5a76ecd9d451115b96702b914096}{varName}};                                    }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00051}\mbox{\hyperlink{clasships_a02e76a9b13872dff1fb000a751198330}{00051}}     std::vector<double> \mbox{\hyperlink{clasships_a02e76a9b13872dff1fb000a751198330}{parcelTimes}};                                     }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00052}\mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{00052}}     std::vector<double> \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{levelRates}};                                      }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00053}\mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{00053}}     std::vector<double> \mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}};                                     }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00054}00054 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00055}00055 \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00056}00056     \textcolor{comment}{// MEMBER FUNCTIONS}}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00057}00057 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00062}\mbox{\hyperlink{clasships_aed30ba57fd6e64de1b8bd5a7d829cbc8}{00062}}     \mbox{\hyperlink{clasships_aed30ba57fd6e64de1b8bd5a7d829cbc8}{hips}}(\textcolor{keywordtype}{int} \mbox{\hyperlink{clasships_a0c7d7ea0e014fe4b34c9db6ad9e19fba}{nLevels\_}},}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00063}00063          \textcolor{keywordtype}{double} domainLength\_,}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00064}00064          \textcolor{keywordtype}{double} tau0\_,}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00065}00065          \textcolor{keywordtype}{double} C\_param\_,}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00066}00066          \textcolor{keywordtype}{int} forceTurb\_,}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00067}00067          \textcolor{keywordtype}{int} nVar\_,}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00068}00068          std::vector<double> \&ScHips\_,}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00069}00069          std::shared\_ptr<Cantera::Solution> cantSol,}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00070}00070          \textcolor{keywordtype}{bool} \mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{performReaction}},}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00071}00071          \textcolor{keywordtype}{int} seed = 10);}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00072}00072 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00073}00073     \mbox{\hyperlink{clasships}{hips}}(\textcolor{keywordtype}{double} Re);                                                       }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00074}00074 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00075}\mbox{\hyperlink{clasships_a39030d04a24424284f2ba3a079686e2e}{00075}}     \textcolor{keyword}{virtual} \mbox{\hyperlink{clasships_a39030d04a24424284f2ba3a079686e2e}{\string~hips}}() \{}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00076}00076         \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\& data : \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}})}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00077}00077             \textcolor{keyword}{delete} data;}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00078}00078     \}                                                                      }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00079}00079 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00080}00080     \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{set\_varData}}(std::vector<double> \&v, std::vector<double> \&w, \textcolor{keyword}{const} std::string \&varN, \textcolor{keywordtype}{int} i);    }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00081}00081     \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{set\_varData}}(std::vector<double> \&v, std::vector<double> \&w, \textcolor{keyword}{const} std::string \&varN,}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00082}00082                      \textcolor{keyword}{const} std::vector<double> \&rho, \textcolor{keywordtype}{int} i);                                             }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00083}00083     std::vector<double> \mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{projection}}(std::vector<double> \&vcfd, std::vector<double> \&weight);              }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00084}00084 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00085}00085     std::pair<std::vector<double>, std::vector<double>>  \mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{projection}}(std::vector<double> \&vcfd, std::vector<double> \&weight,                     }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00086}00086                                    \textcolor{keyword}{const} std::vector<double> \&density);                                   }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00087}00087 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00088}00088     std::vector<double> \mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{setGridHips}}(\textcolor{keywordtype}{int} N);                                  }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00089}00089 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00090}00090     std::vector<double> \mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{setGridCfd}}(std::vector<double> \&w);                  }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00091}00091 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00092}00092     std::vector<std::vector<double>> \mbox{\hyperlink{clasships_a4f12ec17e2983edef734832203570c87}{get\_varData}}();                          }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00093}00093 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00094}00094     std::vector<double>  \mbox{\hyperlink{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}{projection\_back}}(std::vector<double> \&vb);}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00095}00095 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00096}00096     \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a8dd010962442d98a3959ea336670c8db}{calculateSolution}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} tRun, \textcolor{keywordtype}{bool} shouldWriteData );                                }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00097}00097 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00098}00098 \textcolor{keyword}{private}:}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00099}00099     \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a8b2206a09dc03321585fbbcf94fbbb14}{sample\_hips\_eddy}}(\textcolor{keywordtype}{double} \&dt, \textcolor{keywordtype}{int} \&iLevel);                           }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00100}00100     \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a672cc0cc3879ccf71023a059739ab547}{selectAndSwapTwoSubtrees}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} iLevel, \textcolor{keywordtype}{int} \&iTree);              }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00101}00101     \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_ae794eac94488c12cc1aa0a321de471b9}{advanceHips}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} iLevel, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iTree);                      }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00102}00102     \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}{reactParcels\_LevelTree}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} iLevel, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iTree);           }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00103}00103     \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}{mixAcrossLevelTree}}(\textcolor{keywordtype}{int} kVar, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iMixLevel, \textcolor{keyword}{const} \textcolor{keywordtype}{int} iTree);  }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00104}00104     \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a2e1bb3550fb08551e13609f028a10712}{forceProfile}}();}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00105}00105     \textcolor{keywordtype}{void} \mbox{\hyperlink{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}{writeData}}(\textcolor{keyword}{const} \textcolor{keywordtype}{int} ifile, \textcolor{keyword}{const} \textcolor{keywordtype}{double} outputTime);                 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00106}00106 \};}
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00107}00107 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00108}00108 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00109}00109 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00110}00110 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00111}00111 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00112}00112 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00113}00113 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00114}00114 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00115}00115 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00116}00116 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00117}00117 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00118}00118 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00119}00119 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00120}00120 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00121}00121 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00122}00122 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00123}00123 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00124}00124 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00125}00125 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00126}00126 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00127}00127 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00128}00128 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00129}00129 }
-\DoxyCodeLine{\Hypertarget{hips_8h_source_l00130}00130 }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00003}00003\ \textcolor{preprocessor}{\#ifdef\ \ REACTIONS\_ENABLED}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00004}00004\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}cantera/base/Solution.h"{}}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00005}00005\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}cantera/thermo.h"{}}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00006}00006\ \textcolor{preprocessor}{\ \ \ \ \#include\ "{}\mbox{\hyperlink{batch_reactor_8h}{batchReactor.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00007}00007\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00009}00009\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00013}00013\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{random_generator_8h}{randomGenerator.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00015}\mbox{\hyperlink{clasships}{00015}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{clasships}{hips}}\ \{}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00016}00016\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00017}00017\ \ \ \ \ \textcolor{comment}{//\ DATA\ MEMBERS}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00018}\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{00018}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00019}\mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{00019}}\ \ \ \ \ std::vector<std::vector<double>*>\ \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00020}00020\ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00021}00021\ \textcolor{preprocessor}{\ \ \ \ \#ifdef\ REACTIONS\_ENABLED}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00022}00022\ \ \ \ \ \ \ \ \ std::shared\_ptr<Cantera::ThermoPhase>\ gas;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00023}00023\ \ \ \ \ \ \ \ \ std::unique\_ptr<batchReactor>\ bRxr;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00024}00024\ \textcolor{preprocessor}{\ \ \ \ \#endif}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00025}00025\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00026}00026\ \ \ \ \ \textcolor{comment}{//\ MEMBER\ VARIABLES}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00027}\mbox{\hyperlink{clasships_a385507f28dfda82ed6d172d8533fb336}{00027}}\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_a385507f28dfda82ed6d172d8533fb336}{nL}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00028}\mbox{\hyperlink{clasships_a71c4d4341cfde1686e54d9f73ccc1af2}{00028}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_a71c4d4341cfde1686e54d9f73ccc1af2}{currentIndex}}\ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00029}\mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{00029}}\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{clasships_ad5868e484de1ca30cb7427d4a17e2734}{domainLength}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00030}\mbox{\hyperlink{clasships_aefdec9ee971fd921a9edae48e5fee8e0}{00030}}\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{clasships_aefdec9ee971fd921a9edae48e5fee8e0}{tau0}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00031}\mbox{\hyperlink{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}{00031}}\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{clasships_a5f75f3bb97e5db9d07d669d1bbfff45f}{C\_param}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00032}\mbox{\hyperlink{clasships_ac02ac6c9a756c5f0cc2655ea8cbbb916}{00032}}\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{clasships_ac02ac6c9a756c5f0cc2655ea8cbbb916}{Temp}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00033}00033\ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00034}00034\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00035}00035\ \ \ \ \ \textcolor{comment}{//\ Private\ data\ members}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00036}\mbox{\hyperlink{clasships_af05ebcf315fa2b5c627f9d38395f576e}{00036}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_af05ebcf315fa2b5c627f9d38395f576e}{nLevels}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00037}\mbox{\hyperlink{clasships_a0c7d7ea0e014fe4b34c9db6ad9e19fba}{00037}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_a0c7d7ea0e014fe4b34c9db6ad9e19fba}{nLevels\_}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00038}\mbox{\hyperlink{clasships_a61569cff2835802d3daca4fb71e11b76}{00038}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_a61569cff2835802d3daca4fb71e11b76}{forceTurb}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00039}\mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{00039}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_a0b8e82059b65e7870c04dd696f930248}{nVar}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00040}\mbox{\hyperlink{clasships_a61dca70748931a42d50254435f36e5e8}{00040}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_a61dca70748931a42d50254435f36e5e8}{nsp}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00041}\mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{00041}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_af0e018ac591dc6d210f39d73152dc5b7}{Nm1}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00042}\mbox{\hyperlink{clasships_a0a59c28db4e081ee7c4afa2ba051dc64}{00042}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_a0a59c28db4e081ee7c4afa2ba051dc64}{Nm2}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00043}\mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{00043}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_a008fdf2528663d23c02f07364bce9e45}{Nm3}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00044}\mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{00044}}\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_acf56678e2fdbe105d9b6a218262fa517}{iEta}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00045}\mbox{\hyperlink{clasships_af0693b6587b038be50f185a0a8e1d67e}{00045}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{clasships_af0693b6587b038be50f185a0a8e1d67e}{LScHips}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00046}\mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{00046}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{performReaction}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00047}\mbox{\hyperlink{clasships_a3a48aadeba689191761cae9951f83466}{00047}}\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{clasships_a3a48aadeba689191761cae9951f83466}{LrandSet}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00048}\mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{00048}}\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{clasships_a854afb00db645be7307d09bf72ff10d4}{time}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00049}\mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{00049}}\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{clasships_ad56769a509f9d0e67a0e609ac5569b4d}{eddyRate\_total}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00050}\mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{00050}}\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{clasships_a6bb6bdd8027532037b60a56600c3af40}{eddyRate\_inertial}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00051}\mbox{\hyperlink{clasships_a5d68e2f3f805f6c419ab606fb1bb9c91}{00051}}\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{clasships_a5d68e2f3f805f6c419ab606fb1bb9c91}{Afac}}\ =\ 0.5;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00052}\mbox{\hyperlink{clasships_a99cdc3b75f7c81647c67c4b7f2c5d466}{00052}}\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{clasships_a99cdc3b75f7c81647c67c4b7f2c5d466}{Re}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00053}\mbox{\hyperlink{clasships_ace90d17f5b33a132f2f5a9e53884652e}{00053}}\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{clasships_ace90d17f5b33a132f2f5a9e53884652e}{dtEE}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00054}\mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{00054}}\ \ \ \ \ \mbox{\hyperlink{classrandom_generator}{randomGenerator}}\ \mbox{\hyperlink{clasships_a846a206ec9adaac3a83057fb0068be7e}{rand}};}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00055}\mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{00055}}\ \ \ \ \ std::vector<int>\ \mbox{\hyperlink{clasships_a52ef091a3269bf7bc68008064297b625}{i\_plus}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00056}\mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{00056}}\ \ \ \ \ std::vector<int>\ \mbox{\hyperlink{clasships_a27391cfb6e9e60f55e7483fde28eade3}{pLoc}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00057}\mbox{\hyperlink{clasships_a8f22f735022a7d81c44a714b44a62694}{00057}}\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{clasships_a8f22f735022a7d81c44a714b44a62694}{varRho}};}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00058}\mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{00058}}\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{clasships_affdf1d5aaf35da68ec4d1882d39cb02a}{ScHips}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00059}\mbox{\hyperlink{clasships_a998b5a76ecd9d451115b96702b914096}{00059}}\ \ \ \ \ std::vector<std::string>\ \mbox{\hyperlink{clasships_a998b5a76ecd9d451115b96702b914096}{varName}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00060}\mbox{\hyperlink{clasships_a02e76a9b13872dff1fb000a751198330}{00060}}\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{clasships_a02e76a9b13872dff1fb000a751198330}{parcelTimes}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00061}\mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{00061}}\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{clasships_a9966d2b2baaebd32582c70190c5f3c0c}{levelRates}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00062}\mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{00062}}\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{clasships_a7e27da1761f73d3653dc62c56be21bdd}{i\_batchelor}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00063}\mbox{\hyperlink{clasships_a26aa5495c0abc09434ab0be5f8d6fa98}{00063}}\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{clasships_a26aa5495c0abc09434ab0be5f8d6fa98}{xc}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00064}\mbox{\hyperlink{clasships_a34110e2743b51f0c3b0a19066f46c117}{00064}}\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{clasships_a34110e2743b51f0c3b0a19066f46c117}{xh}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00065}00065\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00068}00068\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00069}00069\ \ \ \ \ \textcolor{comment}{//\ MEMBER\ FUNCTIONS}}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00075}\mbox{\hyperlink{clasships_ab8c05e4daf97d3d014126d183eea0fc6}{00075}}\ \ \ \ \ \mbox{\hyperlink{clasships_ab8c05e4daf97d3d014126d183eea0fc6}{hips}}(\textcolor{keywordtype}{int}\ \mbox{\hyperlink{clasships_a0c7d7ea0e014fe4b34c9db6ad9e19fba}{nLevels\_}},}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00076}00076\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ domainLength\_,}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00077}00077\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ tau0\_,}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00078}00078\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ C\_param\_,}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00079}00079\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ forceTurb\_,}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00080}00080\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ nVar\_,}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00081}00081\ \ \ \ \ \ \ \ \ \ std::vector<double>\ \&ScHips\_,}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00082}00082\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{clasships_a27430a737318590bcc888bb2a760d2ee}{performReaction}},}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00083}00083\ \ \ \ \ \ \ \ \ \ \#ifdef\ REACTIONS\_ENABLED}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ std::shared\_ptr<Cantera::Solution>\ cantSol\ =\ \textcolor{keyword}{nullptr},}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00085}00085\ \ \ \ \ \ \ \ \ \ \#endif}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ seed\ =\ 10);}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00087}00087\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00088}00088\ \ \ \ \ \mbox{\hyperlink{clasships_ab8c05e4daf97d3d014126d183eea0fc6}{hips}}(\textcolor{keywordtype}{double}\ Re\_);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00090}\mbox{\hyperlink{clasships_a39030d04a24424284f2ba3a079686e2e}{00090}}\ \ \ \ \ \textcolor{keyword}{virtual}\ \mbox{\hyperlink{clasships_a39030d04a24424284f2ba3a079686e2e}{\string~hips}}()\ \{}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00091}00091\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keyword}{auto}\&\ data\ :\ \mbox{\hyperlink{clasships_a02a6412147880d980d79851117066306}{varData}})}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00092}00092\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{delete}\ data;}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00093}00093\ \ \ \ \ \}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00095}00095\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{clasships_aa1399c0bc82204726c4c70325650f2bb}{set\_varData}}(std::vector<double>\ \&v,\ std::vector<double>\ \&w,\ \textcolor{keyword}{const}\ std::string\ \&varN);\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00096}00096\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{clasships_aa1399c0bc82204726c4c70325650f2bb}{set\_varData}}(std::vector<double>\ \&v,\ std::vector<double>\ \&w,\ \textcolor{keyword}{const}\ std::string\ \&varN,}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00097}00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<double>\ \&rho);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00098}00098\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{projection}}(std::vector<double>\ \&vcfd,\ std::vector<double>\ \&weight);\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00099}00099\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00100}00100\ \ \ \ \ std::pair<std::vector<double>,\ std::vector<double>>\ \ \mbox{\hyperlink{clasships_ae0c1598d16584096403630e1b3f147dd}{projection}}(std::vector<double>\ \&vcfd,\ std::vector<double>\ \&weight,\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00101}00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<double>\ \&density);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00103}00103\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{clasships_a012995a97c1d8ff113dae91847890c2e}{setGridHips}}(\textcolor{keywordtype}{int}\ N);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00104}00104\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{clasships_ae269fef0b7e1d74916c0d4e03f76ac44}{setGridCfd}}(std::vector<double>\ \&w);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00105}00105\ \ \ \ \ std::vector<std::vector<double>>\ \mbox{\hyperlink{clasships_a4f12ec17e2983edef734832203570c87}{get\_varData}}();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00106}00106\ \ \ \ \ std::vector<double>\ \ \mbox{\hyperlink{clasships_a3e9e5bd1177df81f02d588cbd25c0eed}{projection\_back}}(std::vector<double>\ \&vb);\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00107}00107\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{clasships_a81441b0964a4d5b0d9d471f91318aaf5}{calculateSolution}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ tRun,\ \textcolor{keywordtype}{bool}\ shouldWriteData\ =\textcolor{keyword}{false});\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00109}00109\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00110}00110\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{clasships_a8b2206a09dc03321585fbbcf94fbbb14}{sample\_hips\_eddy}}(\textcolor{keywordtype}{double}\ \&dt,\ \textcolor{keywordtype}{int}\ \&iLevel);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00111}00111\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{clasships_a672cc0cc3879ccf71023a059739ab547}{selectAndSwapTwoSubtrees}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ iLevel,\ \textcolor{keywordtype}{int}\ \&iTree);\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00112}00112\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{clasships_ae794eac94488c12cc1aa0a321de471b9}{advanceHips}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ iLevel,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ iTree);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00113}00113\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{clasships_a8f5b1ec397180e3bb58f3eacc28f9672}{reactParcels\_LevelTree}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ iLevel,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ iTree);\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00114}00114\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{clasships_ac85a7c7a9fb9df6ed29b96009de7a21f}{mixAcrossLevelTree}}(\textcolor{keywordtype}{int}\ kVar,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ iMixLevel,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ iTree);\ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00115}00115\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{clasships_a2e1bb3550fb08551e13609f028a10712}{forceProfile}}();}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00116}00116\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{clasships_a9740e1f23ffcd3800bf211ed2ee7cebc}{writeData}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{int}\ ifile,\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ outputTime);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00117}00117\ \};}
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00118}00118\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00122}00122\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00125}00125\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00128}00128\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00129}00129\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00131}00131\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00134}00134\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00135}00135\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00136}00136\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00137}00137\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00138}00138\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00139}00139\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00140}00140\ }
+\DoxyCodeLine{\Hypertarget{hips_8h_source_l00141}00141\ }
 
 \end{DoxyCode}

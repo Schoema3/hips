@@ -1,5 +1,5 @@
-\hypertarget{classstreams}{}\doxysection{streams Class Reference}
-\label{classstreams}\index{streams@{streams}}
+\doxysection{streams Class Reference}
+\hypertarget{classstreams}{}\label{classstreams}\index{streams@{streams}}
 
 
 \doxysubsection{Detailed Description}
@@ -16,7 +16,7 @@ Definition at line \mbox{\hyperlink{streams_8h_source_l00021}{21}} of file \mbox
 
 {\ttfamily \#include $<$streams.\+h$>$}
 
-\doxysubsection*{Public Member Functions}
+\doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{classstreams_ae1acfdaebac0b26841c76d9aaacc4b31}{get\+Prod\+Of\+Complete\+Comb}} (const double mixf, std\+::vector$<$ double $>$ \&ypcc, double \&hpcc, double \&Tpcc)
@@ -27,15 +27,15 @@ void \mbox{\hyperlink{classstreams_afb9231a9360300ec0688d1c1e404ca78}{get\+Equil
 \item 
 void \mbox{\hyperlink{classstreams_aebccdb0fdffb04228f87d73d506d96c5}{get\+Mixing\+State}} (const double mixf, std\+::vector$<$ double $>$ \&ymix, double \&hmix, double \&Tmix)
 \item 
-double \mbox{\hyperlink{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}{get\+Mixture\+Fraction}} (const double $\ast$y, const bool do\+Beta01=false)
+double \mbox{\hyperlink{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}{get\+Mixture\+Fraction}} (const double \texorpdfstring{$\ast$}{*}y, const bool do\+Beta01=false)
 \item 
 \mbox{\hyperlink{classstreams_a30bf5c7e8dd1d2c111118b87fd9f6057}{streams}} ()
 \item 
 \mbox{\hyperlink{classstreams_a28a239d95efcd8d117af8ddbd982965f}{streams}} (std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$ csol, const double \+\_\+P, const double \+\_\+h0, const double \+\_\+h1, const std\+::vector$<$ double $>$ \&\+\_\+y0, const std\+::vector$<$ double $>$ \&\+\_\+y1)
 \item 
-\mbox{\hyperlink{classstreams_a7c69b3a6858ce8ce1dfc7ae242710038}{$\sim$streams}} ()
+\mbox{\hyperlink{classstreams_a7c69b3a6858ce8ce1dfc7ae242710038}{\texorpdfstring{$\sim$}{\string~}streams}} ()
 \end{DoxyCompactItemize}
-\doxysubsection*{Public Attributes}
+\doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 double \mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{h0}}
@@ -59,22 +59,22 @@ double \mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}}
 double \mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{beta1}}
 \begin{DoxyCompactList}\small\item\em mixf = (beta-\/beta0) / (beta1-\/beta0) \end{DoxyCompactList}\item 
 std\+::vector$<$ double $>$ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{g\+CHON}}
-\begin{DoxyCompactList}\small\item\em gammas, as in beta = sum\+\_\+i (y\+\_\+i$\ast$gamma\+\_\+i) \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Private Member Functions}
+\begin{DoxyCompactList}\small\item\em gammas, as in beta = sum\+\_\+i (y\+\_\+i\texorpdfstring{$\ast$}{*}gamma\+\_\+i) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 void \mbox{\hyperlink{classstreams_a346c56671eabbde2eecfaf60f5b5b0f9}{set\+Stoic\+Mixf}} ()
 \item 
-std\+::vector$<$ double $>$ \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{set\+Element\+Mass\+Fracs}} (const double $\ast$y)
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{set\+Element\+Mass\+Fracs}} (const double \texorpdfstring{$\ast$}{*}y)
 \item 
-std\+::vector$<$ double $>$ \mbox{\hyperlink{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa}{set\+Element\+Mole\+Fracs}} (const double $\ast$y)
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa}{set\+Element\+Mole\+Fracs}} (const double \texorpdfstring{$\ast$}{*}y)
 \item 
-std\+::vector$<$ double $>$ \mbox{\hyperlink{classstreams_a45695a5c046ae2a7de87af1654996ce8}{get\+Element\+Moles}} (const double $\ast$x, double \&n\+Onot\+From\+O2, double \&n\+Hnot\+From\+H2O, double \&n\+Cnot\+From\+CO2)
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classstreams_a45695a5c046ae2a7de87af1654996ce8}{get\+Element\+Moles}} (const double \texorpdfstring{$\ast$}{*}x, double \&n\+Onot\+From\+O2, double \&n\+Hnot\+From\+H2O, double \&n\+Cnot\+From\+CO2)
 \end{DoxyCompactItemize}
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classstreams_a30bf5c7e8dd1d2c111118b87fd9f6057}\label{classstreams_a30bf5c7e8dd1d2c111118b87fd9f6057}} 
+\Hypertarget{classstreams_a30bf5c7e8dd1d2c111118b87fd9f6057}\label{classstreams_a30bf5c7e8dd1d2c111118b87fd9f6057} 
 \index{streams@{streams}!streams@{streams}}
 \index{streams@{streams}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{streams()}{streams()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
@@ -84,17 +84,17 @@ std\+::vector$<$ double $>$ \mbox{\hyperlink{classstreams_a45695a5c046ae2a7de87a
 
 Definition at line \mbox{\hyperlink{streams_8h_source_l00082}{82}} of file \mbox{\hyperlink{streams_8h_source}{streams.\+h}}.
 
-\mbox{\Hypertarget{classstreams_a28a239d95efcd8d117af8ddbd982965f}\label{classstreams_a28a239d95efcd8d117af8ddbd982965f}} 
+\Hypertarget{classstreams_a28a239d95efcd8d117af8ddbd982965f}\label{classstreams_a28a239d95efcd8d117af8ddbd982965f} 
 \index{streams@{streams}!streams@{streams}}
 \index{streams@{streams}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{streams()}{streams()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily streams\+::streams (\begin{DoxyParamCaption}\item[{std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$}]{csol,  }\item[{const double}]{\+\_\+P,  }\item[{const double}]{\+\_\+h0,  }\item[{const double}]{\+\_\+h1,  }\item[{const std\+::vector$<$ double $>$ \&}]{\+\_\+y0,  }\item[{const std\+::vector$<$ double $>$ \&}]{\+\_\+y1 }\end{DoxyParamCaption})}
 
-\mbox{\Hypertarget{classstreams_a7c69b3a6858ce8ce1dfc7ae242710038}\label{classstreams_a7c69b3a6858ce8ce1dfc7ae242710038}} 
-\index{streams@{streams}!````~streams@{$\sim$streams}}
-\index{````~streams@{$\sim$streams}!streams@{streams}}
-\doxysubsubsection{\texorpdfstring{$\sim$streams()}{~streams()}}
-{\footnotesize\ttfamily streams\+::$\sim$streams (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\Hypertarget{classstreams_a7c69b3a6858ce8ce1dfc7ae242710038}\label{classstreams_a7c69b3a6858ce8ce1dfc7ae242710038} 
+\index{streams@{streams}!````~streams@{\texorpdfstring{$\sim$}{\string~}streams}}
+\index{````~streams@{\texorpdfstring{$\sim$}{\string~}streams}!streams@{streams}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}streams()}{\string~streams()}}
+{\footnotesize\ttfamily streams\+::\texorpdfstring{$\sim$}{\string~}streams (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -103,7 +103,7 @@ Definition at line \mbox{\hyperlink{streams_8h_source_l00090}{90}} of file \mbox
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{classstreams_ae1acfdaebac0b26841c76d9aaacc4b31}\label{classstreams_ae1acfdaebac0b26841c76d9aaacc4b31}} 
+\Hypertarget{classstreams_ae1acfdaebac0b26841c76d9aaacc4b31}\label{classstreams_ae1acfdaebac0b26841c76d9aaacc4b31} 
 \index{streams@{streams}!getProdOfCompleteComb@{getProdOfCompleteComb}}
 \index{getProdOfCompleteComb@{getProdOfCompleteComb}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{getProdOfCompleteComb()}{getProdOfCompleteComb()}}
@@ -126,7 +126,7 @@ Computes the temperature, enthalpy, and composition of complete combustion at th
 
 Definition at line \mbox{\hyperlink{streams_8cc_source_l00129}{129}} of file \mbox{\hyperlink{streams_8cc_source}{streams.\+cc}}.
 
-\mbox{\Hypertarget{classstreams_a6dbf93fbcde09e925bead7ce9c0113e9}\label{classstreams_a6dbf93fbcde09e925bead7ce9c0113e9}} 
+\Hypertarget{classstreams_a6dbf93fbcde09e925bead7ce9c0113e9}\label{classstreams_a6dbf93fbcde09e925bead7ce9c0113e9} 
 \index{streams@{streams}!getEquilibrium\_HP@{getEquilibrium\_HP}}
 \index{getEquilibrium\_HP@{getEquilibrium\_HP}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{getEquilibrium\_HP()}{getEquilibrium\_HP()}}
@@ -149,7 +149,7 @@ Computes the temperature, enthalpy, and composition of equilibrium at the given 
 
 Definition at line \mbox{\hyperlink{streams_8cc_source_l00072}{72}} of file \mbox{\hyperlink{streams_8cc_source}{streams.\+cc}}.
 
-\mbox{\Hypertarget{classstreams_afb9231a9360300ec0688d1c1e404ca78}\label{classstreams_afb9231a9360300ec0688d1c1e404ca78}} 
+\Hypertarget{classstreams_afb9231a9360300ec0688d1c1e404ca78}\label{classstreams_afb9231a9360300ec0688d1c1e404ca78} 
 \index{streams@{streams}!getEquilibrium\_TP@{getEquilibrium\_TP}}
 \index{getEquilibrium\_TP@{getEquilibrium\_TP}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{getEquilibrium\_TP()}{getEquilibrium\_TP()}}
@@ -172,7 +172,7 @@ Computes the enthalpy, and composition of equilibrium at the given mixf for give
 
 Definition at line \mbox{\hyperlink{streams_8cc_source_l00101}{101}} of file \mbox{\hyperlink{streams_8cc_source}{streams.\+cc}}.
 
-\mbox{\Hypertarget{classstreams_aebccdb0fdffb04228f87d73d506d96c5}\label{classstreams_aebccdb0fdffb04228f87d73d506d96c5}} 
+\Hypertarget{classstreams_aebccdb0fdffb04228f87d73d506d96c5}\label{classstreams_aebccdb0fdffb04228f87d73d506d96c5} 
 \index{streams@{streams}!getMixingState@{getMixingState}}
 \index{getMixingState@{getMixingState}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{getMixingState()}{getMixingState()}}
@@ -195,11 +195,11 @@ Computes the temperature, enthalpy, and composition of mixing among streams.
 
 Definition at line \mbox{\hyperlink{streams_8cc_source_l00050}{50}} of file \mbox{\hyperlink{streams_8cc_source}{streams.\+cc}}.
 
-\mbox{\Hypertarget{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}\label{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}} 
+\Hypertarget{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}\label{classstreams_ad4916fb672c02d1c414b55f443f6f4f4} 
 \index{streams@{streams}!getMixtureFraction@{getMixtureFraction}}
 \index{getMixtureFraction@{getMixtureFraction}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{getMixtureFraction()}{getMixtureFraction()}}
-{\footnotesize\ttfamily double streams\+::get\+Mixture\+Fraction (\begin{DoxyParamCaption}\item[{const double $\ast$}]{y,  }\item[{const bool}]{do\+Beta01 = {\ttfamily false} }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily double streams\+::get\+Mixture\+Fraction (\begin{DoxyParamCaption}\item[{const double \texorpdfstring{$\ast$}{*}}]{y,  }\item[{const bool}]{do\+Beta01 = {\ttfamily false} }\end{DoxyParamCaption})}
 
 Compute the mixture fraction from the mass fractions using Bilger\textquotesingle{}s mixf. Set do\+Beta01=true on first call to initialize members beta0, beta1. Later calls of this function only use the first parameter.
 
@@ -217,7 +217,7 @@ mixture fraction
 
 Definition at line \mbox{\hyperlink{streams_8cc_source_l00363}{363}} of file \mbox{\hyperlink{streams_8cc_source}{streams.\+cc}}.
 
-\mbox{\Hypertarget{classstreams_a346c56671eabbde2eecfaf60f5b5b0f9}\label{classstreams_a346c56671eabbde2eecfaf60f5b5b0f9}} 
+\Hypertarget{classstreams_a346c56671eabbde2eecfaf60f5b5b0f9}\label{classstreams_a346c56671eabbde2eecfaf60f5b5b0f9} 
 \index{streams@{streams}!setStoicMixf@{setStoicMixf}}
 \index{setStoicMixf@{setStoicMixf}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{setStoicMixf()}{setStoicMixf()}}
@@ -227,11 +227,11 @@ Set the stoichiometric mixture fraction using Bilger\textquotesingle{}s definiti
 
 Definition at line \mbox{\hyperlink{streams_8cc_source_l00229}{229}} of file \mbox{\hyperlink{streams_8cc_source}{streams.\+cc}}.
 
-\mbox{\Hypertarget{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}\label{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}} 
+\Hypertarget{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}\label{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97} 
 \index{streams@{streams}!setElementMassFracs@{setElementMassFracs}}
 \index{setElementMassFracs@{setElementMassFracs}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{setElementMassFracs()}{setElementMassFracs()}}
-{\footnotesize\ttfamily vector$<$ double $>$ streams\+::set\+Element\+Mass\+Fracs (\begin{DoxyParamCaption}\item[{const double $\ast$}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily vector$<$ double $>$ streams\+::set\+Element\+Mass\+Fracs (\begin{DoxyParamCaption}\item[{const double \texorpdfstring{$\ast$}{*}}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
 Sets the elements to have the correct Mass Fractions based on the specified array. 
 \begin{DoxyParams}{Parameters}
@@ -245,11 +245,11 @@ vector of element mass fractions.
 
 Definition at line \mbox{\hyperlink{streams_8cc_source_l00264}{264}} of file \mbox{\hyperlink{streams_8cc_source}{streams.\+cc}}.
 
-\mbox{\Hypertarget{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa}\label{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa}} 
+\Hypertarget{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa}\label{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa} 
 \index{streams@{streams}!setElementMoleFracs@{setElementMoleFracs}}
 \index{setElementMoleFracs@{setElementMoleFracs}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{setElementMoleFracs()}{setElementMoleFracs()}}
-{\footnotesize\ttfamily vector$<$ double $>$ streams\+::set\+Element\+Mole\+Fracs (\begin{DoxyParamCaption}\item[{const double $\ast$}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily vector$<$ double $>$ streams\+::set\+Element\+Mole\+Fracs (\begin{DoxyParamCaption}\item[{const double \texorpdfstring{$\ast$}{*}}]{y }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
 Sets the elements to have the correct Mole Fractions based on the specified array. 
 \begin{DoxyParams}{Parameters}
@@ -263,11 +263,11 @@ vector of element mole fractions.
 
 Definition at line \mbox{\hyperlink{streams_8cc_source_l00293}{293}} of file \mbox{\hyperlink{streams_8cc_source}{streams.\+cc}}.
 
-\mbox{\Hypertarget{classstreams_a45695a5c046ae2a7de87af1654996ce8}\label{classstreams_a45695a5c046ae2a7de87af1654996ce8}} 
+\Hypertarget{classstreams_a45695a5c046ae2a7de87af1654996ce8}\label{classstreams_a45695a5c046ae2a7de87af1654996ce8} 
 \index{streams@{streams}!getElementMoles@{getElementMoles}}
 \index{getElementMoles@{getElementMoles}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{getElementMoles()}{getElementMoles()}}
-{\footnotesize\ttfamily vector$<$ double $>$ streams\+::get\+Element\+Moles (\begin{DoxyParamCaption}\item[{const double $\ast$}]{x,  }\item[{double \&}]{n\+Onot\+From\+O2,  }\item[{double \&}]{n\+Hnot\+From\+H2O,  }\item[{double \&}]{n\+Cnot\+From\+CO2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+{\footnotesize\ttfamily vector$<$ double $>$ streams\+::get\+Element\+Moles (\begin{DoxyParamCaption}\item[{const double \texorpdfstring{$\ast$}{*}}]{x,  }\item[{double \&}]{n\+Onot\+From\+O2,  }\item[{double \&}]{n\+Hnot\+From\+H2O,  }\item[{double \&}]{n\+Cnot\+From\+CO2 }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
 
 Get amount of moles for each element. 
 \begin{DoxyParams}{Parameters}
@@ -290,7 +290,7 @@ Definition at line \mbox{\hyperlink{streams_8cc_source_l00326}{326}} of file \mb
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{classstreams_acba6c3551868e1048dab3596dc0be65d}\label{classstreams_acba6c3551868e1048dab3596dc0be65d}} 
+\Hypertarget{classstreams_acba6c3551868e1048dab3596dc0be65d}\label{classstreams_acba6c3551868e1048dab3596dc0be65d} 
 \index{streams@{streams}!h0@{h0}}
 \index{h0@{h0}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{h0}{h0}}
@@ -304,7 +304,7 @@ stream mixf=0 enthalpy (J/kg)
 
 Definition at line \mbox{\hyperlink{streams_8h_source_l00027}{27}} of file \mbox{\hyperlink{streams_8h_source}{streams.\+h}}.
 
-\mbox{\Hypertarget{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}\label{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}} 
+\Hypertarget{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}\label{classstreams_a50280c7ff16728e8b0c10c5f6a117f66} 
 \index{streams@{streams}!h1@{h1}}
 \index{h1@{h1}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{h1}{h1}}
@@ -318,7 +318,7 @@ stream mixf=1 enthalpy (J/kg)
 
 Definition at line \mbox{\hyperlink{streams_8h_source_l00028}{28}} of file \mbox{\hyperlink{streams_8h_source}{streams.\+h}}.
 
-\mbox{\Hypertarget{classstreams_a56f01526b24b000b290d0641997a3833}\label{classstreams_a56f01526b24b000b290d0641997a3833}} 
+\Hypertarget{classstreams_a56f01526b24b000b290d0641997a3833}\label{classstreams_a56f01526b24b000b290d0641997a3833} 
 \index{streams@{streams}!y0@{y0}}
 \index{y0@{y0}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{y0}{y0}}
@@ -332,7 +332,7 @@ stream mixf=0 composition vector
 
 Definition at line \mbox{\hyperlink{streams_8h_source_l00029}{29}} of file \mbox{\hyperlink{streams_8h_source}{streams.\+h}}.
 
-\mbox{\Hypertarget{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}\label{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}} 
+\Hypertarget{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}\label{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e} 
 \index{streams@{streams}!y1@{y1}}
 \index{y1@{y1}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{y1}{y1}}
@@ -346,7 +346,7 @@ stream mixf=1 composition vector
 
 Definition at line \mbox{\hyperlink{streams_8h_source_l00030}{30}} of file \mbox{\hyperlink{streams_8h_source}{streams.\+h}}.
 
-\mbox{\Hypertarget{classstreams_acc61624ba39cbf93e7e1ea260f34861b}\label{classstreams_acc61624ba39cbf93e7e1ea260f34861b}} 
+\Hypertarget{classstreams_acc61624ba39cbf93e7e1ea260f34861b}\label{classstreams_acc61624ba39cbf93e7e1ea260f34861b} 
 \index{streams@{streams}!P@{P}}
 \index{P@{P}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{P}{P}}
@@ -356,7 +356,7 @@ Definition at line \mbox{\hyperlink{streams_8h_source_l00030}{30}} of file \mbox
 
 Definition at line \mbox{\hyperlink{streams_8h_source_l00032}{32}} of file \mbox{\hyperlink{streams_8h_source}{streams.\+h}}.
 
-\mbox{\Hypertarget{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}\label{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}} 
+\Hypertarget{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}\label{classstreams_ae4b6df5777b35edb11ff73d5491ffda5} 
 \index{streams@{streams}!gas@{gas}}
 \index{gas@{gas}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{gas}{gas}}
@@ -366,7 +366,7 @@ Definition at line \mbox{\hyperlink{streams_8h_source_l00032}{32}} of file \mbox
 
 Definition at line \mbox{\hyperlink{streams_8h_source_l00034}{34}} of file \mbox{\hyperlink{streams_8h_source}{streams.\+h}}.
 
-\mbox{\Hypertarget{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}\label{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}} 
+\Hypertarget{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}\label{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0} 
 \index{streams@{streams}!mixfStoic@{mixfStoic}}
 \index{mixfStoic@{mixfStoic}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{mixfStoic}{mixfStoic}}
@@ -380,7 +380,7 @@ stoichiometric mixture fraction
 
 Definition at line \mbox{\hyperlink{streams_8h_source_l00036}{36}} of file \mbox{\hyperlink{streams_8h_source}{streams.\+h}}.
 
-\mbox{\Hypertarget{classstreams_a5f4ed5333c43b8761758c93d06232357}\label{classstreams_a5f4ed5333c43b8761758c93d06232357}} 
+\Hypertarget{classstreams_a5f4ed5333c43b8761758c93d06232357}\label{classstreams_a5f4ed5333c43b8761758c93d06232357} 
 \index{streams@{streams}!nspc@{nspc}}
 \index{nspc@{nspc}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{nspc}{nspc}}
@@ -394,7 +394,7 @@ number of species in gas mechanism
 
 Definition at line \mbox{\hyperlink{streams_8h_source_l00037}{37}} of file \mbox{\hyperlink{streams_8h_source}{streams.\+h}}.
 
-\mbox{\Hypertarget{classstreams_a4894ce57805fc6bc320056a74a23ae88}\label{classstreams_a4894ce57805fc6bc320056a74a23ae88}} 
+\Hypertarget{classstreams_a4894ce57805fc6bc320056a74a23ae88}\label{classstreams_a4894ce57805fc6bc320056a74a23ae88} 
 \index{streams@{streams}!beta0@{beta0}}
 \index{beta0@{beta0}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{beta0}{beta0}}
@@ -408,7 +408,7 @@ mixf = (beta-\/beta0) / (beta1-\/beta0)
 
 Definition at line \mbox{\hyperlink{streams_8h_source_l00038}{38}} of file \mbox{\hyperlink{streams_8h_source}{streams.\+h}}.
 
-\mbox{\Hypertarget{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}\label{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}} 
+\Hypertarget{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}\label{classstreams_a3ec8af43296fdc4618ddc74f84e975bf} 
 \index{streams@{streams}!beta1@{beta1}}
 \index{beta1@{beta1}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{beta1}{beta1}}
@@ -422,7 +422,7 @@ mixf = (beta-\/beta0) / (beta1-\/beta0)
 
 Definition at line \mbox{\hyperlink{streams_8h_source_l00039}{39}} of file \mbox{\hyperlink{streams_8h_source}{streams.\+h}}.
 
-\mbox{\Hypertarget{classstreams_abf0b064bb492fa5ea0836bc178e8303a}\label{classstreams_abf0b064bb492fa5ea0836bc178e8303a}} 
+\Hypertarget{classstreams_abf0b064bb492fa5ea0836bc178e8303a}\label{classstreams_abf0b064bb492fa5ea0836bc178e8303a} 
 \index{streams@{streams}!gCHON@{gCHON}}
 \index{gCHON@{gCHON}!streams@{streams}}
 \doxysubsubsection{\texorpdfstring{gCHON}{gCHON}}
@@ -430,7 +430,7 @@ Definition at line \mbox{\hyperlink{streams_8h_source_l00039}{39}} of file \mbox
 
 
 
-gammas, as in beta = sum\+\_\+i (y\+\_\+i$\ast$gamma\+\_\+i) 
+gammas, as in beta = sum\+\_\+i (y\+\_\+i\texorpdfstring{$\ast$}{*}gamma\+\_\+i) 
 
 
 
@@ -440,5 +440,5 @@ Definition at line \mbox{\hyperlink{streams_8h_source_l00041}{41}} of file \mbox
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/\+Users/maisy/hips-\/lib-\/final/hips/src/\mbox{\hyperlink{streams_8h}{streams.\+h}}\item 
-/\+Users/maisy/hips-\/lib-\/final/hips/src/\mbox{\hyperlink{streams_8cc}{streams.\+cc}}\end{DoxyCompactItemize}
+/\+Users/mbehrang/hips-\/final/hips/src/\mbox{\hyperlink{streams_8h}{streams.\+h}}\item 
+/\+Users/mbehrang/hips-\/final/hips/src/\mbox{\hyperlink{streams_8cc}{streams.\+cc}}\end{DoxyCompactItemize}

@@ -9,5 +9,6 @@ var classbatch_reactor =
     [ "nvar", "classbatch_reactor.html#a25a411dda898478f3c8ff2a5351906e5", null ],
     [ "h_fixed", "classbatch_reactor.html#a8d8d86a997c4e8424063f943ffab033a", null ],
     [ "P_fixed", "classbatch_reactor.html#a486da1fa66d5cad76ca4614371dc335a", null ],
-    [ "rho", "classbatch_reactor.html#a38e600224710a61029e49eb91ab1480d", null ]
+    [ "rho", "classbatch_reactor.html#a38e600224710a61029e49eb91ab1480d", null ],
+    [ "temperature", "classbatch_reactor.html#ae957b69e3e933ddcc85a809b8f06c8ad", null ]
 ];

@@ -1,5 +1,5 @@
-\hypertarget{classintegrator__cvode}{}\doxysection{integrator\+\_\+cvode Class Reference}
-\label{classintegrator__cvode}\index{integrator\_cvode@{integrator\_cvode}}
+\doxysection{integrator\+\_\+cvode Class Reference}
+\hypertarget{classintegrator__cvode}{}\label{classintegrator__cvode}\index{integrator\_cvode@{integrator\_cvode}}
 
 
 \doxysubsection{Detailed Description}
@@ -11,21 +11,21 @@ Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00012}{12}} of 
 
 {\ttfamily \#include $<$integrator\+\_\+cvode.\+h$>$}
 
-\doxysubsection*{Public Member Functions}
+\doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{classintegrator__cvode_a4591e56bcf643d5f7c731e01162c967b}{integrator\+\_\+cvode}} (int($\ast$Func)(realtype, N\+\_\+\+Vector, N\+\_\+\+Vector, void $\ast$), void $\ast$\+\_\+user\+\_\+data, const int \+\_\+nvar, const double \+\_\+rtol, const std\+::vector$<$ double $>$ \&\+\_\+atol)
+\mbox{\hyperlink{classintegrator__cvode_a4591e56bcf643d5f7c731e01162c967b}{integrator\+\_\+cvode}} (int(\texorpdfstring{$\ast$}{*}Func)(realtype, N\+\_\+\+Vector, N\+\_\+\+Vector, void \texorpdfstring{$\ast$}{*}), void \texorpdfstring{$\ast$}{*}\+\_\+user\+\_\+data, const int \+\_\+nvar, const double \+\_\+rtol, const std\+::vector$<$ double $>$ \&\+\_\+atol)
 \item 
 int \mbox{\hyperlink{classintegrator__cvode_a200d2664a94c9ec095df1d9830e9e8c7}{integrate}} (std\+::vector$<$ double $>$ \&y, const realtype dt)
 \item 
-\mbox{\hyperlink{classintegrator__cvode_a928725febae9aa71042c36a1dd8753ef}{$\sim$integrator\+\_\+cvode}} ()
+\mbox{\hyperlink{classintegrator__cvode_a928725febae9aa71042c36a1dd8753ef}{\texorpdfstring{$\sim$}{\string~}integrator\+\_\+cvode}} ()
 \end{DoxyCompactItemize}
-\doxysubsection*{Public Attributes}
+\doxysubsubsection*{Public Attributes}
 \begin{DoxyCompactItemize}
 \item 
 SUNContext \mbox{\hyperlink{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}{sun}}
 \item 
-void $\ast$ \mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}}
+void \texorpdfstring{$\ast$}{*} \mbox{\hyperlink{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}{cmem}}
 \item 
 N\+\_\+\+Vector \mbox{\hyperlink{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}{vars}}
 \item 
@@ -44,21 +44,21 @@ int \mbox{\hyperlink{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}{r
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classintegrator__cvode_a4591e56bcf643d5f7c731e01162c967b}\label{classintegrator__cvode_a4591e56bcf643d5f7c731e01162c967b}} 
+\Hypertarget{classintegrator__cvode_a4591e56bcf643d5f7c731e01162c967b}\label{classintegrator__cvode_a4591e56bcf643d5f7c731e01162c967b} 
 \index{integrator\_cvode@{integrator\_cvode}!integrator\_cvode@{integrator\_cvode}}
 \index{integrator\_cvode@{integrator\_cvode}!integrator\_cvode@{integrator\_cvode}}
 \doxysubsubsection{\texorpdfstring{integrator\_cvode()}{integrator\_cvode()}}
-{\footnotesize\ttfamily integrator\+\_\+cvode\+::integrator\+\_\+cvode (\begin{DoxyParamCaption}\item[{int($\ast$)(realtype, N\+\_\+\+Vector, N\+\_\+\+Vector, void $\ast$)}]{Func,  }\item[{void $\ast$}]{\+\_\+user\+\_\+data,  }\item[{const int}]{\+\_\+nvar,  }\item[{const double}]{\+\_\+rtol,  }\item[{const std\+::vector$<$ double $>$ \&}]{\+\_\+atol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+{\footnotesize\ttfamily integrator\+\_\+cvode\+::integrator\+\_\+cvode (\begin{DoxyParamCaption}\item[{int(\texorpdfstring{$\ast$}{*})(realtype, N\+\_\+\+Vector, N\+\_\+\+Vector, void \texorpdfstring{$\ast$}{*})}]{Func,  }\item[{void \texorpdfstring{$\ast$}{*}}]{\+\_\+user\+\_\+data,  }\item[{const int}]{\+\_\+nvar,  }\item[{const double}]{\+\_\+rtol,  }\item[{const std\+::vector$<$ double $>$ \&}]{\+\_\+atol }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
 Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00030}{30}} of file \mbox{\hyperlink{integrator__cvode_8h_source}{integrator\+\_\+cvode.\+h}}.
 
-\mbox{\Hypertarget{classintegrator__cvode_a928725febae9aa71042c36a1dd8753ef}\label{classintegrator__cvode_a928725febae9aa71042c36a1dd8753ef}} 
-\index{integrator\_cvode@{integrator\_cvode}!````~integrator\_cvode@{$\sim$integrator\_cvode}}
-\index{````~integrator\_cvode@{$\sim$integrator\_cvode}!integrator\_cvode@{integrator\_cvode}}
-\doxysubsubsection{\texorpdfstring{$\sim$integrator\_cvode()}{~integrator\_cvode()}}
-{\footnotesize\ttfamily integrator\+\_\+cvode\+::$\sim$integrator\+\_\+cvode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+\Hypertarget{classintegrator__cvode_a928725febae9aa71042c36a1dd8753ef}\label{classintegrator__cvode_a928725febae9aa71042c36a1dd8753ef} 
+\index{integrator\_cvode@{integrator\_cvode}!````~integrator\_cvode@{\texorpdfstring{$\sim$}{\string~}integrator\_cvode}}
+\index{````~integrator\_cvode@{\texorpdfstring{$\sim$}{\string~}integrator\_cvode}!integrator\_cvode@{integrator\_cvode}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}integrator\_cvode()}{\string~integrator\_cvode()}}
+{\footnotesize\ttfamily integrator\+\_\+cvode\+::\texorpdfstring{$\sim$}{\string~}integrator\+\_\+cvode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
 
@@ -67,7 +67,7 @@ Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00077}{77}} of 
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{classintegrator__cvode_a200d2664a94c9ec095df1d9830e9e8c7}\label{classintegrator__cvode_a200d2664a94c9ec095df1d9830e9e8c7}} 
+\Hypertarget{classintegrator__cvode_a200d2664a94c9ec095df1d9830e9e8c7}\label{classintegrator__cvode_a200d2664a94c9ec095df1d9830e9e8c7} 
 \index{integrator\_cvode@{integrator\_cvode}!integrate@{integrate}}
 \index{integrate@{integrate}!integrator\_cvode@{integrator\_cvode}}
 \doxysubsubsection{\texorpdfstring{integrate()}{integrate()}}
@@ -80,7 +80,7 @@ Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00059}{59}} of 
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}\label{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}} 
+\Hypertarget{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad}\label{classintegrator__cvode_a467d5898c2be5d89b6dd6a1d6fbee1ad} 
 \index{integrator\_cvode@{integrator\_cvode}!sun@{sun}}
 \index{sun@{sun}!integrator\_cvode@{integrator\_cvode}}
 \doxysubsubsection{\texorpdfstring{sun}{sun}}
@@ -90,17 +90,17 @@ Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00059}{59}} of 
 
 Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00018}{18}} of file \mbox{\hyperlink{integrator__cvode_8h_source}{integrator\+\_\+cvode.\+h}}.
 
-\mbox{\Hypertarget{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}\label{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}} 
+\Hypertarget{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e}\label{classintegrator__cvode_aece725405b512ab008b8a9b2eccaa09e} 
 \index{integrator\_cvode@{integrator\_cvode}!cmem@{cmem}}
 \index{cmem@{cmem}!integrator\_cvode@{integrator\_cvode}}
 \doxysubsubsection{\texorpdfstring{cmem}{cmem}}
-{\footnotesize\ttfamily void$\ast$ integrator\+\_\+cvode\+::cmem}
+{\footnotesize\ttfamily void\texorpdfstring{$\ast$}{*} integrator\+\_\+cvode\+::cmem}
 
 
 
 Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00019}{19}} of file \mbox{\hyperlink{integrator__cvode_8h_source}{integrator\+\_\+cvode.\+h}}.
 
-\mbox{\Hypertarget{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}\label{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}} 
+\Hypertarget{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5}\label{classintegrator__cvode_a5908f53d7d3704373c7cfe4bbeee87d5} 
 \index{integrator\_cvode@{integrator\_cvode}!vars@{vars}}
 \index{vars@{vars}!integrator\_cvode@{integrator\_cvode}}
 \doxysubsubsection{\texorpdfstring{vars}{vars}}
@@ -110,7 +110,7 @@ Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00019}{19}} of 
 
 Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00020}{20}} of file \mbox{\hyperlink{integrator__cvode_8h_source}{integrator\+\_\+cvode.\+h}}.
 
-\mbox{\Hypertarget{classintegrator__cvode_a1db23182c20c85ef0efda99a5643405f}\label{classintegrator__cvode_a1db23182c20c85ef0efda99a5643405f}} 
+\Hypertarget{classintegrator__cvode_a1db23182c20c85ef0efda99a5643405f}\label{classintegrator__cvode_a1db23182c20c85ef0efda99a5643405f} 
 \index{integrator\_cvode@{integrator\_cvode}!atol@{atol}}
 \index{atol@{atol}!integrator\_cvode@{integrator\_cvode}}
 \doxysubsubsection{\texorpdfstring{atol}{atol}}
@@ -120,7 +120,7 @@ Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00020}{20}} of 
 
 Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00021}{21}} of file \mbox{\hyperlink{integrator__cvode_8h_source}{integrator\+\_\+cvode.\+h}}.
 
-\mbox{\Hypertarget{classintegrator__cvode_a50b4013a0d1d9deb6d5b12cc29b38903}\label{classintegrator__cvode_a50b4013a0d1d9deb6d5b12cc29b38903}} 
+\Hypertarget{classintegrator__cvode_a50b4013a0d1d9deb6d5b12cc29b38903}\label{classintegrator__cvode_a50b4013a0d1d9deb6d5b12cc29b38903} 
 \index{integrator\_cvode@{integrator\_cvode}!rtol@{rtol}}
 \index{rtol@{rtol}!integrator\_cvode@{integrator\_cvode}}
 \doxysubsubsection{\texorpdfstring{rtol}{rtol}}
@@ -130,7 +130,7 @@ Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00021}{21}} of 
 
 Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00022}{22}} of file \mbox{\hyperlink{integrator__cvode_8h_source}{integrator\+\_\+cvode.\+h}}.
 
-\mbox{\Hypertarget{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}\label{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}} 
+\Hypertarget{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0}\label{classintegrator__cvode_a19a696601751fc7b7b3ad0156517e2d0} 
 \index{integrator\_cvode@{integrator\_cvode}!nvar@{nvar}}
 \index{nvar@{nvar}!integrator\_cvode@{integrator\_cvode}}
 \doxysubsubsection{\texorpdfstring{nvar}{nvar}}
@@ -140,7 +140,7 @@ Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00022}{22}} of 
 
 Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00023}{23}} of file \mbox{\hyperlink{integrator__cvode_8h_source}{integrator\+\_\+cvode.\+h}}.
 
-\mbox{\Hypertarget{classintegrator__cvode_a5988472a70299834919ec7e9d50cbb4a}\label{classintegrator__cvode_a5988472a70299834919ec7e9d50cbb4a}} 
+\Hypertarget{classintegrator__cvode_a5988472a70299834919ec7e9d50cbb4a}\label{classintegrator__cvode_a5988472a70299834919ec7e9d50cbb4a} 
 \index{integrator\_cvode@{integrator\_cvode}!J@{J}}
 \index{J@{J}!integrator\_cvode@{integrator\_cvode}}
 \doxysubsubsection{\texorpdfstring{J}{J}}
@@ -150,7 +150,7 @@ Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00023}{23}} of 
 
 Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00024}{24}} of file \mbox{\hyperlink{integrator__cvode_8h_source}{integrator\+\_\+cvode.\+h}}.
 
-\mbox{\Hypertarget{classintegrator__cvode_a5a2234e49b1f6057b7f041277f115077}\label{classintegrator__cvode_a5a2234e49b1f6057b7f041277f115077}} 
+\Hypertarget{classintegrator__cvode_a5a2234e49b1f6057b7f041277f115077}\label{classintegrator__cvode_a5a2234e49b1f6057b7f041277f115077} 
 \index{integrator\_cvode@{integrator\_cvode}!LS@{LS}}
 \index{LS@{LS}!integrator\_cvode@{integrator\_cvode}}
 \doxysubsubsection{\texorpdfstring{LS}{LS}}
@@ -160,7 +160,7 @@ Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00024}{24}} of 
 
 Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00025}{25}} of file \mbox{\hyperlink{integrator__cvode_8h_source}{integrator\+\_\+cvode.\+h}}.
 
-\mbox{\Hypertarget{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}\label{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}} 
+\Hypertarget{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2}\label{classintegrator__cvode_ab63a1b28a47a7a9da188e99aafe826d2} 
 \index{integrator\_cvode@{integrator\_cvode}!rv@{rv}}
 \index{rv@{rv}!integrator\_cvode@{integrator\_cvode}}
 \doxysubsubsection{\texorpdfstring{rv}{rv}}
@@ -174,4 +174,4 @@ Definition at line \mbox{\hyperlink{integrator__cvode_8h_source_l00026}{26}} of 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-/\+Users/maisy/hips-\/lib-\/final/hips/src/\mbox{\hyperlink{integrator__cvode_8h}{integrator\+\_\+cvode.\+h}}\end{DoxyCompactItemize}
+/\+Users/mbehrang/hips-\/final/hips/src/\mbox{\hyperlink{integrator__cvode_8h}{integrator\+\_\+cvode.\+h}}\end{DoxyCompactItemize}

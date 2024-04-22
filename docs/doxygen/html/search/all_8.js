@@ -1,12 +1,14 @@
 var searchData=
 [
-  ['i_5fbatchelor_0',['i_batchelor',['../clasships.html#a7e27da1761f73d3653dc62c56be21bdd',1,'hips']]],
-  ['i_5fplus_1',['i_plus',['../clasships.html#a52ef091a3269bf7bc68008064297b625',1,'hips']]],
-  ['ieta_2',['iEta',['../clasships.html#acf56678e2fdbe105d9b6a218262fa517',1,'hips']]],
-  ['initialize_3',['initialize',['../class_m_t_rand.html#a9b9a20998f5c805af6301ce5c37dcfc3',1,'MTRand']]],
-  ['initializemixingfractions_4',['initializeMixingFractions',['../ex__1_8cc.html#ad76b7bf13c3053058a6df4f44d02635a',1,'ex_1.cc']]],
-  ['integrate_5',['integrate',['../classintegrator__cvode.html#a200d2664a94c9ec095df1d9830e9e8c7',1,'integrator_cvode']]],
-  ['integrator_6',['integrator',['../classbatch_reactor__cantera.html#a733f663675700952fa3b3df28fb03ac9',1,'batchReactor_cantera::integrator()'],['../classbatch_reactor__cvode.html#a8e86d9cf30e1887a45d67196d8dfa8e0',1,'batchReactor_cvode::integrator()']]],
-  ['integrator_5fcvode_7',['integrator_cvode',['../classintegrator__cvode.html',1,'integrator_cvode'],['../classintegrator__cvode.html#a4591e56bcf643d5f7c731e01162c967b',1,'integrator_cvode::integrator_cvode()']]],
-  ['integrator_5fcvode_2eh_8',['integrator_cvode.h',['../integrator__cvode_8h.html',1,'']]]
+  ['batchreactor_0',['batchReactor',['../classbatch_reactor.html',1,'batchReactor'],['../classbatch_reactor.html#ae9f39242ba26fa25a06a4cc5ff05472e',1,'batchReactor::batchReactor()']]],
+  ['batchreactor_2eh_1',['batchReactor.h',['../batch_reactor_8h.html',1,'']]],
+  ['batchreactor_5fcantera_2',['batchReactor_cantera',['../classbatch_reactor__cantera.html',1,'batchReactor_cantera'],['../classbatch_reactor__cantera.html#a044cbcdcd2d011a24f2adebe8bfcfaa7',1,'batchReactor_cantera::batchReactor_cantera()']]],
+  ['batchreactor_5fcantera_2ecc_3',['batchReactor_cantera.cc',['../batch_reactor__cantera_8cc.html',1,'']]],
+  ['batchreactor_5fcantera_2eh_4',['batchReactor_cantera.h',['../batch_reactor__cantera_8h.html',1,'']]],
+  ['batchreactor_5fcvode_5',['batchReactor_cvode',['../classbatch_reactor__cvode.html',1,'batchReactor_cvode'],['../classbatch_reactor__cvode.html#a0e008b252f8c5d4ce503ba70787f6b90',1,'batchReactor_cvode::batchReactor_cvode()']]],
+  ['batchreactor_5fcvode_2ecc_6',['batchReactor_cvode.cc',['../batch_reactor__cvode_8cc.html',1,'']]],
+  ['batchreactor_5fcvode_2eh_7',['batchReactor_cvode.h',['../batch_reactor__cvode_8h.html',1,'']]],
+  ['beta0_8',['beta0',['../classstreams.html#a4894ce57805fc6bc320056a74a23ae88',1,'streams']]],
+  ['beta1_9',['beta1',['../classstreams.html#a3ec8af43296fdc4618ddc74f84e975bf',1,'streams']]],
+  ['build_20and_20installation_20instructions_10',['Build and installation instructions',['../index.html#autotoc_md8',1,'Build and installation instructions'],['..//Users/mbehrang/hips-final/hips/docs/mainpage.md#autotoc_md4',1,'Build and installation instructions']]]
 ];

@@ -1,87 +1,87 @@
-\hypertarget{streams_8h_source}{}\doxysection{streams.\+h}
-\label{streams_8h_source}\index{/Users/maisy/hips-\/lib-\/final/hips/src/streams.h@{/Users/maisy/hips-\/lib-\/final/hips/src/streams.h}}
+\doxysection{streams.\+h}
+\hypertarget{streams_8h_source}{}\label{streams_8h_source}\index{/Users/mbehrang/hips-\/final/hips/src/streams.h@{/Users/mbehrang/hips-\/final/hips/src/streams.h}}
 \mbox{\hyperlink{streams_8h}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00001}00001 \textcolor{preprocessor}{\#pragma once}}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00002}00002 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00003}00003 \textcolor{preprocessor}{\#include "{}cantera/base/Solution.h"{}}}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00004}00004 \textcolor{preprocessor}{\#include "{}cantera/thermo.h"{}}}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00005}00005 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00006}00006 \textcolor{preprocessor}{\#include <vector>}}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00007}00007 \textcolor{preprocessor}{\#include <memory>}}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00008}00008 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00010}00010 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00021}\mbox{\hyperlink{classstreams}{00021}} \textcolor{keyword}{class }\mbox{\hyperlink{classstreams}{streams}} \{}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00022}00022 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00023}00023     \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00024}00024 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00026}00026 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00027}\mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{00027}}         \textcolor{keywordtype}{double}              \mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{h0}};              }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00028}\mbox{\hyperlink{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}{00028}}         \textcolor{keywordtype}{double}              \mbox{\hyperlink{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}{h1}};              }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00029}\mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{00029}}         std::vector<double> \mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}};              }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00030}\mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{00030}}         std::vector<double> \mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}};              }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00031}00031 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00032}\mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{00032}}         \textcolor{keywordtype}{double} \mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}};}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00033}00033 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00034}\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{00034}}         std::shared\_ptr<Cantera::ThermoPhase> \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}};}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00035}00035 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00036}\mbox{\hyperlink{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}{00036}}         \textcolor{keywordtype}{double} \mbox{\hyperlink{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}{mixfStoic}};       }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00037}\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{00037}}         \textcolor{keywordtype}{int}    \mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};            }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00038}\mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{00038}}         \textcolor{keywordtype}{double} \mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}};           }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00039}\mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{00039}}         \textcolor{keywordtype}{double} \mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{beta1}};           }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00040}00040 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00041}\mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{00041}}         std::vector<double> \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}};           }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00042}00042 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00044}00044 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00045}00045         \textcolor{keywordtype}{void} \mbox{\hyperlink{classstreams_ae1acfdaebac0b26841c76d9aaacc4b31}{getProdOfCompleteComb}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} mixf,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00046}00046                                    std::vector<double> \&ypcc,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00047}00047                                    \textcolor{keywordtype}{double} \&hpcc,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00048}00048                                    \textcolor{keywordtype}{double} \&Tpcc);}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00049}00049 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00050}00050         \textcolor{keywordtype}{void} \mbox{\hyperlink{classstreams_a6dbf93fbcde09e925bead7ce9c0113e9}{getEquilibrium\_HP}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} mixf,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00051}00051                                      std::vector<double> \&yeq,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00052}00052                                      \textcolor{keywordtype}{double} \&heq,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00053}00053                                      \textcolor{keywordtype}{double} \&Teq);}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00054}00054 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00055}00055         \textcolor{keywordtype}{void} \mbox{\hyperlink{classstreams_afb9231a9360300ec0688d1c1e404ca78}{getEquilibrium\_TP}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} mixf,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00056}00056                                      \textcolor{keywordtype}{double} Teq,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00057}00057                                      std::vector<double> \&yeq,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00058}00058                                      \textcolor{keywordtype}{double} \&heq);}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00059}00059 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00060}00060         \textcolor{keywordtype}{void} \mbox{\hyperlink{classstreams_aebccdb0fdffb04228f87d73d506d96c5}{getMixingState}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} mixf,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00061}00061                             std::vector<double> \&ymix,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00062}00062                             \textcolor{keywordtype}{double} \&hmix,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00063}00063                             \textcolor{keywordtype}{double} \&Tmix);}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00064}00064 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00065}00065         \textcolor{keywordtype}{double} \mbox{\hyperlink{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}{getMixtureFraction}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} *y,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00066}00066                                   \textcolor{keyword}{const} \textcolor{keywordtype}{bool} doBeta01=\textcolor{keyword}{false});}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00067}00067 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00068}00068     \textcolor{keyword}{private}:}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00069}00069 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00070}00070         \textcolor{keywordtype}{void} \mbox{\hyperlink{classstreams_a346c56671eabbde2eecfaf60f5b5b0f9}{setStoicMixf}}();}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00071}00071         std::vector<double> \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} *y);}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00072}00072         std::vector<double> \mbox{\hyperlink{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa}{setElementMoleFracs}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} *y);}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00073}00073         std::vector<double> \mbox{\hyperlink{classstreams_a45695a5c046ae2a7de87af1654996ce8}{getElementMoles}}(\textcolor{keyword}{const} \textcolor{keywordtype}{double} *x,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00074}00074                                        \textcolor{keywordtype}{double} \&nOnotFromO2,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00075}00075                                        \textcolor{keywordtype}{double} \&nHnotFromH2O,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00076}00076                                        \textcolor{keywordtype}{double} \&nCnotFromCO2);}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00077}00077 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00079}00079 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00080}00080     \textcolor{keyword}{public}:}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00081}00081 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00082}\mbox{\hyperlink{classstreams_a30bf5c7e8dd1d2c111118b87fd9f6057}{00082}}         \mbox{\hyperlink{classstreams_a30bf5c7e8dd1d2c111118b87fd9f6057}{streams}}() \{\}}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00083}\mbox{\hyperlink{classstreams_a28a239d95efcd8d117af8ddbd982965f}{00083}}         \mbox{\hyperlink{classstreams_a28a239d95efcd8d117af8ddbd982965f}{streams}}(std::shared\_ptr<Cantera::Solution> csol,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00084}00084                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} \_P,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00085}00085                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} \_h0, }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00086}00086                 \textcolor{keyword}{const} \textcolor{keywordtype}{double} \_h1,}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00087}00087                 \textcolor{keyword}{const} std::vector<double> \&\_y0, }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00088}00088                 \textcolor{keyword}{const} std::vector<double> \&\_y1);}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00089}00089 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00090}\mbox{\hyperlink{classstreams_a7c69b3a6858ce8ce1dfc7ae242710038}{00090}}         \mbox{\hyperlink{classstreams_a7c69b3a6858ce8ce1dfc7ae242710038}{\string~streams}}()\{\}}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00091}00091 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00092}00092 \};}
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00093}00093 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00094}00094 }
-\DoxyCodeLine{\Hypertarget{streams_8h_source_l00095}00095 }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00001}00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00003}00003\ \textcolor{preprocessor}{\#include\ "{}cantera/base/Solution.h"{}}}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00004}00004\ \textcolor{preprocessor}{\#include\ "{}cantera/thermo.h"{}}}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00005}00005\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00006}00006\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00007}00007\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00021}\mbox{\hyperlink{classstreams}{00021}}\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classstreams}{streams}}\ \{}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00023}00023\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00027}\mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{00027}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_acba6c3551868e1048dab3596dc0be65d}{h0}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00028}\mbox{\hyperlink{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}{00028}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_a50280c7ff16728e8b0c10c5f6a117f66}{h1}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00029}\mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{00029}}\ \ \ \ \ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{classstreams_a56f01526b24b000b290d0641997a3833}{y0}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00030}\mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{00030}}\ \ \ \ \ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{classstreams_a241a53d6d43a2d79c1165f4f6d2d581e}{y1}};\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00031}00031\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00032}\mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{00032}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classstreams_acc61624ba39cbf93e7e1ea260f34861b}{P}};}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00033}00033\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00034}\mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{00034}}\ \ \ \ \ \ \ \ \ std::shared\_ptr<Cantera::ThermoPhase>\ \mbox{\hyperlink{classstreams_ae4b6df5777b35edb11ff73d5491ffda5}{gas}};}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00036}\mbox{\hyperlink{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}{00036}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classstreams_aa3bca73dd6a32a008a47a01da4ab89c0}{mixfStoic}};\ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00037}\mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{00037}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \mbox{\hyperlink{classstreams_a5f4ed5333c43b8761758c93d06232357}{nspc}};\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00038}\mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{00038}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classstreams_a4894ce57805fc6bc320056a74a23ae88}{beta0}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00039}\mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{00039}}\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classstreams_a3ec8af43296fdc4618ddc74f84e975bf}{beta1}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00040}00040\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00041}\mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{00041}}\ \ \ \ \ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{classstreams_abf0b064bb492fa5ea0836bc178e8303a}{gCHON}};\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00045}00045\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classstreams_ae1acfdaebac0b26841c76d9aaacc4b31}{getProdOfCompleteComb}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ mixf,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<double>\ \&ypcc,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&hpcc,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&Tpcc);}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00050}00050\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classstreams_a6dbf93fbcde09e925bead7ce9c0113e9}{getEquilibrium\_HP}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ mixf,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<double>\ \&yeq,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00052}00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&heq,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00053}00053\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&Teq);}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00054}00054\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00055}00055\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classstreams_afb9231a9360300ec0688d1c1e404ca78}{getEquilibrium\_TP}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ mixf,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ Teq,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00057}00057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<double>\ \&yeq,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00058}00058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&heq);}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00060}00060\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classstreams_aebccdb0fdffb04228f87d73d506d96c5}{getMixingState}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ mixf,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00061}00061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ std::vector<double>\ \&ymix,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00062}00062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&hmix,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00063}00063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&Tmix);}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00065}00065\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classstreams_ad4916fb672c02d1c414b55f443f6f4f4}{getMixtureFraction}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ *y,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00066}00066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{bool}\ doBeta01=\textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00068}00068\ \ \ \ \ \textcolor{keyword}{private}:}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00070}00070\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classstreams_a346c56671eabbde2eecfaf60f5b5b0f9}{setStoicMixf}}();}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00071}00071\ \ \ \ \ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{classstreams_aa90d1d3506e58bb7fb7e983fd1c6eb97}{setElementMassFracs}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ *y);}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00072}00072\ \ \ \ \ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{classstreams_acff00c7b976a7ffe31bf0832b38eeaaa}{setElementMoleFracs}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ *y);}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00073}00073\ \ \ \ \ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{classstreams_a45695a5c046ae2a7de87af1654996ce8}{getElementMoles}}(\textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ *x,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00074}00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&nOnotFromO2,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00075}00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&nHnotFromH2O,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00076}00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \&nCnotFromCO2);}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00079}00079\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00080}00080\ \ \ \ \ \textcolor{keyword}{public}:}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00082}\mbox{\hyperlink{classstreams_a30bf5c7e8dd1d2c111118b87fd9f6057}{00082}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_a30bf5c7e8dd1d2c111118b87fd9f6057}{streams}}()\ \{\}}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00083}\mbox{\hyperlink{classstreams_a28a239d95efcd8d117af8ddbd982965f}{00083}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_a28a239d95efcd8d117af8ddbd982965f}{streams}}(std::shared\_ptr<Cantera::Solution>\ csol,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00084}00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \_P,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00085}00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \_h0,\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \_h1,}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00087}00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<double>\ \&\_y0,\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00088}00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::vector<double>\ \&\_y1);}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00089}00089\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00090}\mbox{\hyperlink{classstreams_a7c69b3a6858ce8ce1dfc7ae242710038}{00090}}\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classstreams_a7c69b3a6858ce8ce1dfc7ae242710038}{\string~streams}}()\{\}}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00091}00091\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00092}00092\ \};}
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00093}00093\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{streams_8h_source_l00095}00095\ }
 
 \end{DoxyCode}

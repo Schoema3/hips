@@ -25,39 +25,25 @@
 var NAVTREE =
 [
   [ "hips", "index.html", [
-    [ "Overview", "index.html#autotoc_md6", null ],
-    [ "Dependencies and installation", "index.html#autotoc_md10", [
-      [ "Build and installation instructions", "index.html#autotoc_md13", null ],
-      [ "CMake configuration variables", "index.html#autotoc_md15", null ]
+    [ "Overview", "index.html#autotoc_md5", null ],
+    [ "Dependencies and installation", "index.html#autotoc_md7", [
+      [ "Build and installation instructions", "index.html#autotoc_md8", null ],
+      [ "CMake configuration variables", "index.html#autotoc_md9", null ]
     ] ],
-    [ "Using HiPS", "index.html#autotoc_md16", null ],
-    [ "Example workflow", "index.html#autotoc_md17", [
-      [ "1. HiPS Tree and Constructor Parameters", "index.html#autotoc_md18", null ],
-      [ "2. Gas Solution Setup (required for reaction)", "index.html#autotoc_md19", null ],
-      [ "3. HiPS Tree Creation", "index.html#autotoc_md20", null ],
-      [ "4. Initialize Variables and Parameters", "index.html#autotoc_md21", null ],
-      [ "5. Initialize Mixing Fractions", "index.html#autotoc_md22", null ],
-      [ "6. Set Initial State in Parcels", "index.html#autotoc_md23", null ],
-      [ "7. Advance HiPS for Mixing and Reaction", "index.html#autotoc_md24", null ],
-      [ "Implementation Guidelines", "index.html#autotoc_md25", null ]
+    [ "Using HiPS", "index.html#autotoc_md10", null ],
+    [ "Example workflow", "index.html#autotoc_md11", [
+      [ "HiPS Tree and Constructor Parameters", "index.html#autotoc_md12", null ],
+      [ "Gas Solution Setup (required for reaction)", "index.html#autotoc_md14", null ],
+      [ "HiPS Tree Creation", "index.html#autotoc_md16", null ],
+      [ "Initialize Variables and Parameters", "index.html#autotoc_md18", null ],
+      [ "Initialize Mixing Fractions", "index.html#autotoc_md19", null ],
+      [ "Set Initial State in Parcels", "index.html#autotoc_md21", null ],
+      [ "Advance HiPS for Mixing and Reaction", "index.html#autotoc_md22", null ],
+      [ "Implementation Guidelines", "index.html#autotoc_md23", null ]
     ] ],
-    [ "Examples", "index.html#autotoc_md26", null ],
-    [ "mainpage", "md_mainpage.html", [
-      [ "Using HiPS", "md_mainpage.html#autotoc_md1", null ],
-      [ "Example workflow", "md_mainpage.html#autotoc_md2", [
-        [ "1. HiPS Tree and Constructor Parameters", "md_mainpage.html#autotoc_md3", null ],
-        [ "2. Gas Solution Setup (required for reaction)", "md_mainpage.html#autotoc_md4", null ],
-        [ "3. HiPS Tree Creation", "md_mainpage.html#autotoc_md5", null ],
-        [ "4. Initialize Variables and Parameters", "md_mainpage.html#autotoc_md7", null ],
-        [ "5. Initialize Mixing Fractions", "md_mainpage.html#autotoc_md8", null ],
-        [ "6. Set Initial State in Parcels", "md_mainpage.html#autotoc_md9", null ],
-        [ "7. Advance HiPS for Mixing and Reaction", "md_mainpage.html#autotoc_md11", null ],
-        [ "Implementation Guidelines", "md_mainpage.html#autotoc_md12", null ]
-      ] ],
-      [ "Examples", "md_mainpage.html#autotoc_md14", null ]
-    ] ],
-    [ "md_results_test", "md_results_test.html", [
-      [ "JUST TO SEE", "md_results_test.html#autotoc_md0", null ]
+    [ "Examples", "index.html#autotoc_md24", null ],
+    [ "md_results_2test", "md_results_2test.html", [
+      [ "JUST TO SEE", "md_results_2test.html#autotoc_md26", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],
@@ -68,14 +54,15 @@ var NAVTREE =
         [ "Variables", "functions_vars.html", null ],
         [ "Typedefs", "functions_type.html", null ],
         [ "Enumerator", "functions_eval.html", null ],
-        [ "Related Functions", "functions_rela.html", null ]
+        [ "Related Symbols", "functions_rela.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
       [ "File List", "files.html", "files_dup" ],
       [ "File Members", "globals.html", [
         [ "All", "globals.html", null ],
-        [ "Functions", "globals_func.html", null ]
+        [ "Functions", "globals_func.html", null ],
+        [ "Variables", "globals_vars.html", null ]
       ] ]
     ] ]
   ] ]

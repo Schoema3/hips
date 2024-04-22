@@ -1,22 +1,24 @@
-\hypertarget{ex__1_8cc}{}\doxysection{/\+Users/maisy/hips-\/lib-\/final/hips/examples/examples-\/bkp/ex\+\_\+1.cc File Reference}
-\label{ex__1_8cc}\index{/Users/maisy/hips-\/lib-\/final/hips/examples/examples-\/bkp/ex\_1.cc@{/Users/maisy/hips-\/lib-\/final/hips/examples/examples-\/bkp/ex\_1.cc}}
-{\ttfamily \#include \char`\"{}hips.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}cantera/base/\+Solution.\+h\char`\"{}}\newline
-{\ttfamily \#include \char`\"{}cantera/thermo.\+h\char`\"{}}\newline
-{\ttfamily \#include $<$vector$>$}\newline
-{\ttfamily \#include $<$string$>$}\newline
+\doxysection{/\+Users/mbehrang/hips-\/final/hips/examples/ex\+\_\+1.cc File Reference}
+\hypertarget{ex__1_8cc}{}\label{ex__1_8cc}\index{/Users/mbehrang/hips-\/final/hips/examples/ex\_1.cc@{/Users/mbehrang/hips-\/final/hips/examples/ex\_1.cc}}
 {\ttfamily \#include $<$iostream$>$}\newline
-\doxysubsection*{Functions}
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include "{}hips.\+h"{}}\newline
+\doxysubsubsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
 vector$<$ double $>$ \mbox{\hyperlink{ex__1_8cc_ad76b7bf13c3053058a6df4f44d02635a}{initialize\+Mixing\+Fractions}} (int num\+Parcels)
-\begin{DoxyCompactList}\small\item\em Initialize mixing fractions. \end{DoxyCompactList}\item 
+\item 
 int \mbox{\hyperlink{ex__1_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
-\begin{DoxyCompactList}\small\item\em Main function for Hi\+PS simulation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+std\+::vector$<$ std\+::string $>$ \mbox{\hyperlink{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213}{variable\+Names}} = \{"{}mixf\+\_\+00"{}, "{}mixf\+\_\+01"{}, "{}mixf\+\_\+02"{}\}
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Function Documentation}
-\mbox{\Hypertarget{ex__1_8cc_ad76b7bf13c3053058a6df4f44d02635a}\label{ex__1_8cc_ad76b7bf13c3053058a6df4f44d02635a}} 
+\Hypertarget{ex__1_8cc_ad76b7bf13c3053058a6df4f44d02635a}\label{ex__1_8cc_ad76b7bf13c3053058a6df4f44d02635a} 
 \index{ex\_1.cc@{ex\_1.cc}!initializeMixingFractions@{initializeMixingFractions}}
 \index{initializeMixingFractions@{initializeMixingFractions}!ex\_1.cc@{ex\_1.cc}}
 \doxysubsubsection{\texorpdfstring{initializeMixingFractions()}{initializeMixingFractions()}}
@@ -24,23 +26,9 @@ int \mbox{\hyperlink{ex__1_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
 
 
 
-Initialize mixing fractions. 
+Definition at line \mbox{\hyperlink{ex__1_8cc_source_l00008}{8}} of file \mbox{\hyperlink{ex__1_8cc_source}{ex\+\_\+1.\+cc}}.
 
-This function initializes mixing fractions for a given number of parcels.
-
-
-\begin{DoxyParams}{Parameters}
-{\em num\+Parcels} & The number of parcels. \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-A vector containing initialized mixing fractions. 
-\end{DoxyReturn}
-
-
-Definition at line \mbox{\hyperlink{ex__1_8cc_source_l00024}{24}} of file \mbox{\hyperlink{ex__1_8cc_source}{ex\+\_\+1.\+cc}}.
-
-\mbox{\Hypertarget{ex__1_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{ex__1_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}} 
+\Hypertarget{ex__1_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}\label{ex__1_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4} 
 \index{ex\_1.cc@{ex\_1.cc}!main@{main}}
 \index{main@{main}!ex\_1.cc@{ex\_1.cc}}
 \doxysubsubsection{\texorpdfstring{main()}{main()}}
@@ -48,14 +36,18 @@ Definition at line \mbox{\hyperlink{ex__1_8cc_source_l00024}{24}} of file \mbox{
 
 
 
-Main function for Hi\+PS simulation. 
-
-This program sets up and runs a Hi\+PS simulation using Cantera.
-
-\begin{DoxyReturn}{Returns}
-0 on successful execution. 
-\end{DoxyReturn}
+Definition at line \mbox{\hyperlink{ex__1_8cc_source_l00019}{19}} of file \mbox{\hyperlink{ex__1_8cc_source}{ex\+\_\+1.\+cc}}.
 
 
-Definition at line \mbox{\hyperlink{ex__1_8cc_source_l00041}{41}} of file \mbox{\hyperlink{ex__1_8cc_source}{ex\+\_\+1.\+cc}}.
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213}\label{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213} 
+\index{ex\_1.cc@{ex\_1.cc}!variableNames@{variableNames}}
+\index{variableNames@{variableNames}!ex\_1.cc@{ex\_1.cc}}
+\doxysubsubsection{\texorpdfstring{variableNames}{variableNames}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::string$>$ variable\+Names = \{"{}mixf\+\_\+00"{}, "{}mixf\+\_\+01"{}, "{}mixf\+\_\+02"{}\}}
+
+
+
+Definition at line \mbox{\hyperlink{ex__1_8cc_source_l00017}{17}} of file \mbox{\hyperlink{ex__1_8cc_source}{ex\+\_\+1.\+cc}}.
 

@@ -1,5 +1,5 @@
-\hypertarget{classbatch_reactor__cvode}{}\doxysection{batch\+Reactor\+\_\+cvode Class Reference}
-\label{classbatch_reactor__cvode}\index{batchReactor\_cvode@{batchReactor\_cvode}}
+\doxysection{batch\+Reactor\+\_\+cvode Class Reference}
+\hypertarget{classbatch_reactor__cvode}{}\label{classbatch_reactor__cvode}\index{batchReactor\_cvode@{batchReactor\_cvode}}
 
 
 \doxysubsection{Detailed Description}
@@ -11,27 +11,56 @@ Definition at line \mbox{\hyperlink{batch_reactor__cvode_8h_source_l00014}{14}} 
 
 {\ttfamily \#include $<$batch\+Reactor\+\_\+cvode.\+h$>$}
 
-\doxysubsection*{Public Member Functions}
+\doxysubsubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classbatch_reactor__cvode_a0e008b252f8c5d4ce503ba70787f6b90}{batch\+Reactor\+\_\+cvode}} (std\+::shared\+\_\+ptr$<$ Cantera\+::\+Solution $>$ cant\+Sol)
-\begin{DoxyCompactList}\small\item\em Constructor for the \mbox{\hyperlink{classbatch_reactor__cvode}{batch\+Reactor\+\_\+cvode}} class. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{classbatch_reactor__cvode}{batch\+Reactor\+\_\+cvode} class. \end{DoxyCompactList}\item 
 virtual void \mbox{\hyperlink{classbatch_reactor__cvode_a48446f013f84461660ef4cff24cb6cf1}{react}} (double \&h, std\+::vector$<$ double $>$ \&y, const double t\+Run)
 \begin{DoxyCompactList}\small\item\em Simulates a reaction in the batch reactor. \end{DoxyCompactList}\item 
-int \mbox{\hyperlink{classbatch_reactor__cvode_a22fd562f616891c39b82d8f320eba0f4}{rhsf}} (const double t, const double $\ast$vars, double $\ast$dvarsdt)
+int \mbox{\hyperlink{classbatch_reactor__cvode_a22fd562f616891c39b82d8f320eba0f4}{rhsf}} (const double t, const double \texorpdfstring{$\ast$}{*}vars, double \texorpdfstring{$\ast$}{*}dvarsdt)
 \begin{DoxyCompactList}\small\item\em Computes the right-\/hand side of the ODE system. \end{DoxyCompactList}\item 
-virtual \mbox{\hyperlink{classbatch_reactor__cvode_a0aae611617ea9fb7d3c647beecd309ca}{$\sim$batch\+Reactor\+\_\+cvode}} ()
+virtual \mbox{\hyperlink{classbatch_reactor__cvode_a0aae611617ea9fb7d3c647beecd309ca}{\texorpdfstring{$\sim$}{\string~}batch\+Reactor\+\_\+cvode}} ()
 \end{DoxyCompactItemize}
-\doxysubsection*{Private Attributes}
+\doxysubsection*{Public Member Functions inherited from \mbox{\hyperlink{classbatch_reactor}{batch\+Reactor}}}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classbatch_reactor_ae9f39242ba26fa25a06a4cc5ff05472e}{batch\+Reactor}} ()
+\item 
+double \mbox{\hyperlink{classbatch_reactor_a915a784039c36da099fe591c30566d2f}{get\+Density}} () const
+\item 
+virtual \mbox{\hyperlink{classbatch_reactor_ae95e00b784edcb60c91a87eab93584d4}{\texorpdfstring{$\sim$}{\string~}batch\+Reactor}} ()
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
 \begin{DoxyCompactItemize}
 \item 
 std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classintegrator__cvode}{integrator\+\_\+cvode}} $>$ \mbox{\hyperlink{classbatch_reactor__cvode_a8e86d9cf30e1887a45d67196d8dfa8e0}{integrator}}
 \begin{DoxyCompactList}\small\item\em cvode integrator wrappter \end{DoxyCompactList}\end{DoxyCompactItemize}
-\doxysubsection*{Additional Inherited Members}
+\doxysubsubsection*{Additional Inherited Members}
+\doxysubsection*{Public Attributes inherited from \mbox{\hyperlink{classbatch_reactor}{batch\+Reactor}}}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{classbatch_reactor_ae957b69e3e933ddcc85a809b8f06c8ad}{temperature}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes inherited from \mbox{\hyperlink{classbatch_reactor}{batch\+Reactor}}}
+\begin{DoxyCompactItemize}
+\item 
+std\+::shared\+\_\+ptr$<$ Cantera\+::\+Thermo\+Phase $>$ \mbox{\hyperlink{classbatch_reactor_a569251f4aa45e53dfd7584aa671a9771}{gas}}
+\begin{DoxyCompactList}\small\item\em Cantera thermo object. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ Cantera\+::\+Kinetics $>$ \mbox{\hyperlink{classbatch_reactor_a44101d5defb4ba69474697744cbef158}{kin}}
+\begin{DoxyCompactList}\small\item\em Cantera kinetics object. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{classbatch_reactor_a25a411dda898478f3c8ff2a5351906e5}{nvar}}
+\begin{DoxyCompactList}\small\item\em number of variables/equations solved \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classbatch_reactor_a8d8d86a997c4e8424063f943ffab033a}{h\+\_\+fixed}}
+\begin{DoxyCompactList}\small\item\em adiabatic h during integrate \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classbatch_reactor_a486da1fa66d5cad76ca4614371dc335a}{P\+\_\+fixed}}
+\begin{DoxyCompactList}\small\item\em pressure during integrate \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classbatch_reactor_a38e600224710a61029e49eb91ab1480d}{rho}}
+\end{DoxyCompactItemize}
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{classbatch_reactor__cvode_a0e008b252f8c5d4ce503ba70787f6b90}\label{classbatch_reactor__cvode_a0e008b252f8c5d4ce503ba70787f6b90}} 
+\Hypertarget{classbatch_reactor__cvode_a0e008b252f8c5d4ce503ba70787f6b90}\label{classbatch_reactor__cvode_a0e008b252f8c5d4ce503ba70787f6b90} 
 \index{batchReactor\_cvode@{batchReactor\_cvode}!batchReactor\_cvode@{batchReactor\_cvode}}
 \index{batchReactor\_cvode@{batchReactor\_cvode}!batchReactor\_cvode@{batchReactor\_cvode}}
 \doxysubsubsection{\texorpdfstring{batchReactor\_cvode()}{batchReactor\_cvode()}}
@@ -39,7 +68,7 @@ std\+::unique\+\_\+ptr$<$ \mbox{\hyperlink{classintegrator__cvode}{integrator\+\
 
 
 
-Constructor for the \mbox{\hyperlink{classbatch_reactor__cvode}{batch\+Reactor\+\_\+cvode}} class. 
+Constructor for the \doxylink{classbatch_reactor__cvode}{batch\+Reactor\+\_\+cvode} class. 
 
 Initializes a batch reactor object using CVODE for simulations.
 
@@ -52,11 +81,11 @@ Initializes a batch reactor object using CVODE for simulations.
 
 Definition at line \mbox{\hyperlink{batch_reactor__cvode_8cc_source_l00023}{23}} of file \mbox{\hyperlink{batch_reactor__cvode_8cc_source}{batch\+Reactor\+\_\+cvode.\+cc}}.
 
-\mbox{\Hypertarget{classbatch_reactor__cvode_a0aae611617ea9fb7d3c647beecd309ca}\label{classbatch_reactor__cvode_a0aae611617ea9fb7d3c647beecd309ca}} 
-\index{batchReactor\_cvode@{batchReactor\_cvode}!````~batchReactor\_cvode@{$\sim$batchReactor\_cvode}}
-\index{````~batchReactor\_cvode@{$\sim$batchReactor\_cvode}!batchReactor\_cvode@{batchReactor\_cvode}}
-\doxysubsubsection{\texorpdfstring{$\sim$batchReactor\_cvode()}{~batchReactor\_cvode()}}
-{\footnotesize\ttfamily virtual batch\+Reactor\+\_\+cvode\+::$\sim$batch\+Reactor\+\_\+cvode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+\Hypertarget{classbatch_reactor__cvode_a0aae611617ea9fb7d3c647beecd309ca}\label{classbatch_reactor__cvode_a0aae611617ea9fb7d3c647beecd309ca} 
+\index{batchReactor\_cvode@{batchReactor\_cvode}!````~batchReactor\_cvode@{\texorpdfstring{$\sim$}{\string~}batchReactor\_cvode}}
+\index{````~batchReactor\_cvode@{\texorpdfstring{$\sim$}{\string~}batchReactor\_cvode}!batchReactor\_cvode@{batchReactor\_cvode}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}batchReactor\_cvode()}{\string~batchReactor\_cvode()}}
+{\footnotesize\ttfamily virtual batch\+Reactor\+\_\+cvode\+::\texorpdfstring{$\sim$}{\string~}batch\+Reactor\+\_\+cvode (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
 
 
 
@@ -65,7 +94,7 @@ Definition at line \mbox{\hyperlink{batch_reactor__cvode_8h_source_l00033}{33}} 
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{classbatch_reactor__cvode_a48446f013f84461660ef4cff24cb6cf1}\label{classbatch_reactor__cvode_a48446f013f84461660ef4cff24cb6cf1}} 
+\Hypertarget{classbatch_reactor__cvode_a48446f013f84461660ef4cff24cb6cf1}\label{classbatch_reactor__cvode_a48446f013f84461660ef4cff24cb6cf1} 
 \index{batchReactor\_cvode@{batchReactor\_cvode}!react@{react}}
 \index{react@{react}!batchReactor\_cvode@{batchReactor\_cvode}}
 \doxysubsubsection{\texorpdfstring{react()}{react()}}
@@ -92,11 +121,11 @@ Implements \mbox{\hyperlink{classbatch_reactor_aec18522d3d27683aee10f482475149e9
 
 Definition at line \mbox{\hyperlink{batch_reactor__cvode_8cc_source_l00045}{45}} of file \mbox{\hyperlink{batch_reactor__cvode_8cc_source}{batch\+Reactor\+\_\+cvode.\+cc}}.
 
-\mbox{\Hypertarget{classbatch_reactor__cvode_a22fd562f616891c39b82d8f320eba0f4}\label{classbatch_reactor__cvode_a22fd562f616891c39b82d8f320eba0f4}} 
+\Hypertarget{classbatch_reactor__cvode_a22fd562f616891c39b82d8f320eba0f4}\label{classbatch_reactor__cvode_a22fd562f616891c39b82d8f320eba0f4} 
 \index{batchReactor\_cvode@{batchReactor\_cvode}!rhsf@{rhsf}}
 \index{rhsf@{rhsf}!batchReactor\_cvode@{batchReactor\_cvode}}
 \doxysubsubsection{\texorpdfstring{rhsf()}{rhsf()}}
-{\footnotesize\ttfamily int batch\+Reactor\+\_\+cvode\+::rhsf (\begin{DoxyParamCaption}\item[{const double}]{t,  }\item[{const double $\ast$}]{vars,  }\item[{double $\ast$}]{dvarsdt }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily int batch\+Reactor\+\_\+cvode\+::rhsf (\begin{DoxyParamCaption}\item[{const double}]{t,  }\item[{const double \texorpdfstring{$\ast$}{*}}]{vars,  }\item[{double \texorpdfstring{$\ast$}{*}}]{dvarsdt }\end{DoxyParamCaption})}
 
 
 
@@ -123,7 +152,7 @@ Definition at line \mbox{\hyperlink{batch_reactor__cvode_8cc_source_l00065}{65}}
 
 
 \doxysubsection{Member Data Documentation}
-\mbox{\Hypertarget{classbatch_reactor__cvode_a8e86d9cf30e1887a45d67196d8dfa8e0}\label{classbatch_reactor__cvode_a8e86d9cf30e1887a45d67196d8dfa8e0}} 
+\Hypertarget{classbatch_reactor__cvode_a8e86d9cf30e1887a45d67196d8dfa8e0}\label{classbatch_reactor__cvode_a8e86d9cf30e1887a45d67196d8dfa8e0} 
 \index{batchReactor\_cvode@{batchReactor\_cvode}!integrator@{integrator}}
 \index{integrator@{integrator}!batchReactor\_cvode@{batchReactor\_cvode}}
 \doxysubsubsection{\texorpdfstring{integrator}{integrator}}
@@ -141,5 +170,5 @@ Definition at line \mbox{\hyperlink{batch_reactor__cvode_8h_source_l00018}{18}} 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-/\+Users/maisy/hips-\/lib-\/final/hips/src/\mbox{\hyperlink{batch_reactor__cvode_8h}{batch\+Reactor\+\_\+cvode.\+h}}\item 
-/\+Users/maisy/hips-\/lib-\/final/hips/src/\mbox{\hyperlink{batch_reactor__cvode_8cc}{batch\+Reactor\+\_\+cvode.\+cc}}\end{DoxyCompactItemize}
+/\+Users/mbehrang/hips-\/final/hips/src/\mbox{\hyperlink{batch_reactor__cvode_8h}{batch\+Reactor\+\_\+cvode.\+h}}\item 
+/\+Users/mbehrang/hips-\/final/hips/src/\mbox{\hyperlink{batch_reactor__cvode_8cc}{batch\+Reactor\+\_\+cvode.\+cc}}\end{DoxyCompactItemize}

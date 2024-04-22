@@ -1,70 +1,60 @@
-\hypertarget{ex__1_8cc_source}{}\doxysection{ex\+\_\+1.\+cc}
-\label{ex__1_8cc_source}\index{/Users/maisy/hips-\/lib-\/final/hips/examples/examples-\/bkp/ex\_1.cc@{/Users/maisy/hips-\/lib-\/final/hips/examples/examples-\/bkp/ex\_1.cc}}
+\doxysection{ex\+\_\+1.\+cc}
+\hypertarget{ex__1_8cc_source}{}\label{ex__1_8cc_source}\index{/Users/mbehrang/hips-\/final/hips/examples/ex\_1.cc@{/Users/mbehrang/hips-\/final/hips/examples/ex\_1.cc}}
 \mbox{\hyperlink{ex__1_8cc}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00001}00001 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00002}00002 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{hips_8h}{hips.h}}"{}}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00003}00003 \textcolor{preprocessor}{\#include "{}cantera/base/Solution.h"{}}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00004}00004 \textcolor{preprocessor}{\#include "{}cantera/thermo.h"{}}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00005}00005 \textcolor{preprocessor}{\#include <vector>}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00006}00006 \textcolor{preprocessor}{\#include <string>}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00007}00007 \textcolor{preprocessor}{\#include <iostream>}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00008}00008 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00009}00009 \textcolor{keyword}{using namespace }std;}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00010}00010 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00024}\mbox{\hyperlink{ex__1_8cc_ad76b7bf13c3053058a6df4f44d02635a}{00024}} vector<double> \mbox{\hyperlink{ex__1_8cc_ad76b7bf13c3053058a6df4f44d02635a}{initializeMixingFractions}}(\textcolor{keywordtype}{int} numParcels) \{}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00025}00025     vector<double> mixingFractions;}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00026}00026     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} i = 0; i < numParcels; i++) \{}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00027}00027         \textcolor{comment}{// Initialize mixing fractions to 0.0 for the first half and 1.0 for the second half}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00028}00028         mixingFractions.push\_back(i < numParcels / 2 ? 0.0 : 1.0);}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00029}00029     \}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00030}00030     \textcolor{keywordflow}{return} mixingFractions;}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00031}00031 \}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00032}00032 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00034}00034 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00041}\mbox{\hyperlink{ex__1_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}{00041}} \textcolor{keywordtype}{int} \mbox{\hyperlink{ex__1_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}}() \{}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00042}00042 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00043}00043     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ HiPS tree and constructor parameters}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00044}00044 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00045}00045     \textcolor{keywordtype}{int} numLevels = 8;}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00046}00046     \textcolor{keywordtype}{double} domainLength = 1.0;}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00047}00047     \textcolor{keywordtype}{double} tau0 = 1.0;}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00048}00048     \textcolor{keywordtype}{double} C\_param = 0.5;}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00049}00049     \textcolor{keywordtype}{double} tRun = 50.0;}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00050}00050     \textcolor{keywordtype}{int} forceTurb = 2;}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00051}00051     vector<double> ScHips(1, 1);}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00052}00052 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00053}00053     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Gas solution setup}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00054}00054 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00055}00055     \textcolor{keyword}{auto} cantSol = Cantera::newSolution(\textcolor{stringliteral}{"{}gri30.yaml"{}});}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00056}00056     \textcolor{keyword}{auto} gas = cantSol-\/>thermo();}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00057}00057     \textcolor{keywordtype}{size\_t} numSpecies = gas-\/>nSpecies();}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00058}00058     \textcolor{keywordtype}{int} numVariables = 1;  }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00059}00059 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00060}00060     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ HiPS tree creation}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00061}00061 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00062}00062     \mbox{\hyperlink{clasships}{hips}} HiPS(numLevels, domainLength, tau0, C\_param, forceTurb, numVariables, ScHips, }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00063}00063               cantSol, \textcolor{keyword}{false});}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00064}00064 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00065}00065     \textcolor{keywordtype}{int} numParcels = HiPS.\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}};}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00066}00066     std::vector<double> weight(numParcels, 1.0/numParcels);}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00067}00067     std::vector<std::string> variableNames=\{\textcolor{stringliteral}{"{}mixf"{}}\};}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00068}00068   }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00069}00069 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00070}00070     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Initialize mixing fractions}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00071}00071 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00072}00072     std::vector<double> initialMixingFractions = \mbox{\hyperlink{ex__1_8cc_ad76b7bf13c3053058a6df4f44d02635a}{initializeMixingFractions}}(numParcels);}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00073}00073 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00074}00074     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Set state vectors in each parcel with initial mixing fractions}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00075}00075 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00076}00076     HiPS.\mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{set\_varData}}(initialMixingFractions, weight, variableNames[0], 0);}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00077}00077 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00078}00078     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ Advance HiPS for mixing }}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00079}00079 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00080}00080     HiPS.\mbox{\hyperlink{clasships_a8dd010962442d98a3959ea336670c8db}{calculateSolution}}(tRun);}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00081}00081 }
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00082}00082     \textcolor{keywordflow}{return} 0;}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00083}00083 \}}
-\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00084}00084 }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00003}00003\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{hips_8h}{hips.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00005}00005\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00007}00007\ \textcolor{comment}{//\ Function\ to\ initialize\ mixing\ fractions}}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00008}\mbox{\hyperlink{ex__1_8cc_ad76b7bf13c3053058a6df4f44d02635a}{00008}}\ vector<double>\ \mbox{\hyperlink{ex__1_8cc_ad76b7bf13c3053058a6df4f44d02635a}{initializeMixingFractions}}(\textcolor{keywordtype}{int}\ numParcels)\ \{}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00009}00009\ \ \ \ \ vector<double>\ mixingFractions;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00010}00010\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ numParcels;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00011}00011\ \ \ \ \ \ \ \ \ mixingFractions.push\_back(i\ <\ numParcels\ /\ 2\ ?\ 0.0\ :\ 1.0);}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00012}00012\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00013}00013\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00014}00014\ \ \ \ \ \textcolor{keywordflow}{return}\ mixingFractions;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00015}00015\ \}}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00017}\mbox{\hyperlink{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213}{00017}}\ std::vector<std::string>\ \mbox{\hyperlink{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213}{variableNames}}\ =\ \{\textcolor{stringliteral}{"{}mixf\_00"{}},\ \textcolor{stringliteral}{"{}mixf\_01"{}},\ \textcolor{stringliteral}{"{}mixf\_02"{}}\};}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00019}\mbox{\hyperlink{ex__1_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}{00019}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{ex__1_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00020}00020\ \ \ \ \ \textcolor{comment}{//\ HiPS\ tree\ and\ constructor\ parameters}}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00021}00021\ \ \ \ \ \textcolor{keywordtype}{int}\ nLevels\ =\ 6;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00022}00022\ \ \ \ \ \textcolor{keywordtype}{double}\ domainLength\ =\ 1.0;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00023}00023\ \ \ \ \ \textcolor{keywordtype}{double}\ tau0\ =\ 1.0;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00024}00024\ \ \ \ \ \textcolor{keywordtype}{double}\ C\_param\ =\ 0.5;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00025}00025\ \ \ \ \ \textcolor{keywordtype}{double}\ tRun\ =\ 300.0;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00026}00026\ \ \ \ \ \textcolor{keywordtype}{int}\ forceTurb\ =\ 2;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00027}00027\ \ \ \ \ vector<double>\ ScHips;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00028}00028\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00029}00029\ \ \ \ \ ScHips.push\_back(0.25);}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00030}00030\ \ \ \ \ ScHips.push\_back(1.0);}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00031}00031\ \ \ \ \ ScHips.push\_back(4.0);}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00033}00033\ \ \ \ \ \textcolor{keywordtype}{int}\ numVariables\ =\ 3;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00034}00034\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00035}00035\ \ \ \ \ \mbox{\hyperlink{clasships}{hips}}\ HiPS(nLevels,\ domainLength,\ tau0,\ C\_param,\ forceTurb,\ numVariables,\ ScHips,\ \textcolor{keyword}{false});}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00036}00036\ \ \ \ \ \textcolor{keywordtype}{int}\ numParcels\ =\ HiPS.\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}};}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00038}00038\ \ \ \ \ \textcolor{comment}{//\ Initialize\ mixing\ fractions\ for\ each\ parcel}}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00039}00039\ \ \ \ \ vector<vector<double>>\ tot\_vec;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00040}00040\ \ \ \ \ vector<double>\ weights(numParcels,\ 1.0\ /\ numParcels);\ \ \textcolor{comment}{//\ Initialize\ weights\ once}}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00041}00041\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00042}00042\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ \mbox{\hyperlink{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213}{variableNames}}.size();\ ++i)\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00043}00043\ \ \ \ \ \ \ \ \ tot\_vec.push\_back(\mbox{\hyperlink{ex__1_8cc_ad76b7bf13c3053058a6df4f44d02635a}{initializeMixingFractions}}(numParcels));}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00044}00044\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00045}00045\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00046}00046\ \ \ \ \ \textcolor{comment}{//\ Set\ state\ vectors\ in\ each\ parcel}}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00047}00047\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ tot\_vec.size();\ i++)\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00048}00048\ \ \ \ \ \ \ \ \ HiPS.\mbox{\hyperlink{clasships_aa1399c0bc82204726c4c70325650f2bb}{set\_varData}}(tot\_vec[i],\ weights,\ \mbox{\hyperlink{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213}{variableNames}}[i]);}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00050}00050\ \ \ \ \ HiPS.\mbox{\hyperlink{clasships_a81441b0964a4d5b0d9d471f91318aaf5}{calculateSolution}}(tRun,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00051}00051\ }
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00052}00052\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00053}00053\ \}}
+\DoxyCodeLine{\Hypertarget{ex__1_8cc_source_l00054}00054\ }
 
 \end{DoxyCode}

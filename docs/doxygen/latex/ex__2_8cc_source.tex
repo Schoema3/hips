@@ -1,119 +1,122 @@
-\hypertarget{ex__2_8cc_source}{}\doxysection{ex\+\_\+2.\+cc}
-\label{ex__2_8cc_source}\index{/Users/maisy/hips-\/lib-\/final/hips/examples/examples-\/bkp/ex\_2.cc@{/Users/maisy/hips-\/lib-\/final/hips/examples/examples-\/bkp/ex\_2.cc}}
+\doxysection{ex\+\_\+2.\+cc}
+\hypertarget{ex__2_8cc_source}{}\label{ex__2_8cc_source}\index{/Users/mbehrang/hips-\/final/hips/examples/ex\_2.cc@{/Users/mbehrang/hips-\/final/hips/examples/ex\_2.cc}}
 \mbox{\hyperlink{ex__2_8cc}{Go to the documentation of this file.}}
 \begin{DoxyCode}{0}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00001}00001 \textcolor{preprocessor}{\#include "{}\mbox{\hyperlink{hips_8h}{hips.h}}"{}}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00002}00002 \textcolor{preprocessor}{\#include "{}cantera/base/Solution.h"{}}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00003}00003 \textcolor{preprocessor}{\#include "{}cantera/thermo.h"{}}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00004}00004 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00005}00005 \textcolor{preprocessor}{\#include <vector>}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00006}00006 \textcolor{preprocessor}{\#include <string>}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00007}00007 \textcolor{preprocessor}{\#include <fstream>}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00008}00008 \textcolor{preprocessor}{\#include <sstream>}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00009}00009 \textcolor{preprocessor}{\#include <iostream>}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00010}00010 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00011}00011 \textcolor{keyword}{using namespace }std;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00012}00012 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00013}00013 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00015}00015 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00027}\mbox{\hyperlink{ex__2_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}{00027}} \textcolor{keywordtype}{int} \mbox{\hyperlink{ex__2_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}}() \{}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00028}00028   }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00029}00029     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ setting  HiPS tree and constructor}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00030}00030 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00031}00031     \textcolor{keywordtype}{int}            nLevels      = 9;           \textcolor{comment}{// \# HiPS tree levels}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00032}00032     \textcolor{keywordtype}{double}         domainLength = 1.0;         \textcolor{comment}{// HiPS tree lengthscale}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00033}00033     \textcolor{keywordtype}{double}         tau0         = 1.0;         \textcolor{comment}{// HiPS tree timescale}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00034}00034     \textcolor{keywordtype}{double}         C\_param      = 0.5;         \textcolor{comment}{// HiPS eddy rate multiplier}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00035}00035     \textcolor{keywordtype}{double}         tRun         = 400.0;       \textcolor{comment}{// tree evolution time}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00036}00036     \textcolor{keywordtype}{int}            forceTurb    = 0;           \textcolor{comment}{// Force turbulent profile}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00037}00037     vector<double> ScHips(54,1);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00038}00038 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00039}00039     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ setting gas solution}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00040}00040 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00041}00041     \textcolor{comment}{//auto   cantSol = Cantera::newSolution("{}2S\_CH4\_BFER.yaml"{}, "{}2S\_CH4\_BFER"{}, "{}None"{});}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00042}00042     \textcolor{keyword}{auto}   cantSol = Cantera::newSolution(\textcolor{stringliteral}{"{}gri30.yaml"{}});}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00043}00043     \textcolor{keyword}{auto}   gas = cantSol-\/>thermo();}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00044}00044     \textcolor{keywordtype}{size\_t} nsp = gas-\/>nSpecies();}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00045}00045     \textcolor{keywordtype}{int}    nVar = nsp+1;           \textcolor{comment}{// 1 + nsp: h, y }}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00046}00046 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00047}00047     \mbox{\hyperlink{clasships}{hips}} HiPS(nLevels,}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00048}00048               domainLength,}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00049}00049               tau0, }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00050}00050               C\_param,}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00051}00051               forceTurb,}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00052}00052               nVar,}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00053}00053               ScHips,}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00054}00054               cantSol,  }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00055}00055               \textcolor{keyword}{true});}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00056}00056 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00057}00057     \textcolor{keywordtype}{int} nparcels = HiPS.\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}};}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00058}00058 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00059}00059     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ declaring state vectors}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00060}00060 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00061}00061     vector<vector <double > > ysp(nsp, vector<double> (nparcels, 0));}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00062}00062     vector<double>            h(nparcels); }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00063}00063 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00064}00064     vector<double>            y0(nsp);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00065}00065     \textcolor{keywordtype}{double}                    T0;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00066}00066     \textcolor{keywordtype}{double}                    h0;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00067}00067 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00068}00068     vector<double>            y1(nsp);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00069}00069     \textcolor{keywordtype}{double}                    T1;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00070}00070     \textcolor{keywordtype}{double}                    h1;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00071}00071     vector<string>            variableNames(nsp+1);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00072}00072 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00073}00073     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ set state vectors in each parcel}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00074}00074 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00075}00075     T0 = 300.0;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00076}00076     gas-\/>setState\_TPX(T0, Cantera::OneAtm, \textcolor{stringliteral}{"{}CH4:1"{}});}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00077}00077     gas-\/>getMassFractions(\&y0[0]);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00078}00078     h0 = gas-\/>enthalpy\_mass();}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00079}00079 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00080}00080     T1 = 300;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00081}00081     gas-\/>setState\_TPX(T1, Cantera::OneAtm, \textcolor{stringliteral}{"{}O2:2, N2:7.52"{}});}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00082}00082     gas-\/>getMassFractions(\&y1[0]);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00083}00083     h1 = gas-\/>enthalpy\_mass();}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00084}00084 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00085}00085     \textcolor{keywordtype}{double} mixf = 16/(16+29*9.52);  \textcolor{comment}{// stoichiometric}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00086}00086     vector<double> ymix(nsp);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00087}00087     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} k=0; k<nsp; k++)}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00088}00088         ymix[k] = y0[k]*(1-\/mixf) + y1[k]*mixf;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00089}00089     \textcolor{keywordtype}{double} hmix = h0*(1-\/mixf) + h1*mixf;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00090}00090     vector<double> yeq(nsp);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00091}00091     gas-\/>setMassFractions(\&ymix[0]);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00092}00092     gas-\/>setState\_HP(hmix, gas-\/>pressure());}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00093}00093     gas-\/>equilibrate(\textcolor{stringliteral}{"{}HP"{}});}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00094}00094 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00095}00095     \textcolor{keywordtype}{double} fracBurn = 0.5;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00096}00096     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0; i<fracBurn*nparcels; i++) \{}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00097}00097         h[i] = hmix;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00098}00098         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k=0; k<nsp; k++)}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00099}00099             ysp[k][i] = gas-\/>massFraction(k);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00100}00100     \}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00101}00101     \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=fracBurn*nparcels; i<nparcels; i++) \{}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00102}00102         h[i] = hmix;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00103}00103         \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k=0; k<nsp; k++)}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00104}00104             ysp[k][i] = ymix[k];}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00105}00105     \}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00106}00106      }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00107}00107    variableNames[0] = \textcolor{stringliteral}{"{}enthalpy"{}};}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00108}00108    \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0; i<ysp.size(); i++)}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00109}00109        variableNames[i+1] = gas-\/>speciesName(i);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00110}00110 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00111}00111    vector<double>           weight(nparcels, 1.0/nparcels);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00112}00112 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00113}00113     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ set array of hips variables from state variables}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00114}00114 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00115}00115     HiPS.\mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{set\_varData}}(h,weight, variableNames[0],  0);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00116}00116     \textcolor{keywordflow}{for} (\textcolor{keywordtype}{int} k=0; k<ysp.size(); k++) }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00117}00117         HiPS.\mbox{\hyperlink{clasships_af9538eb8b5500ff92191287ffb1b1358}{set\_varData}}(ysp[k],weight, variableNames[k+1], k+1);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00118}00118 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00119}00119     \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/ advancing HiPS to do rxn and mixing}}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00120}00120 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00121}00121     HiPS.\mbox{\hyperlink{clasships_a8dd010962442d98a3959ea336670c8db}{calculateSolution}}(tRun);}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00122}00122 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00123}00123     \textcolor{keywordflow}{return} 0;}
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00124}00124 }
-\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00125}00125 \}  }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00001}00001\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00006}00006\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{hips_8h}{hips.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00007}00007\ \textcolor{preprocessor}{\#include\ "{}cantera/base/Solution.h"{}}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00008}00008\ \textcolor{preprocessor}{\#include\ "{}cantera/thermo.h"{}}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00010}00010\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00011}00011\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00012}00012\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00013}00013\ \textcolor{preprocessor}{\#include\ <sstream>}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00014}00014\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00015}00015\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00016}00016\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00017}00017\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00019}00019\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00026}\mbox{\hyperlink{ex__2_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}{00026}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{ex__2_8cc_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}}()\ \{}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00027}00027\ \ \ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00028}00028\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ setting\ \ HiPS\ tree\ and\ constructor}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00029}00029\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00030}00030\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ nLevels\ \ \ \ \ \ =\ 6;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ \#\ HiPS\ tree\ levels}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00031}00031\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ domainLength\ =\ 0.01;\ \ \ \ \ \ \ \ \textcolor{comment}{//\ HiPS\ tree\ lengthscale}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00032}00032\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ tau0\ \ \ \ \ \ \ \ \ =\ 0.0005;\ \ \ \ \textcolor{comment}{//\ HiPS\ tree\ timescale}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00033}00033\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ C\_param\ \ \ \ \ \ =\ 0.5;\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ HiPS\ eddy\ rate\ multiplier}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00034}00034\ \ \ \ \ \textcolor{keywordtype}{double}\ \ \ \ \ \ \ \ \ tRun\ \ \ \ \ \ \ \ \ =\ 0.05;\ \ \ \ \ \ \textcolor{comment}{//\ tree\ evolution\ time}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00035}00035\ \ \ \ \ \textcolor{keywordtype}{int}\ \ \ \ \ \ \ \ \ \ \ \ forceTurb\ \ \ \ =\ 0;\ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Force\ turbulent\ profile}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00036}00036\ \ \ \ \ vector<double>\ ScHips(54,1);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Schmidt\ number\ is\ unity\ for\ all\ species}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00037}00037\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00038}00038\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ setting\ gas\ solution}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00039}00039\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00040}00040\ \ \ \ \ \textcolor{keyword}{auto}\ cantSol\ =\ Cantera::newSolution(\textcolor{stringliteral}{"{}gri30.yaml"{}});}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00041}00041\ \ \ \ \ \textcolor{keyword}{auto}\ gas\ =\ cantSol-\/>thermo();}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00042}00042\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ nsp\ =\ gas-\/>nSpecies();}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00043}00043\ \ \ \ \ \textcolor{keywordtype}{int}\ nVar\ =\ nsp\ +\ 1;\ \textcolor{comment}{//\ 1\ (enthalpy)\ +\ number\ of\ species\ }}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00045}00045\ \ \ \ \ \mbox{\hyperlink{clasships}{hips}}\ HiPS(nLevels,}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00046}00046\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ domainLength,}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00047}00047\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ tau0,\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00048}00048\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ C\_param,}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00049}00049\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ forceTurb,}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00050}00050\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nVar,}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00051}00051\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ScHips,\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00052}00052\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{true}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00053}00053\ \#ifdef\ REACTIONS\_ENABLED}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00054}00054\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ,\ cantSol}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00055}00055\ \#endif}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00056}00056\ \ \ \ \ \ \ \ \ \ \ \ \ \ );}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00057}00057\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00058}00058\ \ \ \ \ \textcolor{keywordtype}{int}\ nparcels\ =\ HiPS.\mbox{\hyperlink{clasships_aacf4a6ce98ac34525bdeb1c775154c67}{nparcels}};}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00059}00059\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00060}00060\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ declaring\ state\ vectors}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00061}00061\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00062}00062\ \ \ \ \ vector<vector<double>>\ ysp(53,\ vector<double>(nparcels,\ 0));\ \textcolor{comment}{//\ Vector\ to\ store\ species\ mass\ fractions\ for\ each\ parcel}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00063}00063\ \ \ \ \ vector<double>\ h(nparcels);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Vector\ to\ store\ enthalpy\ for\ each\ parcel}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00064}00064\ \ \ \ \ vector<double>\ T(nparcels);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Vector\ to\ store\ temperature\ for\ each\ parcel}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00065}00065\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00066}00066\ \ \ \ \ vector<double>\ y0(nsp);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Initial\ state\ vector\ for\ fresh\ reactants}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00067}00067\ \ \ \ \ \textcolor{keywordtype}{double}\ T0;}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00068}00068\ \ \ \ \ \textcolor{keywordtype}{double}\ h0;}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00069}00069\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00070}00070\ \ \ \ \ vector<double>\ y1(nsp);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Initial\ state\ vector\ for\ pre-\/combusted\ parcels}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00071}00071\ \ \ \ \ \textcolor{keywordtype}{double}\ T1;}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00072}00072\ \ \ \ \ \textcolor{keywordtype}{double}\ h1;}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00073}00073\ \ \ \ \ vector<string>\ \mbox{\hyperlink{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213}{variableNames}}(nsp\ +\ 1);\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ Names\ of\ variables\ (enthalpy\ and\ species)}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00075}00075\ \ \ \ \ \textcolor{comment}{//-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ set\ state\ vectors\ in\ each\ parcel}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00076}00076\ \ \ \ \ \textcolor{keywordtype}{double}\ fracBurn\ =\ 0.25;\ \textcolor{comment}{//\ 25\%\ of\ parcels\ are\ pre-\/combusted}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00078}00078\ \ \ \ \ T0\ =\ 300.0;}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00079}00079\ \ \ \ \ gas-\/>setState\_TPX(T0,\ Cantera::OneAtm,\ \textcolor{stringliteral}{"{}C2H4:1,\ O2:3,\ N2:11.25"{}});}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00080}00080\ \ \ \ \ h0\ =\ gas-\/>enthalpy\_mass();}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00081}00081\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00082}00082\ \ \ \ \ gas-\/>getMassFractions(y0.data());}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00083}00083\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00084}00084\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ nsp;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00085}00085\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j\ =\ 0;\ j\ <\ 25;\ j++)\ \{\ \textcolor{comment}{//\ Set\ state\ for\ fresh\ reactants}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00086}00086\ \ \ \ \ \ \ \ \ \ \ \ \ h[j]\ =\ h0;}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00087}00087\ \ \ \ \ \ \ \ \ \ \ \ \ T[j]\ =\ gas-\/>temperature();}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00088}00088\ \ \ \ \ \ \ \ \ \ \ \ \ ysp[i][j]\ =\ y0[i];}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00089}00089\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//cout\ <<\ "{}\ i\ "{}\ <<\ i\ <<\ "{}\ j\ "{}\ <<\ j\ <<\ "{}\ ysp\ "{}\ <<\ gas-\/>temperature()\ <<\ endl;}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00090}00090\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00091}00091\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00092}00092\ \ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00093}00093\ \ \ \ \ T1\ =\ 300.0;}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00094}00094\ \ \ \ \ gas-\/>setState\_TPX(T0,\ Cantera::OneAtm,\ \textcolor{stringliteral}{"{}C2H4:1,\ O2:3,\ N2:11.25"{}});}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00095}00095\ \ \ \ \ h1\ =\ gas-\/>enthalpy\_mass();}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00096}00096\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00097}00097\ \ \ \ \ gas-\/>setState\_HP(h1,\ gas-\/>pressure());}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00098}00098\ \ \ \ \ gas-\/>equilibrate(\textcolor{stringliteral}{"{}HP"{}});}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00099}00099\ \ \ \ \ gas-\/>getMassFractions(y1.data());}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00100}00100\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00101}00101\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ nsp;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00102}00102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ j\ =\ 25;\ j\ <\ nparcels;\ j++)\ \{\ \textcolor{comment}{//\ Set\ state\ for\ pre-\/combusted\ parcels}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00103}00103\ \ \ \ \ \ \ \ \ \ \ \ \ h[j]\ =\ h1;}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00104}00104\ \ \ \ \ \ \ \ \ \ \ \ \ T[j]\ =\ gas-\/>temperature();}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00105}00105\ \ \ \ \ \ \ \ \ \ \ \ \ ysp[i][j]\ =\ y1[i];}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00106}00106\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//cout\ <<\ "{}\ i\ "{}\ <<\ i\ <<\ "{}\ j\ "{}\ <<\ j\ <<\ "{}\ \ "{}\ <<\ gas-\/>speciesName(i)\ <<\ "{}\ ysp\ "{}\ <<\ gas-\/>temperature()\ <<\ endl;}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00107}00107\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00108}00108\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00110}00110\ \ \ \ \ HiPS.\mbox{\hyperlink{clasships_ac02ac6c9a756c5f0cc2655ea8cbbb916}{Temp}}\ =\ T;}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00112}00112\ \ \ \ \ \mbox{\hyperlink{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213}{variableNames}}[0]\ =\ \textcolor{stringliteral}{"{}enthalpy"{}};}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00113}00113\ \ \ \ \ \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ ysp.size();\ i++)}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00114}00114\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213}{variableNames}}[i\ +\ 1]\ =\ gas-\/>speciesName(i);}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00115}00115\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00116}00116\ \ \ \ \ vector<double>\ weight(nparcels,\ 1.0\ /\ nparcels);\ \textcolor{comment}{//\ Set\ weight\ for\ each\ parcel}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00118}00118\ \ \ \ \ HiPS.\mbox{\hyperlink{clasships_aa1399c0bc82204726c4c70325650f2bb}{set\_varData}}(h,\ weight,\ \mbox{\hyperlink{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213}{variableNames}}[0]);}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00119}00119\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ k\ =\ 0;\ k\ <\ ysp.size();\ k++)\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00120}00120\ \ \ \ \ \ \ \ \ HiPS.\mbox{\hyperlink{clasships_aa1399c0bc82204726c4c70325650f2bb}{set\_varData}}(ysp[k],\ weight,\ \mbox{\hyperlink{ex__1_8cc_a980f58dcaefbb109b44c378369e8d213}{variableNames}}[k\ +\ 1]);}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00121}00121\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00122}00122\ \ \ \ \ \textcolor{comment}{//\ \ //-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\ advancing\ HiPS\ to\ do\ rxn\ and\ mixing}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00123}00123\ \ \ \ \ HiPS.\mbox{\hyperlink{clasships_a81441b0964a4d5b0d9d471f91318aaf5}{calculateSolution}}(tRun,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00124}00124\ }
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00125}00125\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00126}00126\ \}}
+\DoxyCodeLine{\Hypertarget{ex__2_8cc_source_l00127}00127\ }
 
 \end{DoxyCode}
