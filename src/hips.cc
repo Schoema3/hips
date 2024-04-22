@@ -156,6 +156,7 @@ hips::hips(int nLevels_,
     
     //------------------- Set the parcel addresses (index array)
    varRho.resize(nparcels);
+   Temp.resize(nparcels);
  
     pLoc.resize(nparcels);
     for (int i=0; i<nparcels; i++)
@@ -384,8 +385,8 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
     int    fileCounter = 0;                                                // number of data files written
     int    iLevel;                                                         // tree level of EE with top at iLevel=0
     int    iTree;                                                          // one of two subtrees involved in swap at iLevel
-    double dtEE;                                                           // time increment to next eddy event 
-    time = 0.0;                        // initialize simulation time
+    dtEE;                                                                 
+    time = 0.0;                                                            // initialize simulation time
 
     sample_hips_eddy(dtEE, iLevel);    // get first EE at time 0+dtEE
     nEddies++;
@@ -566,8 +567,9 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
         for (int k=0; k<nsp; k++)
             y[k] = varData[k+1][0][ime];
         #ifdef REACTIONS_ENABLED
-             bRxr->react(h, y, dt);
+             bRxr->react(h, y, dtEE);
             varRho[ime] =  bRxr->getDensity();             //Mb
+            Temp[ime] = bRxr->temperature;
         #endif
         varData[0][0][ime] = h;
         for (int k=0; k<nsp; k++)
@@ -693,32 +695,35 @@ void hips::forceProfile() {
  */
 void hips::writeData(const int ifile, const double outputTime) {
     // Create the "data" directory if it doesn't exist
-    system("mkdir -p ../data");
-
-    stringstream ss1;
-    string s1;
-    ss1 << setfill('0') << setw(5) << ifile;
-    ss1 >> s1;                                                                  // Convert the index into a string with leading zeros for filename
-
-    string fname = "../data/Data_" + s1 + ".dat";                               // Construct the filename
-
-    ofstream ofile(fname.c_str());                                              // Open the file for writing
-
-    ofile << "# time = " << outputTime << "\n";                                  // Write the time and number of grid points into the file
-    ofile << "# Grid Points = " << nparcels << "\n";
-
-    for (const auto& name : varName)
-        ofile << setw(14) << name;                                              // Write variable names into the file
-    ofile << scientific << setprecision(10);
-
-    for (int i = 0; i < nparcels; i++) {
-        ofile << "\n";                                                          // Start a new line for each parcel
-
-        for (int k = 0; k < nVar; k++)
-            ofile << setw(19) << varData[k][0][pLoc[i]];                       // Write data for each variable
+    if (system("mkdir -p ../data") != 0) {
+        cerr << "Error: Unable to create directory ../data" << endl;
+        return;
     }
 
-    ofile.close();                                                              // Close the file
+    stringstream ss;
+    ss << setw(5) << setfill('0') << ifile;
+    string fileName = "../data/Data_" + ss.str() + ".dat";
+
+    ofstream outputFile(fileName);
+    if (!outputFile) {
+        cerr << "Error: Unable to open file " << fileName << " for writing" << endl;
+        return;
+    }
+
+    outputFile << "# time = " << outputTime << "\n";
+    outputFile << "# Grid Points = " << nparcels << "\n";
+    outputFile << "#temperature" << setw(14);
+    for (const auto& name : varName)
+        outputFile << "#" << setw(14) << name;
+    outputFile << scientific << setprecision(10);
+
+    for (int i = 0; i < nparcels; ++i) {
+        outputFile << "\n" << setw(19) << Temp[pLoc[i]];            // Write temp data for each parcel
+        for (int k = 0; k < nVar; ++k)
+            outputFile << setw(19) << varData[k][0][pLoc[i]];       // Write data for each variable
+    }
+
+    outputFile.close();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

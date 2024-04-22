@@ -29,11 +29,8 @@ public:
     double domainLength;                                                 ///< length of domain (m)
     double tau0;                                                         ///< integral timescale
     double C_param;                                                      ///< Eddy frequency parameter
-    double time;                                                         ///< current simulation time
-    double eddyRate_total;                                               ///< total rate of all eddies 0 through nLevels-3
-    double eddyRate_inertial;                                            ///< total rate of all eddies 0 through iEta (= eddyRate_total if Sc=1) 
-    double Afac = 0.5;                                                   ///< level lengthscale reduction factor (0.5)
-    double Re;                                                           ///< Reynolds number
+    std::vector<double> Temp;                                            ///< Vector containg temperature in each parcel;
+ 
 private:
     // Private data members
     int nLevels;                                                         ///< number of tree levels
@@ -48,6 +45,12 @@ private:
     bool LScHips;                                                        ///< hips schmidt number
     bool performReaction;                                                ///< Flag indicating whether chemical reactions are performed in the simulation 
     bool LrandSet;                                                       ///< flag indicating new randomGen  --> allow deletion
+    double time;                                                         ///< current simulation time
+    double eddyRate_total;                                               ///< total rate of all eddies 0 through nLevels-3
+    double eddyRate_inertial;                                            ///< total rate of all eddies 0 through iEta (= eddyRate_total if Sc=1) 
+    double Afac = 0.5;                                                   ///< level lengthscale reduction factor (0.5)
+    double Re;                                                           ///< Reynolds number
+    double dtEE;                                                         ///< time increment to next eddy event 
     randomGenerator rand;
     std::vector<int> i_plus;                                             ///< ceil(i_batchelor)
     std::vector<int> pLoc;                                               ///< parcel index array for fast implementation of swaps
@@ -59,6 +62,8 @@ private:
     std::vector<double> i_batchelor;                                     ///< Batchelor level for variable Sc scalars; NOTE: double, as in, between levels
     std::vector<double> xc;                                              ///< Vector containing physical domain of flow particles
     std::vector<double> xh;                                              ///< Vector containing physical domain of HiPS parcels
+       
+
 
 public:
     // MEMBER FUNCTIONS

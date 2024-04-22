@@ -24,7 +24,8 @@ protected:
     double                                h_fixed;    ///< adiabatic h during integrate
     double                                P_fixed;    ///< pressure during integrate
     double                                rho;
-
+public:
+    double                                temperature;
 /////////////////////////////// MEMBER FUNCTIONS//////////////////////////////////////////
 
 public:
@@ -33,6 +34,6 @@ public:
 
     virtual void react(double &h, std::vector<double> &y, const double tRun) = 0;
     double getDensity() const { return rho; }       //Mb
-
+    
     virtual ~batchReactor() {}
 };

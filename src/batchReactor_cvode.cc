@@ -70,6 +70,8 @@ int batchReactor_cvode::rhsf(const double t, const double *vars, double *dvarsdt
 
     // Calculate density and reaction rates
     double rho = gas->density();
+    temperature = gas->temperature();
+
     std::vector<double> rr(nvar);
     kin->getNetProductionRates(&rr[0]);
     for (size_t k = 0; k < gas->nSpecies(); k++)
