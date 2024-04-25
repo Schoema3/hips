@@ -25,25 +25,20 @@
 var NAVTREE =
 [
   [ "hips", "index.html", [
-    [ "Overview", "index.html#autotoc_md5", null ],
-    [ "Dependencies and installation", "index.html#autotoc_md7", [
-      [ "Build and installation instructions", "index.html#autotoc_md8", null ],
-      [ "CMake configuration variables", "index.html#autotoc_md9", null ]
+    [ "Overview", "index.html#autotoc_md1", null ],
+    [ "Dependencies and installation", "index.html#autotoc_md2", [
+      [ "Required software:", "index.html#autotoc_md3", null ],
+      [ "Optional software:", "index.html#autotoc_md4", null ],
+      [ "Build and installation instructions", "index.html#autotoc_md5", null ],
+      [ "CMake configuration variables", "index.html#autotoc_md6", null ]
     ] ],
-    [ "Using HiPS", "index.html#autotoc_md10", null ],
-    [ "Example workflow", "index.html#autotoc_md11", [
-      [ "HiPS Tree and Constructor Parameters", "index.html#autotoc_md12", null ],
-      [ "Gas Solution Setup (required for reaction)", "index.html#autotoc_md14", null ],
-      [ "HiPS Tree Creation", "index.html#autotoc_md16", null ],
-      [ "Initialize Variables and Parameters", "index.html#autotoc_md18", null ],
-      [ "Initialize Mixing Fractions", "index.html#autotoc_md19", null ],
-      [ "Set Initial State in Parcels", "index.html#autotoc_md21", null ],
-      [ "Advance HiPS for Mixing and Reaction", "index.html#autotoc_md22", null ],
-      [ "Implementation Guidelines", "index.html#autotoc_md23", null ]
+    [ "Using HiPS", "index.html#autotoc_md7", [
+      [ "Example Workflow", "index.html#autotoc_md8", null ],
+      [ "Implementation Guidelines", "index.html#autotoc_md9", null ],
+      [ "Examples", "index.html#autotoc_md10", null ]
     ] ],
-    [ "Examples", "index.html#autotoc_md24", null ],
     [ "md_results_2test", "md_results_2test.html", [
-      [ "JUST TO SEE", "md_results_2test.html#autotoc_md26", null ]
+      [ "JUST TO SEE", "md_results_2test.html#autotoc_md0", null ]
     ] ],
     [ "Classes", "annotated.html", [
       [ "Class List", "annotated.html", "annotated_dup" ],

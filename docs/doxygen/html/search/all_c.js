@@ -1,8 +1,13 @@
 var searchData=
 [
-  ['for_20mixing_20and_20reaction_0',['7. Advance HiPS for Mixing and Reaction',['../index.html#autotoc_md22',1,'']]],
-  ['for_20reaction_1',['2. Gas Solution Setup (required for reaction)',['../index.html#autotoc_md14',1,'']]],
-  ['forceprofile_2',['forceProfile',['../clasships.html#a2e1bb3550fb08551e13609f028a10712',1,'hips']]],
-  ['forceturb_3',['forceTurb',['../clasships.html#a61569cff2835802d3daca4fb71e11b76',1,'hips']]],
-  ['fractions_4',['5. Initialize Mixing Fractions',['../index.html#autotoc_md19',1,'']]]
+  ['m_0',['M',['../class_m_t_rand.html#a10c3437be98225f5b0beee1ed8c033c8a133070000b798889cd75535ea0d5bb71',1,'MTRand']]],
+  ['main_1',['main',['../ex__1_8cc.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;ex_1.cc'],['../ex__2_8cc.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;ex_2.cc'],['../ex__3_8cc.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;ex_3.cc']]],
+  ['mainpage_2emd_2',['mainpage.md',['../mainpage_8md.html',1,'']]],
+  ['md_5fresults_5f2test_3',['md_results_2test',['../md_results_2test.html',1,'']]],
+  ['mersennetwister_2eh_4',['MersenneTwister.h',['../_mersenne_twister_8h.html',1,'']]],
+  ['mixacrossleveltree_5',['mixAcrossLevelTree',['../clasships.html#ac85a7c7a9fb9df6ed29b96009de7a21f',1,'hips']]],
+  ['mixbits_6',['mixBits',['../class_m_t_rand.html#a41b6713f75a771c5ec8e71ef6832a5fa',1,'MTRand']]],
+  ['mixfstoic_7',['mixfStoic',['../classstreams.html#aa3bca73dd6a32a008a47a01da4ab89c0',1,'streams']]],
+  ['mtrand_8',['MTRand',['../class_m_t_rand.html',1,'MTRand'],['../class_m_t_rand.html#ab4f392e44228a583b7b1a3f036fb2fd0',1,'MTRand::MTRand(const uint32 &amp;oneSeed)'],['../class_m_t_rand.html#a380e79e0192b46426abcefa6e2dd082e',1,'MTRand::MTRand(uint32 *const bigSeed, uint32 const seedLength=N)'],['../class_m_t_rand.html#a265dc65546e26073c0d5f8787b045a1d',1,'MTRand::MTRand()']]],
+  ['mtwist_9',['mtwist',['../classrandom_generator.html#a8b02be3e52aea569321e124d0651074d',1,'randomGenerator']]]
 ];

@@ -1,18 +1,16 @@
 var searchData=
 [
-  ['gas_0',['gas',['../classbatch_reactor.html#a569251f4aa45e53dfd7584aa671a9771',1,'batchReactor::gas'],['../classstreams.html#ae4b6df5777b35edb11ff73d5491ffda5',1,'streams::gas']]],
-  ['gas_20solution_20setup_20required_20for_20reaction_1',['2. Gas Solution Setup (required for reaction)',['../index.html#autotoc_md14',1,'']]],
-  ['gchon_2',['gCHON',['../classstreams.html#abf0b064bb492fa5ea0836bc178e8303a',1,'streams']]],
-  ['get_5fvardata_3',['get_varData',['../clasships.html#a4f12ec17e2983edef734832203570c87',1,'hips']]],
-  ['getdensity_4',['getDensity',['../classbatch_reactor.html#a915a784039c36da099fe591c30566d2f',1,'batchReactor']]],
-  ['getelementmoles_5',['getElementMoles',['../classstreams.html#a45695a5c046ae2a7de87af1654996ce8',1,'streams']]],
-  ['getequilibrium_5fhp_6',['getEquilibrium_HP',['../classstreams.html#a6dbf93fbcde09e925bead7ce9c0113e9',1,'streams']]],
-  ['getequilibrium_5ftp_7',['getEquilibrium_TP',['../classstreams.html#afb9231a9360300ec0688d1c1e404ca78',1,'streams']]],
-  ['getmixingstate_8',['getMixingState',['../classstreams.html#aebccdb0fdffb04228f87d73d506d96c5',1,'streams']]],
-  ['getmixturefraction_9',['getMixtureFraction',['../classstreams.html#ad4916fb672c02d1c414b55f443f6f4f4',1,'streams']]],
-  ['getprodofcompletecomb_10',['getProdOfCompleteComb',['../classstreams.html#ae1acfdaebac0b26841c76d9aaacc4b31',1,'streams']]],
-  ['getrand_11',['getRand',['../classrandom_generator.html#a2b7548422caaa032387e3b58feb6f474',1,'randomGenerator']]],
-  ['getrandint_12',['getRandInt',['../classrandom_generator.html#a3b6451ebf7eea0e796dd1aba501f7613',1,'randomGenerator']]],
-  ['getstate_13',['getState',['../classbatch_reactor__cantera.html#ad64fdb0dc2da58526e083193723a0189',1,'batchReactor_cantera']]],
-  ['guidelines_14',['Guidelines',['..//Users/mbehrang/hips-final/hips/docs/mainpage.md#autotoc_md17',1,'Implementation Guidelines'],['../index.html#autotoc_md23',1,'Implementation Guidelines']]]
+  ['n_0',['N',['../class_m_t_rand.html#ab8fea37d16b55e1a0fe06149e325f1b6a60f472facea8fabd42765cd91273db7b',1,'MTRand']]],
+  ['neq_1',['neq',['../classbatch_reactor__cantera.html#af3cc618b57e267c3bb9d732287e46c20',1,'batchReactor_cantera']]],
+  ['nl_2',['nL',['../clasships.html#a385507f28dfda82ed6d172d8533fb336',1,'hips']]],
+  ['nlevels_3',['nLevels',['../clasships.html#af05ebcf315fa2b5c627f9d38395f576e',1,'hips']]],
+  ['nlevels_5f_4',['nLevels_',['../clasships.html#a0c7d7ea0e014fe4b34c9db6ad9e19fba',1,'hips']]],
+  ['nm1_5',['Nm1',['../clasships.html#af0e018ac591dc6d210f39d73152dc5b7',1,'hips']]],
+  ['nm2_6',['Nm2',['../clasships.html#a0a59c28db4e081ee7c4afa2ba051dc64',1,'hips']]],
+  ['nm3_7',['Nm3',['../clasships.html#a008fdf2528663d23c02f07364bce9e45',1,'hips']]],
+  ['nparcels_8',['nparcels',['../clasships.html#aacf4a6ce98ac34525bdeb1c775154c67',1,'hips']]],
+  ['nsp_9',['nsp',['../clasships.html#a61dca70748931a42d50254435f36e5e8',1,'hips']]],
+  ['nspc_10',['nspc',['../classstreams.html#a5f4ed5333c43b8761758c93d06232357',1,'streams']]],
+  ['nvar_11',['nVar',['../clasships.html#a0b8e82059b65e7870c04dd696f930248',1,'hips']]],
+  ['nvar_12',['nvar',['../classbatch_reactor.html#a25a411dda898478f3c8ff2a5351906e5',1,'batchReactor::nvar'],['../classintegrator__cvode.html#a19a696601751fc7b7b3ad0156517e2d0',1,'integrator_cvode::nvar']]]
 ];
