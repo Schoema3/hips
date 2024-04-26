@@ -17,23 +17,97 @@ using namespace std;
 ////////////////////////////////////////////////////////////////////////////////
 
 int hips::nL = 0;
-//double hips::Prob = 0;
+double hips::Prob = 0.0;
+double hips::lStar = 0.0; 
+double hips::Anew = 0.0;
 
-
-////////////////////////////////////////////////////////////////////////////////
-/**
- * \brief Constructor for initializing 'nLevels_' based on Reynolds number.
- * \param Re                Reynolds number for turbulence simulation.
- */
-hips::hips(double Re_):
-           Re(Re_)  {
-
-    // Calculate original_N based on Re
-    double original_N = std::log(Re) / (std::log(2) * 4.0 / 3.0);
-    nL = ceil(original_N) + 3;
-      
-}
-
+//////////////////////////////////////////////////////////////////////////////////
+///**
+// * @brief Constructor for the 'hips' class.
+// * 
+// * Initializes a 'hips' object with a given Reynolds number (Re_).
+// * It calculates the original level based on the Reynolds number and adjusts parameters accordingly.
+// * 
+// * @param Re_ The Reynolds number used for initialization.
+// */
+//hips::hips(double Re_) :
+//    Re(Re_) {
+//
+//    double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);            //  Calculate the original level
+//
+//    int lowerLevel = ceil(originalLevel);                           // Round the original level to the nearest integer
+//   
+//    nL = lowerLevel + 3;                                           //  Set the number of levels for the binary tree structure
+//
+//}
+//
+//////////////////////////////////////////////////////////////////////////////////
+///**
+// * @brief Constructor for initializing 'nLevels_' based on Reynolds number.
+// * 
+// * Initializes the 'nLevels_' parameter based on the provided Reynolds number (Re_).
+// * 
+// * @param Re Reynolds number for turbulence simulation.
+// */
+//hips::hips(double Re_) :
+//           Re(Re_)  {
+//    
+//    double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);               //  Calculate the original level
+//                             
+//    
+//    int lowerLevel = ceil(originalLevel);                                    // Round the original level to the nearest integer
+//    int upperLevel = lowerLevel - 1;
+//
+//    Prob = abs(( log(originalLevel) - log(lowerLevel))/ (log(upperLevel) - log(lowerLevel))); // Calculate the probability
+//    
+//    nL = lowerLevel + 3;                                                                     // Set the number of levels for the binary tree structure
+//}
+//
+///////////////////////////////////////////////////////////////////////////////////
+///**
+// * @brief Constructor for the 'hips' class.
+// * 
+// * Initializes a 'hips' object with a given Reynolds number (Re_).
+// * It calculates the original level based on the Reynolds number and adjusts parameters accordingly.
+// * 
+// * @param Re_ The Reynolds number used for initialization.
+// */
+//hips::hips(double Re_) :
+//    Re(Re_) {
+//
+//     double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);         // Calculate the original N
+//
+//     int lowerLevel = ceil(originalLevel);                               // Round the original level to the nearest integer
+//
+//     lStar = std::pow(Re, -3.0/4);                                       // Step 3: Calculate lStar using Re
+//
+//     nL = lowerLevel + 3;                                                 // Step 4: Set the number of levels for the binary tree structure
+//
+//}
+//
+/////////////////////////////////////////////////////////////////////////////////
+///**
+// * @brief Constructor for initializing the HiPS class based on Reynolds number.
+// * 
+// * Adjusts parameter A based on the calculated value of i*_s for a given Reynolds number (Re).
+// * The approach ensures i*_s remains an integer within the binary tree structure.
+// * It rounds i*_s to the nearest integer and recalculates A accordingly, maintaining binary tree integrity.
+// * 
+// * @param Re Reynolds number for turbulence simulation.
+// */
+//hips::hips(double Re_) :
+//    Re(Re_)  { // Initialize Reynolds number
+//
+//    double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);    // Calculate the original level (Step 1)
+//    
+//    int closetLevel = round(originalLevel);   // Round the original level to the nearest integer (Step 2)
+//    
+//    Anew = exp(-log(Re) / ((4.0 / 3.0) * closetLevel));   // Calculate the new value of parameter A (Step 3)
+//    
+//    nL = closetLevel + 3; // Set the number of levels for the binary tree structure (Step 4)
+//}
+//
+//
 ///////////////////////////////////////////////////////////////////////////////
 /**
  * \Constructor for initializing required parameters to create the HiPS tree. 
@@ -115,11 +189,16 @@ hips::hips(int nLevels_,
 
     for (int i=0; i<nLevels; i++) {
         levelLengths[i] = domainLength * pow(Afac,i);
+       //levelLengths[i] = domainLength * pow(Anew,i);
         levelTaus[i] = tau0 * pow(levelLengths[i]/domainLength, 2.0/3.0) / C_param;
         levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
 
     }
-    
+   
+//     levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
+ //    levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
+   
+
     LScHips = ScHips.size() > 0 ? true : false;
     if (LScHips) {                             // correct levels for high Sc (levels > Kolmogorov)
         for (int i=iEta+1; i<nLevels; i++) {
@@ -165,10 +244,9 @@ hips::hips(int nLevels_,
 ////////////////////////////////////////i///////////////////////////////////////
 /**
  * \brief Function to pass the variables, their weights, and their names to the parcels of the tree.  
- * \param v                            Input vector consisting of variables passed to the HiPS tree.
- * \param w                            Input vector containing weights for each flow particle.
- * \param varN                         Input vector containing names corresponding to each variable.
- * \param i                             Index indicating where the data should be assigned in the vectors varData and varName.
+ * \param v                            Vector consisting of variables passed to the HiPS tree.
+ * \param w                            Vector containing weights for each flow particle.
+ * \param varN                         Vector containing names corresponding to each variable.
  */
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN) {  
 
@@ -184,7 +262,6 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
  * \param w                              Vector of weights; each flow particle has a weight.
  * \param varN                           Vector of names of the variable.
  * \param rho                            Vector of density; each flow particle has a specific density.
- * \param i                              index indicating where the data should be assigned in the vectors varData and varName.
  * \note This function is overloaded. This version considers particle density.
  */
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho) {
@@ -400,7 +477,7 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
 
         nEddies++;
         //cout<<"-------------------------------------"<<nEddies<<endl;
-        if(shouldWriteData && nEddies %20 == 0) writeData(++fileCounter, time);
+        if(shouldWriteData && nEddies %50000 == 0) writeData(++fileCounter, time);
     }
     time = tRun;
     iLevel = 0; iTree  = 0;
@@ -531,6 +608,7 @@ void hips::advanceHips(const int iLevel, const int iTree) {
     bool rxnDone = false;                       // react all variables once
     for (int k=0; k<nVar; k++) {                // upon finding first variable needing micromixing
         if ( (iLevel >= i_plus[k]) || 
+              //  (iLevel==i_plus[k]-1 && rand.getRand() <=Prob) ) {
              (iLevel==i_plus[k]-1 && rand.getRand() <= i_plus[k]-i_batchelor[k]) ) {
                 if(!rxnDone && performReaction) {
                    reactParcels_LevelTree(iLevel, iTree);

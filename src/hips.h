@@ -25,6 +25,9 @@ public:
 
     // MEMBER VARIABLES
     static int nL;                                                       ///< adjusted number of levels based on Reynolds
+    static double Prob;
+    static double lStar; 
+    static double Anew; 
     int currentIndex = 0;                                                    ///< Member variable to keep track of current index of variables
     double domainLength;                                                 ///< length of domain (m)
     double tau0;                                                         ///< integral timescale
