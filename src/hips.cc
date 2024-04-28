@@ -14,6 +14,8 @@
 #include <cmath>
 #include <vector>
 using namespace std;
+
+
 ////////////////////////////////////////////////////////////////////////////////
 
 int hips::nL = 0;
@@ -22,24 +24,24 @@ double hips::lStar = 0.0;
 double hips::Anew = 0.0;
 
 //////////////////////////////////////////////////////////////////////////////////
-///**
-// * @brief Constructor for the 'hips' class.
-// * 
-// * Initializes a 'hips' object with a given Reynolds number (Re_).
-// * It calculates the original level based on the Reynolds number and adjusts parameters accordingly.
-// * 
-// * @param Re_ The Reynolds number used for initialization.
-// */
-//hips::hips(double Re_) :
-//    Re(Re_) {
-//
-//    double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);            //  Calculate the original level
-//
-//    int lowerLevel = ceil(originalLevel);                           // Round the original level to the nearest integer
-//   
-//    nL = lowerLevel + 3;                                           //  Set the number of levels for the binary tree structure
-//
-//}
+/**
+ * @brief Constructor for the 'hips' class.
+ * 
+ * Initializes a 'hips' object with a given Reynolds number (Re_).
+ * It calculates the original level based on the Reynolds number and adjusts parameters accordingly.
+ * 
+ * @param Re_ The Reynolds number used for initialization.
+ */
+hips::hips(double Re_) :
+    Re(Re_) {
+
+    double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);            //  Calculate the original level
+
+    int lowerLevel = ceil(originalLevel);                           // Round the original level to the nearest integer
+   
+    nL = lowerLevel + 3;                                           //  Set the number of levels for the binary tree structure
+
+}
 //
 //////////////////////////////////////////////////////////////////////////////////
 ///**
@@ -87,11 +89,11 @@ double hips::Anew = 0.0;
 //
 /////////////////////////////////////////////////////////////////////////////////
 ///**
-// * @brief Constructor for initializing the HiPS class based on Reynolds number.
+// * @brief Constructor for initializing the HiPS class based on the Reynolds number.
 // * 
-// * Adjusts parameter A based on the calculated value of i*_s for a given Reynolds number (Re).
+// * Adjusts reduction factor based on the calculated value for a given level, originalLevel, for the Reynolds numbers.
 // * The approach ensures i*_s remains an integer within the binary tree structure.
-// * It rounds i*_s to the nearest integer and recalculates A accordingly, maintaining binary tree integrity.
+// * It rounds originalLevel to the nearest integer and recalculates Anew accordingly, maintaining binary tree integrity.
 // * 
 // * @param Re Reynolds number for turbulence simulation.
 // */
@@ -109,19 +111,6 @@ double hips::Anew = 0.0;
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
-/**
- * \Constructor for initializing required parameters to create the HiPS tree. 
- * \param nLevels_                     Input number of tree levels.
- * \param domainLength_                Input length scale of the domain.
- * \param tau0_                        Input time scale of the domain.
- * \param C_param_                     Input c parameter to control eddy rate
- * \param forceTurb_                   Input flag for forcing turbulence.
- * \param nVar_                        Input number of variables.
- * \param ScHips_                      Input vector of Schmidt numbers for HiPS simulation.
- * \param cantSol                      Input Cantera solution object.
- * \param performReaction_             Input flag for performing chemical reactions
- * \param seed                         Input seed for the random number generator(negative to randomize it).
- */
 hips::hips(int nLevels_, 
            double domainLength_, 
            double tau0_, 
@@ -195,8 +184,8 @@ hips::hips(int nLevels_,
 
     }
    
-//     levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
- //    levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
+      // levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
+      // levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
    
 
     LScHips = ScHips.size() > 0 ? true : false;
@@ -226,7 +215,7 @@ hips::hips(int nLevels_,
         if (ScHips[k] < 1.0)
             i_batchelor[k] = iEta + 1.5*log(ScHips[k])/log(4);
         else if (ScHips[k] > 1.0)
-            i_batchelor[k] = iEta +     log(ScHips[k])/log(4);
+            i_batchelor[k] = iEta + log(ScHips[k])/log(4);
         else
             i_batchelor[k] = iEta;
 
@@ -334,7 +323,7 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 
 /////////////////////////////////////////i/////////////////////////////////////////////
 /**
- * \brief Project vectors onto a grid.
+ * @brief Project vectors onto a grid.
  *
  * This function projects vectors onto a grid. It aligns the values of flow particles with HiPS parcels
  * to handle the limitation on the number of particles that the HiPS model can mix, as described in the paper.
@@ -447,13 +436,13 @@ std::vector<double> hips::setGridHips(int N){
 ///////////////////////////////////////////////////////////////////////////////
 /** The HiPS solver
  * \param tRun                               Input simulation run time
- * \param shouldWriteData                    Set to false by default. If true, data will be written.
- *
+ * \param shouldWriteData                    Set to false by default. If true, data will be written. 
  * Sample tee (time of next eddy event)
  * Select and swap subtrees (at current time, not at tee, so that we know who's involved)
  * If the eddy event is at the parcel/micromixing level:
  *     React involved parcels from their current time to tee
  *     Mix the involved parcels (micromixing)
+ * \note Data is written after a specified number of eddy events. By default, the data is written after "10000" eddy events. Users have the flexibility to adjust this number in the code.
  */
 
 void hips::calculateSolution(const double tRun, bool shouldWriteData) {
@@ -477,7 +466,7 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
 
         nEddies++;
         //cout<<"-------------------------------------"<<nEddies<<endl;
-        if(shouldWriteData && nEddies %50000 == 0) writeData(++fileCounter, time);
+        if(shouldWriteData && nEddies %10000 == 0) writeData(++fileCounter, time);
     }
     time = tRun;
     iLevel = 0; iTree  = 0;

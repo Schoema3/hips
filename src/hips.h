@@ -13,22 +13,17 @@
 #include "randomGenerator.h"
 
 class hips {
+
 public:
-    // DATA MEMBERS
+    // public data members
     int nparcels;                                                       ///< number of parcels
     std::vector<std::vector<double>*> varData;                          ///< vector of pointers to vector
  
     #ifdef REACTIONS_ENABLED
-        std::shared_ptr<Cantera::ThermoPhase> gas;                     ///< Shared pointer to a Cantera thermochemistry object
-        std::unique_ptr<batchReactor> bRxr;                            ///< Unique pointer to the integrator object
+        std::shared_ptr<Cantera::ThermoPhase> gas;                      ///< Shared pointer to a Cantera thermochemistry object
+        std::unique_ptr<batchReactor> bRxr;                             ///< Unique pointer to the integrator object
     #endif
 
-    // MEMBER VARIABLES
-    static int nL;                                                       ///< adjusted number of levels based on Reynolds
-    static double Prob;
-    static double lStar; 
-    static double Anew; 
-    int currentIndex = 0;                                                    ///< Member variable to keep track of current index of variables
     double domainLength;                                                 ///< length of domain (m)
     double tau0;                                                         ///< integral timescale
     double C_param;                                                      ///< Eddy frequency parameter
@@ -36,6 +31,7 @@ public:
  
 private:
     // Private data members
+    int currentIndex = 0;                                                ///< member variable to keep track of current index of variables
     int nLevels;                                                         ///< number of tree levels
     int nLevels_;                                                        ///< number of tree levels?
     int forceTurb;                                                       ///< forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
@@ -46,7 +42,7 @@ private:
     int Nm3;                                                             ///< nLevels - 3 
     int iEta;                                                            ///< Kolmogorov level (needed for variable Sc scalars)
     bool LScHips;                                                        ///< hips schmidt number
-    bool performReaction;                                                ///< Flag indicating whether chemical reactions are performed in the simulation 
+    bool performReaction;                                                ///< flag indicating whether chemical reactions are performed in the simulation 
     bool LrandSet;                                                       ///< flag indicating new randomGen  --> allow deletion
     double time;                                                         ///< current simulation time
     double eddyRate_total;                                               ///< total rate of all eddies 0 through nLevels-3
@@ -54,27 +50,43 @@ private:
     double Afac = 0.5;                                                   ///< level lengthscale reduction factor (0.5)
     double Re;                                                           ///< Reynolds number
     double dtEE;                                                         ///< time increment to next eddy event 
-    randomGenerator rand;
+    randomGenerator rand;                                                 
     std::vector<int> i_plus;                                             ///< ceil(i_batchelor)
     std::vector<int> pLoc;                                               ///< parcel index array for fast implementation of swaps
-    std::vector<double> varRho;
-    std::vector<double> ScHips;                                          ///< Vector containing Schmidt numbers related to each variable
-    std::vector<std::string> varName;                                    ///< Vector containing the names of parcel variables
+    std::vector<double> varRho;                           
+    std::vector<double> ScHips;                                          ///< vector containing Schmidt numbers related to each variable
+    std::vector<std::string> varName;                                    ///< vector containing the names of parcel variables
     std::vector<double> parcelTimes;                                     ///< current times corresponding to the parcel states
     std::vector<double> levelRates;                                      ///< list of eddy event rates at each level
     std::vector<double> i_batchelor;                                     ///< Batchelor level for variable Sc scalars; NOTE: double, as in, between levels
-    std::vector<double> xc;                                              ///< Vector containing physical domain of flow particles
-    std::vector<double> xh;                                              ///< Vector containing physical domain of HiPS parcels
-       
-
-
+    std::vector<double> xc;                                              ///< vector containing physical domain of flow particles
+    std::vector<double> xh;                                              ///< vector containing physical domain of HiPS parcels
+   
+   // data members regarding variable Reynolds numbers
+    static int nL;                                                       ///< adjusted number of levels based on the Reynolds number
+    static double Prob;                                                  ///< probability value for probability-based solution
+    static double lStar;                                                 ///< length of the level associated with the Reynolds number 
+    static double Anew;                                                  ///< adjusted level lengthscale reduction factor for dynamic adjustment of reduction factor
+    
 public:
     // MEMBER FUNCTIONS
 
-    /**
-    * @brief Constructor for the hips class.
-    * Initializes a hips object with specified parameters.
-    */            
+ /**
+ *  @brief Constructor to initialize necessary parameters for creating the HiPS tree, such as length scale, time scale, eddy rate, etc. 
+ * \param nLevels_                     Number of tree levels.
+ * \param domainLength_                Length scale of the domain.
+ * \param tau0_                        time scale of the domain.
+ * \param C_param_                     A parameter to control eddy rate
+ * \param forceTurb_                   Flag for forcing turbulence.
+ * \param nVar_                        Number of variables.
+ * \param ScHips_                      Vector of Schmidt numbers for HiPS simulation.
+ * \param cantSol                      Cantera solution object.
+ * \param performReaction_             Flag for performing chemical reactions
+ * \param seed                         Seed for the random number generator(negative to randomize it).
+ * \note - The number of levels can be passed in two ways: directly or, if the user intends to utilize the Re number, by passing -1.
+ * \note - "bRxr" is a pointer to the integrator object. By default, ``batchReactor_cvode`` is enabled. To switch to ``batchReactor_cantera``, the user needs to uncomment it.
+ */
+          
     hips(int nLevels_,
          double domainLength_,
          double tau0_,
@@ -107,7 +119,7 @@ public:
     std::vector<double> setGridCfd(std::vector<double> &w);                  ///< Set CFD grid using provided weight vector
     std::vector<std::vector<double>> get_varData();                          ///< Retrieves modified data from the HiPS library and stores it in the provided vector. 
     std::vector<double>  projection_back(std::vector<double> &vb);           ///< Perform vector projection of hips parcels onto flow particles operation without density
-    void calculateSolution(const double tRun, bool shouldWriteData =false);                                ///< Running simulations 
+    void calculateSolution(const double tRun, bool shouldWriteData =false);  ///< Running simulations 
 
 private:
     void sample_hips_eddy(double &dt, int &iLevel);                           ///< Sample hips eddy with specified time step and level                                                
