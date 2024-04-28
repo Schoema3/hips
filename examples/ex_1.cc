@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <vector>
 #include "hips.h"
@@ -17,6 +18,15 @@ vector<double> initializeMixingFractions(int numParcels) {
 std::vector<std::string> variableNames = {"mixf_00", "mixf_01", "mixf_02"};
 
 int main() {
+
+/**
+ * - The example `ex_1.cc` demonstrates scalar mixing dynamics, illustrating the behavior of a basic mixing model.
+ * - Initially, fluid parcels are divided into two groups: the first half assigned a value of 0 and the second half a value of 1, which then mix to reach an average value.
+ * - Schmidt numbers in the simulation are 0.0625 and 4, showcasing the impact of high and low Schmidt numbers on mixing.
+ */
+
+
+
     // HiPS tree and constructor parameters
     int nLevels = 6;
     double domainLength = 1.0;
