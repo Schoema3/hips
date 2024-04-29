@@ -1,6 +1,4 @@
 
-################### PREAMBLE ###############################
-
 cmake_minimum_required(VERSION 3.15)
 
 project(hips VERSION 0.1.0 LANGUAGES CXX)
@@ -12,7 +10,9 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # ---- Set C++ language standard ----
+
 option(REACTIONS_ENABLED "Enable reactions" OFF)
+
 if(REACTIONS_ENABLED)
     add_compile_definitions(REACTIONS_ENABLED)
 endif()

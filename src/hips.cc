@@ -32,16 +32,16 @@ double hips::Anew = 0.0;
  * 
  * @param Re_ The Reynolds number used for initialization.
  */
-hips::hips(double Re_) :
-    Re(Re_) {
-
-    double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);            //  Calculate the original level
-
-    int lowerLevel = ceil(originalLevel);                           // Round the original level to the nearest integer
-   
-    nL = lowerLevel + 3;                                           //  Set the number of levels for the binary tree structure
-
-}
+// hips::hips(double Re_) :
+//     Re(Re_) {
+//
+//     double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);            //  Calculate the original level
+//
+//     int lowerLevel = ceil(originalLevel);                           // Round the original level to the nearest integer
+//    
+//     nL = lowerLevel + 3;                                           //  Set the number of levels for the binary tree structure
+//
+// }
 //
 //////////////////////////////////////////////////////////////////////////////////
 ///**
@@ -87,6 +87,9 @@ hips::hips(double Re_) :
 //
 //}
 //
+
+
+
 /////////////////////////////////////////////////////////////////////////////////
 ///**
 // * @brief Constructor for initializing the HiPS class based on the Reynolds number.
@@ -111,6 +114,28 @@ hips::hips(double Re_) :
 //
 //
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+///  @brief Constructor to initialize necessary parameters for creating the HiPS tree, such as length scale, time scale, eddy rate, etc. 
+/// \param nLevels_         Number of tree levels.
+/// \param domainLength_    Length scale of the domain.
+/// \param tau0_            time scale of the domain.
+/// \param C_param_         A parameter to control eddy rate
+/// \param forceTurb_       Flag for forcing turbulence.
+/// \param nVar_            Number of variables.
+/// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
+/// \param cantSol          Cantera solution object.
+/// \param performReaction_ Flag for performing chemical reactions
+/// \param seed             Seed for the random number generator(negative to randomize it).
+/// \note - The number of levels can be passed in two ways: directly or, if the user intends to utilize the Re number, by passing -1.
+/// \note - "bRxr" is a pointer to the integrator object. By default, ``batchReactor_cvode`` is enabled. To switch to ``batchReactor_cantera``, the user needs to uncomment it.
+///////////////////////////////////////////////////////////////////////////////
+
 hips::hips(int nLevels_, 
            double domainLength_, 
            double tau0_, 

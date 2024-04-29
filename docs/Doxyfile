@@ -917,7 +917,7 @@ WARN_LOGFILE           =
 
 INPUT                  = ../src      \ 
                          ../docs     \
-                         ../docs/results \
+                         ../docs/pages \
                          ../examples  \
                          
 

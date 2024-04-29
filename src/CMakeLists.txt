@@ -1,17 +1,12 @@
-
-
-
-
-cmake_minimum_required(VERSION 3.15)
-project(hips)
-
 ##################### hips library #####################
 
 add_library(hips)
+
 option(reactions_enabled "Enable reactions" ON)
 if(reactions_enabled)
     add_compile_definitions(reactions_enabled)
 endif()
+
 target_sources(hips PRIVATE 
     hips.cc                 
     hips.h 
