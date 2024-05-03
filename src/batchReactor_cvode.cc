@@ -1,25 +1,26 @@
 #include "batchReactor_cvode.h"
 
 ///////////////////////////////////////////////////////////////////////////////
-/** @brief Callback function for the right-hand side of the ODE system used by CVODE.
-  *
-  * This function calculates the right-hand side of the ODE system.
-  * 
-  * @param t Current time.
-  * @param varsCV N_Vector containing the variables (species concentrations).
-  * @param dvarsdtCV N_Vector containing the derivatives of the variables with respect to time.
-  * @param user_data Pointer to the user-defined data (batchReactor_cvode instance).
-  * @return 0 on success.
-  */
+/// \brief Callback function for the right-hand side of the ODE system used by CVODE.
+///
+/// This function calculates the right-hand side of the ODE system.
+/// 
+/// \param t Current time.
+/// \param varsCV N_Vector containing the variables (species concentrations).
+/// \param dvarsdtCV N_Vector containing the derivatives of the variables with respect to time.
+/// \param user_data Pointer to the user-defined data (batchReactor_cvode instance).
+/// \return 0 on success.
+////////////////////////////////////////////////////////////////////////////////
 int rhsf_cvode(realtype t, N_Vector varsCV, N_Vector dvarsdtCV, void *user_data);
 
 ///////////////////////////////////////////////////////////////////////////////
-/** @brief Constructor for the batchReactor_cvode class.
-  * 
-  * Initializes a batch reactor object using CVODE for simulations.
-  * 
-  * @param cantSol A shared pointer to a Cantera solution object.
-  */
+/// \brief Constructor for the batchReactor_cvode class.
+/// 
+/// Initializes a batch reactor object using CVODE for simulations.
+/// 
+/// \param cantSol A shared pointer to a Cantera solution object.
+/// 
+///////////////////////////////////////////////////////////////////////////////////
 batchReactor_cvode::batchReactor_cvode(std::shared_ptr<Cantera::Solution> cantSol) {
 
     gas = cantSol->thermo(); 
@@ -36,12 +37,13 @@ batchReactor_cvode::batchReactor_cvode(std::shared_ptr<Cantera::Solution> cantSo
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/** @brief Simulates a reaction in the batch reactor.
-  * 
-  * @param h Heat of the reactor.
-  * @param y Vector of species mass fractions.
-  * @param tRun Time for the simulation.
-  */
+/// \brief Simulates a reaction in the batch reactor.
+/// 
+/// \param h Heat of the reactor.
+/// \param y Vector of species mass fractions.
+/// \param tRun Time for the simulation.
+///
+////////////////////////////////////////////////////////////////////////////////////////
 void batchReactor_cvode::react(double &h, std::vector<double> &y, const double tRun) {
 
     // Store fixed enthalpy and pressure
@@ -53,15 +55,16 @@ void batchReactor_cvode::react(double &h, std::vector<double> &y, const double t
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/** @brief Computes the right-hand side of the ODE system.
-  * 
-  * This function is used by CVODE to compute the derivatives of the variables with respect to time.
-  * 
-  * @param t Current time.
-  * @param vars Pointer to an array containing the variables (species concentrations).
-  * @param dvarsdt Pointer to an array where the computed derivatives will be stored.
-  * @return 0 on success.
-  */
+/// \brief Computes the right-hand side of the ODE system.
+/// 
+/// This function is used by CVODE to compute the derivatives of the variables with respect to time.
+/// 
+/// \param t Current time.
+/// \param vars Pointer to an array containing the variables (species concentrations).
+/// \param dvarsdt Pointer to an array where the computed derivatives will be stored.
+/// \return 0 on success.
+////
+/////////////////////////////////////////////////////////////////////////////////////
 int batchReactor_cvode::rhsf(const double t, const double *vars, double *dvarsdt) {
 
     // Set mass fractions and state
@@ -83,27 +86,25 @@ int batchReactor_cvode::rhsf(const double t, const double *vars, double *dvarsdt
 ///////////////////////////////////////////////////////////////////////////////
 // CVODE interface; CVODE calls this function, which then calls user_data's rhsf
 
-/**
- * @brief Callback function for the right-hand side of the ODE system used by CVODE.
- * 
- * This function is called by CVODE, which in turn calls the rhsf method of the batchReactor_cvode instance.
- * 
- * @param t Current time.
- * @param varsCV N_Vector containing the variables (species concentrations).
- * @param dvarsdtCV N_Vector containing the derivatives of the variables with respect to time.
- * @param user_data Pointer to the user-defined data (batchReactor_cvode instance).
- * @return 0 on success.
- */
+/// \brief Callback function for the right-hand side of the ODE system used by CVODE.
+/// 
+/// This function is called by CVODE, which in turn calls the rhsf method of the batchReactor_cvode instance.
+/// 
+/// \param t Current time.
+/// \param varsCV N_Vector containing the variables (species concentrations).
+/// \param dvarsdtCV N_Vector containing the derivatives of the variables with respect to time.
+/// \param user_data Pointer to the user-defined data (batchReactor_cvode instance).
+/// \return 0 on success.
+/////////////////////////////////////////////////////////////////////////////////
+
 int rhsf_cvode(realtype t, N_Vector varsCV, N_Vector dvarsdtCV, void *user_data) {
+ 
+    batchReactor_cvode *bRxr = static_cast<batchReactor_cvode *>(user_data);       // Cast user_data pointer to batchReactor_cvode pointer
 
-    // Cast user_data pointer to batchReactor_cvode pointer
-    batchReactor_cvode *bRxr = static_cast<batchReactor_cvode *>(user_data);
+    double *vars    = N_VGetArrayPointer(varsCV);                                 // Get array pointers for variables and derivatives
 
-    // Get array pointers for variables and derivatives
-    double *vars    = N_VGetArrayPointer(varsCV);
-    double *dvarsdt = N_VGetArrayPointer(dvarsdtCV);
-
-    // Call rhsf method of batchReactor_cvode instance
+    double *dvarsdt = N_VGetArrayPointer(dvarsdtCV);                              // Call rhsf method of batchReactor_cvode instance
+    
     int rv = bRxr->rhsf(t, vars, dvarsdt);
 
     return rv;

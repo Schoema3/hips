@@ -25,11 +25,11 @@ public:
 
     virtual void react(double &h, std::vector<double> &y, const double tRun);
 
-    void eval(double t, double *vars, double *dvarsdt, double *not_used); // rhsf: dydt = rhsf
+    void eval(double t, double *vars, double *dvarsdt, double *not_used);    // rhsf: dydt = rhsf
 
-    size_t neq() { return nvar; }          // called by Cantera
+    size_t neq() { return nvar; }                                           // Called by Cantera
 
-    void getState(double* y) {             // called by cantera to set y
+    void getState(double* y) {                                              // Called by cantera to set y
         gas->getMassFractions(y);
     }
 
