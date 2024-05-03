@@ -2,11 +2,6 @@
 
 add_library(hips)
 
-option(reactions_enabled "Enable reactions" ON)
-if(reactions_enabled)
-    add_compile_definitions(reactions_enabled)
-endif()
-
 target_sources(hips PRIVATE 
     hips.cc                 
     hips.h 
@@ -14,8 +9,6 @@ target_sources(hips PRIVATE
 
 if(REACTIONS_ENABLED)
     target_sources(hips PRIVATE
-        hips.cc                 
-        hips.h 
         batchreactor_cvode.cc   
         batchreactor_cvode.h   
         integrator_cvode.h

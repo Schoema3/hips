@@ -32,7 +32,7 @@ int main() {
     double domainLength = 1.0;
     double tau0 = 1.0;
     double C_param = 0.5;
-    double tRun = 300.0;
+    double tRun = 300000.0;
     int forceTurb = 2;
     vector<double> ScHips;
     
@@ -41,6 +41,9 @@ int main() {
     ScHips.push_back(4.0);
 
     int numVariables = 3;
+
+    //hips HiPS(C_param, forceTurb, numVariables, false);
+    //HiPS.set_tree(nLevels, domainLength, tau0, ScHips);
 
     hips HiPS(nLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips, false);
     int numParcels = HiPS.nparcels;
@@ -51,7 +54,6 @@ int main() {
 
     for (int i = 0; i < variableNames.size(); ++i) 
         tot_vec.push_back(initializeMixingFractions(numParcels));
-    
 
     // Set state vectors in each parcel
     for (int i = 0; i < tot_vec.size(); i++) 
