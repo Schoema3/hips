@@ -15,101 +15,31 @@
 #include <vector>
 using namespace std;
 
-
 ////////////////////////////////////////////////////////////////////////////////
 
-int hips::nL = 0;
-double hips::Prob = 0.0;
-double hips::lStar = 0.0; 
-double hips::Anew = 0.0;
+int hips::nL = 0;                   // Initialize adjusted number of levels based on the Reynolds number.
+double hips::Prob = 0.0;            // Initialize probability value for probability-based solution.
+double hips::lStar = 0.0;           // Initialize length of the level associated with the Reynolds number.
+double hips::Anew = 0.0;            // Initialize adjusted level lengthscale reduction factor.          
 
-//////////////////////////////////////////////////////////////////////////////////
-/**
- * @brief Constructor for the 'hips' class.
- * 
- * Initializes a 'hips' object with a given Reynolds number (Re_).
- * It calculates the original level based on the Reynolds number and adjusts parameters accordingly.
- * 
- * @param Re_ The Reynolds number used for initialization.
- */
-// hips::hips(double Re_) :
-//     Re(Re_) {
-//
-//     double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);            //  Calculate the original level
-//
-//     int lowerLevel = ceil(originalLevel);                           // Round the original level to the nearest integer
-//    
-//     nL = lowerLevel + 3;                                           //  Set the number of levels for the binary tree structure
-//
-// }
+//////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////////////////
-///**
-// * @brief Constructor for initializing 'nLevels_' based on Reynolds number.
-// * 
-// * Initializes the 'nLevels_' parameter based on the provided Reynolds number (Re_).
-// * 
-// * @param Re Reynolds number for turbulence simulation.
-// */
-//hips::hips(double Re_) :
-//           Re(Re_)  {
-//    
-//    double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);               //  Calculate the original level
-//                             
-//    
-//    int lowerLevel = ceil(originalLevel);                                    // Round the original level to the nearest integer
-//    int upperLevel = lowerLevel - 1;
-//
-//    Prob = abs(( log(originalLevel) - log(lowerLevel))/ (log(upperLevel) - log(lowerLevel))); // Calculate the probability
-//    
-//    nL = lowerLevel + 3;                                                                     // Set the number of levels for the binary tree structure
-//}
+/// \brief Constructor to initialize parameters for creating the HiPS tree.
+///
+/// This constructor initializes parameters including, eddy rate, forcing turbulence, number of variables, solution obj, etc. 
+/// It is particularly useful for initializing the tree multiple times, as it allows for the parameters to be set once and reused. This constructor is typically followed by a call to `set_tree(...)`.
+///
+/// \param C_param_         Parameter controlling eddy rate.
+/// \param forceTurb_       Flag indicating whether to force turbulence.
+/// \param nVar_            Number of variables.
+/// \param cantSol          Cantera solution object.
+/// \param performReaction_ Flag indicating whether to perform chemical reactions.
+/// \param seed             Seed for the random number generator (negative value to randomize it).
+///
+/// \note `bRxr` is a pointer to the integrator object. By default, `batchReactor_cvode` is enabled. To switch to `batchReactor_cantera`, the user needs to uncomment the corresponding section.
 
-///////////////////////////////////////////////////////////////////////////////////
-///**
-// * @brief Constructor for the 'hips' class.
-// * 
-// * Initializes a 'hips' object with a given Reynolds number (Re_).
-// * It calculates the original level based on the Reynolds number and adjusts parameters accordingly.
-// * 
-// * @param Re_ The Reynolds number used for initialization.
-// */
-//hips::hips(double Re_) :
-//    Re(Re_) {
-//
-//     double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);         // Calculate the original N
-//
-//     int lowerLevel = ceil(originalLevel);                               // Round the original level to the nearest integer
-//
-//     lStar = std::pow(Re, -3.0/4);                                       // Step 3: Calculate lStar using Re
-//
-//     nL = lowerLevel + 3;                                                 // Step 4: Set the number of levels for the binary tree structure
-//
-//}
+//////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////
-///**
-// * @brief Constructor for initializing the HiPS class based on the Reynolds number.
-// * 
-// * Adjusts reduction factor based on the calculated value for a given level, originalLevel, for the Reynolds numbers.
-// * The approach ensures i*_s remains an integer within the binary tree structure.
-// * It rounds originalLevel to the nearest integer and recalculates Anew accordingly, maintaining binary tree integrity.
-// * 
-// * @param Re Reynolds number for turbulence simulation.
-// */
-//hips::hips(double Re_) :
-//    Re(Re_)  { // Initialize Reynolds number
-//
-//    double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);    // Calculate the original level (Step 1)
-//    
-//    int closetLevel = round(originalLevel);   // Round the original level to the nearest integer (Step 2)
-//    
-//    Anew = exp(-log(Re) / ((4.0 / 3.0) * closetLevel));   // Calculate the new value of parameter A (Step 3)
-//    
-//    nL = closetLevel + 3; // Set the number of levels for the binary tree structure (Step 4)
-//}
-
-///////////////////////////////////////////////////////////////////////////////
 hips::hips(double C_param_, 
            int forceTurb_,
            int nVar_,
@@ -125,20 +55,97 @@ hips::hips(double C_param_,
     LrandSet(true),              
     rand(seed),
     performReaction(performReaction_) {
-
-    // If the number of tree levels is set to -1, it is automatically assigned 
       
     #ifdef REACTIONS_ENABLED
         gas = cantSol->thermo(); 
         nsp = gas->nSpecies();
-        bRxr = make_unique<batchReactor_cvode>(cantSol);                  
-        //bRxr = make_unique<batchReactor_cantera>(cantSol);
+
+        // By default, use batchReactor_cvode
+        bRxr = make_unique<batchReactor_cvode>(cantSol);
+
+        // Uncomment the following line to switch to batchReactor_cantera
+        // bRxr = make_unique<batchReactor_cantera>(cantSol);
     #endif
 
+    // Resize vectors to the number of variables
     varData.resize(nVar);
     varName.resize(nVar);        
-}  
-/////////////////////////////////////////////////////////////////////////////
+} 
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// @brief Constructor to initialize parameters for creating the HiPS tree.
+///
+/// This constructor initializes all necessary parameters in a single step, including length scale, time scale, eddy rate, and more. 
+/// It is beneficial for scenarios where users need to initialize the tree once, such as for simple mixing simulations.
+///
+/// \param nLevels_         Number of tree levels.
+/// \param domainLength_    Length scale of the domain.
+/// \param tau0_            Time scale of the domain.
+/// \param C_param_         Parameter to control eddy rate.
+/// \param forceTurb_       Flag indicating whether to force turbulence.
+/// \param nVar_            Number of variables.
+/// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
+/// \param cantSol          Cantera solution object.
+/// \param performReaction_ Flag indicating whether to perform chemical reactions.
+/// \param seed             Seed for the random number generator (negative value to randomize it).
+///
+/// \note `bRxr` is a pointer to the integrator object. By default, `batchReactor_cvode` is enabled. To switch to `batchReactor_cantera`, the user needs to uncomment the corresponding section.
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+hips::hips(int nLevels_, 
+           double domainLength_, 
+           double tau0_, 
+           double C_param_, 
+           int forceTurb_,
+           int nVar_,
+           vector<double> &ScHips_,
+           bool performReaction_,
+         #ifdef REACTIONS_ENABLED
+                 shared_ptr<Cantera::Solution> cantSol,
+          #endif
+         int seed): 
+
+   nLevels(nLevels_), 
+   domainLength(domainLength_), 
+   tau0(tau0_),
+   C_param(C_param_), 
+   forceTurb(forceTurb_),       
+   ScHips(ScHips_),   
+   nVar(nVar_),                       
+   LrandSet(true),              
+   rand(seed),
+   performReaction(performReaction_){
+
+   #ifdef REACTIONS_ENABLED
+        gas = cantSol->thermo(); 
+        nsp = gas->nSpecies();
+
+        // By default, use batchReactor_cvode
+        bRxr = make_unique<batchReactor_cvode>(cantSol);
+
+        // Uncomment the following line to switch to batchReactor_cantera
+        // bRxr = make_unique<batchReactor_cantera>(cantSol);
+    #endif
+
+    // Resize vectors to the number of variables
+    varData.resize(nVar);
+    varName.resize(nVar); 
+
+    set_tree(nLevels, domainLength, tau0, ScHips);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/// \brief Function to create a tree structure based on the specified parameters.
+/// \param nLevels_         Number of levels in the tree.
+/// \param domainLength_    Length scale of the domain.
+/// \param tau0_            Time scale of the domain.
+/// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
+///
+/// \note This function sets up the tree based on the specified number of levels. It is useful when the user knows the number of levels explicitly.
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<double> &ScHips_){    
  
@@ -227,188 +234,130 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
     for (int i=0; i<nparcels; i++)
         pLoc[i] = i;
 } 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////////////////////////
-///  @brief Constructor to initialize necessary parameters for creating the HiPS tree, such as length scale, time scale, eddy rate, etc. 
-/// \param nLevels_         Number of tree levels.
+/// \brief Function to create a tree structure based on the specified parameters.
+/// \param Re_              The Reynolds number.
+/// \param approach         The method used for setting the number of levels based on the Reynolds number:
+///                         - approach "1": Reads the Reynolds number and calculates the related level using 
+///                           \f$ \text{originalLevel} = \frac{3.0}{4} \cdot \frac{\log(\frac{1}{\text{Re}})}{\log(\text{Afac})} \f$. 
+///                           Rounds it to the nearest level and considers it as the base level.
+///                         - approach "4": Rounds the original level to the nearest integer, either up or down.
+///                           After rounding, recalculates Afac to achieve the newly rounded integer value for the level.
 /// \param domainLength_    Length scale of the domain.
-/// \param tau0_            time scale of the domain.
-/// \param C_param_         A parameter to control eddy rate
-/// \param forceTurb_       Flag for forcing turbulence.
-/// \param nVar_            Number of variables.
+/// \param tau0_            Time scale of the domain.
 /// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
-/// \param cantSol          Cantera solution object.
-/// \param performReaction_ Flag for performing chemical reactions
-/// \param seed             Seed for the random number generator(negative to randomize it).
-/// \note - The number of levels can be passed in two ways: directly or, if the user intends to utilize the Re number, by passing -1.
-/// \note - "bRxr" is a pointer to the integrator object. By default, ``batchReactor_cvode`` is enabled. To switch to ``batchReactor_cantera``, the user needs to uncomment it.
-///////////////////////////////////////////////////////////////////////////////
+/// \note This function sets up the tree based on the Reynolds number. Users pass the method (approach) and the number of levels.
 
-hips::hips(int nLevels_, 
-           double domainLength_, 
-           double tau0_, 
-           double C_param_, 
-           int forceTurb_,
-           int nVar_,
-           vector<double> &ScHips_,
-           bool performReaction_,
-         #ifdef REACTIONS_ENABLED
-                 shared_ptr<Cantera::Solution> cantSol,
-          #endif
-         int seed): 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   nLevels(nLevels_), 
-   domainLength(domainLength_), 
-   tau0(tau0_),
-   C_param(C_param_), 
-   forceTurb(forceTurb_),       
-   ScHips(ScHips_),   
-   nVar(nVar_),                       
-   LrandSet(true),              
-   rand(seed),
-   performReaction(performReaction_){
+void hips::set_tree(double Re_, std::string approach, double domainLength_, double tau0_, std::vector<double> &ScHips_) {
+    Re = Re_;
+    domainLength = domainLength_;
+    tau0 = tau0_;
+    ScHips = ScHips_;
 
-    #ifdef REACTIONS_ENABLED
-        gas = cantSol->thermo(); 
-        nsp = gas->nSpecies();
-        bRxr = make_unique<batchReactor_cvode>(cantSol);                  
-        //bRxr = make_unique<batchReactor_cantera>(cantSol);
-    #endif
+    double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);  // Calculate the original level
 
-    varData.resize(nVar);
-    varName.resize(nVar);
+    if (approach == "1") {
+        int lowerLevel = round(originalLevel);                   // Round the original level to the nearest integer
+        nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
+    } 
+    else if (approach == "2") {
+        int lowerLevel = ceil(originalLevel);                    // Round the original level to the nearest integer
+        int upperLevel = lowerLevel - 1;
+        Prob = abs((log(originalLevel) - log(lowerLevel)) / (log(upperLevel) - log(lowerLevel)));  // Calculate the probability
+        nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
+    }  
+    else if (approach == "3") {
+        int lowerLevel = ceil(originalLevel);                    // Round the original level to the nearest integer
+        lStar = std::pow(Re, -3.0 / 4);                          // Step 3: Calculate lStar using Re
+        nL = lowerLevel + 3;                                     // Step 4: Set the number of levels for the binary tree structure
+    } 
+    else {
+        int closestLevel = round(originalLevel);                 // Round the original level to the nearest integer
+        Anew = exp(-log(Re) / ((4.0 / 3.0) * closestLevel));     // Calculate the new value of parameter A
+        nL = closestLevel + 3;                                   // Set the number of levels for the binary tree structure
+    }
 
-    set_tree(nLevels, domainLength, tau0, ScHips);
+    nLevels = nL;
+    iEta = nLevels - 3;                                          // Kolmogorov level 
+
+    int maxSc = 1.0;
+    for (const auto &sc : ScHips) {
+        maxSc = std::max(maxSc, static_cast<int>(sc));
+    }
+    if (maxSc > 1.0) {
+        nLevels += ceil(log(maxSc) / log(4));                    // Changing number of levels!
+    }
+
+    Nm1 = nLevels - 1;
+    Nm2 = nLevels - 2;
+    Nm3 = nLevels - 3;
+
+    nparcels = static_cast<int>(pow(2, Nm1));
+    parcelTimes.resize(nparcels, 0);
+    i_batchelor.resize(nVar, 0);
+
+    std::vector<double> levelLengths(nLevels);                   // Including all levels, but last 2 don't count
+    std::vector<double> levelTaus(nLevels);                      // Smallest scale is 2 levels up from bottom
+    levelRates.resize(nLevels);
+
+    for (int i = 0; i < nLevels; ++i) {
+        levelLengths[i] = domainLength * pow(Afac, i);
+        // levelLengths[i] = domainLength * pow(Anew, i);
+
+        levelTaus[i] = tau0 * pow(levelLengths[i] / domainLength, 2.0 / 3.0) / C_param;
+        levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
+    }
+
+    LScHips = !ScHips.empty();
+    if (LScHips) {                                              // Correct levels for high Sc (levels > Kolmogorov)
+        for (int i = iEta + 1; i < nLevels; ++i) {
+            levelTaus[i] = tau0 * pow(levelLengths[iEta] / domainLength, 2.0 / 3.0) / C_param;
+            levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
+        }
+    }
+    
+    eddyRate_total = 0.0;
+    for (int i = 0; i <= Nm3; ++i) {
+        eddyRate_total += levelRates[i];
+    }
+
+    eddyRate_inertial = 0.0;
+    for (int i = 0; i <= iEta; ++i) {
+        eddyRate_inertial += levelRates[i];
+    }
+
+    i_plus.resize(nVar);
+    for (int k = 0; k < nVar; ++k) {
+        if (ScHips[k] < 1.0) {
+            i_batchelor[k] = iEta + 1.5 * log(ScHips[k]) / log(4);
+        } else if (ScHips[k] > 1.0) {
+            i_batchelor[k] = iEta + log(ScHips[k]) / log(4);
+        } else {
+            i_batchelor[k] = iEta;
+        }
+        i_plus[k] = ceil(i_batchelor[k]);
+    }
+
+    varRho.resize(nparcels);
+    Temp.resize(nparcels);
+    pLoc.resize(nparcels);
+    for (int i = 0; i < nparcels; ++i) {
+        pLoc[i] = i;
+    }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//hips::hips(int nLevels_, 
-//           double domainLength_, 
-//           double tau0_, 
-//           double C_param_, 
-//           int forceTurb_,
-//           int nVar_,
-//           vector<double> &ScHips_,
-//           bool performReaction_,
-//         #ifdef REACTIONS_ENABLED
-//                 shared_ptr<Cantera::Solution> cantSol,
-//          #endif
-//         int seed) : 
-//
-//    nLevels(nLevels_), 
-//    domainLength(domainLength_), 
-//    tau0(tau0_),
-//    C_param(C_param_), 
-//    forceTurb(forceTurb_),       
-//    ScHips(ScHips_),   
-//    nVar(nVar_),                       
-//    LrandSet(true),              
-//    rand(seed),
-//    performReaction(performReaction_) {
-//
-//    // If the number of tree levels is set to -1, it is automatically assigned 
-//    // the default number of levels 'nL'.
-//    if (nLevels == -1)  
-//        nLevels = nL; 
-//    
-//    #ifdef REACTIONS_ENABLED
-//        gas = cantSol->thermo(); 
-//        nsp = gas->nSpecies();
-//        bRxr = make_unique<batchReactor_cvode>(cantSol);                  
-//        //bRxr = make_unique<batchReactor_cantera>(cantSol);
-//    #endif
-//
-//    varData.resize(nVar);
-//    varName.resize(nVar);        
-//    
-//    //-------------------------- Set number of parcels, level lengthscales, timescales, and rates, and i_plus && i_batchelor
-//     
-//    iEta = nLevels - 3;        // Kolmogorov level; if nLevels = 7, then 0, 1, 2, 3, (4), 5, 6; iEta=4 is the lowest swap level: swap grandchildren of iEta=4 at level 6.
-//           
-//    int maxSc = 1.0;
-//
-//    for (int i=0; i<ScHips.size(); i++)
-//        maxSc = ScHips[i]>maxSc ? ScHips[i] : maxSc;
-//    
-//    if (maxSc > 1.0)
-//        nLevels += ceil(log(maxSc)/log(4));       // Changing number of levels!
-//    
-//    Nm1 = nLevels - 1;
-//    Nm2 = nLevels - 2;
-//    Nm3 = nLevels - 3;
-//    
-//    // -------------------------- 
-//    
-//    nparcels = static_cast<int>(pow(2, Nm1));
-//    parcelTimes.resize(nparcels,0);
-//    i_batchelor.resize(nVar,0);
-//    
-//    vector<double> levelLengths(nLevels);      // including all levels, but last 2 don't count:
-//    vector<double> levelTaus(nLevels);         // smallest scale is 2 levels up from bottom
-//    levelRates   = vector<double>(nLevels);
-//
-//    for (int i=0; i<nLevels; i++) {
-//        levelLengths[i] = domainLength * pow(Afac,i);
-//       //levelLengths[i] = domainLength * pow(Anew,i);
-//        levelTaus[i] = tau0 * pow(levelLengths[i]/domainLength, 2.0/3.0) / C_param;
-//        levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
-//
-//    }
-//   
-//      // levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
-//      // levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
-//   
-//
-//    LScHips = ScHips.size() > 0 ? true : false;
-//    if (LScHips) {                             // correct levels for high Sc (levels > Kolmogorov)
-//        for (int i=iEta+1; i<nLevels; i++) {
-//            levelTaus[i] = tau0 *
-//            pow(levelLengths[iEta]/domainLength, 2.0/3.0) /
-//            C_param;
-//            levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
-//        }
-//    }
-//
-//    //-------------------------------------------------
-//
-//    eddyRate_total = 0.0;
-//    for (int i=0; i<=Nm3; i++)
-//        eddyRate_total += levelRates[i];
-//    
-//    eddyRate_inertial = 0.0;
-//    for (int i=0; i<=iEta; i++)
-//        eddyRate_inertial += levelRates[i];
-//    
-//    //-------------------
-//    
-//    i_plus.resize(nVar);
-//    for (int k=0; k<nVar; k++) {
-//        if (ScHips[k] < 1.0)
-//            i_batchelor[k] = iEta + 1.5*log(ScHips[k])/log(4);
-//        else if (ScHips[k] > 1.0)
-//            i_batchelor[k] = iEta + log(ScHips[k])/log(4);
-//        else
-//            i_batchelor[k] = iEta;
-//
-//        i_plus[k] = ceil(i_batchelor[k]);
-//    }
-//    
-//    //------------------- Set the parcel addresses (index array)
-//   varRho.resize(nparcels);
-//   Temp.resize(nparcels);
-// 
-//    pLoc.resize(nparcels);
-//    for (int i=0; i<nparcels; i++)
-//        pLoc[i] = i;
-//} 
-
-////////////////////////////////////////i///////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 /// @brief Function to pass the variables, their weights, and their names to the parcels of the tree.  
 /// \param v         Vector consisting of variables passed to the HiPS tree.
 /// \param w         Vector containing weights for each flow particle.
 /// \param varN      Vector containing names corresponding to each variable.
+
 ////////////////////////////////////////////////////////////////////////////////////
+
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN) {  
     
     varData[currentIndex] = new vector<double>(projection(v, w));
@@ -416,6 +365,7 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
     currentIndex++; 
 }
+
 ///////////////////////////////////////i///////////////////////////////////////
 
 /// @brief Function to pass the variable, their weights, names, and densities to the parcels of the tree. 
@@ -424,6 +374,7 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 /// \param varN      Vector of names of the variable.
 /// \param rho       Vector of density; each flow particle has a specific density.
 /// \note This function is overloaded. This version considers particle density.
+
 //////////////////////////////////////////////////////////////////////////////////// 
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho) {
     
@@ -441,19 +392,14 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
 /////////////////////////////////////////i/////////////////////////////////////////////
 
-/// @brief Project vectors onto a grid.
-///
-/// This function projects vectors onto a grid. It aligns the values of flow particles with HiPS parcels
-/// to handle the limitation on the number of particles that the HiPS model can mix, as described in the paper.
-/// The projection is done by scaling the values of flow particles according to their weights and summing them up
-/// to match the number of HiPS parcels required by the Reynolds number.
-///
+/// @brief This function projects the value in flow particles onto HiPS parcels. If works in cases in which density is constant.  
+/// It follows \f[
+/// \f[
+/// \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i} = \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j}
+/// \f]
 /// \param vcfd      Vector of variables passed to the HiPS tree.
 /// \param weight    Weight vector; each flow particle has a weight.
-/// \return A pair of vectors representing the projected vector and the density on the grid.
-///
-/// \remarks This function assumes that the number of HiPS parcels is determined by the Reynolds number.
-/// It aligns the flow particles with these parcels to address the disparity
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight) {
@@ -495,22 +441,15 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 
 /////////////////////////////////////////i/////////////////////////////////////////////
 
-/// @brief Project vectors onto a grid.
-///
-/// This function projects vectors onto a grid. It aligns the values of flow particles with HiPS parcels
-/// to handle the limitation on the number of particles that the HiPS model can mix, as described in the paper.
-/// The projection is done by scaling the values of flow particles according to their weights and summing them up
-/// to match the number of HiPS parcels required by the Reynolds number.
+/// @brief This function projects the value in flow particles onto HiPS parcels.
 ///
 /// \param vcfd      Vector of variables passed to the HiPS tree.
 /// \param weight    Weight vector; each flow particle has a weight.
 /// \param density   Vector of density.
 /// \return A pair of vectors representing the projected vector and the density on the grid.
 ///
-/// \note This function is overloaded. This version considers particle density.
-///
-/// \remarks This function assumes that the number of HiPS parcels is determined by the Reynolds number.
-/// It aligns the flow particles with these parcels to address the disparity
+/// \note This function is overloaded. This version considers particle density. 
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight, const std::vector<double> &density) {
@@ -558,12 +497,11 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
 
 /////////////////////////////////////////////////////////////////////////////////
 
-/// @brief Set up a grid for CFD simulation.
-///
-/// This function generates a grid for CFD simulation based on a given weight vector.
-///
+/// @brief This function generates a physical domain for flow particles based on the given weights.
+/// /// It assumes that the length of the domain is 1, meaning each particle occupies a portion of the domain proportional to its weight.
+/// The sum of the portions occupied by all particles should equal 1.
 /// \param w                     Weight vector defining the spacing between grid points.
-/// \return Vector representing the grid positions.
+/// \return Vector representing the grid positions for flow particles.
 ////////////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::setGridCfd(std::vector<double> &w) {
@@ -584,14 +522,13 @@ std::vector<double> hips::setGridCfd(std::vector<double> &w) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-///
-/// \brief Set up a grid for HIPS simulation.
-///
-/// This function generates a grid for HIPS simulation with a specified number of grid points.
-///
+
+/// @brief This function generates a physical domain for HiPS parcels.
+/// The size of the HiPS domain matches the size of the physical domain specified in the ``setGridCfd()`` function.
+/// All parcels occupy an equal portion of the physical domain, meaning the domain is divided evenly among the parcels.
 /// \param N                       Number of grid points.
-/// \return Vector representing the grid.
-////
+/// \return A vector representing the HiPS grids.
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 std::vector<double> hips::setGridHips(int N){
 

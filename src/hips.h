@@ -104,17 +104,15 @@ public:
              std::shared_ptr<Cantera::Solution> cantSol = nullptr,
          #endif
          int seed = 10);
-
-    hips(double Re_);
-
-
+ 
     virtual ~hips() {
         for(auto& data : varData)
             delete data;
     }                                                                                               // Destructor for the hips class
 
-    void set_tree(int nLevels_, double domainLength_, double tau0_, std::vector<double> &ScHips_);
-
+    void set_tree(int nLevels_, double domainLength_, double tau0_, std::vector<double> &ScHips_);  // setting the HiPS tree based on the number of levels
+    void  set_tree(double Re_, std::string approach, double domainLength_, double tau0_, std::vector<double> &ScHips_);
+   
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN);      // passing all variables to vector of pointer 
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN,
                      const std::vector<double> &rho);                                               // passing all variables to vector of pointer
