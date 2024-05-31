@@ -237,17 +237,17 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// \brief Function to create a tree structure based on the specified parameters.
-/// \param Re_              The Reynolds number.
-/// \param approach         The method used for setting the number of levels based on the Reynolds number:
-///                         - approach "1": Reads the Reynolds number and calculates the related level using 
-///                           \f$ \text{originalLevel} = \frac{3.0}{4} \cdot \frac{\log(\frac{1}{\text{Re}})}{\log(\text{Afac})} \f$. 
-///                           Rounds it to the nearest level and considers it as the base level.
-///                         - approach "4": Rounds the original level to the nearest integer, either up or down.
-///                           After rounding, recalculates Afac to achieve the newly rounded integer value for the level.
-/// \param domainLength_    Length scale of the domain.
-/// \param tau0_            Time scale of the domain.
-/// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
+/// \param Re_ The Reynolds number.
+/// \param approach The method used for setting the number of levels based on the Reynolds number:
+///                 - approach "1": This approach is introduced as Rounding to closest level to \f$ i_s^* \f$ for micromixing in the paper.
+///                 - approach "2": This approach is introduced as Probability-based solution the paper.
+///                 - approach "3": This approach is introduced as Micromixing at level \f$ i \f$ with \f$ \tau_s^* \f$ in the paper.
+///                 - The last approach: This approach is considered as Dynamic adjustment of \f$ A \f$ value in the paper.
+/// \param domainLength_ Length scale of the domain.
+/// \param tau0_ Time scale of the domain.
+/// \param ScHips_ Vector of Schmidt numbers for HiPS simulation.
 /// \note This function sets up the tree based on the Reynolds number. Users pass the method (approach) and the number of levels.
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
