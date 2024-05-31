@@ -24,7 +24,7 @@ double hips::Anew = 0.0;            // Initialize adjusted level lengthscale red
 
 //////////////////////////////////////////////////////////////////////////////
 
-/// \brief Constructor to initialize parameters for creating the HiPS tree.
+/// @brief Constructor to initialize parameters for creating the HiPS tree.
 ///
 /// This constructor initializes parameters including, eddy rate, forcing turbulence, number of variables, solution obj, etc. 
 /// It is particularly useful for initializing the tree multiple times, as it allows for the parameters to be set once and reused. This constructor is typically followed by a call to `set_tree(...)`.
@@ -73,6 +73,7 @@ hips::hips(double C_param_,
 } 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /// @brief Constructor to initialize parameters for creating the HiPS tree.
 ///
 /// This constructor initializes all necessary parameters in a single step, including length scale, time scale, eddy rate, and more. 
@@ -142,7 +143,6 @@ hips::hips(int nLevels_,
 /// \param domainLength_    Length scale of the domain.
 /// \param tau0_            Time scale of the domain.
 /// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
-///
 /// \note This function sets up the tree based on the specified number of levels. It is useful when the user knows the number of levels explicitly.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -264,15 +264,15 @@ void hips::set_tree(double Re_, std::string approach, double domainLength_, doub
         nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
     } 
     else if (approach == "2") {
-        int lowerLevel = ceil(originalLevel);                    // Round the original level to the nearest integer
+        int lowerLevel = ceil(originalLevel);                    // Ceil the original level to the nearest integer
         int upperLevel = lowerLevel - 1;
-        Prob = abs((log(originalLevel) - log(lowerLevel)) / (log(upperLevel) - log(lowerLevel)));  // Calculate the probability
+        Prob = abs((log(originalLevel) - log(lowerLevel)) / (log(upperLevel) - log(lowerLevel)));  // Calculate the probability 
         nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
     }  
     else if (approach == "3") {
-        int lowerLevel = ceil(originalLevel);                    // Round the original level to the nearest integer
-        lStar = std::pow(Re, -3.0 / 4);                          // Step 3: Calculate lStar using Re
-        nL = lowerLevel + 3;                                     // Step 4: Set the number of levels for the binary tree structure
+        int lowerLevel = ceil(originalLevel);                    // Ceil the original level to the nearest integer
+        lStar = std::pow(Re, -3.0 / 4);                          // Calculate lStar based on Re
+        nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
     } 
     else {
         int closestLevel = round(originalLevel);                 // Round the original level to the nearest integer
@@ -530,6 +530,7 @@ std::vector<double> hips::setGridCfd(std::vector<double> &w) {
 /// \return A vector representing the HiPS grids.
 
 ////////////////////////////////////////////////////////////////////////////////////////////
+
 std::vector<double> hips::setGridHips(int N){
 
     std::vector<double> xh(N + 1);                               // Initialize a vector to hold the grid points
@@ -543,6 +544,7 @@ std::vector<double> hips::setGridHips(int N){
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
 /// The HiPS solver
 /// \param tRun                               Input simulation run time
 /// \param shouldWriteData                    Set to false by default. If true, data will be written. 
@@ -554,6 +556,7 @@ std::vector<double> hips::setGridHips(int N){
 /// \note Data is written after a specified number of eddy events. By default, the data is written after "10000" eddy events. Users have the flexibility to adjust this number in the code.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
+
 void hips::calculateSolution(const double tRun, bool shouldWriteData) {
     
     unsigned long long nEddies = 0;                   // Number of eddy events
@@ -584,11 +587,13 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
 /// Samples stochastic eddy events on the hips tree: time and level.
 /// \param dtEE                            Time increment to next eddy event (EE)
 /// \param iLevel                          Tree level of EE
-///
+
 ////////////////////////////////////////////////////////////////////////////////
+
 void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
 
     static double c1 = 1.0 - pow(2.0, 5.0/3.0*(iEta+1));
@@ -622,6 +627,7 @@ void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
 /// Function performs eddy events: parcel swaps.
 /// \param iLevel                          Input  level of the tree for the base of the swap.
 /// \param iTree                           Output which subtree on the level is selected
@@ -671,6 +677,7 @@ void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
 ///
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
 
     iTree = rand.getRandInt((1 << iLevel)-1);
@@ -688,8 +695,8 @@ void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
     copy(aa.begin(), aa.end(), pLoc.begin()+Rstart);                     // python: pLoc[Rstart:Rend]=aa
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
+
 /// React and mix parcels that are involved in a micromixing process.
 /// This is determined by the level and the tree within that level.
 /// Might not do anything if the eddy doesn't cause micromixing.
@@ -697,6 +704,7 @@ void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
 /// \param iTree                     Input root note of the eddy event at iLevel.
 
 /////////////////////////////////////////////////////////////////////////////////
+
 void hips::advanceHips(const int iLevel, const int iTree) {
      
     if (forceTurb==2 && iLevel==0)              // Forcing for statistically stationary
@@ -716,7 +724,9 @@ void hips::advanceHips(const int iLevel, const int iTree) {
     }
 
 }
+
 ///////////////////////////////////////////////////////////////////////////////
+
 /// React parcels that are involved in a micromixing process.
 /// Parcels might react for different amounts of time depending on when they last
 /// reacted, which is stored in the parcelTimes array.
@@ -755,6 +765,7 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+
 /// Mix parcels uniformly (using average) at given level and tree
 /// Mixing at levels above the lowest enables low Sc variables.
 /// \param kVar     Variable index to mix (normally a transported var as determined by caller)
@@ -778,7 +789,8 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 ///
 /// recall: 3 << 4 means 3*2^4 (or 3 = 000011 and 3<<4 = 110000 = 48), that is, we shift the bits left 4 places.
 ///          
-/// NOTE: BE CAREFUL WITH MIXING SOME SCALARS, LIKE MASS FRACTIONS; CURRENT CODE ASSUMES ALL PARCELS HAVE SAME DENSITY (mixing Yi directly)
+/// \note BE CAREFUL WITH MIXING SOME SCALARS, LIKE MASS FRACTIONS; CURRENT CODE ASSUMES ALL PARCELS HAVE SAME DENSITY (mixing Yi directly)
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
@@ -830,6 +842,7 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
 /// The code within this function is configured to force the left half of parcels to average 0 and the right half of parcels to average 1.
 /// 
 /// \note This function modifies the data stored in the HiPS profile.
+
 ///////////////////////////////////////////////////////////////////////////
  
 void hips::forceProfile() {
@@ -908,6 +921,7 @@ void hips::writeData(const int ifile, const double outputTime) {
 
 ///  @brief Function for projecting vectors onto a grid.
 ///  \param vb Vector to be projected back.
+
 //////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::projection_back(std::vector<double> &vh) {
@@ -948,12 +962,13 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-/// @brief Retrieve modified data from the Hierarchical Progressive Survey (HiPS) library.
+/// \brief Retrieve modified data from the Hierarchical Progressive Survey (HiPS) library.
 ///
 /// This function retrieves modified data from the HiPS library and stores it in the provided vector.
 /// Each element of the returned vector contains a vector representing a single data projection.
 ///
-/// @return A vector of vectors containing modified data retrieved from the HiPS library.
+/// \return A vector of vectors containing modified data retrieved from the HiPS library.
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 std::vector<std::vector<double>> hips::get_varData(){
