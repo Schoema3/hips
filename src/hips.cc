@@ -251,7 +251,7 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void hips::set_tree(double Re_, std::string approach, double domainLength_, double tau0_, std::vector<double> &ScHips_) {
+void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach = "1") {
     Re = Re_;
     domainLength = domainLength_;
     tau0 = tau0_;
@@ -274,10 +274,14 @@ void hips::set_tree(double Re_, std::string approach, double domainLength_, doub
         lStar = std::pow(Re, -3.0 / 4);                          // Calculate lStar based on Re
         nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
     } 
-    else {
+    else if (approach == "4") {
         int closestLevel = round(originalLevel);                 // Round the original level to the nearest integer
         Anew = exp(-log(Re) / ((4.0 / 3.0) * closestLevel));     // Calculate the new value of parameter A
         nL = closestLevel + 3;                                   // Set the number of levels for the binary tree structure
+    }
+    else {
+        // Handle invalid approach case if needed
+        throw std::invalid_argument("Invalid approach specified");
     }
 
     nLevels = nL;
