@@ -6,6 +6,7 @@
 #endif
 
 #include "randomGenerator.h"
+#include <yaml-cpp/yaml.h>
 
 #include <iostream>
 #include <iomanip>
