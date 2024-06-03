@@ -588,6 +588,9 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
     iLevel = 0; iTree  = 0;
     if(performReaction)
     reactParcels_LevelTree(iLevel, iTree);      // react all parcels up to end time
+
+    if(shouldWriteData)
+        writeInputParameters();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -984,6 +987,48 @@ std::vector<std::vector<double>> hips::get_varData(){
 
     return varDataProjections;                                                      // Return the vector containing modified data projections
 }
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+/// \brief Writes the input parameters to a YAML file for post-process simulations.
+/// 
+/// This function creates a YAML file named "InputParameters.yaml" in the "../data/" directory.
+/// The file includes the following simulation parameters:
+/// - nLevels: The number of levels in the simulation.
+/// - nparcels: The number of parcels used in the simulation.
+/// - nVar: The number of variables in the simulation.
+/// - varName: A list of variable names.
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+void hips::writeInputParameters() {
+    // Construct the YAML file name
+    string yamlFileName = "../data/InputParameters.yaml";
+
+    YAML::Node yamlData;                                // Create a YAML node and write the input parameters to it
+
+    yamlData["params"]["nLevels"] = nLevels;            // Adding simulation parameters with comments
+    yamlData["params"]["nparcels"] = nparcels;
+    yamlData["params"]["nVar"] = nVar;
+
+    YAML::Node varNamesNode;                             // Adding variable names with comments
+
+    for (const auto& name : varName) {
+        varNamesNode.push_back(name);
+    }
+    yamlData["variable_names"] = varNamesNode;
+
+
+    std::ofstream yamlFile(yamlFileName);                  // Save the YAML node to a file
+    if (!yamlFile) {
+        cerr << "Error: Unable to open file " << yamlFileName << " for writing" << endl;
+        return;
+    }
+
+    yamlFile << yamlData;
+    yamlFile.close();
+}
+ 
 
 
  

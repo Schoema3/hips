@@ -145,6 +145,7 @@ private:
     void forceProfile();
     
     void writeData(const int ifile, const double outputTime);                                        // Writing the results for a user-defined number of eddies in the data folder.
+    void writeInputParameters();
 };
 
 
