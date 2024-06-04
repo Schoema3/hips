@@ -61,8 +61,7 @@ hips::hips(double C_param_,
         gas = cantSol->thermo(); 
         nsp = gas->nSpecies();
 
-        // By default, use batchReactor_cvode
-        bRxr = make_unique<batchReactor_cvode>(cantSol);
+        bRxr = make_unique<batchReactor_cvode>(cantSol);                             // By default, use batchReactor_cvode
 
         // Uncomment the following line to switch to batchReactor_cantera
         // bRxr = make_unique<batchReactor_cantera>(cantSol);
@@ -123,8 +122,7 @@ hips::hips(int nLevels_,
         gas = cantSol->thermo(); 
         nsp = gas->nSpecies();
 
-        // By default, use batchReactor_cvode
-        bRxr = make_unique<batchReactor_cvode>(cantSol);
+        bRxr = make_unique<batchReactor_cvode>(cantSol);                                // By default, use batchReactor_cvode
 
         // Uncomment the following line to switch to batchReactor_cantera
         // bRxr = make_unique<batchReactor_cantera>(cantSol);
@@ -285,6 +283,8 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
         throw std::invalid_argument("Invalid approach specified");
     }
 
+    //----------------------------------------------------------------------
+
     nLevels = nL;
     iEta = nLevels - 3;                                          // Kolmogorov level 
 
@@ -310,10 +310,17 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
 
     for (int i = 0; i < nLevels; ++i) {
         levelLengths[i] = domainLength * pow(Afac, i);
-        // levelLengths[i] = domainLength * pow(Anew, i);
+
+        if (approach == "4")                            //Mb---------------
+            levelLengths[i] = domainLength * pow(Anew, i);
 
         levelTaus[i] = tau0 * pow(levelLengths[i] / domainLength, 2.0 / 3.0) / C_param;
         levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
+
+        if (approach == "3") {                         //Mb--------------
+            levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
+            levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
+        }
     }
 
     LScHips = !ScHips.empty();
@@ -323,7 +330,9 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
             levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
         }
     }
-    
+   
+    //-----------------------------------------------
+
     eddyRate_total = 0.0;
     for (int i = 0; i <= Nm3; ++i) {
         eddyRate_total += levelRates[i];
@@ -333,6 +342,8 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     for (int i = 0; i <= iEta; ++i) {
         eddyRate_inertial += levelRates[i];
     }
+
+    //-------------------------------------------------
 
     i_plus.resize(nVar);
     for (int k = 0; k < nVar; ++k) {
@@ -345,7 +356,8 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
         }
         i_plus[k] = ceil(i_batchelor[k]);
     }
-
+ 
+    //-----------------------------------------------------
     varRho.resize(nparcels);
     Temp.resize(nparcels);
     pLoc.resize(nparcels);
@@ -492,7 +504,8 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
             }
         }
 
-        // Normalize results
+        // ------------------------ Normalize results
+
         rho_h[i] /= (xh[i + 1] - xh[i]);
         vh[i] /= rho_h[i] * (xh[i + 1] - xh[i]);
     }
