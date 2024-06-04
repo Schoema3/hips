@@ -250,11 +250,12 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach = "1") {
+void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_) {
     Re = Re_;
     domainLength = domainLength_;
     tau0 = tau0_;
     ScHips = ScHips_;
+    approach = approach_;
 
     double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);  // Calculate the original level
 
@@ -727,23 +728,23 @@ void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
 /////////////////////////////////////////////////////////////////////////////////
 
 void hips::advanceHips(const int iLevel, const int iTree) {
-     
-    if (forceTurb==2 && iLevel==0)              // Forcing for statistically stationary
-        forceProfile();
-
-    bool rxnDone = false;                       // React all variables once
-    for (int k=0; k<nVar; k++) {                // Upon finding first variable needing micromixing
-        if ( (iLevel >= i_plus[k]) || 
-              //  (iLevel==i_plus[k]-1 && rand.getRand() <=Prob) ) {
-             (iLevel==i_plus[k]-1 && rand.getRand() <= i_plus[k]-i_batchelor[k]) ) {
-                if(!rxnDone && performReaction) {
-                   reactParcels_LevelTree(iLevel, iTree);
-                   rxnDone = true;
-             }
-            mixAcrossLevelTree(k, iLevel, iTree);
-        }
+    if (forceTurb == 2 && iLevel == 0) {
+        forceProfile();                                                  // Forcing for statistically stationary
     }
 
+    bool rxnDone = false;                                               // React all variables once
+    for (int k = 0; k < nVar; k++) {                                    // Upon finding first variable needing micromixing
+        // Combined condition check with approach condition
+        if ((iLevel >= i_plus[k]) || 
+            (iLevel == i_plus[k] - 1 && rand.getRand() <= i_plus[k] - i_batchelor[k]) || 
+            (approach == "2" && iLevel == i_plus[k] - 1 && rand.getRand() <= Prob)) {
+                if (!rxnDone && performReaction) {
+                    reactParcels_LevelTree(iLevel, iTree);
+                    rxnDone = true;
+                }
+                mixAcrossLevelTree(k, iLevel, iTree);
+        }
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

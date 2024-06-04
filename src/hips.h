@@ -76,7 +76,7 @@ private:
     static double Prob;                                 ///< probability value for probability-based solution
     static double lStar;                                ///< length of the level associated with the Reynolds number 
     static double Anew;                                 ///< adjusted level lengthscale reduction factor for dynamic adjustment of reduction factor
-
+    std::string  approach;
       ////////////////////////////// MEMBER FUNCTIONS: PUBLIC /////////////////////////////
 
 public:
@@ -111,7 +111,7 @@ public:
     }                                                                                               // Destructor for the hips class
 
     void set_tree(int nLevels_, double domainLength_, double tau0_, std::vector<double> &ScHips_);  // setting the HiPS tree based on the number of levels
-    void  set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach);
+    void  set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_ = "1");
    
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN);      // passing all variables to vector of pointer 
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN,
