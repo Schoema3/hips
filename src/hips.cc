@@ -25,7 +25,7 @@ double hips::Anew = 0.0;            // Initialize adjusted level lengthscale red
 
 //////////////////////////////////////////////////////////////////////////////
 
-/// @brief Constructor to initialize parameters for creating the HiPS tree.
+/// \brief Constructor to initialize parameters for creating the HiPS tree.
 ///
 /// This constructor initializes parameters including, eddy rate, forcing turbulence, number of variables, solution obj, etc. 
 /// It is particularly useful for initializing the tree multiple times, as it allows for the parameters to be set once and reused. This constructor is typically followed by a call to `set_tree(...)`.
@@ -79,16 +79,16 @@ hips::hips(double C_param_,
 /// This constructor initializes all necessary parameters in a single step, including length scale, time scale, eddy rate, and more. 
 /// It is beneficial for scenarios where users need to initialize the tree once, such as for simple mixing simulations.
 ///
-/// \param nLevels_         Number of tree levels.
-/// \param domainLength_    Length scale of the domain.
-/// \param tau0_            Time scale of the domain.
-/// \param C_param_         Parameter to control eddy rate.
-/// \param forceTurb_       Flag indicating whether to force turbulence.
-/// \param nVar_            Number of variables.
-/// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
-/// \param cantSol          Cantera solution object.
-/// \param performReaction_ Flag indicating whether to perform chemical reactions.
-/// \param seed             Seed for the random number generator (negative value to randomize it).
+/// \param nLevels_          Number of tree levels.
+/// \param domainLength_     Length scale of the domain.
+/// \param tau0_             Time scale of the domain.
+/// \param C_param_          Parameter to control eddy rate.
+/// \param forceTurb_        Flag indicating whether to force turbulence.
+/// \param nVar_             Number of variables.
+/// \param ScHips_           Vector of Schmidt numbers for HiPS simulation.
+/// \param cantSol           Cantera solution object.
+/// \param performReaction_  Flag indicating whether to perform chemical reactions.
+/// \param seed              Seed for the random number generator (negative value to randomize it).
 ///
 /// \note `bRxr` is a pointer to the integrator object. By default, `batchReactor_cvode` is enabled. To switch to `batchReactor_cantera`, the user needs to uncomment the corresponding section.
 
@@ -138,10 +138,12 @@ hips::hips(int nLevels_,
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// \brief Function to create a tree structure based on the specified parameters.
+///
 /// \param nLevels_         Number of levels in the tree.
 /// \param domainLength_    Length scale of the domain.
 /// \param tau0_            Time scale of the domain.
 /// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
+///
 /// \note This function sets up the tree based on the specified number of levels. It is useful when the user knows the number of levels explicitly.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,17 +238,18 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// \brief Function to create a tree structure based on the specified parameters.
-/// \param Re_ The Reynolds number.
-/// \param approach The method used for setting the number of levels based on the Reynolds number:
-///                 - approach "1": This approach is introduced as Rounding to closest level to \f$ i_s^* \f$ for micromixing in the paper.
-///                 - approach "2": This approach is introduced as Probability-based solution the paper.
-///                 - approach "3": This approach is introduced as Micromixing at level \f$ i \f$ with \f$ \tau_s^* \f$ in the paper.
-///                 - The last approach: This approach is considered as Dynamic adjustment of \f$ A \f$ value in the paper.
-/// \param domainLength_ Length scale of the domain.
-/// \param tau0_ Time scale of the domain.
-/// \param ScHips_ Vector of Schmidt numbers for HiPS simulation.
+///
+/// \param Re_              The Reynolds number.
+/// \param approach_        The method used for setting the number of levels based on the Reynolds number:
+///                        - approach "1": This approach is introduced as Rounding to closest level to \f$ i_s^* \f$ for micromixing in the paper.
+///                        - approach "2": This approach is introduced as Probability-based solution the paper.
+///                        - approach "3": This approach is introduced as Micromixing at level \f$ i \f$ with \f$ \tau_s^* \f$ in the paper.
+///                        - The last approach: This approach is considered as Dynamic adjustment of \f$ A \f$ value in the paper.
+/// \param domainLength_    Length scale of the domain.
+/// \param tau0_            Time scale of the domain.
+/// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
+///
 /// \note This function sets up the tree based on the Reynolds number. Users pass the method (approach) and the number of levels.
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -369,7 +372,8 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/// @brief Function to pass the variables, their weights, and their names to the parcels of the tree.  
+/// \brief Function to pass the variables, their weights, and their names to the parcels of the tree.
+///
 /// \param v         Vector consisting of variables passed to the HiPS tree.
 /// \param w         Vector containing weights for each flow particle.
 /// \param varN      Vector containing names corresponding to each variable.
@@ -386,11 +390,13 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
 ///////////////////////////////////////i///////////////////////////////////////
 
-/// @brief Function to pass the variable, their weights, names, and densities to the parcels of the tree. 
+/// \brief Function to pass the variable, their weights, names, and densities to the parcels of the tree. 
+///
 /// \param v         Vector of variables that are passed to the HiPS tree.
 /// \param w         Vector of weights; each flow particle has a weight.
 /// \param varN      Vector of names of the variable.
 /// \param rho       Vector of density; each flow particle has a specific density.
+///
 /// \note This function is overloaded. This version considers particle density.
 
 //////////////////////////////////////////////////////////////////////////////////// 
@@ -410,13 +416,14 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
 /////////////////////////////////////////i/////////////////////////////////////////////
 
-/// @brief This function projects the value in flow particles onto HiPS parcels. If works in cases in which density is constant.  
+/// \brief This function projects the value in flow particles onto HiPS parcels. If works in cases in which density is constant. 
+///
 /// It follows \f[
 /// \f[
 /// \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i} = \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j}
 /// \f]
-/// \param vcfd      Vector of variables passed to the HiPS tree.
-/// \param weight    Weight vector; each flow particle has a weight.
+/// \param vcfd          Vector of variables passed to the HiPS tree.
+/// \param weight        Weight vector; each flow particle has a weight.
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -459,11 +466,11 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 
 /////////////////////////////////////////i/////////////////////////////////////////////
 
-/// @brief This function projects the value in flow particles onto HiPS parcels.
+/// \brief This function projects the value in flow particles onto HiPS parcels.
 ///
-/// \param vcfd      Vector of variables passed to the HiPS tree.
-/// \param weight    Weight vector; each flow particle has a weight.
-/// \param density   Vector of density.
+/// \param vcfd         Vector of variables passed to the HiPS tree.
+/// \param weight       Weight vector; each flow particle has a weight.
+/// \param density      Vector of density.
 /// \return A pair of vectors representing the projected vector and the density on the grid.
 ///
 /// \note This function is overloaded. This version considers particle density. 
@@ -516,11 +523,14 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
 
 /////////////////////////////////////////////////////////////////////////////////
 
-/// @brief This function generates a physical domain for flow particles based on the given weights.
-/// /// It assumes that the length of the domain is 1, meaning each particle occupies a portion of the domain proportional to its weight.
+/// \brief This function generates a physical domain for flow particles based on the given weights.
+///
+/// It assumes that the length of the domain is 1, meaning each particle occupies a portion of the domain proportional to its weight.
 /// The sum of the portions occupied by all particles should equal 1.
-/// \param w                     Weight vector defining the spacing between grid points.
+/// \param w         Weight vector defining the spacing between grid points.
+///
 /// \return Vector representing the grid positions for flow particles.
+
 ////////////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::setGridCfd(std::vector<double> &w) {
@@ -542,10 +552,12 @@ std::vector<double> hips::setGridCfd(std::vector<double> &w) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/// @brief This function generates a physical domain for HiPS parcels.
+/// \brief This function generates a physical domain for HiPS parcels.
+///
 /// The size of the HiPS domain matches the size of the physical domain specified in the ``setGridCfd()`` function.
 /// All parcels occupy an equal portion of the physical domain, meaning the domain is divided evenly among the parcels.
-/// \param N                       Number of grid points.
+/// \param N         Number of grid points.
+///
 /// \return A vector representing the HiPS grids.
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -565,13 +577,16 @@ std::vector<double> hips::setGridHips(int N){
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// The HiPS solver
-/// \param tRun                               Input simulation run time
-/// \param shouldWriteData                    Set to false by default. If true, data will be written. 
+///
+/// \param tRun                Input simulation run time
+/// \param shouldWriteData     Set to false by default. If true, data will be written.
+///
 /// Sample tee (time of next eddy event)
 /// Select and swap subtrees (at current time, not at tee, so that we know who's involved)
 /// If the eddy event is at the parcel/micromixing level:
 ///     React involved parcels from their current time to tee
 ///     Mix the involved parcels (micromixing)
+///
 /// \note Data is written after a specified number of eddy events. By default, the data is written after "10000" eddy events. Users have the flexibility to adjust this number in the code.
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -611,8 +626,9 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
 ///////////////////////////////////////////////////////////////////////////////
 
 /// Samples stochastic eddy events on the hips tree: time and level.
-/// \param dtEE                            Time increment to next eddy event (EE)
-/// \param iLevel                          Tree level of EE
+///
+/// \param dtEE         Time increment to next eddy event (EE)
+/// \param iLevel       Tree level of EE
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -651,8 +667,9 @@ void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
 ///////////////////////////////////////////////////////////////////////////////
 
 /// Function performs eddy events: parcel swaps.
-/// \param iLevel                          Input  level of the tree for the base of the swap.
-/// \param iTree                           Output which subtree on the level is selected
+///
+/// \param iLevel         Input  level of the tree for the base of the swap.
+/// \param iTree          Output which subtree on the level is selected
 ///
 ///  Randomly select a node on iLevel.
 ///  Go down two levels and select nodes 0q and 1r, where q, r are randomly 0 or 1
@@ -720,10 +737,11 @@ void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
 ///////////////////////////////////////////////////////////////////////////////
 
 /// React and mix parcels that are involved in a micromixing process.
-/// This is determined by the level and the tree within that level.
+/// This is determined by the level nd the tree within that level.
 /// Might not do anything if the eddy doesn't cause micromixing.
-/// \param iLevel                    Input level that the eddy event occurred.
-/// \param iTree                     Input root note of the eddy event at iLevel.
+///
+/// \param iLevel         Input level that the eddy event occurred.
+/// \param iTree          Input root note of the eddy event at iLevel.
 
 /////////////////////////////////////////////////////////////////////////////////
 
@@ -752,8 +770,9 @@ void hips::advanceHips(const int iLevel, const int iTree) {
 /// React parcels that are involved in a micromixing process.
 /// Parcels might react for different amounts of time depending on when they last
 /// reacted, which is stored in the parcelTimes array.
-/// \param iLevel                    Input level that the eddy event occurred.
-/// \param iTree                     Input root note of the eddy event at iLevel.
+///
+/// \param iLevel         Input level that the eddy event occurred.
+/// \param iTree          Input root note of the eddy event at iLevel.
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -790,9 +809,10 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 
 /// Mix parcels uniformly (using average) at given level and tree
 /// Mixing at levels above the lowest enables low Sc variables.
-/// \param kVar     Variable index to mix (normally a transported var as determined by caller)
-/// \param iLevel   Grandchildren of this iLevel will be mixed
-/// \param iTree    At the given iLevel, mix only this subtree
+///
+/// \param kVar         Variable index to mix (normally a transported var as determined by caller)
+/// \param iLevel       Grandchildren of this iLevel will be mixed
+/// \param iTree        At the given iLevel, mix only this subtree
 ///
 /// Example: For a 5 level tree, we have levels 0, 1, 2, 3, 4 (top to bottom).
 ///   
@@ -858,7 +878,7 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/// @brief Force the HiPS profile to achieve statistical stationarity.
+/// \brief Force the HiPS profile to achieve statistical stationarity.
 ///
 /// This function is meant to demonstrate forcing for simple scalars, such as a mixture fraction variable that varies between 0 and 1.
 /// The code within this function is configured to force the left half of parcels to average 0 and the right half of parcels to average 1.
@@ -897,13 +917,14 @@ void hips::forceProfile() {
 
 ///////////////////////////////////////////////////////////////////////////////////
 
-/// @brief Write data to a file with a specific index and output time.
+/// \brief Write data to a file with a specific index and output time.
 ///
 /// This function writes data to a file with a filename following a sequential incrementing index pattern 
 /// (e.g., Data_00001.dat, Data_00002.dat, etc.). The time of the data file is also written into the file.
 ///
 /// \param ifile The sequential index used in the file name.
 /// \param outputTime The time associated with the data, written into the file.
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 void hips::writeData(const int ifile, const double outputTime) {
@@ -952,7 +973,8 @@ void hips::writeData(const int ifile, const double outputTime) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-///  @brief Function for projecting vectors onto a grid.
+///  \brief Function for projecting vectors onto a grid.
+///
 ///  \param vb Vector to be projected back.
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1019,11 +1041,11 @@ std::vector<std::vector<double>> hips::get_varData(){
 /// \brief Writes the input parameters to a YAML file for post-process simulations.
 /// 
 /// This function creates a YAML file named "InputParameters.yaml" in the "../data/" directory.
-/// The file includes the following simulation parameters:
-/// - nLevels: The number of levels in the simulation.
-/// - nparcels: The number of parcels used in the simulation.
-/// - nVar: The number of variables in the simulation.
-/// - varName: A list of variable names.
+///
+/// \param nLevels         The number of levels in the simulation.
+/// \param nparcels        The number of parcels used in the simulation.
+/// \param nVar            The number of variables in the simulation.
+/// \param varName         A list of variable names.
 
 /////////////////////////////////////////////////////////////////////////////////////
 
