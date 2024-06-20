@@ -973,9 +973,10 @@ void hips::writeData(const int ifile, const double outputTime) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-///  \brief Function for projecting vectors onto a grid.
+/// \brief Projects hip results back onto flow particles.
 ///
-///  \param vb Vector to be projected back.
+/// \param vh Vector to be projected back.
+/// \note This function is the reverse of the projection function.
 
 //////////////////////////////////////////////////////////////////////////////
 
