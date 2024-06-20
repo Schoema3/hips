@@ -925,15 +925,26 @@ void hips::writeData(const int ifile, const double outputTime) {
 
     outputFile << "# time = " << outputTime << "\n";
     outputFile << "# Grid Points = " << nparcels << "\n";
-    outputFile << "#temperature" << setw(14);
-    for (const auto& name : varName)
+
+    if (performReaction) {
+        outputFile << "#temperature" << setw(14);
+    }
+
+    for (const auto& name : varName) {
         outputFile << "#" << setw(14) << name;
+    }
+    
     outputFile << scientific << setprecision(10);
 
     for (int i = 0; i < nparcels; ++i) {
-        outputFile << "\n" << setw(19) << Temp[pLoc[i]];            // Write temp data for each parcel
-        for (int k = 0; k < nVar; ++k)
-            outputFile << setw(19) << varData[k][0][pLoc[i]];       // Write data for each variable
+        if (performReaction) {
+            outputFile << "\n" << setw(19) << Temp[pLoc[i]]; // Write temp data for each parcel if reaction occurs
+        } else {
+            outputFile << "\n";
+        }
+        for (int k = 0; k < nVar; ++k) {
+            outputFile << setw(19) << varData[k][0][pLoc[i]]; // Write data for each variable
+        }
     }
 
     outputFile.close();
