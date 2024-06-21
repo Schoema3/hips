@@ -138,13 +138,14 @@ hips::hips(int nLevels_,
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /// \brief Function to create a tree structure based on the specified parameters.
-///
+/// 
 /// \param nLevels_         Number of levels in the tree.
 /// \param domainLength_    Length scale of the domain.
 /// \param tau0_            Time scale of the domain.
 /// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
 ///
-/// \note This function sets up the tree based on the specified number of levels. It is useful when the user knows the number of levels explicitly.
+/// \note This function sets up the tree based on the specified number of levels.
+/// It is useful when the user knows the number of levels explicitly.
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -416,14 +417,16 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
 /////////////////////////////////////////i/////////////////////////////////////////////
 
-/// \brief This function projects the value in flow particles onto HiPS parcels. If works in cases in which density is constant. 
-///
-/// It follows \f[
+/// \brief This function projects the value in flow particles onto HiPS parcels. It works in cases where density is constant.
+/// 
+/// It follows:
 /// \f[
 /// \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i} = \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j}
 /// \f]
+/// 
 /// \param vcfd          Vector of variables passed to the HiPS tree.
 /// \param weight        Weight vector; each flow particle has a weight.
+/// \return              Vector of values projected onto HiPS parcels.
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -612,14 +615,14 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
 
         nEddies++;
         //cout<<"-------------------------------------"<<nEddies<<endl;
-        if(shouldWriteData && nEddies %10000 == 0) writeData(++fileCounter, time);
+        if (shouldWriteData && nEddies %10000 == 0) writeData(++fileCounter, time);
     }
     time = tRun;
     iLevel = 0; iTree  = 0;
-    if(performReaction)
+    if (performReaction)
     reactParcels_LevelTree(iLevel, iTree);      // react all parcels up to end time
 
-    if(shouldWriteData)
+    if (shouldWriteData)
         writeInputParameters();
 }
 
@@ -657,8 +660,8 @@ void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
     else {                                            // "Batchelor" region
         r = rand.getRand();
         iLevel = ceil(log2(r*c2 + c3) - 1.0);
-        if(iLevel < iEta+1) iLevel = iEta+1;
-        if(iLevel > Nm3) iLevel = Nm3;
+        if (iLevel < iEta+1) iLevel = iEta+1;
+        if (iLevel > Nm3) iLevel = Nm3;
     }
 
     return;
@@ -973,9 +976,19 @@ void hips::writeData(const int ifile, const double outputTime) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-/// \brief Projects hip results back onto flow particles.
-///
-/// \param vh Vector to be projected back.
+/// \brief This function projects the HiPS parcel values back onto the flow particles.
+/// 
+/// It effectively reverses the projection process to ensure the values in HiPS parcels 
+/// are accurately redistributed to the flow particles.
+/// 
+/// It follows:
+/// \f[
+/// \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j} = \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i}
+/// \f]
+/// 
+/// \param vh           Vector of values from HiPS parcels to be projected back.
+/// \return             Vector of values projected back onto the flow particles.
+/// 
 /// \note This function is the reverse of the projection function.
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1018,12 +1031,12 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
-/// \brief Retrieve modified data from the Hierarchical Progressive Survey (HiPS) library.
+/// \brief This function returns final data from the simulation.
 ///
-/// This function retrieves modified data from the HiPS library and stores it in the provided vector.
-/// Each element of the returned vector contains a vector representing a single data projection.
+/// \note This function is used for integrating HiPS as a subgrid model in CFD simulations.
 ///
-/// \return A vector of vectors containing modified data retrieved from the HiPS library.
+/// \return A vector of vectors containing the final results.
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1039,7 +1052,7 @@ std::vector<std::vector<double>> hips::get_varData(){
 
 /////////////////////////////////////////////////////////////////////////////////////
 
-/// \brief Writes the input parameters to a YAML file for post-process simulations.
+/// \brief This function writes the input parameters to a YAML file for post-processes simulations.
 /// 
 /// This function creates a YAML file named "InputParameters.yaml" in the "../data/" directory.
 ///
@@ -1047,6 +1060,8 @@ std::vector<std::vector<double>> hips::get_varData(){
 /// \param nparcels        The number of parcels used in the simulation.
 /// \param nVar            The number of variables in the simulation.
 /// \param varName         A list of variable names.
+///
+/// \note Users can add other simulations parameters to this function. 
 
 /////////////////////////////////////////////////////////////////////////////////////
 
@@ -1056,19 +1071,22 @@ void hips::writeInputParameters() {
 
     YAML::Node yamlData;                                // Create a YAML node and write the input parameters to it
 
-    yamlData["params"]["nLevels"] = nLevels;            // Adding simulation parameters with comments
+    // Adding simulation parameters with comments
+    yamlData["params"]["nLevels"] = nLevels;           
     yamlData["params"]["nparcels"] = nparcels;
     yamlData["params"]["nVar"] = nVar;
 
-    YAML::Node varNamesNode;                             // Adding variable names with comments
+    YAML::Node varNamesNode;
 
+    // Adding variable names with comments
     for (const auto& name : varName) {
         varNamesNode.push_back(name);
     }
     yamlData["variable_names"] = varNamesNode;
 
 
-    std::ofstream yamlFile(yamlFileName);                  // Save the YAML node to a file
+    // Save the YAML node to a file
+    std::ofstream yamlFile(yamlFileName);                  
     if (!yamlFile) {
         cerr << "Error: Unable to open file " << yamlFileName << " for writing" << endl;
         return;
@@ -1077,7 +1095,8 @@ void hips::writeInputParameters() {
     yamlFile << yamlData;
     yamlFile.close();
 }
- 
+
+//////////////////////////////////////////////////////////////////////////////////
 
 
  
