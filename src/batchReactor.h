@@ -16,16 +16,19 @@ class batchReactor {
 
 protected:
 
-    std::shared_ptr<Cantera::ThermoPhase> gas;        ///< Cantera thermo object
-    std::shared_ptr<Cantera::Kinetics>    kin;        ///< Cantera kinetics object
+    std::shared_ptr<Cantera::ThermoPhase> gas;          ///< Cantera thermo object
+    std::shared_ptr<Cantera::Kinetics>    kin;          ///< Cantera kinetics object
 
-    int                                   nvar;       ///< number of variables/equations solved
+    int                                   nvar;         ///< number of variables/equations solved
 
-    double                                h_fixed;    ///< adiabatic h during integrate
-    double                                P_fixed;    ///< pressure during integrate
-    double                                rho;
+    double                                h_fixed;      ///< adiabatic h during integrate
+    double                                P_fixed;      ///< pressure during integrate
+    //double                                rho;
+
 public:
-    double                                temperature;
+    double                                temperature;  ///< temperature during integrate
+    double                                rho;          ///< density during integrate
+
 /////////////////////////////// MEMBER FUNCTIONS//////////////////////////////////////////
 
 public:
@@ -33,7 +36,6 @@ public:
     batchReactor() {};
 
     virtual void react(double &h, std::vector<double> &y, const double tRun) = 0;
-    double getDensity() const { return rho; }       //Mb
+    double getDensity() const { return rho; }       
     
-    virtual ~batchReactor() {}
 };

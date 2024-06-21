@@ -72,7 +72,7 @@ int batchReactor_cvode::rhsf(const double t, const double *vars, double *dvarsdt
     gas->setState_HP(h_fixed, P_fixed);
 
     // Calculate density and reaction rates
-    double rho = gas->density();
+    rho = gas->density();
     temperature = gas->temperature();
 
     std::vector<double> rr(nvar);
