@@ -9,7 +9,7 @@ target_sources(hips PRIVATE
     FILE_SET hips_headers
         TYPE HEADERS
         BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" 
-        FILES hips.h             
+        FILES hips.h
 )
 
 if(REACTIONS_ENABLED)

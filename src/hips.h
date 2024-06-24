@@ -31,8 +31,6 @@ public:
     double C_param;                                   ///< Eddy frequency parameter
     std::vector<double> Temp;                         ///< Vector containg temperature in each parcel;
     
-    /////////////////////////// DATA MEMBERS: PRIVATE //////////////////////////////////
-
 private:
     
     int currentIndex = 0;                              ///< member variable to keep track of current index of variables
@@ -70,19 +68,54 @@ private:
     std::vector<double> xc;                             ///< vector containing physical domain of flow particles
     std::vector<double> xh;                             ///< vector containing physical domain of HiPS parcels
     
-    /////////////////////////  STATIC MEMBERS  ///////////////////////// 
-
     static int nL;                                      ///< adjusted number of levels based on the Reynolds number
     static double Prob;                                 ///< probability value for probability-based solution
     static double lStar;                                ///< length of the level associated with the Reynolds number 
     static double Anew;                                 ///< adjusted level lengthscale reduction factor for dynamic adjustment of reduction factor
     std::string  approach;
 
-    ////////////////////////////// MEMBER FUNCTIONS: PUBLIC /////////////////////////////
+    ////////////////////////////// MEMBER FUNCTIONS /////////////////////////////
 
 public:
+
+    void set_tree(int nLevels_, double domainLength_, double tau0_, std::vector<double> &ScHips_);  // setting the HiPS tree based on the number of levels
+    void set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_ = "1");
+   
+    void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN);      // passing all variables to vector of pointer 
+    void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN,
+                     const std::vector<double> &rho);                                               // passing all variables to vector of pointer
+
+    std::vector<std::vector<double>> get_varData();                                                 // Retrieves modified data from the HiPS library and stores it in the provided vector. 
+    
+    void calculateSolution(const double tRun, bool shouldWriteData =false);                         // Running simulations 
+
+private:
+
+    std::vector<double> projection(std::vector<double> &vcfd, std::vector<double> &weight);           //Perform vector projection of flow particles onto hips parcels operation without density 
+    
+    std::pair<std::vector<double>, std::vector<double>>  projection(std::vector<double> &vcfd, std::vector<double> &weight,                     
+                                   const std::vector<double> &density);                             // Perform vector projection flow particles onto hips parcels operation with density 
+    
+    std::vector<double> setGridHips(int N);                                                          // Set Hips grid with a specified number of grid points equal to number of parcels   
+    std::vector<double> setGridCfd(std::vector<double> &w);                                          // Set CFD grid using provided weight vector
+    std::vector<double>  projection_back(std::vector<double> &vb);                                   // Perform vector projection of hips parcels onto flow particles operation without density
+    
+    void sample_hips_eddy(double &dt, int &iLevel);                                                  // Sample hips eddy with specified time step and level                                                
+    void selectAndSwapTwoSubtrees(const int iLevel, int &iTree);                                     // Select and swap two subtrees in the level tree
+    void advanceHips(const int iLevel, const int iTree);                                             // Advancing simulations to do mixing and reaction
+   
+    void reactParcels_LevelTree(const int iLevel, const int iTree);                                  // Reacting parcels involved in micro-mixing
+    void mixAcrossLevelTree(int kVar, const int iMixLevel, const int iTree);                         // Mixing paecels involved in micr0-mixing.
+   
+    void forceProfile();
+    
+    void writeData(const int ifile, const double outputTime);                                        // Writing the results for a user-defined number of eddies in the data folder.
+    void writeInputParameters();
+
     
     /////////////////////////  COSTRUCTORS  ///////////////////////// 
+
+public:
 
     hips(double C_param_,
          int forceTurb_,
@@ -111,39 +144,4 @@ public:
             delete data;
     }
 
-    void set_tree(int nLevels_, double domainLength_, double tau0_, std::vector<double> &ScHips_);  // setting the HiPS tree based on the number of levels
-    void set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_ = "1");
-   
-    void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN);      // passing all variables to vector of pointer 
-    void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN,
-                     const std::vector<double> &rho);                                               // passing all variables to vector of pointer
-
-    std::vector<std::vector<double>> get_varData();                                                 // Retrieves modified data from the HiPS library and stores it in the provided vector. 
-    
-    void calculateSolution(const double tRun, bool shouldWriteData =false);                         // Running simulations 
-
-private:
-
-    ////////////////////////////// MEMBER FUNCTIONS: PRIVATE /////////////////////////////
-
-    std::vector<double> projection(std::vector<double> &vcfd, std::vector<double> &weight);           //Perform vector projection of flow particles onto hips parcels operation without density 
-    
-    std::pair<std::vector<double>, std::vector<double>>  projection(std::vector<double> &vcfd, std::vector<double> &weight,                     
-                                   const std::vector<double> &density);                             // Perform vector projection flow particles onto hips parcels operation with density 
-    
-    std::vector<double> setGridHips(int N);                                                          // Set Hips grid with a specified number of grid points equal to number of parcels   
-    std::vector<double> setGridCfd(std::vector<double> &w);                                          // Set CFD grid using provided weight vector
-    std::vector<double>  projection_back(std::vector<double> &vb);                                   // Perform vector projection of hips parcels onto flow particles operation without density
-    
-    void sample_hips_eddy(double &dt, int &iLevel);                                                  // Sample hips eddy with specified time step and level                                                
-    void selectAndSwapTwoSubtrees(const int iLevel, int &iTree);                                     // Select and swap two subtrees in the level tree
-    void advanceHips(const int iLevel, const int iTree);                                             // Advancing simulations to do mixing and reaction
-   
-    void reactParcels_LevelTree(const int iLevel, const int iTree);                                  // Reacting parcels involved in micro-mixing
-    void mixAcrossLevelTree(int kVar, const int iMixLevel, const int iTree);                         // Mixing paecels involved in micr0-mixing.
-   
-    void forceProfile();
-    
-    void writeData(const int ifile, const double outputTime);                                        // Writing the results for a user-defined number of eddies in the data folder.
-    void writeInputParameters();
 };

@@ -11,7 +11,7 @@ endif()
 
 # ---- Set C++ language standard ----
 
-option(REACTIONS_ENABLED "Enable reactions" ON)
+option(REACTIONS_ENABLED "Enable reactions" OFF )
 
 if(REACTIONS_ENABLED)
     add_compile_definitions(REACTIONS_ENABLED)

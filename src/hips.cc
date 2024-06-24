@@ -767,10 +767,10 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
         for (int k=0; k<nsp; k++)
             y[k] = varData[k+1][0][ime];
 #ifdef REACTIONS_ENABLED
-            bRxr->react(h, y, dtEE);
-            varRho[ime] =  bRxr->getDensity();             //Mb
+                bRxr->react(h, y, dtEE);
+                varRho[ime] =  bRxr->getDensity();             //Mb
             Temp[ime] = bRxr->temperature;
- #endif
+#endif
         varData[0][0][ime] = h;
         for (int k=0; k<nsp; k++)
             varData[k+1][0][ime] = y[k];
