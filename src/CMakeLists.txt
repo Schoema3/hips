@@ -1,65 +1,62 @@
-##################### hips library #####################
+##################### hips library
 
-add_library(hips)
+add_library(hips SHARED)
+add_library(hips::hips ALIAS hips)
 
 target_sources(hips PRIVATE 
     hips.cc                 
-    hips.h 
+    PUBLIC
+    FILE_SET hips_headers
+        TYPE HEADERS
+        BASE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}" 
+        FILES hips.h             
 )
 
 if(REACTIONS_ENABLED)
     target_sources(hips PRIVATE
-        batchreactor_cvode.cc   
-        batchreactor_cvode.h   
-        integrator_cvode.h
-        batchreactor_cantera.cc 
-        batchreactor_cantera.h
-        batchreactor.h
+        batchReactor_cvode.cc
+        batchReactor_cantera.cc
     )
 endif()
 
+##################### build library
 
-# Option to enable reactions
+find_library(YAML   yaml-cpp)
 
+target_include_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/include")
+target_include_directories(hips PUBLIC "/usr/local/include")
 
-# Setting target properties
-set_target_properties(hips PROPERTIES 
-    PUBLIC_HEADER "hips.h"
-)
+target_link_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/lib")
+target_link_directories(hips PUBLIC "/usr/local/lib")
 
-# Find necessary libraries
-find_package(Threads REQUIRED)
-find_package(Python REQUIRED COMPONENTS Interpreter Development)
-find_package(LAPACK REQUIRED)
-find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
-target_link_libraries(hips ${Python_LIBRARIES} ${Python} ${ACCELERATE})
+target_link_libraries(hips ${YAML} )
 
-
-# Include boost if necessary
-if(reactions_enabled)
+if(REACTIONS_ENABLED)
     find_library(CVODES sundials_cvodes)
     find_library(CANTERA NAMES cantera_shared cantera)
-    get_filename_component(cantera_path ${CANTERA} DIRECTORY)
-    set_property(TARGET hips APPEND PROPERTY INSTALL_RPATH ${cantera_path})
-    target_link_libraries(hips ${CANTERA})
-    target_link_libraries(hips ${CANTERA} ${YAML} ${CVODES} ${Python_LIBRARIES} ${Python} ${ACCELERATE})
-
+    target_link_libraries(hips ${CANTERA} ${CVODES})
 endif()
-
-# Link libraries
-include_directories("/usr/local/include")
-target_link_directories(hips PRIVATE "/usr/local/lib")
-
 
 ############# Installation ################
 
 include(GNUInstallDirs)
 
-install(TARGETS hips
-    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}"
+install(
+    TARGETS hips                                        # install library
+    EXPORT  hips_exp                                    # define export var for next comand
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}"
     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
-    PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" 
+    FILE_SET hips_headers DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
 )
 
+install(
+    EXPORT      hips_exp                                # hips export file
+    FILE        hips_exp.cmake  
+    NAMESPACE   hips::
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/hips"
+)
+
+install(
+    FILES       "hipsConfig.cmake"                      # install config files
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/hips"    # edit file hipsConfig.cmake
+)

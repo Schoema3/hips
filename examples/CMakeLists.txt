@@ -1,42 +1,52 @@
 
 ####################### EXAMPLES #######################
 
-if(APPLE)
-    find_library(ACCELERATE Accelerate)
-    find_library(YAML yaml-cpp)
+set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib") # to include hips (built in this project)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)            # only needed if examples dep on an external lib
+
+#---------- Example 1
+
+add_executable(ex_1.x ex_1.cc)
+target_include_directories(ex_1.x PRIVATE "${CMAKE_SOURCE_DIR}/src")
+target_link_libraries(ex_1.x PRIVATE hips)
+install(TARGETS ex_1.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
+
+#---------- Example 2
+
+if(REACTIONS_ENABLED)
+
+add_executable(ex_2.x ex_2.cc)
+
+#    find_library(CANTERA NAMES cantera_shared cantera)
+
+#target_include_directories(ex_2.x PRIVATE "${CMAKE_SOURCE_DIR}/src")
+#target_include_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/include")
+
+target_link_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/lib")
+
+target_link_libraries(ex_2.x PRIVATE hips ${CANTERA})
+
+install(TARGETS ex_2.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
+
 endif()
 
-find_library(CVODES sundials_cvodes)
-find_library(CANTERA cantera)
-find_package(Python COMPONENTS Interpreter Development)
+#---------- Example 3
 
-find_library(CANTERA NAMES cantera_shared cantera)
-get_filename_component(cantera_path ${CANTERA} DIRECTORY)
+if(REACTIONS_ENABLED)
 
-#----------
+add_executable(ex_3.x ex_3.cc)
 
-#add_executable(ex_1.x ex_1.cc)
-#set_property(TARGET ex_1.x APPEND PROPERTY INSTALL_RPATH ${cantera_path})
-#target_include_directories(ex_1.x PRIVATE "${CMAKE_SOURCE_DIR}/src" "/usr/local/include")
-#target_include_directories(ex_1.x PRIVATE "/Users/mbehrang/miniconda3/envs/py312ct/include")
-#target_link_libraries(ex_1.x PRIVATE hips ${CANTERA} ${YAML} ${CVODES} ${Python} ${ACCELERATE})
-#install(TARGETS ex_1.x DESTINATION "${CMAKE_SOURCE_DIR}/run")
+#if(REACTIONS_ENABLED)
+#    find_library(CANTERA NAMES cantera_shared cantera)
+#endif()
 
-#----------
+#target_include_directories(ex_3.x PRIVATE "${CMAKE_SOURCE_DIR}/src")
+#target_include_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/include")
 
-#add_executable(ex_2.x ex_2.cc)
-#set_property(TARGET ex_2.x APPEND PROPERTY INSTALL_RPATH ${cantera_path})
-#target_include_directories(ex_2.x PRIVATE "${CMAKE_SOURCE_DIR}/src" "/usr/local/include")
-#target_include_directories(ex_2.x PRIVATE "/Users/mbehrang/miniconda3/envs/py312ct/include")
-#target_link_libraries(ex_2.x PRIVATE hips ${CANTERA} ${YAML} ${CVODES} ${Python} ${ACCELERATE})
-#install(TARGETS ex_2.x DESTINATION "${CMAKE_SOURCE_DIR}/run")
-#
-##----------
-#
-#add_executable(ex_3.x ex_3.cc)
-#set_property(TARGET ex_3.x APPEND PROPERTY INSTALL_RPATH ${cantera_path})
-#target_include_directories(ex_3.x PRIVATE "${CMAKE_SOURCE_DIR}/src" "/usr/local/include")
-#target_include_directories(ex_3.x PRIVATE "/Users/mbehrang/miniconda3/envs/py312ct/include")
-#target_link_libraries(ex_3.x PRIVATE hips ${CANTERA} ${YAML} ${CVODES} ${Python} ${ACCELERATE})
-#install(TARGETS ex_3.x DESTINATION "${CMAKE_SOURCE_DIR}/run")
-#
+target_link_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/lib")
+
+target_link_libraries(ex_3.x PRIVATE hips ${CANTERA})
+
+install(TARGETS ex_3.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
+
+endif()

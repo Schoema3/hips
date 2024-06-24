@@ -1,9 +1,9 @@
 #pragma once
 
 #ifdef  REACTIONS_ENABLED
-    #include "cantera/base/Solution.h"
-    #include "cantera/thermo.h"
-    #include "batchReactor.h"
+#include "cantera/base/Solution.h"
+#include "cantera/thermo.h"
+#include "batchReactor.h"
 #endif
 
 #include <iostream>
@@ -21,10 +21,10 @@ public:
     int nparcels;                                     ///< number of parcels
     std::vector<std::vector<double>*> varData;        ///< vector of pointers to vector
  
-    #ifdef REACTIONS_ENABLED
-        std::shared_ptr<Cantera::ThermoPhase> gas;    ///< Shared pointer to a Cantera thermochemistry object
-        std::unique_ptr<batchReactor> bRxr;           ///< Unique pointer to the integrator object
-    #endif
+#ifdef REACTIONS_ENABLED
+    std::shared_ptr<Cantera::ThermoPhase> gas;        ///< Shared pointer to a Cantera thermochemistry object
+    std::unique_ptr<batchReactor> bRxr;               ///< Unique pointer to the integrator object
+#endif
 
     double domainLength;                              ///< length of domain (m)
     double tau0;                                      ///< integral timescale
@@ -70,27 +70,28 @@ private:
     std::vector<double> xc;                             ///< vector containing physical domain of flow particles
     std::vector<double> xh;                             ///< vector containing physical domain of HiPS parcels
     
-      /////////////////////////  STATIC MEMBERS  ///////////////////////// 
+    /////////////////////////  STATIC MEMBERS  ///////////////////////// 
 
     static int nL;                                      ///< adjusted number of levels based on the Reynolds number
     static double Prob;                                 ///< probability value for probability-based solution
     static double lStar;                                ///< length of the level associated with the Reynolds number 
     static double Anew;                                 ///< adjusted level lengthscale reduction factor for dynamic adjustment of reduction factor
     std::string  approach;
-      ////////////////////////////// MEMBER FUNCTIONS: PUBLIC /////////////////////////////
+
+    ////////////////////////////// MEMBER FUNCTIONS: PUBLIC /////////////////////////////
 
 public:
     
-         /////////////////////////  COSTRUCTORS  ///////////////////////// 
+    /////////////////////////  COSTRUCTORS  ///////////////////////// 
+
     hips(double C_param_,
          int forceTurb_,
          int nVar_,
          bool performReaction,
-         #ifdef REACTIONS_ENABLED
-             std::shared_ptr<Cantera::Solution> cantSol = nullptr,
-         #endif
+#ifdef REACTIONS_ENABLED
+         std::shared_ptr<Cantera::Solution> cantSol = nullptr,
+#endif
          int seed = 10);
-
 
     hips(int nLevels_,
          double domainLength_,
@@ -100,18 +101,18 @@ public:
          int nVar_,
          std::vector<double> &ScHips_,
          bool performReaction,
-         #ifdef REACTIONS_ENABLED
-             std::shared_ptr<Cantera::Solution> cantSol = nullptr,
-         #endif
+#ifdef REACTIONS_ENABLED
+         std::shared_ptr<Cantera::Solution> cantSol = nullptr,
+#endif
          int seed = 10);
  
     virtual ~hips() {
         for(auto& data : varData)
             delete data;
-    }                                                                                               // Destructor for the hips class
+    }
 
     void set_tree(int nLevels_, double domainLength_, double tau0_, std::vector<double> &ScHips_);  // setting the HiPS tree based on the number of levels
-    void  set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_ = "1");
+    void set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_ = "1");
    
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN);      // passing all variables to vector of pointer 
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN,
@@ -124,7 +125,6 @@ public:
 private:
 
     ////////////////////////////// MEMBER FUNCTIONS: PRIVATE /////////////////////////////
-
 
     std::vector<double> projection(std::vector<double> &vcfd, std::vector<double> &weight);           //Perform vector projection of flow particles onto hips parcels operation without density 
     
@@ -147,22 +147,3 @@ private:
     void writeData(const int ifile, const double outputTime);                                        // Writing the results for a user-defined number of eddies in the data folder.
     void writeInputParameters();
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

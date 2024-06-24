@@ -1,9 +1,10 @@
-
 #include <iostream>
 #include <vector>
 #include "hips.h"
 
-using namespace std;
+using std::vector, std::string;
+
+///////////////////////////////////////////////////////////////////////////////
 
 // Function to initialize mixing fractions
 vector<double> initializeMixingFractions(int numParcels) {
@@ -11,13 +12,12 @@ vector<double> initializeMixingFractions(int numParcels) {
     for (int i = 0; i < numParcels; i++) {
         mixingFractions.push_back(i < numParcels / 2 ? 0.0 : 1.0);
     }
-    cout << "\n\n";
     return mixingFractions;
 }
 
-std::vector<std::string> variableNames = {"mixf_00", "mixf_01", "mixf_02"};
+vector<string> variableNames = {"mixf_00", "mixf_01", "mixf_02"};
 
-int main() {
+///////////////////////////////////////////////////////////////////////////////
 
 /**
  * - The example `ex_1.cc` demonstrates scalar mixing dynamics, illustrating the behavior of a basic mixing model.
@@ -25,7 +25,7 @@ int main() {
  * - Schmidt numbers in the simulation are 0.0625 and 4, showcasing the impact of high and low Schmidt numbers on mixing.
  */
 
-
+int main() {
 
     // HiPS tree and constructor parameters
     int nLevels = 6;
