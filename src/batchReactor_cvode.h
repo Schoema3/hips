@@ -28,5 +28,4 @@ public:
     int rhsf(const double t, const double *vars, double *dvarsdt);  // dydt = rhsf
     
     virtual ~batchReactor_cvode() {}
-
 };

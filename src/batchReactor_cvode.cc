@@ -11,6 +11,7 @@
 /// \param user_data Pointer to the user-defined data (batchReactor_cvode instance).
 /// \return 0 on success.
 ////////////////////////////////////////////////////////////////////////////////
+
 int rhsf_cvode(realtype t, N_Vector varsCV, N_Vector dvarsdtCV, void *user_data);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,6 +22,7 @@ int rhsf_cvode(realtype t, N_Vector varsCV, N_Vector dvarsdtCV, void *user_data)
 /// \param cantSol A shared pointer to a Cantera solution object.
 /// 
 ///////////////////////////////////////////////////////////////////////////////////
+
 batchReactor_cvode::batchReactor_cvode(std::shared_ptr<Cantera::Solution> cantSol) {
 
     gas = cantSol->thermo(); 
@@ -44,6 +46,7 @@ batchReactor_cvode::batchReactor_cvode(std::shared_ptr<Cantera::Solution> cantSo
 /// \param tRun Time for the simulation.
 ///
 ////////////////////////////////////////////////////////////////////////////////////////
+
 void batchReactor_cvode::react(double &h, std::vector<double> &y, const double tRun) {
 
     // Store fixed enthalpy and pressure
@@ -65,6 +68,7 @@ void batchReactor_cvode::react(double &h, std::vector<double> &y, const double t
 /// \return 0 on success.
 ////
 /////////////////////////////////////////////////////////////////////////////////////
+
 int batchReactor_cvode::rhsf(const double t, const double *vars, double *dvarsdt) {
 
     // Set mass fractions and state
@@ -109,4 +113,3 @@ int rhsf_cvode(realtype t, N_Vector varsCV, N_Vector dvarsdtCV, void *user_data)
 
     return rv;
 }
-

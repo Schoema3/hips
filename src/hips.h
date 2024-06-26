@@ -14,7 +14,7 @@
 
 class hips {
 
-    ////////////////////////////// DATA MEMBERS: PUBLIC /////////////////////////////
+    ////////////////////////////// DATA MEMBERS /////////////////////////////
 
 public:
   
@@ -91,25 +91,25 @@ public:
 
 private:
 
-    std::vector<double> projection(std::vector<double> &vcfd, std::vector<double> &weight);           //Perform vector projection of flow particles onto hips parcels operation without density 
+    std::vector<double> projection(std::vector<double> &vcfd, std::vector<double> &weight);         // Perform vector projection of flow particles onto hips parcels operation without density 
     
     std::pair<std::vector<double>, std::vector<double>>  projection(std::vector<double> &vcfd, std::vector<double> &weight,                     
                                    const std::vector<double> &density);                             // Perform vector projection flow particles onto hips parcels operation with density 
     
-    std::vector<double> setGridHips(int N);                                                          // Set Hips grid with a specified number of grid points equal to number of parcels   
-    std::vector<double> setGridCfd(std::vector<double> &w);                                          // Set CFD grid using provided weight vector
-    std::vector<double>  projection_back(std::vector<double> &vb);                                   // Perform vector projection of hips parcels onto flow particles operation without density
+    std::vector<double> setGridHips(int N);                                                         // Set Hips grid with a specified number of grid points equal to number of parcels   
+    std::vector<double> setGridCfd(std::vector<double> &w);                                         // Set CFD grid using provided weight vector
+    std::vector<double>  projection_back(std::vector<double> &vb);                                  // Perform vector projection of hips parcels onto flow particles operation without density
     
-    void sample_hips_eddy(double &dt, int &iLevel);                                                  // Sample hips eddy with specified time step and level                                                
-    void selectAndSwapTwoSubtrees(const int iLevel, int &iTree);                                     // Select and swap two subtrees in the level tree
-    void advanceHips(const int iLevel, const int iTree);                                             // Advancing simulations to do mixing and reaction
+    void sample_hips_eddy(double &dt, int &iLevel);                                                 // Sample hips eddy with specified time step and level                                                
+    void selectAndSwapTwoSubtrees(const int iLevel, int &iTree);                                    // Select and swap two subtrees in the level tree
+    void advanceHips(const int iLevel, const int iTree);                                            // Advancing simulations to do mixing and reaction
    
-    void reactParcels_LevelTree(const int iLevel, const int iTree);                                  // Reacting parcels involved in micro-mixing
-    void mixAcrossLevelTree(int kVar, const int iMixLevel, const int iTree);                         // Mixing paecels involved in micr0-mixing.
+    void reactParcels_LevelTree(const int iLevel, const int iTree);                                 // Reacting parcels involved in micro-mixing
+    void mixAcrossLevelTree(int kVar, const int iMixLevel, const int iTree);                        // Mixing paecels involved in micr0-mixing.
    
     void forceProfile();
     
-    void writeData(const int ifile, const double outputTime);                                        // Writing the results for a user-defined number of eddies in the data folder.
+    void writeData(const int ifile, const double outputTime);                                       // Writing the results for a user-defined number of eddies in the data folder.
     void writeInputParameters();
 
     

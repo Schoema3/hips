@@ -49,13 +49,13 @@ hips::hips(double C_param_,
     performReaction(performReaction_) {
       
 #ifdef REACTIONS_ENABLED
-        gas = cantSol->thermo(); 
-        nsp = gas->nSpecies();
+    gas = cantSol->thermo(); 
+    nsp = gas->nSpecies();
 
-        bRxr = make_unique<batchReactor_cvode>(cantSol);                             // By default, use batchReactor_cvode
+    bRxr = make_unique<batchReactor_cvode>(cantSol);                             // By default, use batchReactor_cvode
 
-        // Uncomment the following line to switch to batchReactor_cantera
-        // bRxr = make_unique<batchReactor_cantera>(cantSol);
+    // Uncomment the following line to switch to batchReactor_cantera
+    // bRxr = make_unique<batchReactor_cantera>(cantSol);
 #endif
 
     // Resize vectors to the number of variables
@@ -142,7 +142,6 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
     tau0 = tau0_; 
     ScHips = ScHips_; 
 
- 
     if (nLevels == -1)  
         nLevels = nL; 
 
@@ -176,7 +175,6 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
 
         levelTaus[i] = tau0 * pow(levelLengths[i]/domainLength, 2.0/3.0) / C_param;
         levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
-
     }
 
     LScHips = ScHips.size() > 0 ? true : false;
@@ -215,13 +213,15 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
     }
     
     //------------------- Set the parcel addresses (index array)
-   varRho.resize(nparcels);
-   Temp.resize(nparcels);
+
+    varRho.resize(nparcels);
+    Temp.resize(nparcels);
  
     pLoc.resize(nparcels);
     for (int i=0; i<nparcels; i++)
         pLoc[i] = i;
 } 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Function to create a tree structure based on the specified parameters.
 ///
@@ -277,13 +277,11 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     nLevels = nL;
     iEta = nLevels - 3;                                          // Kolmogorov level 
 
-    int maxSc = 1.0;
-    for (const auto &sc : ScHips) {
+    int maxSc = 1;
+    for (const auto &sc : ScHips)
         maxSc = std::max(maxSc, static_cast<int>(sc));
-    }
-    if (maxSc > 1.0) {
+    if (maxSc > 1.0)
         nLevels += ceil(log(maxSc) / log(4));                    // Changing number of levels!
-    }
 
     Nm1 = nLevels - 1;
     Nm2 = nLevels - 2;
@@ -313,46 +311,42 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     }
 
     LScHips = !ScHips.empty();
-    if (LScHips) {                                              // Correct levels for high Sc (levels > Kolmogorov)
+    if (LScHips)                                                // Correct levels for high Sc (levels > Kolmogorov)
         for (int i = iEta + 1; i < nLevels; ++i) {
             levelTaus[i] = tau0 * pow(levelLengths[iEta] / domainLength, 2.0 / 3.0) / C_param;
             levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
         }
-    }
    
     //-----------------------------------------------
 
     eddyRate_total = 0.0;
-    for (int i = 0; i <= Nm3; ++i) {
+    for (int i = 0; i <= Nm3; ++i)
         eddyRate_total += levelRates[i];
-    }
 
     eddyRate_inertial = 0.0;
-    for (int i = 0; i <= iEta; ++i) {
+    for (int i = 0; i <= iEta; ++i)
         eddyRate_inertial += levelRates[i];
-    }
 
     //-------------------------------------------------
 
     i_plus.resize(nVar);
     for (int k = 0; k < nVar; ++k) {
-        if (ScHips[k] < 1.0) {
+        if (ScHips[k] < 1.0)
             i_batchelor[k] = iEta + 1.5 * log(ScHips[k]) / log(4);
-        } else if (ScHips[k] > 1.0) {
+        else if (ScHips[k] > 1.0)
             i_batchelor[k] = iEta + log(ScHips[k]) / log(4);
-        } else {
+        else
             i_batchelor[k] = iEta;
-        }
         i_plus[k] = ceil(i_batchelor[k]);
     }
  
     //-----------------------------------------------------
+
     varRho.resize(nparcels);
     Temp.resize(nparcels);
     pLoc.resize(nparcels);
-    for (int i = 0; i < nparcels; ++i) {
+    for (int i = 0; i < nparcels; ++i)
         pLoc[i] = i;
-    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -389,11 +383,10 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
     std::vector<double> rho_h = results.second;
 
     varData[currentIndex] = new std::vector<double>(vh);            
-    varRho =  std::vector<double>(rho_h);
+    varRho = std::vector<double>(rho_h);
     varName[currentIndex] = varN;
  
     currentIndex++; 
-
 }
 
 /////////////////////////////////////////i/////////////////////////////////////////////
@@ -429,8 +422,7 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 
                 vh[i] += vcfd[j - 1] * d;
             } 
-
-        else {
+            else {
                 double d1 = xh[i + 1] - xc[j - 1];
                 double d2 = xh[i + 1] - xh[i];
                 double d = std::min(d1, d2);
@@ -440,7 +432,6 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
                 break;
             }
         }
-        
         vh[i] /= (xh[i + 1] - xh[i]);   
     }
     return vh;
@@ -457,7 +448,9 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 /// \note This function is overloaded. This version considers particle density. 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight, const std::vector<double> &density) {
+std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector<double> &vcfd, 
+                                                                     std::vector<double> &weight, 
+                                                                     const std::vector<double> &density) {
     
     std::vector<double> xc = setGridCfd(weight);
     std::vector<double> xh = setGridHips(nparcels);
@@ -470,7 +463,6 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
     std::vector<double> rho_h(nh, 0.0);
     int jprev = 0;
 
-    // Main loop
     for (int i = 0; i < nh; i++) {
         double total_dx = 0.0;
 
@@ -481,8 +473,7 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
                 rho_h[i] += density[j - 1] * d;
                 vh[i] += density[j - 1] * vcfd[j - 1] * d;
             } 
-
-        else {
+            else {
                 double d = std::min(xh[i + 1] - xc[j - 1], xh[i + 1] - xh[i]);
                 total_dx += d;
                 rho_h[i] += density[j - 1] * d;
@@ -497,7 +488,6 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
         rho_h[i] /= (xh[i + 1] - xh[i]);
         vh[i] /= rho_h[i] * (xh[i + 1] - xh[i]);
     }
-
     return {vh, rho_h};
 }
 
@@ -513,19 +503,17 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
 
 std::vector<double> hips::setGridCfd(std::vector<double> &w) {
     
-    std::vector<double> pos;                               // Initializing a vector to hold the grid positions
-    double posL = 0.0;                                     // Initializing the starting position
+    std::vector<double> pos;      // Initializing a vector to hold the grid positions
+    double posL = 0.0;            // Initializing the starting position
 
     int i = 0;
 
-    while (i <= w.size()) {                                // Generate the grid positions based on the weights
-        pos.push_back(posL);                               // Add the current position to the grid
-        posL += w[i];                                      // Move to the next position by adding the corresponding weight
+    while (i <= w.size()) {       // Generate the grid positions based on the weights
+        pos.push_back(posL);      // Add the current position to the grid
+        posL += w[i];             // Move to the next position by adding the corresponding weight
         i++;                                              
-                                                   
     }
-
-    return pos;                                           // Return the generated grid positions
+    return pos;                   // Return the generated grid positions
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -543,9 +531,8 @@ std::vector<double> hips::setGridHips(int N){
     std::vector<double> xh(N + 1);                               // Initialize a vector to hold the grid points
     double step = 1.0 / N;                                       // Calculate the step size
 
-    for(int i = 0; i <= N; i++){                                // Populate the grid with evenly spaced points
+    for(int i = 0; i <= N; i++)                                 // Populate the grid with evenly spaced points
         xh[i] = i * step;
-    }
         
     return xh;                                                  // Return the generated grid
 }
@@ -580,18 +567,18 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
     while (time+dtEE<=tRun) {
         time += dtEE;
         selectAndSwapTwoSubtrees(iLevel, iTree);
-        advanceHips(iLevel, iTree);    // reaction and micromixing (if needed) to t=time
+        advanceHips(iLevel, iTree);                   // reaction and micromixing (if needed) to t=time
 
         sample_hips_eddy(dtEE, iLevel);
 
         nEddies++;
-        //cout<<"-------------------------------------"<<nEddies<<endl;
-        if (shouldWriteData && nEddies %10000 == 0) writeData(++fileCounter, time);
+        if (shouldWriteData && nEddies %10000 == 0) 
+            writeData(++fileCounter, time);
     }
     time = tRun;
     iLevel = 0; iTree  = 0;
     if (performReaction)
-    reactParcels_LevelTree(iLevel, iTree);      // react all parcels up to end time
+    reactParcels_LevelTree(iLevel, iTree);            // react all parcels up to end time
 
     if (shouldWriteData)
         writeInputParameters();
@@ -632,7 +619,6 @@ void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
         if (iLevel < iEta+1) iLevel = iEta+1;
         if (iLevel > Nm3) iLevel = Nm3;
     }
-
     return;
 }
 
@@ -837,8 +823,7 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
     for (int i=istart; i<iend; i++) {
         ime = pLoc[i];
         varData[kVar][0][ime] = s / nPmix; 
-        
-    }   
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -918,7 +903,7 @@ void hips::writeData(const int ifile, const double outputTime) {
 
     for (int i = 0; i < nparcels; ++i) {
         if (performReaction)
-            outputFile << "\n" << setw(19) << Temp[pLoc[i]]; // Write temp data for each parcel if reaction occurs
+            outputFile << "\n" << setw(19) << Temp[pLoc[i]];  // Write temp data for each parcel if reaction occurs
         else
             outputFile << "\n";
         for (int k = 0; k < nVar; ++k)
@@ -991,12 +976,12 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 
 std::vector<std::vector<double>> hips::get_varData(){
 
-    std::vector<std::vector<double>> varDataProjections;                             // Vector to store modified data projections
+    std::vector<std::vector<double>> varDataProjections;               // Vector to store modified data projections
 
-    for (int i = 0; i < varData.size(); i++)                                        // Loop through each element of varData and project the data back
-        varDataProjections.push_back(projection_back(varData[i][0]));               // Project the data back and store it in vh
+    for (int i = 0; i < varData.size(); i++)                           // Loop through each element of varData and project the data back
+        varDataProjections.push_back(projection_back(varData[i][0]));  // Project the data back and store it in vh
 
-    return varDataProjections;                                                      // Return the vector containing modified data projections
+    return varDataProjections;                                         // Return the vector containing modified data projections
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -1016,7 +1001,7 @@ void hips::writeInputParameters() {
     // Construct the YAML file name
     string yamlFileName = "../data/InputParameters.yaml";
 
-    YAML::Node yamlData;                                // Create a YAML node and write the input parameters to it
+    YAML::Node yamlData;               // Create a YAML node and write the input parameters to it
 
     // Adding simulation parameters with comments
     yamlData["params"]["nLevels"] = nLevels;           
@@ -1026,9 +1011,8 @@ void hips::writeInputParameters() {
     YAML::Node varNamesNode;
 
     // Adding variable names with comments
-    for (const auto& name : varName) {
+    for (const auto& name : varName)
         varNamesNode.push_back(name);
-    }
     yamlData["variable_names"] = varNamesNode;
 
 

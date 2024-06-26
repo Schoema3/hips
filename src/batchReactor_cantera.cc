@@ -1,4 +1,3 @@
-
 #include "batchReactor_cantera.h"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -9,6 +8,7 @@
 /// \param cantSol A shared pointer to a Cantera solution object.
 /// 
 ///////////////////////////////////////////////////////////////////////
+
 batchReactor_cantera::batchReactor_cantera(std::shared_ptr<Cantera::Solution> cantSol) {
     gas = cantSol->thermo(); 
     kin = cantSol->kinetics(); 
@@ -31,6 +31,7 @@ batchReactor_cantera::batchReactor_cantera(std::shared_ptr<Cantera::Solution> ca
 /// \param tRun Time for the simulation.
 ///
 ///////////////////////////////////////////////////////////////////////////////
+
 void batchReactor_cantera::react(double &h, std::vector<double> &y, const double tRun) {
     // Set mass fractions and state
     gas->setMassFractions(&y[0]);
@@ -60,6 +61,7 @@ void batchReactor_cantera::react(double &h, std::vector<double> &y, const double
 /// \param dvarsdt Derivatives of variables with respect to time.
 /// \param not_used Unused parameter.
 /////////////////////////////////////////////////////////////////////////////////
+
 void batchReactor_cantera::eval(double t, double *vars, double *dvarsdt, double *not_used) {
     // Set mass fractions and state
     gas->setMassFractions_NoNorm(vars);
@@ -72,4 +74,3 @@ void batchReactor_cantera::eval(double t, double *vars, double *dvarsdt, double 
     for (size_t k = 0; k < gas->nSpecies(); k++)
         dvarsdt[k] = rr[k] * gas->molecularWeight(k) / rho;
 }
-
