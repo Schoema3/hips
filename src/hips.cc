@@ -17,13 +17,6 @@
 
 using namespace std;
 
-////////////////////////////////////////////////////////////////////////////////
-
-int hips::nL = 0;                   // Initialize adjusted number of levels based on the Reynolds number.
-double hips::Prob = 0.0;            // Initialize probability value for probability-based solution.
-double hips::lStar = 0.0;           // Initialize length of the level associated with the Reynolds number.
-double hips::Anew = 0.0;            // Initialize adjusted level lengthscale reduction factor.          
-
 //////////////////////////////////////////////////////////////////////////////
 /// \brief Constructor to initialize parameters for creating the HiPS tree.
 ///

@@ -43,7 +43,8 @@ private:
     int Nm2;                                           ///< nLevels - 2                     
     int Nm3;                                           ///< nLevels - 3 
     int iEta;                                          ///< Kolmogorov level (needed for variable Sc scalars)
-    
+    int nL;                                            ///< adjusted number of levels based on the Reynolds number
+
     bool LScHips;                                      ///< hips schmidt number
     bool performReaction;                              ///< flag indicating whether chemical reactions are performed in the simulation 
     bool LrandSet;                                     ///< flag indicating new randomGen  --> allow deletion
@@ -54,7 +55,10 @@ private:
     double Afac = 0.5;                                 ///< level lengthscale reduction factor (0.5)
     double Re;                                         ///< Reynolds number
     double dtEE;                                       ///< time increment to next eddy event 
-    
+    double Prob;                                       ///< probability value for probability-based solution
+    double lStar;                                      ///< length of the level associated with the Reynolds number 
+    double Anew;                                       ///< adjusted level lengthscale reduction factor for dynamic adjustment of reduction factor
+
     randomGenerator rand;                                   
     
     std::vector<int> i_plus;                            ///< ceil(i_batchelor)
@@ -68,10 +72,6 @@ private:
     std::vector<double> xc;                             ///< vector containing physical domain of flow particles
     std::vector<double> xh;                             ///< vector containing physical domain of HiPS parcels
     
-    static int nL;                                      ///< adjusted number of levels based on the Reynolds number
-    static double Prob;                                 ///< probability value for probability-based solution
-    static double lStar;                                ///< length of the level associated with the Reynolds number 
-    static double Anew;                                 ///< adjusted level lengthscale reduction factor for dynamic adjustment of reduction factor
     std::string  approach;
 
     ////////////////////////////// MEMBER FUNCTIONS /////////////////////////////
