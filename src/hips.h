@@ -86,7 +86,9 @@ public:
                      const std::vector<double> &rho);                                               // passing all variables to vector of pointer
 
     std::vector<std::vector<double>> get_varData();                                                 // Retrieves modified data from the HiPS library and stores it in the provided vector. 
+    std::vector<std::pair<std::vector<double>, std::vector<double>>> get_varData_with_density();
     
+
     void calculateSolution(const double tRun, bool shouldWriteData =false);                         // Running simulations 
 
 private:
@@ -98,8 +100,13 @@ private:
     
     std::vector<double> setGridHips(int N);                                                         // Set Hips grid with a specified number of grid points equal to number of parcels   
     std::vector<double> setGridCfd(std::vector<double> &w);                                         // Set CFD grid using provided weight vector
-    std::vector<double>  projection_back(std::vector<double> &vb);                                  // Perform vector projection of hips parcels onto flow particles operation without density
+    std::vector<double>  projection_back(std::vector<double> &vb);                       
+    std::pair<std::vector<double>, std::vector<double>> projection_back_with_density(std::vector<double> &vh, 
+                                                                                       std::vector<double> &rho_h);
     
+
+
+
     void sample_hips_eddy(double &dt, int &iLevel);                                                 // Sample hips eddy with specified time step and level                                                
     void selectAndSwapTwoSubtrees(const int iLevel, int &iTree);                                    // Select and swap two subtrees in the level tree
     void advanceHips(const int iLevel, const int iTree);                                            // Advancing simulations to do mixing and reaction

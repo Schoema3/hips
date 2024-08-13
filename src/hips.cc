@@ -943,19 +943,18 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 
     for (int i = 0; i < nc; ++i) {
         for (int j = jprev + 1; j <= nh; ++j) {
-            //std::cout << "first.    i. " << i << "  j. " << j << std::endl;
             if (xh[j] <= xc[i + 1]) {
-                double Δ1 = xh[j] - xh[j - 1];
-                double Δ2 = xh[j] - xc[i];
-                double Δ = std::min(Δ1, Δ2);
+                double d1 = xh[j] - xh[j - 1];
+                double d2 = xh[j] - xc[i];
+                double d = std::min(d1, d2);
 
-                vc[i] += vh[j - 1] * Δ;
+                vc[i] += vh[j - 1] * d;
             } else {
-                double Δ1 = xc[i + 1] - xh[j - 1];
-                double Δ2 = xc[i + 1] - xc[i];
-                double Δ = std::min(Δ1, Δ2);
+                double d1 = xc[i + 1] - xh[j - 1];
+                double d2 = xc[i + 1] - xc[i];
+                double d = std::min(d1, d2);
 
-                vc[i] += vh[j - 1] * Δ;
+                vc[i] += vh[j - 1] * d;
 
                 jprev = j - 1;
                 break;
@@ -964,6 +963,62 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
         vc[i] /= (xc[i + 1] - xc[i]);
     }
     return vc;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+
+/// \brief This function projects the HiPS parcel values and densities back onto the flow particles.
+/// 
+/// It effectively reverses the projection process to ensure both the values and densities in HiPS parcels 
+/// are accurately redistributed to the flow particles.
+/// 
+/// It follows:
+/// \f[
+/// \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \rho_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j} = \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \rho_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i}
+/// \f]
+/// 
+/// \param vh           Vector of values from HiPS parcels to be projected back.
+/// \param rho_h        Vector of density values from HiPS parcels.
+/// \return             A pair of vectors: 
+///                     - The first vector contains the values projected back onto the flow particles.
+///                     - The second vector contains the corresponding densities for the flow particles.
+/// 
+/// \note This function is the reverse of the projection function with density.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_density(std::vector<double> &vh, 
+                                                                                       std::vector<double> &rho_h) {
+    int nh = xh.size() - 1;
+    int nc = xc.size() - 1;
+
+    std::vector<double> vc(nc, 0.0);
+    std::vector<double> rho_c(nc, 0.0);
+    int jprev = 0;
+
+    for (int i = 0; i < nc; ++i) {
+        double total_dx = 0.0;
+
+        for (int j = jprev + 1; j <= nh; ++j) {
+            if (xh[j] <= xc[i + 1]) {
+                double d = std::min(xh[j] - xh[j - 1], xh[j] - xc[i]);
+                total_dx += d;
+                rho_c[i] += rho_h[j - 1] * d;
+                vc[i] += vh[j - 1] * rho_h[j - 1] * d;
+            } else {
+                double d = std::min(xc[i + 1] - xh[j - 1], xc[i + 1] - xc[i]);
+                total_dx += d;
+                rho_c[i] += rho_h[j - 1] * d;
+                vc[i] += vh[j - 1] * rho_h[j - 1] * d;
+
+                jprev = j - 1;
+                break;
+            }
+        }
+
+        // Normalize the results
+        vc[i] /= rho_c[i];
+    }
+    return {vc, rho_c};
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -982,6 +1037,36 @@ std::vector<std::vector<double>> hips::get_varData(){
         varDataProjections.push_back(projection_back(varData[i][0]));  // Project the data back and store it in vh
 
     return varDataProjections;                                         // Return the vector containing modified data projections
+}
+////////////////////////////////////////////////////////////////////////////////////
+/// \brief This function returns final data from the simulation, including densities.
+///
+/// This function processes the HiPS data, including both values and densities, and 
+/// projects them back onto the flow particles.
+///
+/// \note This function is used for integrating HiPS as a subgrid model in CFD simulations, 
+///       taking into account both the values and densities of parcels.
+///
+/// \return A vector of pairs:
+///         - Each pair contains two vectors: 
+///             - The first vector contains the final results for the values.
+///             - The second vector contains the corresponding density results.
+///////////////////////////////////////////////////////////////////////////////////
+
+std::vector<std::pair<std::vector<double>, std::vector<double>>> hips::get_varData_with_density() {
+
+    std::vector<std::pair<std::vector<double>, std::vector<double>>> varDataProjections;  // Vector to store data projections with densities
+
+    for (int i = 0; i < varData.size(); i++) {
+        // Extract the value and density data
+        std::vector<double> vh = varData[i][0];  // Assuming varData[i][0] holds the values
+        std::vector<double> rho_h = varRho;      // Assuming varData[i][1] holds the densities
+
+        // Project the data back with density and store the result
+        varDataProjections.push_back(projection_back_with_density(vh, rho_h));
+    }
+
+    return varDataProjections;  // Return the vector containing modified data projections with densities
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
