@@ -386,29 +386,6 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 }
 
 //////////////////////////////////////////////////////////////////////////////////// 
-/// \brief Function to pass the variable, their weights, names, and densities to the parcels of the tree. 
-///
-/// \param v         Vector of variables that are passed to the HiPS tree.
-/// \param w         Vector of weights; each flow particle has a weight.
-/// \param varN      Vector of names of the variable.
-/// \param rho       Vector of density; each flow particle has a specific density.
-///
-/// \note This function is overloaded. This version considers particle density.
-////////////////////////////////////////////////////////////////////////////////////
-void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho) {
-    
-    std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
-    std::vector<double> vh = results.first;
-    std::vector<double> rho_h = results.second;
-
-    varData[currentIndex] = new std::vector<double>(vh);            
-    varRho = std::vector<double>(rho_h);
-    varName[currentIndex] = varN;
- 
-    currentIndex++; 
-}
-
-//////////////////////////////////////////////////////////////////////////////////// 
 /// \brief Assigns variables, weights, names, and densities to the parcels in the HiPS tree.
 ///
 /// This overloaded function assigns the specified variables, along with their associated weights,
@@ -422,6 +399,31 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 ///
 /// \note This function is overloaded to account for particle density in the HiPS tree.
 ////////////////////////////////////////////////////////////////////////////////////
+
+void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho) {
+    
+    std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
+    std::vector<double> vh = results.first;
+    std::vector<double> rho_h = results.second;
+
+    varData[currentIndex] = new std::vector<double>(vh);            
+    varRho = std::vector<double>(rho_h);
+    varName[currentIndex] = varN;
+ 
+    currentIndex++; 
+}
+//////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief This function projects the values in flow particles onto HiPS parcels. It works in cases where density is constant.
+/// 
+/// This function follows the equation:
+/// \f[
+/// \sum_{i=0}^{\text{Number of Flow Particles (FP)}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i} = \sum_{j=0}^{\text{Number of HiPS Parcels (HP)}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j}
+/// \f]
+/// 
+/// \param vcfd          Vector of variables passed to the HiPS tree.
+/// \param weight        Weight vector; each flow particle has a weight.
+/// \return              Vector of values projected onto HiPS parcels.
+///////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight) {
     
@@ -458,15 +460,22 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
     return vh;
 }
 
-/////////////////////////////////////////i/////////////////////////////////////////////
-/// \brief This function projects the value in flow particles onto HiPS parcels.
+///////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Projects the values from flow particles onto HiPS parcels, considering particle density.
 ///
-/// \param vcfd         Vector of variables passed to the HiPS tree.
-/// \param weight       Weight vector; each flow particle has a weight.
-/// \param density      Vector of density.
-/// \return A pair of vectors representing the projected vector and the density on the grid.
+/// This function calculates the projection of values from flow particles onto HiPS parcels, 
+/// taking into account the density of the particles. The function returns a pair of vectors: 
+/// one representing the projected values and one for the densities on the HiPS grid.
 ///
-/// \note This function is overloaded. This version considers particle density. 
+/// \param vcfd         Vector of variables from flow particles to be projected onto HiPS parcels.
+/// \param weight       Weight vector associated with each flow particle.
+/// \param density      Vector of densities for each flow particle.
+///
+/// \return A pair of vectors:
+///         - First vector: Projected values on the HiPS parcels.
+///         - Second vector: Densities on the HiPS parcels.
+///
+/// \note This function is overloaded. This version includes particle density in the projection process.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector<double> &vcfd, 
