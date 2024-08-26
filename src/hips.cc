@@ -365,7 +365,7 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
     currentIndex++; 
 }
 
-///////////////////////////////////////i///////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////// 
 /// \brief Function to pass the variable, their weights, names, and densities to the parcels of the tree. 
 ///
 /// \param v         Vector of variables that are passed to the HiPS tree.
@@ -374,8 +374,7 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 /// \param rho       Vector of density; each flow particle has a specific density.
 ///
 /// \note This function is overloaded. This version considers particle density.
-//////////////////////////////////////////////////////////////////////////////////// 
-
+////////////////////////////////////////////////////////////////////////////////////
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho) {
     
     std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
