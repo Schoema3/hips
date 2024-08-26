@@ -17,21 +17,25 @@
 
 using namespace std;
 
-//////////////////////////////////////////////////////////////////////////////
-/// \brief Constructor to initialize parameters for creating the HiPS tree.
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Constructor for initializing parameters to create the HiPS tree.
 ///
-/// This constructor initializes parameters including, eddy rate, forcing turbulence, number of variables, solution obj, etc. 
-/// It is particularly useful for initializing the tree multiple times, as it allows for the parameters to be set once and reused. This constructor is typically followed by a call to `set_tree(...)`.
+/// This constructor sets up the necessary parameters for creating the HiPS tree,
+/// including the eddy rate, turbulence forcing, number of variables, and the 
+/// Cantera solution object (if reactions are enabled). It is useful for initializing 
+/// the tree multiple times, as the parameters are set once and reused. Typically, 
+/// this constructor is followed by a call to `set_tree(...)`.
 ///
-/// \param C_param_         Parameter controlling eddy rate.
-/// \param forceTurb_       Flag indicating whether to force turbulence.
-/// \param nVar_            Number of variables.
-/// \param cantSol          Cantera solution object.
-/// \param performReaction_ Flag indicating whether to perform chemical reactions.
-/// \param seed             Seed for the random number generator (negative value to randomize it).
+/// \param C_param_         Controls the eddy rate.
+/// \param forceTurb_       Flag indicating whether to force turbulence (non-zero for true).
+/// \param nVar_            Number of variables in the simulation.
+/// \param cantSol          Shared pointer to the Cantera solution object (used only if reactions are enabled).
+/// \param performReaction_ Flag indicating whether chemical reactions should be performed.
+/// \param seed             Seed for the random number generator (if negative, a random seed is generated).
 ///
-/// \note `bRxr` is a pointer to the integrator object. By default, `batchReactor_cvode` is enabled. To switch to `batchReactor_cantera`, the user needs to uncomment the corresponding section.
-//////////////////////////////////////////////////////////////////////////////
+/// \note By default, the integrator object `bRxr` is initialized as `batchReactor_cvode`.
+///       To switch to `batchReactor_cantera`, uncomment the corresponding line in the code.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 hips::hips(double C_param_, 
            int forceTurb_,
@@ -64,24 +68,26 @@ hips::hips(double C_param_,
 } 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// @brief Constructor to initialize parameters for creating the HiPS tree.
+/// \brief Constructor for initializing parameters to create the HiPS tree.
 ///
-/// This constructor initializes all necessary parameters in a single step, including length scale, time scale, eddy rate, and more. 
-/// It is beneficial for scenarios where users need to initialize the tree once, such as for simple mixing simulations.
+/// This constructor sets up all necessary parameters in a single step, including the length scale, 
+/// time scale, eddy rate, and other key variables. It is particularly useful for scenarios where the 
+/// HiPS tree needs to be initialized only once, such as in simple mixing simulations.
 ///
-/// \param nLevels_          Number of tree levels.
+/// \param nLevels_          Number of levels in the HiPS tree.
 /// \param domainLength_     Length scale of the domain.
 /// \param tau0_             Time scale of the domain.
-/// \param C_param_          Parameter to control eddy rate.
-/// \param forceTurb_        Flag indicating whether to force turbulence.
-/// \param nVar_             Number of variables.
-/// \param ScHips_           Vector of Schmidt numbers for HiPS simulation.
-/// \param cantSol           Cantera solution object.
-/// \param performReaction_  Flag indicating whether to perform chemical reactions.
-/// \param seed              Seed for the random number generator (negative value to randomize it).
+/// \param C_param_          Parameter controlling the eddy rate.
+/// \param forceTurb_        Flag indicating whether to force turbulence (non-zero for true).
+/// \param nVar_             Number of variables in the simulation.
+/// \param ScHips_           Vector containing Schmidt numbers for the HiPS simulation.
+/// \param cantSol           Shared pointer to the Cantera solution object (used only if reactions are enabled).
+/// \param performReaction_  Flag indicating whether chemical reactions should be performed.
+/// \param seed              Seed for the random number generator (if negative, a random seed is generated).
 ///
-/// \note `bRxr` is a pointer to the integrator object. By default, `batchReactor_cvode` is enabled. To switch to `batchReactor_cantera`, the user needs to uncomment the corresponding section.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \note By default, the integrator object `bRxr` is initialized as `batchReactor_cvode`.
+///       To switch to `batchReactor_cantera`, uncomment the corresponding line in the code.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 hips::hips(int nLevels_, 
            double domainLength_, 
@@ -124,15 +130,21 @@ hips::hips(int nLevels_,
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Function to create a tree structure based on the specified parameters.
-/// 
-/// \param nLevels_         Number of levels in the tree.
+/// \brief Creates a tree structure based on the specified parameters.
+///
+/// This function sets up the tree structure according to the provided number of levels, 
+/// domain length, time scale, and Schmidt numbers. It adjusts the number of levels if 
+/// necessary, based on the maximum Schmidt number, and initializes various internal 
+/// parameters used in the HiPS simulation.
+///
+/// \param nLevels_         Number of levels in the tree. If set to -1, the function uses the value of `nL`.
 /// \param domainLength_    Length scale of the domain.
 /// \param tau0_            Time scale of the domain.
-/// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
+/// \param ScHips_          Vector of Schmidt numbers for the HiPS simulation.
 ///
-/// \note This function sets up the tree based on the specified number of levels.
-/// It is useful when the user knows the number of levels explicitly.
+/// \note The function computes and adjusts the number of levels based on the maximum 
+///       Schmidt number if it exceeds 1.0. It also calculates various level-specific 
+///       properties like length scales, time scales, and rates used in the HiPS model.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<double> &ScHips_){    
@@ -222,20 +234,25 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
         pLoc[i] = i;
 } 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Function to create a tree structure based on the specified parameters.
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Creates a tree structure based on the specified Reynolds number and approach.
 ///
-/// \param Re_              The Reynolds number.
-/// \param approach_        The method used for setting the number of levels based on the Reynolds number:
-///                        - approach "1": This approach is introduced as Rounding to closest level to \f$ i_s^* \f$ for micromixing in the paper.
-///                        - approach "2": This approach is introduced as Probability-based solution the paper.
-///                        - approach "3": This approach is introduced as Micromixing at level \f$ i \f$ with \f$ \tau_s^* \f$ in the paper.
-///                        - The last approach: This approach is considered as Dynamic adjustment of \f$ A \f$ value in the paper.
+/// This function sets up the HiPS tree structure according to the provided Reynolds number (Re), domain length, 
+/// time scale, and Schmidt numbers, using a specified approach to determine the number of levels. 
+/// The function offers multiple methods to set the number of levels, based on different strategies outlined in the related paper.
+///
+/// \param Re_              The Reynolds number, used to determine the original level of the tree.
+/// \param approach_        The method for setting the number of levels based on the Reynolds number:
+///                         - "1": Rounding to the closest level to \f$i_s^*\f$ for micromixing.
+///                         - "2": Probability-based solution.
+///                         - "3": Micromixing at level \f$i\f$ with \f$\tau_s^*\f$.
+///                         - "4": Dynamic adjustment of \f$A\f$ value.
 /// \param domainLength_    Length scale of the domain.
 /// \param tau0_            Time scale of the domain.
-/// \param ScHips_          Vector of Schmidt numbers for HiPS simulation.
+/// \param ScHips_          Vector of Schmidt numbers for the HiPS simulation.
 ///
-/// \note This function sets up the tree based on the Reynolds number. Users pass the method (approach) and the number of levels.
+/// \note This function adjusts the number of levels based on the Reynolds number and the selected approach, 
+///       and initializes various parameters used for the HiPS simulation.
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_) {
@@ -349,12 +366,15 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
         pLoc[i] = i;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// \brief Function to pass the variables, their weights, and their names to the parcels of the tree.
+////////////////////////////////////////////////////////////////////////////////////
+/// \brief Assigns variables, their corresponding weights, and names to the parcels in the HiPS tree.
 ///
-/// \param v         Vector consisting of variables passed to the HiPS tree.
-/// \param w         Vector containing weights for each flow particle.
-/// \param varN      Vector containing names corresponding to each variable.
+/// This function assigns the given variables, their associated weights, and names to the specific parcels 
+/// within the HiPS tree structure. The function performs a weighted projection of the variables onto the parcels.
+///
+/// \param v         Vector of variables to be assigned to the HiPS tree.
+/// \param w         Vector of weights corresponding to each flow particle.
+/// \param varN      Name of the variable being assigned, stored as a string.
 ////////////////////////////////////////////////////////////////////////////////////
 
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN) {  
@@ -388,18 +408,20 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
     currentIndex++; 
 }
 
-/////////////////////////////////////////i/////////////////////////////////////////////
-/// \brief This function projects the value in flow particles onto HiPS parcels. It works in cases where density is constant.
-/// 
-/// It follows:
-/// \f[
-/// \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i} = \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j}
-/// \f]
-/// 
-/// \param vcfd          Vector of variables passed to the HiPS tree.
-/// \param weight        Weight vector; each flow particle has a weight.
-/// \return              Vector of values projected onto HiPS parcels.
-//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////// 
+/// \brief Assigns variables, weights, names, and densities to the parcels in the HiPS tree.
+///
+/// This overloaded function assigns the specified variables, along with their associated weights,
+/// names, and densities, to the parcels within the HiPS tree structure. It considers particle density
+/// during the projection process.
+///
+/// \param v         Vector of variables to be assigned to the HiPS tree.
+/// \param w         Vector of weights for each flow particle.
+/// \param varN      Name of the variable being assigned, stored as a string.
+/// \param rho       Vector of densities for each flow particle.
+///
+/// \note This function is overloaded to account for particle density in the HiPS tree.
+////////////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight) {
     
