@@ -522,14 +522,14 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
 }
 
 /////////////////////////////////////////////////////////////////////////////////
-/// \brief This function generates a physical domain for flow particles based on the given weights.
+/// \brief Generates a physical domain for flow particles based on the given weights.
 ///
-/// It assumes that the length of the domain is 1, meaning each particle occupies a portion of the domain proportional to its weight.
-/// The sum of the portions occupied by all particles should equal 1.
+/// This function assumes that the total length of the domain is 1, and each particle occupies a portion 
+/// of the domain proportional to its weight. The sum of all particle portions should equal 1.
+///
 /// \param w         Weight vector defining the spacing between grid points.
-///
-/// \return Vector representing the grid positions for flow particles.
-////////////////////////////////////////////////////////////////////////////////////
+/// \return          Vector representing the grid positions for flow particles.
+/////////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::setGridCfd(std::vector<double> &w) {
     
@@ -547,14 +547,15 @@ std::vector<double> hips::setGridCfd(std::vector<double> &w) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief This function generates a physical domain for HiPS parcels.
+/// \brief Generates a physical domain for HiPS parcels.
 ///
-/// The size of the HiPS domain matches the size of the physical domain specified in the ``setGridCfd()`` function.
-/// All parcels occupy an equal portion of the physical domain, meaning the domain is divided evenly among the parcels.
+/// This function creates a grid for HiPS parcels, with each parcel occupying an equal portion 
+/// of the physical domain. The size of the HiPS domain matches the size of the domain specified 
+/// in the `setGridCfd()` function.
+///
 /// \param N         Number of grid points.
-///
-/// \return A vector representing the HiPS grids.
-////////////////////////////////////////////////////////////////////////////////////////////
+/// \return          Vector representing the HiPS grid positions.
+///////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::setGridHips(int N){
 
@@ -567,20 +568,20 @@ std::vector<double> hips::setGridHips(int N){
     return xh;                                                  // Return the generated grid
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-/// The HiPS solver
+/////////////////////////////////////////////////////////////////////////////////
+/// \brief The HiPS solver for simulating the interaction of parcels within a turbulent flow.
 ///
-/// \param tRun                Input simulation run time
-/// \param shouldWriteData     Set to false by default. If true, data will be written.
+/// \param tRun                Simulation run time.
+/// \param shouldWriteData     Flag indicating whether to write data during the simulation. Default is false.
 ///
-/// Sample tee (time of next eddy event)
-/// Select and swap subtrees (at current time, not at tee, so that we know who's involved)
-/// If the eddy event is at the parcel/micromixing level:
-///     React involved parcels from their current time to tee
-///     Mix the involved parcels (micromixing)
+/// This function simulates the HiPS process by iterating over eddy events until the specified simulation time is reached.
+/// It samples the time of the next eddy event (tee), selects and swaps subtrees, and handles reactions and micromixing 
+/// at the parcel level if necessary. Data is written after a specified number of eddy events (default is 10,000), but this 
+/// number can be adjusted by the user.
 ///
-/// \note Data is written after a specified number of eddy events. By default, the data is written after "10000" eddy events. Users have the flexibility to adjust this number in the code.
-//////////////////////////////////////////////////////////////////////////////////////////////////
+/// \note Data is written after a specified number of eddy events. By default, data is written after 10,000 eddy events. 
+/// Users can modify this threshold within the code.
+///////////////////////////////////////////////////////////////////////////////////
 
 void hips::calculateSolution(const double tRun, bool shouldWriteData) {
     
@@ -615,10 +616,14 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Samples stochastic eddy events on the hips tree: time and level.
+/// \brief Samples stochastic eddy events on the HiPS tree, determining both the time increment to the next eddy event (dtEE) and the tree level of the eddy event (iLevel).
 ///
-/// \param dtEE         Time increment to next eddy event (EE)
-/// \param iLevel       Tree level of EE
+/// \param dtEE         Time increment to the next eddy event (EE).
+/// \param iLevel       Tree level at which the eddy event occurs.
+///
+/// This function uses stochastic sampling to determine when and at what level in the HiPS tree an eddy event will occur.
+/// The time to the next eddy event is sampled based on the total eddy rate, and the level is determined by whether the event
+/// occurs in the inertial or Batchelor region of the turbulence.
 ////////////////////////////////////////////////////////////////////////////////
 
 void hips::sample_hips_eddy(double &dtEE, int &iLevel) {
