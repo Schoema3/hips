@@ -725,13 +725,23 @@ void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
     copy(aa.begin(), aa.end(), pLoc.begin()+Rstart);                     // python: pLoc[Rstart:Rend]=aa
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// React and mix parcels that are involved in a micromixing process.
-/// This is determined by the level nd the tree within that level.
-/// Might not do anything if the eddy doesn't cause micromixing.
+/////////////////////////////////////////////////////////////////////////////////
+/// \brief Advances the HiPS model by reacting and mixing parcels involved in a 
+/// micromixing process, determined by the level and tree structure within that level.
 ///
-/// \param iLevel         Input level that the eddy event occurred.
-/// \param iTree          Input root note of the eddy event at iLevel.
+/// \param iLevel    The level at which the eddy event occurs.
+/// \param iTree     The root node of the eddy event at the specified level.
+///
+/// This function simulates the interaction of parcels in the HiPS model, focusing on 
+/// micromixing and reactions at a given tree level. If the conditions are met for 
+/// micromixing, the function may trigger reactions and mixing across the tree structure. 
+/// The operation is dependent on the level and specific conditions related to turbulence 
+/// forcing and micromixing thresholds.
+///
+/// \note The function checks for turbulence forcing and applies it if necessary. 
+/// Reactions are performed once for the first variable that meets the micromixing 
+/// conditions. Subsequent variables undergo mixing without triggering additional 
+/// reactions.
 /////////////////////////////////////////////////////////////////////////////////
 
 void hips::advanceHips(const int iLevel, const int iTree) {
@@ -793,32 +803,42 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// Mix parcels uniformly (using average) at given level and tree
-/// Mixing at levels above the lowest enables low Sc variables.
+////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Mixes parcels uniformly (using their average) at a specified level and tree 
+/// within the HiPS model, enabling mixing at levels above the lowest for low Schmidt 
+/// number (Sc) variables.
 ///
-/// \param kVar         Variable index to mix (normally a transported var as determined by caller)
-/// \param iLevel       Grandchildren of this iLevel will be mixed
-/// \param iTree        At the given iLevel, mix only this subtree
+/// \param kVar   Index of the variable to be mixed (typically a transported variable 
+///               as determined by the caller).
+/// \param iLevel The level within the tree whose grandchildren will be mixed.
+/// \param iTree  The subtree at the given level where mixing will occur.
 ///
-/// Example: For a 5 level tree, we have levels 0, 1, 2, 3, 4 (top to bottom).
-///   
-///          Let iLevel = 2, then nPmix = 2 and we are mixing pairs of parcels at the base of the tree.
-///          iTree can be 0, 1, 2, or 3.
-///          if iTree = 0 we will mix parcels (0,1) and (2,3) as the left subtree and right subtree:
-///                (istart=1, iend=2) and (istart=2, iend=4)
-///          if iTree = 1 we will mix parcels (4,5) and (6,7) with (istart=4,iend=6), (istart=6, iend=8)
-///          if iTree = 2 we will mix parcels (8,9) and (10,11) with (istart=8,iend=10), (istart=10, iend=12)
-///          if iTree = 3 we will mix parcels (12,13) and (14,15) with (istart=12,iend=14), (istart=14, iend=16)
-///         
-///          Let iLevel=1 then we will be mixing groups of four parcels.
-///          iTree can be 0 or 1
-///          if iTree = 0 we will mix parcels (0,1,2,3) and (4,5,6,7) with (istart=0,iend=4), (istart=4, iend=8)
-///          if iTree = 1 we will mix parcels (8,9,10,11) and (12,13,14,15) with (istart=8,iend=12), (istart=12, iend=16)
+/// This function performs uniform mixing of parcels within a specified level and subtree 
+/// of the HiPS model. The mixing process occurs in pairs of parcels, progressing through 
+/// the tree based on the specified level and subtree index. Depending on the level, the 
+/// function mixes parcels in groups, either pairs or larger groups as defined by the 
+/// tree structure.
 ///
-/// recall: 3 << 4 means 3*2^4 (or 3 = 000011 and 3<<4 = 110000 = 48), that is, we shift the bits left 4 places.
-///          
-/// \note BE CAREFUL WITH MIXING SOME SCALARS, LIKE MASS FRACTIONS; CURRENT CODE ASSUMES ALL PARCELS HAVE SAME DENSITY (mixing Yi directly)
+/// \note BE CAUTIOUS WHEN MIXING CERTAIN SCALARS, SUCH AS MASS FRACTIONS. THE CURRENT 
+/// CODE ASSUMES ALL PARCELS HAVE THE SAME DENSITY (mixing Yi directly).
+///
+/// \example 
+/// For a 5-level tree, the levels range from 0 to 4 (top to bottom):
+///
+/// - If \p iLevel = 2, the function mixes pairs of parcels at the base of the tree.
+///   \p iTree can range from 0 to 3. For example:
+///   - If \p iTree = 0, parcels (0,1) and (2,3) will be mixed.
+///   - If \p iTree = 1, parcels (4,5) and (6,7) will be mixed.
+///   - If \p iTree = 2, parcels (8,9) and (10,11) will be mixed.
+///   - If \p iTree = 3, parcels (12,13) and (14,15) will be mixed.
+/// 
+/// - If \p iLevel = 1, the function mixes groups of four parcels.
+///   \p iTree can be 0 or 1. For example:
+///   - If \p iTree = 0, parcels (0,1,2,3) and (4,5,6,7) will be mixed.
+///   - If \p iTree = 1, parcels (8,9,10,11) and (12,13,14,15) will be mixed.
+///
+/// \note The bitwise left shift operation (<<) is used to calculate the starting and 
+/// ending indices for mixing.
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
@@ -861,13 +881,20 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// \brief Force the HiPS profile to achieve statistical stationarity.
+///////////////////////////////////////////////////////////////////////////
+/// \brief Forces the HiPS profile to achieve statistical stationarity.
 ///
-/// This function is meant to demonstrate forcing for simple scalars, such as a mixture fraction variable that varies between 0 and 1.
-/// The code within this function is configured to force the left half of parcels to average 0 and the right half of parcels to average 1.
-/// 
-/// \note This function modifies the data stored in the HiPS profile.
+/// This function adjusts the values of parcels in the HiPS profile to ensure 
+/// that the left half of the parcels averages to 0 and the right half 
+/// averages to 1. It is particularly useful for simple scalars, such as a 
+/// mixture fraction variable ranging between 0 and 1.
+///
+/// The function loops through each variable in the HiPS profile, calculating 
+/// the average value of parcels in both the left and right halves. It then 
+/// adjusts these values to meet the desired average for statistical 
+/// stationarity.
+///
+/// \note This function directly modifies the data stored in the HiPS profile.
 ///////////////////////////////////////////////////////////////////////////
  
 void hips::forceProfile() {
@@ -899,13 +926,22 @@ void hips::forceProfile() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-/// \brief Write data to a file with a specific index and output time.
+/// \brief Write simulation data to a file with a specified index and output time.
 ///
-/// This function writes data to a file with a filename following a sequential incrementing index pattern 
-/// (e.g., Data_00001.dat, Data_00002.dat, etc.). The time of the data file is also written into the file.
+/// This function saves the current state of the simulation data to a file. The 
+/// file is named using a sequential index (e.g., Data_00001.dat, Data_00002.dat) 
+/// to ensure a clear order of outputs. The output time is also included within 
+/// the file content for reference.
 ///
-/// \param ifile The sequential index used in the file name.
-/// \param outputTime The time associated with the data, written into the file.
+/// The function first checks if the "data" directory exists and creates it if 
+/// necessary. It then writes data such as temperature (if applicable) and 
+/// other variables to the file in a scientific format with high precision.
+///
+/// \param ifile       The sequential index used in the filename.
+/// \param outputTime  The simulation time associated with the data, written into the file.
+///
+/// \note The function handles potential errors, such as the inability to create 
+/// the directory or open the file for writing.
 ///////////////////////////////////////////////////////////////////////////////////
 
 void hips::writeData(const int ifile, const double outputTime) {
