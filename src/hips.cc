@@ -821,8 +821,7 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 ///
 /// \note BE CAUTIOUS WHEN MIXING CERTAIN SCALARS, SUCH AS MASS FRACTIONS. THE CURRENT 
 /// CODE ASSUMES ALL PARCELS HAVE THE SAME DENSITY (mixing Yi directly).
-///
-/// \example 
+/// 
 /// For a 5-level tree, the levels range from 0 to 4 (top to bottom):
 ///
 /// - If \p iLevel = 2, the function mixes pairs of parcels at the base of the tree.
