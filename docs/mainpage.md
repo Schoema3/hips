@@ -44,7 +44,9 @@ The following project-specific CMake configuration variables can be specified by
 
 The `REACTIONS_ENABLED` flag determines whether the HiPS library supports chemical reactions. When set to   `ON`, the library includes functionality for reactions, requiring additional libraries like Contra or Sundials. When set to `OFF`, only simple mixing is supported, and these additional libraries are not needed. Users can adjust this flag based on whether they require reaction support and have the necessary libraries installed.
 
-![HiPS workflow diagram](Diagram-paper.png)
+<div style="text-align: center;">
+    <img src="Diagram-paper.png" style="width: 500px;">
+</div>
 # Using HiPS
 
 The HiPS library consists of three main object classes that users can interact with: `hips`, `batchReactor_cvode`, and `batchReactor_cantera`. These classes serve as the computational engine responsible for advancing the reaction system through time, solving complex sets of differential equations.
