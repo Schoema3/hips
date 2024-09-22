@@ -116,25 +116,23 @@ The \f$l^*\f$ scale holds particular significance for a scalar with Sc equal to 
 $$
 Sc=(l^*/l_s^*)^{p_s}. 
 $$
-\label{eq:ScDef}
 
 For \f$Sc\ge 1\f$, the choice of \f$p_s=2\f$ is grounded in the analogy to a physical flow, where \f$\tau_\eta=\tau_{\eta_b}\f$ in the viscous regime. Here, \f$Sc=\nu/D\f$, \f$\nu=\eta^2/\tau_\eta\f$, and \f$D=\eta_b^2/\tau_{\eta_b}\f$.
 
 For \f$Sc\le 1\f$, the selection of \f$p_s=3/4\f$ is similarly based on an analogy to a physical flow, where \f$\tau_{\eta_b}=\tau_\eta(\eta_b/\eta)^{2/3}\f$ in the inertial range (using \f$\tau_i = \tau_0A^{2i/3}\f$).
 
-### Discrete
+### Discretized Schmidt Values
 
-To establish the relationship between \f$Sc\f$ and the associated scales in the HiPS tree, we initially focus on \f$l^*_s\f$ values restricted to HiPS levels, followed in Sec.~\ref{s:arb_sc} by generalization to arbitrary \f$l^*_s\f$. In a general HiPS simulation, multiple scalars with different \f$Sc\f$ values can be considered.
+To establish the relationship between \f$Sc\f$ and the associated scales in the HiPS tree, we initially focus on \f$l^*_s\f$ values restricted to HiPS levels. ~\ref{s:arb_sc} by generalization to arbitrary \f$l^*_s\f$. In a general HiPS simulation, multiple scalars with different \f$Sc\f$ values can be considered.
 
 The \f$Sc\f$ value is related to the tree levels \f$i^*\f$ and \f$i_s^*\f$ as follows:
 $$
 Sc = A^{p_s(i^*-i^*_s)} = A^{-p_s\Delta i}.
 $$
-\label{eq:Sci}
 
 For \f$A=1/2\f$ and \f$p_s=4/3\f$ for \f$Sc\le 1\f$, we get \f$Sc=4^{2\Delta i/3}\f$, resulting in \f$Sc\approx\f$ 1, 0.4, 0.16, 0.062, 0.025, for \f$\Delta i=\f$ 0, -1, -2, -3, -4, respectively. For \f$Sc\ge 1\f$, with \f$p_s=2\f$, \f$Sc=4^{\Delta i}\f$, leading to \f$Sc=\f$ 1, 4, 16, 64, 256, for \f$\Delta i\f$ = 0, 1, 2, 3, 4, respectively.
 
-### Arbitary
+### Arbitary Schmid
 
 
 The formulation presented above identifies \f$Sc\f$ values associated with integer levels of the HiPS tree. Arbitrary \f$Sc\f$ corresponds to scalars with \f$l^*_s\f$ between two HiPS tree levels, and therefore, \f$i^*_s\f$ may not be an integer. For a scalar with a given \f$Sc\f$, \f$i^*_s\f$ is computed as \f$i^*_s = i^* - (\log Sc)/(p_s\log A)\f$, or
