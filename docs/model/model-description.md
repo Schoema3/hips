@@ -3,7 +3,7 @@
 
 ## Tree Structure
 
-In the following, a summary of the model is provided. More detail is found in \cite Lignell_2024. The structure is based on a binary tree consisting of a hierarchy of nodes (represented by circles). At the base (bottom) of the tree, there are fluid parcels (represented by squares). The tree has five levels (indexed from 0 to 4). The top node, or apex, divides into two subtrees, each starting from a node one level below. Each of these nodes divides further into smaller subtrees. This pattern continues down to the base, where fluid properties are stored in parcels, and additional length and time scale information is associated with the nodes at each level.
+In the following, a summary of the model is provided. More detail is found in \cite Lignell2024. The structure is based on a binary tree consisting of a hierarchy of nodes (represented by circles). At the base (bottom) of the tree, there are fluid parcels (represented by squares). The tree has five levels (indexed from 0 to 4). The top node, or apex, divides into two subtrees, each starting from a node one level below. Each of these nodes divides further into smaller subtrees. This pattern continues down to the base, where fluid properties are stored in parcels, and additional length and time scale information is associated with the nodes at each level.
 
 For an N-level binary tree, the number of fluid parcels is \f$2^{N-1}\f$, and the length scale at each level is reduced by a factor of \f$A\f$ from the previous level, given by \f$L_{i+1} = L_iA\f$, which can be expressed as:
 
