@@ -13,9 +13,9 @@ reactions, focusing on combustion processes. The premixed example `ex_2.cc` simu
 turbulent flames using a stoichiometric ethylene/air mixture to initialize a HiPS domain with six levels. In
 this setup, 25% of the parcels are pre-combusted, while the remaining 75% are fresh reactants. The Schmidt
 number is set to unity for all species, and the domain length scale is 0.01. Experiments are conducted with
-two values of \(\tau_0\) (5E-4 and 5E-6) to control mixing rates, impacting ignition and extinction
-phenomena. Smaller \(\tau_0\) values correspond to faster mixing rates, enhancing fuel-oxidizer mixing and
-promoting ignition, while larger \(\tau_0\) values indicate slower mixing rates, potentially leading to
+two values of \f$\tau_0\f$ (5E-4 and 5E-6) to control mixing rates, impacting ignition and extinction
+phenomena. Smaller \f$\tau_0\f$ values correspond to faster mixing rates, enhancing fuel-oxidizer mixing and
+promoting ignition, while larger \f$\tau_0\f$ values indicate slower mixing rates, potentially leading to
 extinction as combustion reactions struggle to sustain.
 
 The HiPS library supports two integrators for simulating chemical reactions within the framework. The first
