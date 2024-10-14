@@ -603,7 +603,7 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
         sample_hips_eddy(dtEE, iLevel);
 
         nEddies++;
-        if (shouldWriteData && nEddies %10000 == 0) 
+        if (shouldWriteData && nEddies %100 == 0) 
             writeData(++fileCounter, time);
     }
     time = tRun;
@@ -611,8 +611,8 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
     if (performReaction)
     reactParcels_LevelTree(iLevel, iTree);            // react all parcels up to end time
 
-    if (shouldWriteData)
-        writeInputParameters();
+  //  if (shouldWriteData)
+  //      writeInputParameters();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
