@@ -18,8 +18,8 @@ class hips {
 
 public:
   
-    int nparcels;                                     ///< number of parcels
-    std::vector<std::vector<double>*> varData;        ///< vector of pointers to vector
+    int nparcels;                                                 ///< number of parcels
+    std::vector<std::shared_ptr<std::vector<double>>> varData;    ///< vector of pointers to vector
  
 #ifdef REACTIONS_ENABLED
     std::shared_ptr<Cantera::ThermoPhase> gas;        ///< Shared pointer to a Cantera thermochemistry object
@@ -146,9 +146,4 @@ public:
 #endif
          int seed = 10);
  
-    virtual ~hips() {
-        for(auto& data : varData)
-            delete data;
-    }
-
 };

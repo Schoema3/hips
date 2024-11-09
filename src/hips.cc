@@ -379,7 +379,7 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
 
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN) {  
     
-    varData[currentIndex] = new vector<double>(projection(v, w));
+    varData[currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));
     varName[currentIndex] = varN;
 
     currentIndex++; 
@@ -406,7 +406,7 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
     std::vector<double> vh = results.first;
     std::vector<double> rho_h = results.second;
 
-    varData[currentIndex] = new std::vector<double>(vh);            
+    varData[currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));            
     varRho = std::vector<double>(rho_h);
     varName[currentIndex] = varN;
  
@@ -787,9 +787,9 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
         ime = pLoc[i];
         //cout<<"pLoc "<<pLoc[i]<<"  gas "<<gas->density()<<"\n\n"<<endl;
         dt = time-parcelTimes[ime];
-        h = varData[0][0][ime]; 
+        h = (*varData[0])[ime]; 
         for (int k=0; k<nsp; k++)
-            y[k] = varData[k+1][0][ime];
+            y[k] = (*varData[k+1])[ime];
 #ifdef REACTIONS_ENABLED
         if(performReaction) {
                 bRxr->react(h, y, dtEE);
@@ -797,9 +797,9 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
             Temp[ime] = bRxr->temperature;
         }
 #endif
-        varData[0][0][ime] = h;
+        (*varData[0])[ime] = h;
         for (int k=0; k<nsp; k++)
-            varData[k+1][0][ime] = y[k];
+            (*varData[k+1])[ime] = y[k];
     }
 }
 
@@ -857,11 +857,11 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
     double s = 0;                                               // Initialize sum to 0
     for (int i=istart; i<iend; i++) {
         ime = pLoc[i];
-        s += varData[kVar][0][ime];
+        s += (*varData[kVar])[ime];
     }
     for (int i=istart; i<iend; i++) {
         ime = pLoc[i];
-        varData[kVar][0][ime] = s / nPmix; 
+        (*varData[kVar])[ime] = s / nPmix; 
     }
 
     //--------- Mix right branch of iTree
@@ -872,11 +872,11 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
     s = 0;                   // initialize sum to 0
     for (int i=istart; i<iend; i++) {
         ime = pLoc[i];
-        s += varData[kVar][0][ime];
+        s += (*varData[kVar])[ime];
     }
     for (int i=istart; i<iend; i++) {
         ime = pLoc[i];
-        varData[kVar][0][ime] = s / nPmix; 
+        (*varData[kVar])[ime] = s / nPmix; 
     }
 }
 
@@ -904,23 +904,23 @@ void hips::forceProfile() {
         //---------- Force the left half of parcels to average 0 ----------
 
         for (int i = 0; i < nparcels >> 1; i++)
-            s += varData[k][0][pLoc[i]];                             // Calculate the sum of values in the left half of parcels
+            s += (*varData[k])[pLoc[i]];                             // Calculate the sum of values in the left half of parcels
         
         s /= (nparcels >> 1); // Calculate the average of values in the left half of parcels
         
         for (int i = 0; i < nparcels >> 1; i++)
-            varData[k][0][pLoc[i]] += (-s - 0.0);                    // Adjust values in the left half of parcels to achieve an average of 0
+            (*varData[k])[pLoc[i]] += (-s - 0.0);                    // Adjust values in the left half of parcels to achieve an average of 0
 
         //---------- Force the right half of parcels to average 1 ----------
         s = 0.0;
 
         for (int i = nparcels >> 1; i < nparcels; i++)
-            s += varData[k][0][pLoc[i]];                             // Calculate the sum of values in the right half of parcels
+            s += (*varData[k])[pLoc[i]];                             // Calculate the sum of values in the right half of parcels
         
         s /= (nparcels >> 1);                                        // Calculate the average of values in the right half of parcels
         
         for (int i = nparcels >> 1; i < nparcels; i++)
-            varData[k][0][pLoc[i]] += (-s + 1.0);                    // Adjust values in the right half of parcels to achieve an average of 1
+            (*varData[k])[pLoc[i]] += (-s + 1.0);                    // Adjust values in the right half of parcels to achieve an average of 1
     }
 }
 
@@ -977,7 +977,7 @@ void hips::writeData(const int ifile, const double outputTime) {
         else
             outputFile << "\n";
         for (int k = 0; k < nVar; ++k)
-            outputFile << setw(19) << varData[k][0][pLoc[i]]; // Write data for each variable
+            outputFile << setw(19) << ((*varData[k])[pLoc[i]]); // Write data for each variable
     }
 
     outputFile.close();
@@ -1104,7 +1104,7 @@ std::vector<std::vector<double>> hips::get_varData(){
     std::vector<std::vector<double>> varDataProjections;               // Vector to store modified data projections
 
     for (int i = 0; i < varData.size(); i++)                           // Loop through each element of varData and project the data back
-        varDataProjections.push_back(projection_back(varData[i][0]));  // Project the data back and store it in vh
+        varDataProjections.push_back(projection_back((*varData[i])));  // Project the data back and store it in vh
 
     return varDataProjections;                                         // Return the vector containing modified data projections
 }
@@ -1129,7 +1129,7 @@ std::vector<std::pair<std::vector<double>, std::vector<double>>> hips::get_varDa
 
     for (int i = 0; i < varData.size(); i++) {
         // Extract the value and density data
-        std::vector<double> vh = varData[i][0];  // Assuming varData[i][0] holds the values
+        std::vector<double> vh = (*varData[i]);  // Assuming varData[i][0] holds the values
         std::vector<double> rho_h = varRho;      // Assuming varData[i][1] holds the densities
 
         // Project the data back with density and store the result
