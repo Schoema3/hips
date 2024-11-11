@@ -19,6 +19,7 @@ class hips {
 public:
   
     int nparcels;                                                 ///< number of parcels
+    int realization;                                              ///< number of realizations
     std::vector<std::shared_ptr<std::vector<double>>> varData;    ///< vector of pointers to vector
  
 #ifdef REACTIONS_ENABLED
@@ -116,7 +117,7 @@ private:
    
     void forceProfile();
     
-    void writeData(const int ifile, const double outputTime);                                       // Writing the results for a user-defined number of eddies in the data folder.
+    void writeData(int real, const int ifile, const double outputTime);                                       // Writing the results for a user-defined number of eddies in the data folder.
     void writeInputParameters();
 
     
@@ -144,6 +145,11 @@ public:
 #ifdef REACTIONS_ENABLED
          std::shared_ptr<Cantera::Solution> cantSol = nullptr,
 #endif
-         int seed = 10);
+         int seed = 10, 
+         int realization_ = 1);
+
+    void resetForNewRealization() {                                                                   // Reset the number of Index to use for new realization
+    currentIndex = 0;
+    }
  
 };

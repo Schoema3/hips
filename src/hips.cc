@@ -100,7 +100,8 @@ hips::hips(int nLevels_,
 #ifdef REACTIONS_ENABLED
            shared_ptr<Cantera::Solution> cantSol,
 #endif
-           int seed): 
+           int seed,
+           int realization_): 
     nLevels(nLevels_), 
     domainLength(domainLength_), 
     tau0(tau0_),
@@ -110,7 +111,8 @@ hips::hips(int nLevels_,
     nVar(nVar_),                       
     LrandSet(true),              
     rand(seed),
-    performReaction(performReaction_){
+    performReaction(performReaction_),
+    realization(realization_){
 
 #ifdef REACTIONS_ENABLED
     gas = cantSol->thermo(); 
@@ -603,8 +605,8 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
         sample_hips_eddy(dtEE, iLevel);
 
         nEddies++;
-        if (shouldWriteData && nEddies %100 == 0) 
-            writeData(++fileCounter, time);
+        if (shouldWriteData && nEddies %1 == 0) 
+            writeData(realization, ++fileCounter, time);
     }
     time = tRun;
     iLevel = 0; iTree  = 0;
@@ -943,46 +945,48 @@ void hips::forceProfile() {
 /// the directory or open the file for writing.
 ///////////////////////////////////////////////////////////////////////////////////
 
-void hips::writeData(const int ifile, const double outputTime) {
-    // Create the "data" directory if it doesn't exist
-    if (system("mkdir -p ../data") != 0) {
-        cerr << "Error: Unable to create directory ../data" << endl;
-        return;
+void hips::writeData(int real, const int ifile, const double outputTime) {
+    stringstream ss1, ss2;
+    string s1, s2;
+
+    //cout<<"realiz   "<<realization<<endl;
+    ss1 << "../data/rlz_" << setfill('0') << setw(5) << real;
+    ss1 >> s1;
+
+    // Create directories if they don't exist
+    #ifdef _WIN32
+        system(("mkdir " + s1).c_str());
+    #else
+        system(("mkdir -p " + s1).c_str());
+    #endif
+
+    ss2 << "Data_" << setfill('0') << setw(5) << ifile << ".dat";
+    ss2 >> s2;
+
+    string fname = s1 + "/" + s2;
+
+    ofstream ofile(fname.c_str());
+
+    ofile << "# time = " << outputTime;
+    ofile << "\n# Grid Poins = " << nparcels;
+
+    for (const auto& varN : varName)
+        ofile << setw(14) << varN;
+
+    ofile << scientific;
+    ofile << setprecision(10);
+
+    for (int i = 0; i < nparcels; i++) {
+        ofile << endl; 
+
+        for (int k = 0; k < nVar; k++)
+            ofile << setw(19) << (*varData[k])[pLoc[i]];
     }
 
-    stringstream ss;
-    ss << setw(5) << setfill('0') << ifile;
-    string fileName = "../data/Data_" + ss.str() + ".dat";
-
-    ofstream outputFile(fileName);
-    if (!outputFile) {
-        cerr << "Error: Unable to open file " << fileName << " for writing" << endl;
-        return;
-    }
-
-    outputFile << "# time = " << outputTime << "\n";
-    outputFile << "# Grid Points = " << nparcels << "\n";
-
-    if (performReaction)
-        outputFile << "#temperature" << setw(14);
-
-    for (const auto& name : varName)
-        outputFile << "#" << setw(14) << name;
-    
-    outputFile << scientific << setprecision(10);
-
-    for (int i = 0; i < nparcels; ++i) {
-        if (performReaction)
-            outputFile << "\n" << setw(19) << Temp[pLoc[i]];  // Write temp data for each parcel if reaction occurs
-        else
-            outputFile << "\n";
-        for (int k = 0; k < nVar; ++k)
-            outputFile << setw(19) << ((*varData[k])[pLoc[i]]); // Write data for each variable
-    }
-
-    outputFile.close();
+    ofile.close();
 }
 
+    
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief This function projects the HiPS parcel values back onto the flow particles.
 /// 
