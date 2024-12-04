@@ -112,6 +112,8 @@ private:
     void selectAndSwapTwoSubtrees(const int iLevel, int &iTree);                                    // Select and swap two subtrees in the level tree
     void advanceHips(const int iLevel, const int iTree);                                            // Advancing simulations to do mixing and reaction
    
+    int getVariableIndex(const std::string &varName) const;
+
     void reactParcels_LevelTree(const int iLevel, const int iTree);                                 // Reacting parcels involved in micro-mixing
     void mixAcrossLevelTree(int kVar, const int iMixLevel, const int iTree);                        // Mixing paecels involved in micr0-mixing.
    

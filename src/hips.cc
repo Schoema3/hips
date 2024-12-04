@@ -765,43 +765,94 @@ void hips::advanceHips(const int iLevel, const int iTree) {
         }
     }
 }
+///////////////////////////////////////////////////////////////////////////////
+/// \brief Retrieve the index of a variable by its name.
+/// This function searches the `varName` list for the given variable name
+/// and calculates its index using `std::find` and `std::distance`. If the
+/// variable name does not exist in the list, the function throws a runtime error.
+///
+/// \param varName The name of the variable to search for (e.g., "enthalpy").
+/// \return int The index of the variable in the `varName` list.
+/// \throws std::runtime_error If the variable name is not found in `varName`.
+///
+/// \note This function is case-sensitive and assumes that the `varName` list 
+///       has been properly populated, typically via the `set_varData` method.
+///
+/// \see set_varData
+////
+///////////////////////////////////////////////////////////////////////////////
+
+int hips::getVariableIndex(const std::string &varName) const {
+    auto it = std::find(this->varName.begin(), this->varName.end(), varName);
+    if (it == this->varName.end()) {
+        throw std::runtime_error("Error: Variable name '" + varName + "' not found.");
+    }
+    return std::distance(this->varName.begin(), it);
+}
 
 ///////////////////////////////////////////////////////////////////////////////
-/// React parcels that are involved in a micromixing process.
-/// Parcels might react for different amounts of time depending on when they last
-/// reacted, which is stored in the parcelTimes array.
+/// \brief React parcels involved in a micromixing process.
 ///
-/// \param iLevel         Input level that the eddy event occurred.
-/// \param iTree          Input root note of the eddy event at iLevel.
-////////////////////////////////////////////////////////////////////////////////
+/// Simulates chemical reactions for parcels affected by a micromixing event. 
+/// Reaction times depend on the last reaction time stored in `parcelTimes`.
+/// The indices of `enthalpy` and species are dynamically retrieved using 
+/// `getVariableIndex` and the `varName` list.
+///
+/// \param iLevel         Level where the eddy event occurred.
+/// \param iTree          Root node of the eddy event at `iLevel`.
+///
+/// \details
+/// - `getVariableIndex("enthalpy")` retrieves the index for `enthalpy`.
+/// - Indices for species are retrieved using `gas->speciesName(i)`.
+/// - Updates parcel states, including `enthalpy` and species mass fractions.
+///
+/// \throws std::runtime_error If a variable name is not found in `varName`.
+///
+/// \note Ensure `varName` is populated via `set_varData` before calling this.
+///       Reaction capabilities require `REACTIONS_ENABLED`.
+///
+/// \see set_varData, getVariableIndex
+///////////////////////////////////////////////////////////////////////////////
 
 void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
-    
-    int nP  = 1 << (Nm1 - iLevel);
-    //int istart = iTree << nP;
+
+    int enthalpyIdx = getVariableIndex("enthalpy");  // Dynamically find enthalpy index
+    int nP = 1 << (Nm1 - iLevel);
     int istart = iTree * nP;
     int iend = istart + nP;
     int ime;
     double dt;
     double h;
-    vector<double> y(nsp); 
-    for (int i=istart; i<iend; i++) {
+    std::vector<double> y(nsp);
+
+    for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        //cout<<"pLoc "<<pLoc[i]<<"  gas "<<gas->density()<<"\n\n"<<endl;
-        dt = time-parcelTimes[ime];
-        h = (*varData[0])[ime]; 
-        for (int k=0; k<nsp; k++)
-            y[k] = (*varData[k+1])[ime];
+        dt = time - parcelTimes[ime];
+
+        // Access enthalpy using its index
+        h = (*varData[enthalpyIdx])[ime];
+
 #ifdef REACTIONS_ENABLED
-        if(performReaction) {
-                bRxr->react(h, y, dtEE);
-                varRho[ime] =  bRxr->getDensity();            
+
+          // Access species using their indices
+        for (int k = 0; k < nsp; k++) {
+            int speciesIdx = getVariableIndex(gas->speciesName(k));
+            y[k] = (*varData[speciesIdx])[ime];
+        }
+        if (performReaction) {
+            bRxr->react(h, y, dtEE);
+            varRho[ime] = bRxr->getDensity();
             Temp[ime] = bRxr->temperature;
         }
+        // Update enthalpy and species
+        (*varData[enthalpyIdx])[ime] = h;
+        for (int k = 0; k < nsp; k++) {
+            int speciesIdx = getVariableIndex(gas->speciesName(k));
+            (*varData[speciesIdx])[ime] = y[k];
+        }
+
 #endif
-        (*varData[0])[ime] = h;
-        for (int k=0; k<nsp; k++)
-            (*varData[k+1])[ime] = y[k];
+        
     }
 }
 
