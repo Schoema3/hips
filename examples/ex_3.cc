@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \file ex_3.cc
+/// \brief Example 3: HiPS simulation with non-premixed combustion.
+///
+/// Simulates a non-premixed ethylene/air mixture in a HiPS domain. The mixture fraction varies across 
+/// the HiPS tree, with fuel and oxidizer fractions based on this profile. Schmidt numbers are unity for 
+/// all species, and the simulation runs for a specified time to observe mixing and combustion phenomena.
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 #include "hips.h"
 #include "cantera/base/Solution.h"
 #include "cantera/thermo.h"
@@ -10,111 +19,99 @@
 
 using namespace std;
 
-
-///////////////////////////////////////////////////////////////////////////////
-
-/**
- * @file main.cpp
- * @brief Main program for HiPS simulation with chemical reactions.
- */
-
-/**
- * @brief Main function for HiPS simulation with chemical reactions.
- * @details This program sets up and runs a HiPS simulation with chemical reactions using Cantera.
- * 
- * @return 0 on successful execution.
- */
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Main function for HiPS simulation with non-premixed combustion.
+///
+/// Sets up and runs the HiPS simulation with non-premixed combustion using Cantera. Initializes the state 
+/// of each parcel based on the mixture fraction profile, computes species mass fractions, enthalpy, and 
+/// temperature for each parcel, and runs the simulation.
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main() {
-  
-    //---------- setting  HiPS tree and constructor
-
-    int            nLevels      = 9;           // # HiPS tree levels
-    double         domainLength = 1.0;         // HiPS tree lengthscale
-    double         tau0         = 1.0;         // HiPS tree timescale
+    int            nLevels      = 6;           // Number of HiPS tree levels
+    double         domainLength = 0.01;        // HiPS tree length scale
+    double         tau0         = 0.0005;      // HiPS tree timescale
     double         C_param      = 0.5;         // HiPS eddy rate multiplier
-    double         tRun         = 4.0;       // tree evolution time
-    int            forceTurb    = 0;           // Force turbulent profile
-    vector<double> ScHips(54,1);
+    double         tRun         = 0.05;        // Simulation runtime
+    int            forceTurb    = 0;           // Force turbulent profile (0 = no)
+    vector<double> ScHips(54, 1);               // Schmidt number (unity for all species)
 
-    //---------- setting gas solution
-
-    //auto   cantSol = Cantera::newSolution("2S_CH4_BFER.yaml", "2S_CH4_BFER", "None");
-    auto   cantSol = Cantera::newSolution("gri30.yaml");
-    auto   gas = cantSol->thermo();
+    auto cantSol = Cantera::newSolution("gri30.yaml");
+    auto gas = cantSol->thermo();
     size_t nsp = gas->nSpecies();
-    int    nVar = nsp+1;           // 1 + nsp: h, y 
+    int nVar = nsp + 1; // Number of variables (species + enthalpy)
 
-    hips HiPS(nLevels,
-          domainLength,
-          tau0, 
-          C_param,
-          forceTurb,
-          nVar,
-          ScHips, 
-          true
+    hips HiPS(nLevels, domainLength, tau0, C_param, forceTurb, nVar, ScHips, true
 #ifdef REACTIONS_ENABLED
-          , cantSol
+              , cantSol
 #endif
-        );
+             );
 
     int nparcels = HiPS.nparcels;
 
-    //------------- declaring state vectors
+    vector<vector<double>> ysp(nsp, vector<double>(nparcels, 0)); // Species mass fractions
+    vector<double> h(nparcels), T(nparcels), Z(nparcels);         // Enthalpy, temperature, and mixture fraction
+    vector<string> variableNames(nsp + 1);                         // Variable names (enthalpy + species)
 
-    vector<vector <double > > ysp(nsp, vector<double> (nparcels, 0));
-    vector<double>            y0(nsp);
-    vector<double>            y1(nsp);
-    double                    h0;
-    
-    vector<double>            h(nparcels); 
-    double                    T0;
-    double                    T1;
-    double                    h1;
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \brief Define mixture fraction profile.
+    ///
+    /// Defines a linear mixture fraction profile for the parcels, ranging from 0 (oxidizer) to 1 (fuel).
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    vector<string>            variableNames(nsp+1);
-
-    //-------------- set state vectors in each parcel
-
-    T0 = 700.0;
-    gas->setState_TPX(T0, Cantera::OneAtm, "CH4:1");
-    gas->getMassFractions(&y0[0]);
-    h0 = gas->enthalpy_mass();
-
-
-    T1 = 1200;
-    gas->setState_TPX(T1, Cantera::OneAtm, "O2:2, N2:7.52");
-    gas->getMassFractions(&y1[0]);
-    h1 = gas->enthalpy_mass();
-
-    for (int i=0; i<nparcels/2; i++) {       // left parcels are stream 0 (air)
-        h[i] = h0;
-        for (int k=0; k<nsp; k++)
-            ysp[k][i] = y0[k];
+    for (int j = 0; j < nparcels; j++) {
+        Z[j] = static_cast<double>(j) / (nparcels - 1); // Z ranges from 0 (oxidizer) to 1 (fuel)
     }
 
-    for (int i=nparcels/2; i<nparcels; i++) { // right parcels are stream 1 (fuel)
-        h[i] = h1;
-        for (int k=0; k<nsp; k++)
-            ysp[k][i] = y1[k];
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \brief Initialize parcels based on mixture fraction.
+    ///
+    /// Initializes the state of each parcel based on its mixture fraction. Fuel and oxidizer fractions 
+    /// are computed from the mixture fraction, and the gas state is set accordingly for each parcel.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    for (int j = 0; j < nparcels; j++) {
+        double Zj = Z[j];
+        double fuel_fraction = Zj;
+        double oxidizer_fraction = 1.0 - Zj;
+
+        string composition = "C2H4:" + to_string(fuel_fraction) + ", O2:" + to_string(oxidizer_fraction * 3.0) +
+                             ", N2:" + to_string(oxidizer_fraction * 11.52); // Air composition
+        gas->setState_TPX(400.0, Cantera::OneAtm, composition);
+        gas->equilibrate("HP");
+
+        // Store parcel properties
+        h[j] = gas->enthalpy_mass();
+        T[j] = gas->temperature();
+        gas->getMassFractions(ysp[j].data());
     }
 
-    //----------------- set array of hips variables from state variables
-     
-   variableNames[0] = "Enthalpy";
-   for(int i=0; i<ysp.size(); i++)
-       variableNames[i+1] = gas->speciesName(i);
+    HiPS.Temp = T;
 
-   vector<double>           weight(nparcels, 1.0/nparcels);
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \brief Set variable names and HiPS data.
+    ///
+    /// Assigns variable names and sets the HiPS data (enthalpy and species mass fractions) for each parcel.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //----------------- set array of hips variables from state variables
+    variableNames[0] = "enthalpy";
+    for (int i = 0; i < ysp.size(); i++) {
+        variableNames[i + 1] = gas->speciesName(i);
+    }
 
-    HiPS.set_varData(h,weight, variableNames[0]);
-    for (int k=0; k<ysp.size(); k++) 
-        HiPS.set_varData(ysp[k],weight, variableNames[k+1]);
+    vector<double> weight(nparcels, 1.0 / nparcels); // Set weight for each parcel
 
-    //----------------- advancing HiPS to do rxn and mixing 
+    HiPS.set_varData(h, weight, variableNames[0]);
+    for (int k = 0; k < ysp.size(); k++) 
+        HiPS.set_varData(ysp[k], weight, variableNames[k + 1]);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// \brief Advance the HiPS tree.
+    ///
+    /// Advances the HiPS tree to simulate chemical reactions and mixing for the specified runtime.
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     HiPS.calculateSolution(tRun, true);
 
     return 0;
+}
 
-}  
