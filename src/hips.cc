@@ -1090,22 +1090,28 @@ void hips::forceProfile() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-/// \brief Write simulation data to a file with a specified index and output time.
+/// \brief Writes simulation data to a file with a specified index and output time.
 ///
-/// This function saves the current state of the simulation data to a file. The 
-/// file is named using a sequential index (e.g., Data_00001.dat, Data_00002.dat) 
-/// to ensure a clear order of outputs. The output time is also included within 
-/// the file content for reference.
+/// This function saves the current state of simulation data to a file named sequentially 
+/// (e.g., `Data_00001.dat`, `Data_00002.dat`) to maintain an ordered record of outputs. 
+/// The simulation time associated with the data is also written into the file for reference.
 ///
-/// The function first checks if the "data" directory exists and creates it if 
-/// necessary. It then writes data such as temperature (if applicable) and 
-/// other variables to the file in a scientific format with high precision.
+/// ### Key Operations:
+/// 1. Checks if the "data" directory exists. If not, attempts to create it.
+/// 2. Opens the file for writing using the sequential index (\p ifile) to construct the filename.
+/// 3. Writes simulation variables (e.g., temperature, other quantities) to the file in a 
+///    scientific format with high precision.
 ///
-/// \param ifile       The sequential index used in the filename.
-/// \param outputTime  The simulation time associated with the data, written into the file.
+/// \param ifile       Sequential index for naming the output file.
+/// \param outputTime  Simulation time associated with the data, written into the file content.
 ///
-/// \note The function handles potential errors, such as the inability to create 
-/// the directory or open the file for writing.
+/// \note 
+/// - The function ensures that the output directory ("data") is created if it does not exist.
+/// - It writes data with high precision to maintain accuracy in numerical simulations.
+///
+/// \warning 
+/// - If the function fails to create the directory or open the file for writing, it may throw 
+///   an error or log a warning. Ensure sufficient permissions and disk space are available.
 ///////////////////////////////////////////////////////////////////////////////////
 
 void hips::writeData(int real, const int ifile, const double outputTime) {
@@ -1151,20 +1157,35 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
 
     
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief This function projects the HiPS parcel values back onto the flow particles.
-/// 
-/// It effectively reverses the projection process to ensure the values in HiPS parcels 
-/// are accurately redistributed to the flow particles.
-/// 
-/// It follows:
+/// \brief Projects HiPS parcel values back onto the flow particles.
+///
+/// This function reverses the projection process, redistributing the values stored in the HiPS 
+/// parcels back to the flow particles. It ensures conservation of properties such as mass or 
+/// concentration by maintaining consistency between the HiPS parcels and flow particles.
+///
+/// ### Conservation Principle:
+/// The projection follows the equation:
 /// \f[
-/// \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j} = \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i}
+/// \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j} = 
+/// \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i}
 /// \f]
-/// 
+/// where:
+/// - \f$\phi_{\text{HP}}\f$: Values in HiPS parcels.
+/// - \f$\mathrm{d}x_{\text{HP}}\f$: Differential volume elements for HiPS parcels.
+/// - \f$\phi_{\text{FP}}\f$: Values in flow particles.
+/// - \f$\mathrm{d}x_{\text{FP}}\f$: Differential volume elements for flow particles.
+///
 /// \param vh           Vector of values from HiPS parcels to be projected back.
-/// \return             Vector of values projected back onto the flow particles.
-/// 
-/// \note This function is the reverse of the projection function.
+/// \return             Vector of values redistributed onto the flow particles.
+///
+/// \note 
+/// - This function is the reverse of the projection function, ensuring consistency in 
+///   value transfers between HiPS parcels and flow particles.
+/// - The input vector \p vh should be consistent with the HiPS parcel structure.
+///
+/// \warning 
+/// - Ensure that the HiPS parcels have been properly populated with values before invoking this function.
+/// - Mismatches in data sizes between HiPS parcels and flow particles may lead to unexpected results.
 //////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::projection_back(std::vector<double> &vh) {
@@ -1203,24 +1224,39 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-
-/// \brief This function projects the HiPS parcel values and densities back onto the flow particles.
-/// 
-/// It effectively reverses the projection process to ensure both the values and densities in HiPS parcels 
-/// are accurately redistributed to the flow particles.
-/// 
-/// It follows:
+/// \brief Projects HiPS parcel values and densities back onto the flow particles.
+///
+/// This function reverses the projection process, redistributing both the values and densities stored 
+/// in the HiPS parcels back to the flow particles. It ensures conservation of both the property values 
+/// and densities, maintaining consistency between the HiPS parcels and flow particles.
+///
+/// ### Conservation Principle:
+/// The projection follows the equation:
 /// \f[
-/// \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \rho_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j} = \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \rho_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i}
+/// \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \rho_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j} = 
+/// \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \rho_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i}
 /// \f]
-/// 
+/// where:
+/// - \f$\phi_{\text{HP}}\f$: Values in HiPS parcels.
+/// - \f$\rho_{\text{HP}}\f$: Densities in HiPS parcels.
+/// - \f$\mathrm{d}x_{\text{HP}}\f$: Differential volume elements for HiPS parcels.
+/// - \f$\phi_{\text{FP}}\f$: Values in flow particles.
+/// - \f$\rho_{\text{FP}}\f$: Densities in flow particles.
+/// - \f$\mathrm{d}x_{\text{FP}}\f$: Differential volume elements for flow particles.
+///
 /// \param vh           Vector of values from HiPS parcels to be projected back.
 /// \param rho_h        Vector of density values from HiPS parcels.
-/// \return             A pair of vectors: 
+/// \return             A pair of vectors:
 ///                     - The first vector contains the values projected back onto the flow particles.
-///                     - The second vector contains the corresponding densities for the flow particles.
-/// 
-/// \note This function is the reverse of the projection function with density.
+///                     - The second vector contains the densities redistributed to the flow particles.
+///
+/// \note 
+/// - This function is the reverse of the projection function that includes density.
+/// - The input vectors \p vh and \p rho_h should be consistent with the HiPS parcel structure and sizes.
+///
+/// \warning 
+/// - Ensure that the HiPS parcels are populated with valid values and densities before invoking this function.
+/// - Mismatches in data sizes between HiPS parcels and flow particles may lead to inaccurate results.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_density(std::vector<double> &vh, 
@@ -1259,11 +1295,23 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_d
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-/// \brief This function returns final data from the simulation.
+/// \brief Retrieves the final data from the simulation.
 ///
-/// \note This function is used for integrating HiPS as a subgrid model in CFD simulations.
+/// This function returns the final state of the simulation, packaged as a vector of vectors. 
+/// It is particularly useful when integrating HiPS as a subgrid model in CFD simulations, 
+/// enabling seamless transfer of data for further analysis or post-processing.
 ///
-/// \return A vector of vectors containing the final results.
+/// \return A vector of vectors containing the final results, where:
+///         - Each inner vector represents a specific variable or property.
+///         - The outer vector contains all variables across parcels.
+///
+/// \note 
+/// - This function is specifically designed for use when HiPS is employed as a subgrid model in CFD simulations.
+/// - The structure of the returned data ensures compatibility with CFD solvers that require parcel-level data.
+///
+/// \warning 
+/// - Ensure the simulation has reached completion before calling this function to avoid incomplete or inconsistent data.
+/// - The returned data structure should be interpreted according to the simulation setup and variable ordering.
 //////////////////////////////////////////////////////////////////////////////////////////
 
 std::vector<std::vector<double>> hips::get_varData(){
@@ -1276,18 +1324,24 @@ std::vector<std::vector<double>> hips::get_varData(){
     return varDataProjections;                                         // Return the vector containing modified data projections
 }
 ////////////////////////////////////////////////////////////////////////////////////
-/// \brief This function returns final data from the simulation, including densities.
+/// \brief Retrieves final simulation data, including both values and densities.
 ///
-/// This function processes the HiPS data, including both values and densities, and 
-/// projects them back onto the flow particles.
-///
-/// \note This function is used for integrating HiPS as a subgrid model in CFD simulations, 
-///       taking into account both the values and densities of parcels.
+/// This function processes the HiPS data and projects both the values and densities back 
+/// onto the flow particles. It returns a vector of pairs, where each pair contains the 
+/// values and corresponding densities for a specific variable. This function is designed 
+/// to support HiPS as a subgrid model in CFD simulations, ensuring compatibility with 
+/// solvers that require both values and density information.
 ///
 /// \return A vector of pairs:
-///         - Each pair contains two vectors: 
+///         - Each pair consists of two vectors:
 ///             - The first vector contains the final results for the values.
 ///             - The second vector contains the corresponding density results.
+///
+/// \note 
+/// - This function is tailored for integrating HiPS as a subgrid model in CFD simulations, 
+///   providing both value and density data for accurate modeling.
+/// - Ensure that all HiPS parcels are properly initialized and contain valid values and densities 
+///   before invoking this function.
 ///////////////////////////////////////////////////////////////////////////////////
 
 std::vector<std::pair<std::vector<double>, std::vector<double>>> hips::get_varData_with_density() {
