@@ -692,8 +692,6 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
     if (performReaction)
     reactParcels_LevelTree(iLevel, iTree);            // react all parcels up to end time
 
-  //  if (shouldWriteData)
-  //      writeInputParameters();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1118,7 +1116,7 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
     stringstream ss1, ss2;
     string s1, s2;
 
-    //cout<<"realiz   "<<realization<<endl;
+    // Prepare directory path
     ss1 << "../data/rlz_" << setfill('0') << setw(5) << real;
     ss1 >> s1;
 
@@ -1136,25 +1134,43 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
 
     ofstream ofile(fname.c_str());
 
-    ofile << "# time = " << outputTime;
-    ofile << "\n# Grid Poins = " << nparcels;
+    // Write metadata (header information)
+    ofile << "# time = " << outputTime << "\n";
+    ofile << "# Grid Points = " << nparcels << "\n";
+    ofile << "# nLevels = " << nLevels << "\n";
+    ofile << "# domainLength = " << domainLength << "\n";
+    ofile << "# tau0 = " << tau0 << "\n";
+    ofile << "# C_param = " << C_param << "\n";
+    ofile << "# forceTurb = " << forceTurb << "\n";
+    ofile << "# nVar = " << nVar << "\n";
+    ofile << "# performReaction = " << (performReaction ? "true" : "false") << "\n";
+#ifdef REACTIONS_ENABLED
+    ofile << "# nSpecies = " << nsp << "\n";
+#endif
 
+    // Include ScHips (vector of Schmidt numbers)
+    ofile << "# ScHips = ";
+    for (const auto& sc : ScHips) {
+        ofile << sc << " ";
+    }
+    ofile << "\n";
+
+    // Write column names
     for (const auto& varN : varName)
         ofile << setw(14) << varN;
 
     ofile << scientific;
     ofile << setprecision(10);
 
+    // Write data
     for (int i = 0; i < nparcels; i++) {
         ofile << endl; 
-
         for (int k = 0; k < nVar; k++)
             ofile << setw(19) << (*varData[k])[pLoc[i]];
     }
 
     ofile.close();
 }
-
     
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Projects HiPS parcel values back onto the flow particles.
@@ -1361,44 +1377,4 @@ std::vector<std::pair<std::vector<double>, std::vector<double>>> hips::get_varDa
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
-/// \brief This function writes the input parameters to a YAML file for post-processes simulations.
-/// 
-/// This function creates a YAML file named "InputParameters.yaml" in the "../data/" directory.
-///
-/// \param nLevels         The number of levels in the simulation.
-/// \param nparcels        The number of parcels used in the simulation.
-/// \param nVar            The number of variables in the simulation.
-/// \param varName         A list of variable names.
-///
-/// \note Users can add other simulations parameters to this function. 
-/////////////////////////////////////////////////////////////////////////////////////
 
-void hips::writeInputParameters() {
-    // Construct the YAML file name
-    string yamlFileName = "../data/InputParameters.yaml";
-
-    YAML::Node yamlData;               // Create a YAML node and write the input parameters to it
-
-    // Adding simulation parameters with comments
-    yamlData["params"]["nLevels"] = nLevels;           
-    yamlData["params"]["nparcels"] = nparcels;
-    yamlData["params"]["nVar"] = nVar;
-
-    YAML::Node varNamesNode;
-
-    // Adding variable names with comments
-    for (const auto& name : varName)
-        varNamesNode.push_back(name);
-    yamlData["variable_names"] = varNamesNode;
-
-
-    // Save the YAML node to a file
-    std::ofstream yamlFile(yamlFileName);                  
-    if (!yamlFile) {
-        cerr << "Error: Unable to open file " << yamlFileName << " for writing" << endl;
-        return;
-    }
-
-    yamlFile << yamlData;
-    yamlFile.close();
-}
