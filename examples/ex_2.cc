@@ -39,9 +39,9 @@ int main() {
     
     int            nLevels      = 6;           // Number of HiPS tree levels
     double         domainLength = 0.01;        // HiPS domain length scale
-    double         tau0         = 0.0005;      // HiPS timescale
+    double         tau0         = 0.000005;      // HiPS timescale
     double         C_param      = 0.5;         // Eddy rate multiplier
-    double         tRun         = 0.05;        // Simulation runtime
+    double         tRun         = 0.0005;        // Simulation runtime
     int            forceTurb    = 0;           // Force turbulent profile (0 = no)
     vector<double> ScHips(54, 1);               // Schmidt number (unity for all species)
 
@@ -85,11 +85,15 @@ int main() {
     gas->getMassFractions(y0.data());
 
     // Initialize fresh reactants
-    for (int j = 0; j < fracBurn * nparcels; j++) {
-        h[j] = h0;
-        T[j] = gas->temperature();
-        ysp[j] = y0;
+   for (int i = 0; i < nsp; i++) {
+        for (int j = 0; j <= (1-fracBurn)*nparcels; j++) { // Set state for fresh reactants
+            h[j] = h0;
+            T[j] = gas->temperature();
+            ysp[i][j] = y0[i];
+
+        }
     }
+
 
     // Initialize pre-combusted parcels
     gas->setState_TPX(T1, Cantera::OneAtm, "C2H4:1, O2:3, N2:11.25");
@@ -98,11 +102,14 @@ int main() {
     gas->equilibrate("HP");
     gas->getMassFractions(y1.data());
 
-    for (int j = fracBurn * nparcels; j < nparcels; j++) {
-        h[j] = h1;
-        T[j] = gas->temperature();
-        ysp[j] = y1;
+   for (int i = 0; i < nsp; i++) {
+        for (int j = ((1-fracBurn)*nparcels+1); j < nparcels; j++) { // Set state for pre-combusted parcels
+            h[j] = h1;
+            T[j] = gas->temperature();
+            ysp[i][j] = y1[i];
+        }
     }
+
 
     HiPS.Temp = T;
     variableNames[0] = "enthalpy";

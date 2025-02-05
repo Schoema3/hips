@@ -16,6 +16,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <iomanip>  // For setting precision in output
+#include <cmath>    // For isnan and isfinite
 
 using namespace std;
 
@@ -23,7 +25,7 @@ using namespace std;
 /// \brief Main function for HiPS simulation with non-premixed combustion.
 ///
 /// Sets up and runs the HiPS simulation with non-premixed combustion using Cantera. Initializes the state 
-/// of each parcel based on the mixture fraction profile, computes species mass fractions, enthalpy, and 
+/// of each parcel based on its mixture fraction profile, computes species mass fractions, enthalpy, and 
 /// temperature for each parcel, and runs the simulation.
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 int main() {
@@ -33,7 +35,7 @@ int main() {
     double         C_param      = 0.5;         // HiPS eddy rate multiplier
     double         tRun         = 0.05;        // Simulation runtime
     int            forceTurb    = 0;           // Force turbulent profile (0 = no)
-    vector<double> ScHips(54, 1);               // Schmidt number (unity for all species)
+    vector<double> ScHips(54, 1);              // Schmidt number (unity for all species)
 
     auto cantSol = Cantera::newSolution("gri30.yaml");
     auto gas = cantSol->thermo();
@@ -49,66 +51,62 @@ int main() {
     int nparcels = HiPS.nparcels;
 
     vector<vector<double>> ysp(nsp, vector<double>(nparcels, 0)); // Species mass fractions
-    vector<double> h(nparcels), T(nparcels), Z(nparcels);         // Enthalpy, temperature, and mixture fraction
-    vector<string> variableNames(nsp + 1);                         // Variable names (enthalpy + species)
+    vector<double> h(nparcels, 0.0), T(nparcels, 0.0), Z(nparcels, 0.0); // Enthalpy, temperature, mixture fraction
+    vector<string> variableNames(nsp + 1); // Variable names (enthalpy + species)
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// \brief Define mixture fraction profile.
-    ///
-    /// Defines a linear mixture fraction profile for the parcels, ranging from 0 (oxidizer) to 1 (fuel).
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    cout << "Number of species (nsp) = " << nsp << endl; // Debugging species count
+
+    // Temperature profile settings
+    double T_ox = 300.0;  // Oxidizer temperature
+    double T_fuel = 1500.0; // Fuel temperature
+    double n_temp = 1.0;   // Exponent for interpolation
 
     for (int j = 0; j < nparcels; j++) {
         Z[j] = static_cast<double>(j) / (nparcels - 1); // Z ranges from 0 (oxidizer) to 1 (fuel)
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// \brief Initialize parcels based on mixture fraction.
-    ///
-    /// Initializes the state of each parcel based on its mixture fraction. Fuel and oxidizer fractions 
-    /// are computed from the mixture fraction, and the gas state is set accordingly for each parcel.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    double min_oxidizer = 0.05; // Ensure at least 5% oxidizer for stability
 
     for (int j = 0; j < nparcels; j++) {
         double Zj = Z[j];
         double fuel_fraction = Zj;
-        double oxidizer_fraction = 1.0 - Zj;
+        double oxidizer_fraction = max(1.0 - Zj, min_oxidizer); // Prevent zero oxidizer
 
-        string composition = "C2H4:" + to_string(fuel_fraction) + ", O2:" + to_string(oxidizer_fraction * 3.0) +
-                             ", N2:" + to_string(oxidizer_fraction * 11.52); // Air composition
-        gas->setState_TPX(400.0, Cantera::OneAtm, composition);
-        gas->equilibrate("HP");
+        // Adjusted stoichiometric oxidizer and nitrogen amounts
+        string composition = "C2H4:" + to_string(fuel_fraction) + 
+                             ", O2:" + to_string(oxidizer_fraction * 3.5) +
+                             ", N2:" + to_string(oxidizer_fraction * 13.2); // Maintain realistic air composition
 
-        // Store parcel properties
+        // Compute initial temperature based on mixture fraction
+        double T_init = T_ox + (T_fuel - T_ox) * pow(Zj, n_temp);
+
+        gas->setState_TPX(T_init, Cantera::OneAtm, composition);
+
+        // Get enthalpy after setting temperature
         h[j] = gas->enthalpy_mass();
+        gas->setState_HP(h[j], gas->pressure());
+        gas->equilibrate("HP", "auto", 50);
+
         T[j] = gas->temperature();
-        gas->getMassFractions(ysp[j].data());
+
+        // Properly assign species fractions in a nested loop
+        for (int i = 0; i < nsp; i++) {
+            ysp[i][j] = gas->massFraction(i);
+        }
     }
 
-    HiPS.Temp = T;
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// \brief Set variable names and HiPS data.
-    ///
-    /// Assigns variable names and sets the HiPS data (enthalpy and species mass fractions) for each parcel.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    HiPS.Temp.assign(T.begin(), T.end());
 
     variableNames[0] = "enthalpy";
-    for (int i = 0; i < ysp.size(); i++) {
+    for (int i = 0; i < nsp; i++) {
         variableNames[i + 1] = gas->speciesName(i);
     }
 
     vector<double> weight(nparcels, 1.0 / nparcels); // Set weight for each parcel
 
     HiPS.set_varData(h, weight, variableNames[0]);
-    for (int k = 0; k < ysp.size(); k++) 
+    for (int k = 0; k < nsp; k++) 
         HiPS.set_varData(ysp[k], weight, variableNames[k + 1]);
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// \brief Advance the HiPS tree.
-    ///
-    /// Advances the HiPS tree to simulate chemical reactions and mixing for the specified runtime.
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     HiPS.calculateSolution(tRun, true);
 
