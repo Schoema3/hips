@@ -74,6 +74,16 @@ private:
     std::vector<double> xh;                             ///< vector containing physical domain of HiPS parcels
     
     std::string  approach;
+    int outputIntervalEddy = 10;                        ///< Default: write data every 10 eddy events
+    double outputIntervalTime = 0.1;                    ///< Default: write data every 0.1s
+    int eddyCounter = 0;                                ///< Counter for eddy events
+    double lastOutputTime = 0.0;                        ///< Last time data was written
+    bool useEddyBasedWriting = false;                   ///< Tracks if eddy writing is set
+    bool useTimeBasedWriting = false;                   ///< Tracks if time writing is set
+    const int DEFAULT_EDDY_INTERVAL = 1000;             ///< Default: Write every 1000 eddies
+    const double DEFAULT_TIME_INTERVAL = 0.1;           ///< Default: Write every 0.1s
+  
+
 
     ////////////////////////////// MEMBER FUNCTIONS /////////////////////////////
 
@@ -89,6 +99,8 @@ public:
     std::vector<std::vector<double>> get_varData();                                                 // Retrieves modified data from the HiPS library and stores it in the provided vector. 
     std::vector<std::pair<std::vector<double>, std::vector<double>>> get_varData_with_density();
     
+    void setOutputIntervalTime(double interval);
+    void setOutputIntervalEddy(int interval);
 
     void calculateSolution(const double tRun, bool shouldWriteData =false);                         // Running simulations 
 

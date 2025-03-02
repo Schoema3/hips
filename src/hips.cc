@@ -646,53 +646,85 @@ std::vector<double> hips::setGridHips(int N){
 /////////////////////////////////////////////////////////////////////////////////
 /// \brief Simulates the interaction of parcels within a turbulent flow using the HiPS solver.
 ///
-/// This function models the HiPS process by iterating over eddy events until the specified simulation 
+/// This function models the HiPS process by iterating over eddy events until the specified simulation
 /// time is reached. It performs the following key steps:
 /// - Samples the time of the next eddy event (\f$t_{ee}\f$).
 /// - Selects and swaps subtrees in the HiPS structure.
 /// - Handles reactions and micromixing at the parcel level, if enabled.
-/// - Optionally writes data at regular intervals.
+/// - Optionally writes data at regular intervals based on eddy events or time.
 ///
-/// \param tRun                Total simulation run time.
-/// \param shouldWriteData     Flag indicating whether to write simulation data periodically. Default is false.
+/// The output mode is determined by user selection:
+/// - **Eddy-based writing** occurs every `outputIntervalEddy` events if set via `setOutputIntervalEddy()`.
+/// - **Time-based writing** occurs every `outputIntervalTime` seconds if set via `setOutputIntervalTime()`.
+/// - **Default behavior:** If neither function is called, data is written every `1000` eddy events.
 ///
-/// \note By default, data is written after every 10,000 eddy events. Users can modify this threshold 
-///       by changing the corresponding value in the code. Ensure that `shouldWriteData` is set to true 
-///       if periodic data output is desired.
+/// \param tRun                Total simulation run time (in seconds).
+/// \param shouldWriteData     Flag indicating whether to write simulation data periodically. Default is `fa
 ///
-/// \warning Long simulation run times may result in significant data output. Adjust the writing interval 
+/// \note Users can modify the writing intervals using:
+///       - `setOutputIntervalEddy(int interval)` to enable eddy-based writing.
+///       - `setOutputIntervalTime(double interval)` to enable time-based writing.
+///       - If neither function is called, the default interval is `1000` eddy events.
+///
+/// \warning Long simulation run times may result in significant data output. Adjust the writing interval
 ///          or disable data writing (`shouldWriteData = false`) to manage disk usage effectively.
 ///////////////////////////////////////////////////////////////////////////////////
 
 void hips::calculateSolution(const double tRun, bool shouldWriteData) {
     
     unsigned long long nEddies = 0;                   // Number of eddy events
-    int    fileCounter = 0;                           // Number of data files written
-    int    iLevel;                                    // Tree level of EE with top at iLevel=0
-    int    iTree;                                     // One of two subtrees involved in swap at iLevel
-    dtEE;                                                                 
+    int fileCounter = 0;                              // Number of data files written
+    int iLevel;                                       // Tree level of EE with top at iLevel=0
+    int iTree;                                        // One of two subtrees involved in swap at iLevel
+    dtEE;                                            
     time = 0.0;                                       // Initialize simulation time
+    int lastEddyOutput = 0;                           // Track last eddy-based output event
+
+    // Apply default values if user hasn't set them
+    if (!useEddyBasedWriting && !useTimeBasedWriting) {
+        outputIntervalEddy = DEFAULT_EDDY_INTERVAL;
+        useEddyBasedWriting = true;  // Default to eddy-based writing
+    }
 
     sample_hips_eddy(dtEE, iLevel);                   // Get first EE at time 0+dtEE
     nEddies++;
+    eddyCounter = 0;                                  // Reset eddy counter at start
+    lastOutputTime = 0.0;                             // Reset last output time
 
-    while (time+dtEE<=tRun) {
+    while (time + dtEE <= tRun) {
         time += dtEE;
         selectAndSwapTwoSubtrees(iLevel, iTree);
-        advanceHips(iLevel, iTree);                   // reaction and micromixing (if needed) to t=time
+        advanceHips(iLevel, iTree);                   // Reaction and micromixing (if needed) to t=time
 
         sample_hips_eddy(dtEE, iLevel);
-
         nEddies++;
-        if (shouldWriteData && nEddies %1 == 0) 
-            writeData(realization, ++fileCounter, time);
-    }
-    time = tRun;
-    iLevel = 0; iTree  = 0;
-    if (performReaction)
-    reactParcels_LevelTree(iLevel, iTree);            // react all parcels up to end time
+        eddyCounter++;  
 
+        //  Only check the selected mode (set in example code or by default)
+        bool writeByEddy = (useEddyBasedWriting && eddyCounter >= lastEddyOutput + outputIntervalEddy);
+        bool writeByTime = (useTimeBasedWriting && time - lastOutputTime >= outputIntervalTime);
+
+        if (shouldWriteData) {
+            if (writeByEddy) {  //  Only write if using eddy-based writing
+                writeData(realization, ++fileCounter, time);
+                lastEddyOutput = eddyCounter;  //  Update last output event
+            }
+            else if (writeByTime) {  // Only write if using time-based writing
+                 writeData(realization, ++fileCounter, time);
+                lastOutputTime = time;
+            }
+        }
+    }
+
+    // Ensure the final time step completes
+    time = tRun;
+    iLevel = 0; 
+    iTree = 0;
+
+    if (performReaction)
+        reactParcels_LevelTree(iLevel, iTree);        // React all parcels up to end time
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Samples stochastic eddy events on the HiPS tree, determining the time increment and tree level.
@@ -1377,4 +1409,41 @@ std::vector<std::pair<std::vector<double>, std::vector<double>>> hips::get_varDa
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
+/// \brief Sets the interval (in number of eddy events) for writing simulation data.
+///
+/// Calling this function enables eddy-based writing and disables time-based writing.
+/// If the user does not call this function or `setOutputIntervalTime()`, the default 
+/// interval is set to 1000 eddy events.
+///
+/// \param interval The number of eddy events between data writes (e.g., `1000` writes data every 1000 eddies).
+///
+/// \note Calling this function automatically disables time-based writing (`setOutputIntervalTime()`).
+///       To revert to default settings, the user must explicitly set a new interval or avoid calling this function.
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
+void hips::setOutputIntervalEddy(int interval) {
+    outputIntervalEddy = interval;
+    useEddyBasedWriting = true;  ///< Enables eddy-based writing
+    useTimeBasedWriting = false; ///< Disables time-based writing
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+/// \brief Sets the interval (in simulation time) for writing simulation data.
+///
+/// Calling this function enables time-based writing and disables eddy-based writing.
+/// If the user does not call this function or `setOutputIntervalEddy()`, the default 
+/// behavior is eddy-based writing every 1000 eddies.
+///
+/// \param interval The time interval (in seconds) between data writes (e.g., `0.1` writes data every 0.1s).
+///
+/// \note Calling this function automatically disables eddy-based writing (`setOutputIntervalEddy()`).
+///       To revert to default settings, the user must explicitly set a new interval or avoid calling this function.
+///////////////////////////////////////////////////////////////////////////////////////
+
+    void hips::setOutputIntervalTime(double interval) {
+    outputIntervalTime = interval;
+    useTimeBasedWriting = true;  ///< Enables time-based writing
+    useEddyBasedWriting = false; ///< Disables eddy-based writing
+}
+
+/////////////////////////////////////////////////////////////////////////////////

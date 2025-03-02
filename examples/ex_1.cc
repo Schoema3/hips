@@ -56,6 +56,9 @@ int main() {
         HiPS.set_varData(mixingFractions[i], weights, "mixf_0" + to_string(i));
     }
 
+    //HiPS.setOutputIntervalEddy(5000);
+    HiPS.setOutputIntervalTime(100.0);
+
     // Run simulation to observe mixing dynamics
     HiPS.calculateSolution(tRun, true);
 
