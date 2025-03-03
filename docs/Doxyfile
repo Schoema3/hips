@@ -920,6 +920,7 @@ INPUT                  = ../src      \
                          ../examples  \
                          ../docs/pages \
                          ../docs/model \
+                         ../post
                        
                          
 
