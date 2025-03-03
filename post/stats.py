@@ -1,48 +1,80 @@
 import numpy as np
 import glob
-from utils import read_parameters  # Import the utility function for reading parameters
+import os
+
+# Function to read parameters from parameters.dat
+def read_parameters_from_dat(file_path):
+    params = {}
+
+    with open(file_path, "r") as f:
+        for line in f:
+            key, value = line.split(maxsplit=1)
+            params[key] = value.strip()
+
+    # Convert to correct types
+    n_var = int(params["nVar"])
+    nLevels = int(params["nLevels"])
+    nx = 2**(nLevels - 1)  # Compute number of parcels
+
+    variable_names = params["varName"].split()  # Assuming space-separated variable names
+    # variable_names = params["varName"].split(",")  # If comma-separated, uncomment this
+
+    return n_var, nx, variable_names
 
 #------------------------------------------------------------------------------
 
 def main():
-    # Reading input parameters
-    yaml_file_path = '../data/InputParameters.yaml'
-    params = read_parameters(yaml_file_path)
+    # Define the folder for saving processed data
+    output_dir = "processed_data"
+    os.makedirs(output_dir, exist_ok=True)  #  Create the folder if it doesn't exist
 
-    n_var = params['params'].get('nVar')  # Number of variables to process
-    variable_names = params['variable_names']  # Get variable names from input parameters
-
-    # Ensure the number of variable names matches the number of variables (n_var)
-    if len(variable_names) != n_var:
-        raise ValueError("The number of variable names does not match the number of variables (nVar)")
+    # Read parameters from `parameters.dat`
+    params_file_path = "parameters.dat"
+    n_var, nx, variable_names = read_parameters_from_dat(params_file_path)
 
     # Find all data files
-    data_files = glob.glob("../data/Data_*.dat")
+    data_files = sorted(glob.glob("../data/rlz_00001/Data_*.dat"))  # Ensure correct step ordering
+    n_files = len(data_files)  # Number of data files (equivalent to steps)
 
-    # Initialize arrays to hold mean and variance data
-    mean_values = np.zeros((len(data_files), n_var))
-    variance_values = np.zeros((len(data_files), n_var))
+    if n_files == 0:
+        raise FileNotFoundError("No data files found in ../data/")
 
-    # Process each column in the data files
-    for column_index in range(n_var):
-        all_data = np.array([])
+    print(f" Found {n_files} data files for processing.")
 
-        # Load and append data from each file
-        for file_path in data_files:
-            data = np.loadtxt(file_path)
-            all_data = np.append(all_data, data[:, column_index])
+    # Initialize arrays for mean and variance calculations
+    sum_values = np.zeros((nx, n_var))  # Sum of values for each parcel
+    sum_sq_values = np.zeros((nx, n_var))  # Sum of squared values for variance calculation
+    count = np.zeros((nx, n_var))  # Count occurrences for each parcel
 
-        # Calculate mean and variance
-        mean_values[:, column_index] = np.mean(all_data)
-        variance_values[:, column_index] = np.var(all_data)
+    # Process each data file
+    for file_path in data_files:
+        print(f"Processing file: {file_path}")
 
-    # Create aligned header strings for variable names
-    header_format = "{:<15}" * n_var
-    aligned_header = header_format.format(*variable_names)
+        # Load data (each row corresponds to a parcel, each column is a variable)
+        data = np.loadtxt(file_path)
 
-    # Save mean and variance to files with aligned variable names in the header
-    np.savetxt("mean_values.dat", mean_values, header=aligned_header, fmt="%15.8e")
-    np.savetxt("variance_values.dat", variance_values, header=aligned_header, fmt="%15.8e")
+        # Accumulate sum and sum of squares for each parcel
+        sum_values += data
+        sum_sq_values += data**2
+        count += 1  # Each parcel is counted once per file
+
+    # Compute mean and variance per parcel across all data files
+    mean_values = sum_values / count
+    variance_values = (sum_sq_values / count) - (mean_values**2)
+
+    # Ensure non-negative variances (avoid small numerical errors)
+    variance_values = np.maximum(variance_values, 0)
+
+    # Save results to processed_data/ folder
+    mean_file = os.path.join(output_dir, "means_per_parcel.dat")
+    var_file = os.path.join(output_dir, "variances_per_parcel.dat")
+
+    header = " ".join(variable_names)
+
+    np.savetxt(mean_file, mean_values, header=header, fmt="%15.8e")
+    np.savetxt(var_file, variance_values, header=header, fmt="%15.8e")
+
+    print(f" Mean and variance per parcel saved in: {output_dir}/")
 
 if __name__ == "__main__":
     main()

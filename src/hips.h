@@ -131,7 +131,8 @@ private:
    
     void forceProfile();
     
-    void writeData(int real, const int ifile, const double outputTime);                                       // Writing the results for a user-defined number of eddies in the data folder. 
+    void writeData(int real, const int ifile, const double outputTime);                                       // Writing the results for a user-defined number of eddies in the data folder.
+    void saveAllParameters();                                                                       // Function to save ALL parameters
     
     /////////////////////////  COSTRUCTORS  ///////////////////////// 
 

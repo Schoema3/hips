@@ -723,6 +723,7 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
 
     if (performReaction)
         reactParcels_LevelTree(iLevel, iTree);        // React all parcels up to end time
+    saveAllParameters();
 }
 
 
@@ -1189,7 +1190,7 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
 
     // Write column names
     for (const auto& varN : varName)
-        ofile << setw(14) << varN;
+        ofile << setw(14) << "# " <<varN;
 
     ofile << scientific;
     ofile << setprecision(10);
@@ -1446,4 +1447,58 @@ void hips::setOutputIntervalEddy(int interval) {
     useEddyBasedWriting = false; ///< Disables eddy-based writing
 }
 
-/////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Saves all user-defined and computed simulation parameters to a file.
+///
+/// This function writes both input parameters (provided by the user) and computed parameters 
+/// to an output file (`parameters.dat`) for post-processing. The file is stored in the `post/` directory.
+///
+/// The file includes:
+/// - **User-defined input parameters**, such as grid levels, domain size, turbulence settings, and variable names.
+/// - **Additional computed parameters**, which may be useful for analysis.
+///
+/// \note The parameters are saved to `../post/parameters.dat`. Ensure that the `post/` directory exists, 
+///       or the function may fail to write the file.
+///
+/// \warning If the file cannot be openedx, an error message is printed, and no data is saved.
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+void hips::saveAllParameters() {
+    std::string filepath = "../post/parameters.dat";  ///< Output file path for simulation parameters
+    std::ofstream file(filepath);
+
+    if (!file) {
+        std::cerr << "Error: Could not open " << filepath << " for writing!\n";
+        return;
+    }
+
+    // Write user-defined input parameters
+    file << "nLevels " << nLevels << "\n";            ///< Number of hierarchical levels in the HiPS model
+    file << "domainLength " << domainLength << "\n";  ///< Length of the computational domain
+    file << "tau0 " << tau0 << "\n";                  ///< Reference eddy turnover time
+    file << "C_param " << C_param << "\n";            ///< Model constant controlling turbulence behavior
+    file << "forceTurb " << forceTurb << "\n";        ///< Flag for forced turbulence (1 = enabled, 0 = disabled)
+    file << "nVar " << nVar << "\n";                  ///< Number of variables tracked in the simulation
+    file << "performReaction " << performReaction << "\n";  ///< Flag indicating whether chemical reactions are simulated
+    file << "realization " << realization << "\n";    ///< Current simulation realization (for multiple runs)
+
+    // Write additional simulation parameters (not from constructor)
+    if (!varName.empty()) {
+        file << "varName ";
+        for (const std::string &name : varName) {
+            file << name << " ";  ///< Separate variable names by spaces
+        }
+        file << "\n";
+    } else {
+        file << "varName (undefined)\n";
+    }
+
+    // Additional parameters (commented for now, but can be included if needed)
+    // file << "eddyRate_inertial " << eddyRate_inertial << "\n";  ///< Eddy dissipation rate in inertial subrange
+    // file << "Re " << Re << "\n";  ///< Reynolds number of the simulation
+    // file << "time " << time << "\n";  ///< Current simulation time
+    
+    file.close();
+    std::cout << " All parameters saved in: " << filepath << std::endl;
+}
+/////////////////////////////////////////////////////////////////////////////
