@@ -90,7 +90,7 @@ private:
 public:
 
     void set_tree(int nLevels_, double domainLength_, double tau0_, std::vector<double> &ScHips_);  // setting the HiPS tree based on the number of levels
-    void set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_ = "1");
+    void set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_ = "rounding");
    
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN);      // passing all variables to vector of pointer 
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN,

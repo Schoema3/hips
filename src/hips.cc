@@ -269,10 +269,10 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
 ///
 /// \param Re_              Reynolds number, which determines the original level of the tree.
 /// \param approach_        Method for setting the number of levels based on the Reynolds number:
-///                         - "1": Rounds to the closest level to \f$i_s^*\f$ for micromixing.
-///                         - "2": Uses a probability-based solution.
-///                         - "3": Performs micromixing at level \f$i\f$ with \f$\tau_s^*\f$.
-///                         - "4": Dynamically adjusts the \f$A\f$ value.
+///                         - "rounding": Rounds to the closest level to \f$i_s^*\f$ for micromixing.
+///                         - "probability": Uses a probability-based solution.
+///                         - "micromixing": Performs micromixing at level \f$i\f$ with \f$\tau_s^*\f$.
+///                         - "dynamic_A": Dynamically adjusts the \f$A\f$ value.
 /// \param domainLength_    Length scale of the domain.
 /// \param tau0_            Time scale of the domain.
 /// \param ScHips_          Vector of Schmidt numbers for the HiPS simulation.
@@ -293,22 +293,22 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
 
     double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);  // Calculate the original level
 
-    if (approach == "1") {
+    if (approach == "rounding") {
         int lowerLevel = round(originalLevel);                   // Round the original level to the nearest integer
         nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
     } 
-    else if (approach == "2") {
+    else if (approach == "probability") {
         int lowerLevel = ceil(originalLevel);                    // Ceil the original level to the nearest integer
         int upperLevel = lowerLevel - 1;
         Prob = abs((log(originalLevel) - log(lowerLevel)) / (log(upperLevel) - log(lowerLevel)));  // Calculate the probability 
         nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
     }  
-    else if (approach == "3") {
+    else if (approach == "micromixing") {
         int lowerLevel = ceil(originalLevel);                    // Ceil the original level to the nearest integer
         lStar = std::pow(Re, -3.0 / 4);                          // Calculate lStar based on Re
         nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
     } 
-    else if (approach == "4") {
+    else if (approach == "dynamic_A") {
         int closestLevel = round(originalLevel);                 // Round the original level to the nearest integer
         Anew = exp(-log(Re) / ((4.0 / 3.0) * closestLevel));     // Calculate the new value of parameter A
         nL = closestLevel + 3;                                   // Set the number of levels for the binary tree structure
@@ -878,7 +878,7 @@ void hips::advanceHips(const int iLevel, const int iTree) {
         // Combined condition check with approach condition
         if ((iLevel >= i_plus[k]) || 
             (iLevel == i_plus[k] - 1 && rand.getRand() <= i_plus[k] - i_batchelor[k]) || 
-            (approach == "2" && iLevel == i_plus[k] - 1 && rand.getRand() <= Prob)) {
+            (approach == "probability" && iLevel == i_plus[k] - 1 && rand.getRand() <= Prob)) {
                 if (!rxnDone && performReaction) {
                     reactParcels_LevelTree(iLevel, iTree);
                     rxnDone = true;
