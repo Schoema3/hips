@@ -35,79 +35,34 @@
 
 using namespace std;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Constructor for initializing parameters to create the HiPS tree.
-///
-/// This constructor sets up the necessary parameters for creating the HiPS tree,
-/// which is a key structure for simulating turbulent mixing. It initializes
-/// parameters such as the eddy rate, turbulence forcing, and the number of variables
-/// used in the simulation. If chemical reactions are enabled, it also initializes
-/// the associated Cantera solution object.
-///
-/// \param C_param_         Controls the eddy rate in the simulation.
-/// \param forceTurb_       Indicates whether to enforce turbulence (non-zero = true).
-/// \param nVar_            The number of variables in the simulation.
-/// \param performReaction_ Flag indicating if chemical reactions are performed.
-/// \param seed             Seed for the random number generator (if negative, a random seed is used).
-/// @param cantSol          Shared pointer to the Cantera solution object, required if reactions are enabled.
-///
-/// \note If `REACTIONS_ENABLED` is defined, the default batch reactor used is `batchReactor_cvode`.
-///       To use `batchReactor_cantera`, modify the code to uncomment the corresponding line.
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-hips::hips(double C_param_, 
-           int forceTurb_,
-           int nVar_,
-           bool performReaction_,
-#ifdef REACTIONS_ENABLED
-           shared_ptr<Cantera::Solution> cantSol,
-#endif
-           int seed) : 
-    C_param(C_param_), 
-    forceTurb(forceTurb_),       
-    nVar(nVar_),                       
-    LrandSet(true),              
-    rand(seed),
-    performReaction(performReaction_) {
-
-#ifdef REACTIONS_ENABLED
-    // Initialize Cantera thermo phase and species count.
-    gas = cantSol->thermo(); 
-    nsp = gas->nSpecies();
-
-    // Set up the default batch reactor (cvode).
-    bRxr = make_unique<batchReactor_cvode>(cantSol);
-
-    // Uncomment the following line to switch to batchReactor_cantera.
-    // bRxr = make_unique<batchReactor_cantera>(cantSol);
-#endif
-
-    // Resize vectors to accommodate the number of variables.
-    varData.resize(nVar);
-    varName.resize(nVar);        
-}
-
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Alternate constructor for initializing the HiPS tree with additional parameters.
+/// \brief Constructor for initializing the full HiPS tree at the time of object creation.
 ///
-/// This constructor is designed for scenarios where detailed configuration is required.
-/// It initializes all necessary parameters, including length scale, time scale, and 
-/// turbulence properties, in addition to the standard HiPS parameters.
+/// This constructor is intended for simulations where the domain structure and turbulence 
+/// properties are fixed throughout the run (e.g., standalone mixing or reacting cases).
+/// The HiPS tree is initialized immediately using the provided parameters, and the 
+/// structure remains constant throughout the simulation.
 ///
-/// \param nLevels_         Number of hierarchical levels in the HiPS tree.
-/// \param domainLength_    Length of the domain being modeled.
-/// \param tau0_            Time scale for the smallest eddy.
-/// \param C_param_         Controls the eddy rate in the simulation.
-/// \param forceTurb_       Indicates whether to enforce turbulence (non-zero = true).
-/// \param nVar_            The number of variables in the simulation.
-/// \param ScHips_          Vector of Schmidt numbers for each variable.
-/// \param performReaction_ Flag indicating if chemical reactions are performed.
-/// \param seed             Seed for the random number generator (if negative, a random seed is used).
-/// \param cantSol          Shared pointer to the Cantera solution object, required if reactions are enabled.
+/// \param nLevels_         Number of levels in the HiPS binary tree (can be adjusted for high Sc).
+/// \param domainLength_    Domain length for defining spatial scales.
+/// \param tau0_            Characteristic time scale for the smallest eddy.
+/// \param C_param_         Eddy coefficient controlling mixing rate.
+/// \param forceTurb_       Flag to enforce turbulence activation.
+/// \param nVar_            Number of transported variables.
+/// \param ScHips_          Vector of Schmidt numbers (one per variable).
+/// \param performReaction_ Enables chemical reactions if set to true.
+/// \param cantSol          Cantera solution object (required when REACTIONS_ENABLED).
+/// \param seed             Random seed (negative for random initialization).
+/// \param realization_     Realization index for ensemble or parallel runs.
 ///
-/// \note If `REACTIONS_ENABLED` is defined, the Cantera thermo phase and species count 
-///       are initialized, along with the default batch reactor (`batchReactor_cvode`).
+/// \note This constructor calls `set_tree(nLevels, domainLength, tau0, ScHips)` internally 
+///       to fully build the tree at initialization time. This setup is optimal for cases 
+///       where tree reconfiguration is not needed during runtime.
+///
+/// \note If `REACTIONS_ENABLED` is defined, the default chemical integrator is `batchReactor_cvode`.
+///       To use `batchReactor_cantera` instead, uncomment the corresponding line in the constructor code.
+///
+/// \see hips::set_tree() for the internal tree setup logic.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 hips::hips(int nLevels_, 
@@ -153,23 +108,75 @@ hips::hips(int nLevels_,
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Creates a tree structure based on the specified parameters.
+/// \brief Constructor for initializing a HiPS object without building the tree immediately.
 ///
-/// This function sets up the HiPS tree structure according to the provided parameters:
-/// the number of levels, domain length, time scale, and Schmidt numbers. It adjusts the 
-/// number of levels dynamically if necessary, based on the maximum Schmidt number, and 
-/// initializes various internal parameters used in the HiPS simulation.
+/// This constructor is designed for simulations where the HiPS tree must be configured dynamically, 
+/// such as grid-based simulations with cell-specific turbulence properties. The tree can be created 
+/// or updated later using one of the `set_tree` functions.
 ///
-/// \param nLevels_      Number of levels in the tree. If set to -1, the function uses the value of `nL`.
-/// \param domainLength_ Length of the simulation domain.
-/// \param tau0_         Time scale for the smallest eddy.
-/// \param ScHips_       Vector of Schmidt numbers for all variables.
+/// \param nVar_            Number of transported variables.
+/// \param performReaction_ Enables chemical reactions if set to true.
+/// \param cantSol          Cantera solution object (required when REACTIONS_ENABLED).
+/// \param seed             Random seed (negative for random initialization).
+/// \param realization_     Realization index for ensemble or parallel runs.
 ///
-/// \note This function dynamically adjusts the levels in the tree and ensures that 
-///       internal variables like `iEta` and `nLevels` are correctly initialized.
+/// \note This constructor does not call any `set_tree()` function. The user is responsible 
+///       for building the tree explicitly by calling either version of `set_tree(...)`.
 ///
-/// \warning Ensure that the provided parameters, particularly `nLevels_` and `ScHips_`,
-///          align with the physical requirements of the simulation.
+/// \note See the full constructor for chemical integrator behavior under `REACTIONS_ENABLED`.
+///
+/// \see hips::set_tree() for deferred tree construction.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+hips::hips(double C_param_, 
+           int forceTurb_,
+           int nVar_,
+           bool performReaction_,
+#ifdef REACTIONS_ENABLED
+           shared_ptr<Cantera::Solution> cantSol,
+#endif
+           int seed) : 
+    C_param(C_param_), 
+    forceTurb(forceTurb_),       
+    nVar(nVar_),                       
+    LrandSet(true),              
+    rand(seed),
+    performReaction(performReaction_) {
+
+#ifdef REACTIONS_ENABLED
+    // Initialize Cantera thermo phase and species count.
+    gas = cantSol->thermo(); 
+    nsp = gas->nSpecies();
+
+    // Set up the default batch reactor (cvode).
+    bRxr = make_unique<batchReactor_cvode>(cantSol);
+
+    // Uncomment the following line to switch to batchReactor_cantera.
+    // bRxr = make_unique<batchReactor_cantera>(cantSol);
+#endif
+
+    // Resize vectors to accommodate the number of variables.
+    varData.resize(nVar);
+    varName.resize(nVar);        
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Sets up the HiPS tree using explicitly specified tree parameters.
+///
+/// This method builds the binary HiPS tree using a user-defined number of levels and physical parameters.
+/// It also automatically adjusts the number of levels to account for high Schmidt numbers, ensuring that
+/// micromixing is properly resolved.
+///
+/// \param nLevels_         Base number of levels in the HiPS tree.
+/// \param domainLength_    Domain size for determining eddy length scales.
+/// \param tau0_            Time scale of the smallest eddy (Kolmogorov scale).
+/// \param ScHips_          Vector of Schmidt numbers (one per variable).
+///
+/// \note This function is used by the full constructor and can also be called manually after 
+///       using the dynamic constructor.
+///
+/// \warning The number of levels may be increased automatically for large Schmidt numbers 
+///          to ensure accurate scalar mixing across scales.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<double> &ScHips_){    
@@ -259,30 +266,30 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
         pLoc[i] = i;
 } 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Creates a tree structure based on the specified Reynolds number and approach.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Dynamically builds the HiPS tree based on Reynolds number and a selected strategy.
 ///
-/// This function configures the HiPS tree structure using the provided Reynolds number (Re), 
-/// domain length, time scale, and Schmidt numbers. It allows for multiple approaches to 
-/// determine the number of levels in the tree, as outlined in the related paper. These 
-/// approaches define different strategies for hierarchical parcel swapping and micromixing.
+/// This method configures the HiPS tree using a continuous Reynolds number and one of several 
+/// initialization strategies. It is intended for simulations where local turbulence conditions 
+/// change over time or space, requiring the tree to be updated dynamically.
 ///
-/// \param Re_              Reynolds number, which determines the original level of the tree.
-/// \param approach_        Method for setting the number of levels based on the Reynolds number:
-///                         - "rounding": Rounds to the closest level to \f$i_s^*\f$ for micromixing.
-///                         - "probability": Uses a probability-based solution.
-///                         - "micromixing": Performs micromixing at level \f$i\f$ with \f$\tau_s^*\f$.
-///                         - "dynamic_A": Dynamically adjusts the \f$A\f$ value.
-/// \param domainLength_    Length scale of the domain.
-/// \param tau0_            Time scale of the domain.
-/// \param ScHips_          Vector of Schmidt numbers for the HiPS simulation.
+/// \param Re_              Reynolds number used to determine base tree level.
+/// \param domainLength_    Domain length for spatial scaling.
+/// \param tau0_            Base time scale for the largest eddy.
+/// \param ScHips_          Vector of Schmidt numbers (one per variable).
+/// \param approach_        Strategy to convert continuous Re to tree level:
+///                         - "rounding"     → Round to nearest discrete level
+///                         - "probability"  → Use probabilistic interpolation between levels
+///                         - "micromixing"  → Use fixed level with adjusted mixing rate
+///                         - "dynamic_A"    → Adjust geometric scale factor A to fit Re
 ///
-/// \note This function dynamically adjusts the number of levels based on the Reynolds number and 
-///       the selected approach. It also initializes various parameters required for the HiPS simulation.
+/// \note This method is ideal for Lagrangian simulations using grid cells with different Re values.
+///       It supports runtime reconfiguration of the tree without reinitializing the hips object.
 ///
-/// \warning Ensure that the provided approach is valid and aligns with the simulation goals to 
-///          avoid inconsistencies or unexpected behavior.
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \warning Ensure consistent `approach_` handling across the simulation to avoid inconsistencies.
+///
+/// \see hips::set_tree(int, ...) for direct-level setup.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_) {
     Re = Re_;
