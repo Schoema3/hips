@@ -547,8 +547,8 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
                                                                      std::vector<double> &weight, 
                                                                      const std::vector<double> &density) {
     
-    std::vector<double> xc = setGridCfd(weight);
-    std::vector<double> xh = setGridHips(nparcels);
+    xc = setGridCfd(weight);
+    xh = setGridHips(nparcels);
 
     // Initialize variables
     int nc = xc.size() - 1;
@@ -1128,28 +1128,31 @@ void hips::forceProfile() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
-/// \brief Writes simulation data to a file with a specified index and output time.
+/// \brief Writes simulation data to a file for a specific realization, time, and file index.
 ///
-/// This function saves the current state of simulation data to a file named sequentially 
+/// This function saves the current state of simulation data to a file, organized by 
+/// realization and time step. The output is stored in a subdirectory corresponding to 
+/// the realization index (e.g., `rlz_00000`, `rlz_00001`), and the file is named sequentially 
 /// (e.g., `Data_00001.dat`, `Data_00002.dat`) to maintain an ordered record of outputs. 
-/// The simulation time associated with the data is also written into the file for reference.
+/// The simulation time is also written into the file for reference.
 ///
 /// ### Key Operations:
-/// 1. Checks if the "data" directory exists. If not, attempts to create it.
-/// 2. Opens the file for writing using the sequential index (\p ifile) to construct the filename.
-/// 3. Writes simulation variables (e.g., temperature, other quantities) to the file in a 
+/// 1. Creates a subdirectory named `rlz_XXXXX` based on the realization index.
+/// 2. Constructs the output filename using the sequential file index.
+/// 3. Writes the simulation variables (e.g., temperature, species mass fractions) in 
 ///    scientific format with high precision.
 ///
-/// \param ifile       Sequential index for naming the output file.
-/// \param outputTime  Simulation time associated with the data, written into the file content.
+/// \param real        Realization index used to name the subdirectory (`rlz_XXXXX`).
+/// \param ifile       Sequential index for naming the output file within the realization.
+/// \param outputTime  Simulation time associated with the data, included in the file header.
 ///
 /// \note 
-/// - The function ensures that the output directory ("data") is created if it does not exist.
-/// - It writes data with high precision to maintain accuracy in numerical simulations.
+/// - The function ensures the output directory for the specified realization is created if it does not exist.
+/// - It writes all data with high precision for accurate post-processing.
 ///
 /// \warning 
-/// - If the function fails to create the directory or open the file for writing, it may throw 
-///   an error or log a warning. Ensure sufficient permissions and disk space are available.
+/// - If the function fails to create the directory or open the output file, it may throw 
+///   an error or silently fail. Ensure file system permissions and disk space are sufficient.
 ///////////////////////////////////////////////////////////////////////////////////
 
 void hips::writeData(int real, const int ifile, const double outputTime) {
@@ -1177,24 +1180,7 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
     // Write metadata (header information)
     ofile << "# time = " << outputTime << "\n";
     ofile << "# Grid Points = " << nparcels << "\n";
-    ofile << "# nLevels = " << nLevels << "\n";
-    ofile << "# domainLength = " << domainLength << "\n";
-    ofile << "# tau0 = " << tau0 << "\n";
-    ofile << "# C_param = " << C_param << "\n";
-    ofile << "# forceTurb = " << forceTurb << "\n";
-    ofile << "# nVar = " << nVar << "\n";
-    ofile << "# performReaction = " << (performReaction ? "true" : "false") << "\n";
-#ifdef REACTIONS_ENABLED
-    ofile << "# nSpecies = " << nsp << "\n";
-#endif
-
-    // Include ScHips (vector of Schmidt numbers)
-    ofile << "# ScHips = ";
-    for (const auto& sc : ScHips) {
-        ofile << sc << " ";
-    }
-    ofile << "\n";
-
+    
     // Write column names
     for (const auto& varN : varName)
         ofile << setw(14) << "# " <<varN;
