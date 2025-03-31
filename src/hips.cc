@@ -650,31 +650,41 @@ std::vector<double> hips::setGridHips(int N){
     return xh;                                                  // Return the generated grid
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// \brief Simulates the interaction of parcels within a turbulent flow using the HiPS solver.
+///////////////////////////////////////////////////////////////////////////////////
+/// \brief Runs the HiPS simulation, advancing the solution using eddy events.
 ///
-/// This function models the HiPS process by iterating over eddy events until the specified simulation
-/// time is reached. It performs the following key steps:
-/// - Samples the time of the next eddy event (\f$t_{ee}\f$).
-/// - Selects and swaps subtrees in the HiPS structure.
-/// - Handles reactions and micromixing at the parcel level, if enabled.
-/// - Optionally writes data at regular intervals based on eddy events or time.
+/// This function performs the core HiPS loop: sampling eddy events, performing 
+/// subtree swaps, advancing parcels, and optionally triggering reactions.
+/// It runs until the specified simulation time (`tRun`) is reached and writes 
+/// data periodically based on either eddy count or elapsed simulation time.
 ///
-/// The output mode is determined by user selection:
-/// - **Eddy-based writing** occurs every `outputIntervalEddy` events if set via `setOutputIntervalEddy()`.
-/// - **Time-based writing** occurs every `outputIntervalTime` seconds if set via `setOutputIntervalTime()`.
-/// - **Default behavior:** If neither function is called, data is written every `1000` eddy events.
+/// ### Key operations:
+/// - Samples the next eddy event time (`dtEE`)
+/// - Selects and swaps subtrees at a given level
+/// - Applies micromixing and reactions (if enabled)
+/// - Writes output data either:
+///     - Every `outputIntervalEddy` eddy events (if enabled), or
+///     - Every `outputIntervalTime` seconds (if enabled)
+/// - At the end of the simulation, calls `saveAllParameters()` to store 
+///   input and configuration data in `../post/parameters.dat`.
 ///
-/// \param tRun                Total simulation run time (in seconds).
-/// \param shouldWriteData     Flag indicating whether to write simulation data periodically. Default is `fa
+/// \param tRun              Total simulation run time (in seconds).
+/// \param shouldWriteData   Flag to enable/disable periodic data writing.
 ///
-/// \note Users can modify the writing intervals using:
-///       - `setOutputIntervalEddy(int interval)` to enable eddy-based writing.
-///       - `setOutputIntervalTime(double interval)` to enable time-based writing.
-///       - If neither function is called, the default interval is `1000` eddy events.
+/// \note To control output frequency, use:
+///       - `setOutputIntervalEddy(int interval)`
+///       - `setOutputIntervalTime(double interval)`
+///       - If neither is called, the default behavior is writing every 1000 eddy events.
 ///
-/// \warning Long simulation run times may result in significant data output. Adjust the writing interval
-///          or disable data writing (`shouldWriteData = false`) to manage disk usage effectively.
+/// \note Output files are saved using `writeData(realization, ...)` and include the realization index.
+///
+/// \note At the end of the run, `saveAllParameters()` is automatically called 
+///       to document simulation settings.
+///
+/// \warning Long simulations may generate many output files. Adjust output intervals or 
+///          disable writing (`shouldWriteData = false`) to manage storage needs.
+///
+/// \see hips::writeData(), hips::saveAllParameters()
 ///////////////////////////////////////////////////////////////////////////////////
 
 void hips::calculateSolution(const double tRun, bool shouldWriteData) {
@@ -732,7 +742,6 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
         reactParcels_LevelTree(iLevel, iTree);        // React all parcels up to end time
     saveAllParameters();
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Samples stochastic eddy events on the HiPS tree, determining the time increment and tree level.
@@ -1441,14 +1450,12 @@ void hips::setOutputIntervalEddy(int interval) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Saves all user-defined and computed simulation parameters to a file.
+/// \brief Saves all user-defined to a file.
 ///
-/// This function writes both input parameters (provided by the user) and computed parameters 
-/// to an output file (`parameters.dat`) for post-processing. The file is stored in the `post/` directory.
+/// This function writes both input parameters (provided by the user) for post-processing. The file is stored in the `post/` directory.
 ///
 /// The file includes:
 /// - **User-defined input parameters**, such as grid levels, domain size, turbulence settings, and variable names.
-/// - **Additional computed parameters**, which may be useful for analysis.
 ///
 /// \note The parameters are saved to `../post/parameters.dat`. Ensure that the `post/` directory exists, 
 ///       or the function may fail to write the file.
@@ -1485,13 +1492,9 @@ void hips::saveAllParameters() {
     } else {
         file << "varName (undefined)\n";
     }
-
-    // Additional parameters (commented for now, but can be included if needed)
-    // file << "eddyRate_inertial " << eddyRate_inertial << "\n";  ///< Eddy dissipation rate in inertial subrange
-    // file << "Re " << Re << "\n";  ///< Reynolds number of the simulation
-    // file << "time " << time << "\n";  ///< Current simulation time
     
     file.close();
     std::cout << " All parameters saved in: " << filepath << std::endl;
 }
+
 /////////////////////////////////////////////////////////////////////////////
