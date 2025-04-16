@@ -498,14 +498,18 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
             if(xc[j] <= xh[i + 1]) {
                 double d1 = xc[j] - xc[j - 1];
                 double d2 = xc[j] - xh[i];
-                double d = std::min(d1, d2);
+                // calculation of shortest distance
+                // handling if distance is zero but substarction gives comutational error
+                double d  = std::min(d1, d2) < 1E-15 ? 0 : std::min(d1, d2);
 
                 vh[i] += vcfd[j - 1] * d;
             } 
             else {
                 double d1 = xh[i + 1] - xc[j - 1];
                 double d2 = xh[i + 1] - xh[i];
-                double d = std::min(d1, d2);
+                // calculation of shortest distance
+                // handling if distance is zero but substarction gives comutational error
+                double d  = std::min(d1, d2) < 1E-15 ? 0 : std::min(d1, d2);
 
                 vh[i] += vcfd[j - 1] * d;
                 jprev = j - 1;
@@ -1255,13 +1259,17 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
             if (xh[j] <= xc[i + 1]) {
                 double d1 = xh[j] - xh[j - 1];
                 double d2 = xh[j] - xc[i];
-                double d = std::min(d1, d2);
+                // calculation of shortest distance
+                // handling if distance is zero but substarction gives comutational error
+                double d  = std::min(d1, d2) < 1E-15 ? 0 : std::min(d1, d2);
 
                 vc[i] += vh[j - 1] * d;
             } else {
                 double d1 = xc[i + 1] - xh[j - 1];
                 double d2 = xc[i + 1] - xc[i];
-                double d = std::min(d1, d2);
+                // calculation of shortest distance
+                // handling if distance is zero but substarction gives comutational error
+                double d  = std::min(d1, d2) < 1E-15 ? 0 : std::min(d1, d2);
 
                 vc[i] += vh[j - 1] * d;
 
