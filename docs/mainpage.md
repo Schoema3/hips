@@ -47,30 +47,83 @@ The following project-specific CMake variables can be set by the user:
 | `HIPSLIB_BUILD_DOCS`       | `OFF`                         | Build HiPS documentation with Doxygen                                       |
 
 The `REACTIONS_ENABLED` flag determines if HiPS supports chemical reactions. If set to `ON`, additional libraries like Cantera or Sundials are required. For simple mixing without reactions, set this flag to `OFF`.
-
-
 # Using HiPS
 
-HiPS consists of three main object classes: `hips`, `batchReactor_cvode`, and `batchReactor_cantera`. These classes act as the computational engine for advancing the reaction system and solving complex differential equations.
+This section outlines how to run simulations using the HiPS library, assuming prior familiarity with the model as described in the Overview and associated publication.
 
-## Example Workflow
+HiPS can be used in two primary modes:
+- As a standalone model for scalar mixing and reacting flows,
+- As a sub-grid mixing model embedded in a CFD or PDF solver with tree updates at each timestep.
 
-To use HiPS in C++, include the `hips.h` header file. Interaction with HiPS is primarily done through two constructors:
+## Basic Workflow
 
-1. [hips(int nLevels, double domainLength, double tau0, int nVar, int forceTurb, std::vector<double>& ScHips, bool performReaction, std::shared_ptr<Cantera::Solution> cantSol, int seed)](@ref hips(int, double, double, int, int, std::vector<double>&, bool, std::shared_ptr<Cantera::Solution>, int)) for standalone simulations with full parameter initialization.
-2. [hips(int nVar, int forceTurb, std::vector<double>& ScHips, bool performReaction, std::shared_ptr<Cantera::Solution> cantSol, int seed)](@ref hips(int, int, std::vector<double>&, bool, std::shared_ptr<Cantera::Solution>, int)) for use as a sub-grid model in CFD simulations, requiring frequent tree structure updates.
+To use HiPS in a simulation:
 
-To re-initialize the HiPS tree, use the [set_tree(int nLevels, double domainLength, double tau0, std::vector<double>& ScHips)](@ref set_tree(int, double, double, std::vector<double>&)) function. After initialization, pass variable values to the tree with [`set_varData`](@ref set_varData), run simulations with [`calculateSolution`](@ref calculateSolution), and retrieve results with [`get_varData`](@ref get_varData).
+1. **Initialize** a `hips` object with the required physical parameters.
+2. If needed, **reset the tree** using `set_tree()` for each time step (typical in CFD coupling).
+3. **Assign scalar values** using `set_varData()`.
+4. **Advance the simulation** using `calculateSolution(tRun, shouldWriteData)`.
+5. **Extract updated scalar values** with `get_varData()`.
 
-## Implementation Guidelines
+## Constructors
 
-To implement a HiPS simulation:
+Two constructor options are available:
 
-1. Compile the code, ensuring all necessary libraries and dependencies are correctly linked.
-2. Run the compiled binary to start the simulation with the specified parameters.
-3. Monitor the simulation and analyze the output.
+### Static Tree Mode
 
-Researchers can adjust parameters based on specific simulation needs.
+```cpp
+hips(
+  int nLevels,
+  double domainLength,
+  double tau0,
+  int nVar,
+  int forceTurb,
+  std::vector<double>& ScHips,
+  bool performReaction,
+  std::shared_ptr<Cantera::Solution> cantSol,
+  int seed
+);
+```
+
+Use this for standalone simulations when the tree structure is fixed.
+
+### CFD-Compatible Mode
+
+```cpp
+hips(
+  int nVar,
+  int forceTurb,
+  std::vector<double>& ScHips,
+  bool performReaction,
+  std::shared_ptr<Cantera::Solution> cantSol,
+  int seed
+);
+```
+
+Pair this with a per-time-step call to:
+
+```cpp
+set_tree(int nLevels, double domainLength, double tau0, std::vector<double>& ScHips);
+```
+
+## Main Functions
+
+| Function | Purpose |
+|----------|---------|
+| `set_varData(...)` | Provide scalar values (e.g., species, temperature) to each parcel. |
+| `calculateSolution(...)` | Perform mixing and optional reaction from current time to `tRun`. |
+| `get_varData()` | Retrieve updated parcel values. |
+
+## Output and Data Access
+
+HiPS can write output internally during the simulation, controlled by:
+
+- `setOutputIntervalEddy(int interval)`: every N eddy events.
+- `setOutputIntervalTime(double interval)`: every Δt seconds.
+
+By default, output is written every 1000 eddy events. Output is only written if `shouldWriteData = true` is passed to `calculateSolution()`.
+
+`get_varData()` returns the scalar values of all parcels after mixing and reaction. This is typically called at the end of each time step to extract results for post-processing or for coupling with an external solver.
 
 ## Examples
 
