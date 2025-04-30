@@ -94,7 +94,7 @@ hips::hips(int nLevels_,
     gas = cantSol->thermo(); 
     nsp = gas->nSpecies();
 
-    bRxr = make_unique<batchReactor_cvode>(cantSol);                                // By default, use batchReactor_cvode
+    bRxr = make_shared<batchReactor_cvode>(cantSol);                                // By default, use batchReactor_cvode
 
     // Uncomment the following line to switch to batchReactor_cantera
     // bRxr = make_unique<batchReactor_cantera>(cantSol);

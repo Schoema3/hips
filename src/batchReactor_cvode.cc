@@ -35,7 +35,7 @@ batchReactor_cvode::batchReactor_cvode(std::shared_ptr<Cantera::Solution> cantSo
     double rtol = 1E-4;
 
     // Initialize the integrator with CVODE
-    integrator = std::make_unique<integrator_cvode>(rhsf_cvode, this, nvar, rtol, atol);
+    integrator = std::make_shared<integrator_cvode>(rhsf_cvode, this, nvar, rtol, atol);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
