@@ -73,7 +73,7 @@ RUN git clone https://github.com/Cantera/cantera.git -b 3.0 --depth=1 \
 
 ############## Build hips
 
-RUN git clone https://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:x-oauth-basic@github.com/BYUignite/hips.git --depth=1 \
+RUN git clone https://github.com/BYUignite/hips.git --depth=1 \
 &&  cd hips \
 &&  mkdir build \
 &&  cd build \
