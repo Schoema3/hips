@@ -7,7 +7,8 @@
 
 # Overview
 
-[HiPS] \cite Kerstein_2013 \cite Kerstein_2014 \cite Kerstein_2021 is an open-source C++ library that functions both as a standalone mixing model and as a sub-grid model for Transported Probability Density Functions.
+
+[HiPS](https://github.com/BYUignite/hips.git) \cite Kerstein_2013 \cite Kerstein_2014 \cite Kerstein_2021  is an open-source C++ library for stochastic scalar mixing. It can be used both as a standalone mixing model and as a subgrid mixing model in turbulent flow simulations. HiPS is designed to support applications in the transported PDF (TPDF) framework, as well as other particle-based or hybrid CFD methods.
 
 # Dependencies and Installation
 
