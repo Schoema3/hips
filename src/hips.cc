@@ -135,13 +135,15 @@ hips::hips(double C_param_,
 #ifdef REACTIONS_ENABLED
            shared_ptr<Cantera::Solution> cantSol,
 #endif
-           int seed) : 
+           int seed,
+           int realization_): 
     C_param(C_param_), 
     forceTurb(forceTurb_),       
     nVar(nVar_),                       
     LrandSet(true),              
     rand(seed),
-    performReaction(performReaction_) {
+    performReaction(performReaction_),
+    realization(realization_){
 
 #ifdef REACTIONS_ENABLED
     // Initialize Cantera thermo phase and species count.

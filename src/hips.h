@@ -145,7 +145,8 @@ public:
 #ifdef REACTIONS_ENABLED
          std::shared_ptr<Cantera::Solution> cantSol = nullptr,
 #endif
-         int seed = 10);
+         int seed = 10,
+         int realization_ = 1);
 
     hips(int nLevels_,
          double domainLength_,
