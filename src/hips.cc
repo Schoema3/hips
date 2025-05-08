@@ -546,7 +546,6 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 ///
 /// \warning Discrepancies in the size of the input vectors (`vcfd`, `weight`, and `density`) may lead 
 ///          to undefined behavior or inaccurate projections. Verify the inputs before calling this function.
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector<double> &vcfd, 
@@ -1195,6 +1194,7 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
     // Write metadata (header information)
     ofile << "# time = " << outputTime << "\n";
     ofile << "# Grid Points = " << nparcels << "\n";
+    ofile << "# Temp" << setw(14); 
     
     // Write column names
     for (const auto& varN : varName)
@@ -1206,6 +1206,7 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
     // Write data
     for (int i = 0; i < nparcels; i++) {
         ofile << endl; 
+        ofile << setw(19) << Temp[pLoc[i]];  
         for (int k = 0; k < nVar; k++)
             ofile << setw(19) << (*varData[k])[pLoc[i]];
     }
