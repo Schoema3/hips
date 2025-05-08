@@ -1,25 +1,42 @@
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
 /// \file ex_1.cc
-/// \brief HiPS simulation example for scalar mixing in turbulent flow.
-/// Initializes fluid parcels with distinct scalar values and observes mixing influenced by Schmidt numbers.
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Example demonstrating scalar mixing dynamics using HiPS.
+/// 
+/// This example illustrates the basic behavior of scalar mixing dynamics. 
+/// Fluid parcels are initially divided into two groups (0 and 1) and then 
+/// mix over time to form a uniform scalar field. The example uses the HiPS 
+/// model to demonstrate how Schmidt numbers affect mixing dynamics.
+/// 
+/// ## Compilation:
+/// ```bash
+/// cd build
+/// cmake ..
+/// make
+/// sudo make install
+/// ```
+/// 
+/// ## Execution:
+/// ```bash
+/// cd ../run
+/// ./ex_1.x
+/// ```
+/// 
+/// ## Output:
+/// The simulation produces scalar concentration profiles stored in the output file.
 
+///////////////////////////////////////////////////////////////////////////////////////
 #include <iostream>
 #include <vector>
 #include "hips.h"
 
 using namespace std;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Initializes fluid parcel scalar values (mixing fractions) as 0 and 1.
-/// \param numParcels Total number of fluid parcels.
-/// \return Vector of initial scalar values for each parcel.
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Initializes mixing fractions for fluid parcels
+// - numParcels: Number of parcels in the simulation
+// - Returns a vector with initialized mixing fractions (0 or 1)
 
 vector<double> initializeMixingFractions(int numParcels) {
     vector<double> mixingFractions(numParcels);
-    
     for (int i = 0; i < numParcels; i++) {
         // Assign 0.0 to the first half and 1.0 to the second half
         mixingFractions[i] = (i < numParcels / 2) ? 0.0 : 1.0;
@@ -27,39 +44,36 @@ vector<double> initializeMixingFractions(int numParcels) {
     return mixingFractions;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Runs the HiPS simulation for scalar mixing dynamics.
-/// Sets up HiPS tree parameters, initializes scalar values, and runs the simulation.
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+///////////////////////////////////////////////////////////////////////////////////////
 int main() {
     // HiPS tree and simulation parameters
-    int nLevels = 9;                           // Hierarchical levels
-    double domainLength = 1.0;                 // Simulation domain length
-    double tau0 = 1.0;                         // Initial timescale for largest eddies
+    int nLevels = 9;                           // Number of hierarchical levels
+    double domainLength = 1.0;                  // Simulation domain length
+    double tau0 = 1.0;                         // Initial time scale for the largest eddies
     double C_param = 0.5;                      // Eddy turnover rate multiplier
     double tRun = 300.0;                       // Total simulation time
-    int forceTurb = 2;                         // Forcing turbulent profile
-    vector<double> ScHips = {0.0625, 16.0};    // Schmidt numbers for scalars
+    int forceTurb = 2;                         // Forcing parameter to impose turbulent profile
+    vector<double> ScHips = {0.0625, 16.0};    // Schmidt numbers for low and high diffusivity
     int numVariables = 2;                      // Number of scalar fields
 
-    // Set up HiPS tree and parcel count
+    // Set up HiPS tree and calculate the number of parcels
     hips HiPS(nLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips, false);
-    int numParcels = HiPS.nparcels; 
+    int numParcels = HiPS.nparcels;
 
-    // Initialize mixing fractions for each scalar
+    // Initialize mixing fractions for each scalar variable
     vector<vector<double>> mixingFractions(numVariables);
-    vector<double> weights(numParcels, 1.0 / numParcels);
+    vector<double> weights(numParcels, 1.0 / numParcels);  // Uniform weights
 
     for (int i = 0; i < numVariables; ++i) {
+        // Initialize mixing fractions for variable i
         mixingFractions[i] = initializeMixingFractions(numParcels);
         HiPS.set_varData(mixingFractions[i], weights, "mixf_0" + to_string(i));
     }
 
-    //HiPS.setOutputIntervalEddy(5000);
-    HiPS.setOutputIntervalTime(100.0);
+    // Set output interval in terms of time
+    HiPS.setOutputIntervalTime(100.0);  // Save results every 100 seconds
 
-    // Run simulation to observe mixing dynamics
+    // Run the simulation and calculate mixing dynamics
     HiPS.calculateSolution(tRun, true);
 
     return 0;
