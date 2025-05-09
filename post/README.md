@@ -48,8 +48,7 @@ The simulation automatically generates the required data files and configuration
 * **`utils.py`**:
   Contains utility functions for:
 
-  * Reading parameters from a configuration file (`parameters.dat`) using the `read_parameters()` function.
-  * Computing the Probability Density Function (PDF) using the `compute_pdf()` function.
+    * Computing the Probability Density Function (PDF) using the `compute_pdf()` function.
 
 ---
 
