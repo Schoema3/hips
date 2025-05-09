@@ -73,9 +73,9 @@ hips::hips(int nLevels_,
            int nVar_,
            vector<double> &ScHips_,
            bool performReaction_,
-#ifdef REACTIONS_ENABLED
-           shared_ptr<Cantera::Solution> cantSol,
-#endif
+           #ifdef REACTIONS_ENABLED
+                shared_ptr<Cantera::Solution> cantSol,
+           #endif
            int seed,
            int realization_): 
     nLevels(nLevels_), 
@@ -90,7 +90,7 @@ hips::hips(int nLevels_,
     performReaction(performReaction_),
     realization(realization_){
 
-#ifdef REACTIONS_ENABLED
+    #ifdef REACTIONS_ENABLED
     gas = cantSol->thermo(); 
     nsp = gas->nSpecies();
 
@@ -98,7 +98,7 @@ hips::hips(int nLevels_,
 
     // Uncomment the following line to switch to batchReactor_cantera
     // bRxr = make_unique<batchReactor_cantera>(cantSol);
-#endif
+    #endif
 
     // Resize vectors to the number of variables
     varData.resize(nVar);
@@ -132,9 +132,9 @@ hips::hips(double C_param_,
            int forceTurb_,
            int nVar_,
            bool performReaction_,
-#ifdef REACTIONS_ENABLED
-           shared_ptr<Cantera::Solution> cantSol,
-#endif
+           #ifdef REACTIONS_ENABLED
+                shared_ptr<Cantera::Solution> cantSol,
+           #endif
            int seed,
            int realization_): 
     C_param(C_param_), 
@@ -145,17 +145,17 @@ hips::hips(double C_param_,
     performReaction(performReaction_),
     realization(realization_){
 
-#ifdef REACTIONS_ENABLED
+    #ifdef REACTIONS_ENABLED
     // Initialize Cantera thermo phase and species count.
     gas = cantSol->thermo(); 
     nsp = gas->nSpecies();
 
     // Set up the default batch reactor (cvode).
-    bRxr = make_unique<batchReactor_cvode>(cantSol);
+   // bRxr = make_shared<batchReactor_cvode>(cantSol);
 
     // Uncomment the following line to switch to batchReactor_cantera.
-    // bRxr = make_unique<batchReactor_cantera>(cantSol);
-#endif
+     bRxr = make_shared<batchReactor_cantera>(cantSol);
+    #endif
 
     // Resize vectors to accommodate the number of variables.
     varData.resize(nVar);
@@ -990,7 +990,7 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
         // Access enthalpy using its index
         h = (*varData[enthalpyIdx])[ime];
 
-#ifdef REACTIONS_ENABLED
+    #ifdef REACTIONS_ENABLED
 
           // Access species using their indices
         for (int k = 0; k < nsp; k++) {
@@ -1009,7 +1009,7 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
             (*varData[speciesIdx])[ime] = y[k];
         }
 
-#endif
+    #endif
         
     }
 }
@@ -1188,32 +1188,50 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
     ss2 >> s2;
 
     string fname = s1 + "/" + s2;
-
     ofstream ofile(fname.c_str());
+
+    // Check if file opened successfully
+    if (!ofile) {
+        cerr << "Error: Unable to open file " << fname << " for writing!" << endl;
+        return;
+    }
 
     // Write metadata (header information)
     ofile << "# time = " << outputTime << "\n";
     ofile << "# Grid Points = " << nparcels << "\n";
-    ofile << "# Temp" << setw(14); 
-    
-    // Write column names
-    for (const auto& varN : varName)
-        ofile << setw(14) << "# " <<varN;
+        
+    // Write column names (include temperature if reactions are enabled)
+    #ifdef REACTIONS_ENABLED
+        ofile << setw(19) << "# Temp";  // Include temperature column if reactions are enabled
+    #endif
 
+    for (const auto& varN : varName) {
+        ofile << setw(19) << "# " << varN;
+    }
+    ofile << endl;  // End of the header line
+
+    // Set scientific notation and precision
     ofile << scientific;
     ofile << setprecision(10);
 
     // Write data
     for (int i = 0; i < nparcels; i++) {
-        ofile << endl; 
-        ofile << setw(19) << Temp[pLoc[i]];  
-        for (int k = 0; k < nVar; k++)
+        // Write temperature first if reactions are enabled
+        #ifdef REACTIONS_ENABLED
+            ofile << setw(19) << Temp[pLoc[i]];
+        #endif
+
+        // Write variables
+        for (int k = 0; k < nVar; k++) {
             ofile << setw(19) << (*varData[k])[pLoc[i]];
+        }
+        ofile << endl;
     }
 
     ofile.close();
+   // cout << "Data successfully written to: " << fname << endl;
 }
-    
+   
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Projects HiPS parcel values back onto the flow particles.
 ///
@@ -1493,7 +1511,7 @@ void hips::saveAllParameters() {
     file << "performReaction " << performReaction << "\n";  ///< Flag indicating whether chemical reactions are simulated
     file << "realization " << realization << "\n";    ///< Current simulation realization (for multiple runs)
 
-    // Write additional simulation parameters (not from constructor)
+    // Write variable names
     if (!varName.empty()) {
         file << "varName ";
         for (const std::string &name : varName) {
@@ -1503,9 +1521,19 @@ void hips::saveAllParameters() {
     } else {
         file << "varName (undefined)\n";
     }
-    
-    file.close();
-    std::cout << " All parameters saved in: " << filepath << std::endl;
-}
 
+    // Write i_batchelor vector if it exists and has the correct size
+    if (!i_batchelor.empty() && i_batchelor.size() == nVar) {
+        file << "i_batchelor ";
+        for (const auto &val : i_batchelor) {
+            file << val << " ";  ///< Print each element separated by space
+        }
+        file << "\n";
+    } else {
+        file << "i_batchelor (undefined or size mismatch)\n";
+    }
+
+    file.close();
+    std::cout << "All parameters saved in: " << filepath << std::endl;
+}
 /////////////////////////////////////////////////////////////////////////////
