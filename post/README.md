@@ -2,53 +2,119 @@
 
 ## Overview
 
-This repository contains scripts for post-processing simulation data. The scripts compute statistical measures, including the mean and variance for different variables, and generate a Probability Density Function (PDF) for the scalar dissipation rate (`chi`). The simulation automatically generates the required data files and configuration file (`Parameters.dat`), which are expected to be located in the `post` directory.
+This repository contains scripts for post-processing simulation data. The scripts compute statistical measures, including the **mean** and **variance** for different variables, and generate a **Probability Density Function (PDF)** for the scalar dissipation rate (`chi`).
+
+The simulation automatically generates the required data files and configuration file (`parameters.dat`), which are expected to be located in the `../data/` directory for data files and the `post` directory for configuration files.
+
+---
 
 ## Setup Instructions
 
-1. **Environment Setup**: Ensure you have Python 3.x installed along with the necessary libraries. You can install the required libraries using the following command:
-    ```bash
-    pip install numpy matplotlib pyyaml
-    ```
+1. **Environment Setup**:
+   Ensure you have Python 3.x installed along with the necessary libraries. You can install the required libraries using the following command:
 
-2. **Data and Configuration**: The simulation creates the necessary data files and the `parameters.dat` configuration file by default. These files are expected to be located in the `../data/` and `post` directories. There is no need to manually create or move these files.
+   ```bash
+   pip install numpy matplotlib pyyaml
+   ```
+
+2. **Data and Configuration**:
+   The simulation automatically creates the necessary data files and the `parameters.dat` configuration file. These files are expected to be located in the following directories:
+
+   * Data files: `../data/`
+   * Configuration file: `post/`
+     There is no need to manually create or move these files.
+
+---
 
 ## Files and Scripts
 
-- `stats.py`: This script reads the simulation data files and calculates the mean and variance for each variable. The results are saved in `mean_values.dat` and `variance_values.dat` in the `processed-data`.
+* **`stats.py`**:
+  Reads the simulation data files and calculates the **mean** and **variance** for each variable.
 
-- `chi_pdf.py`: This script processes the simulation data to compute the scalar dissipation rate (`chi`), log-transforms it, and then generates a PDF. The resulting plot is saved as `chi.pdf`.
+  * Results are saved in the `processed_data/` directory:
 
-- `utils.py`: Contains utility functions for reading parameters from a YAML file (`read_parameters`) and computing the Probability Density Function (`compute_pdf`).
+    * `mean_values.dat`: Mean values for each variable.
+    * `variance_values.dat`: Variance values for each variable.
+  * The columns in these files are labeled according to the variable names specified in `parameters.dat`.
+
+* **`chi_pdf.py`**:
+  Processes the simulation data to compute the scalar dissipation rate (`chi`), log-transforms it, and then generates a **PDF**.
+
+  * The script creates one PDF file per variable.
+  * The resulting plots are saved as `chi_<variable_name>.pdf` in the current directory.
+  * Note: Only scalar mixing variables (e.g., `mixf_00`, `mixf_01`) are processed to ensure accurate PDF calculation.
+  * Temperature is included only when reactions are enabled.
+
+* **`utils.py`**:
+  Contains utility functions for:
+
+  * Reading parameters from a configuration file (`parameters.dat`) using the `read_parameters()` function.
+  * Computing the Probability Density Function (PDF) using the `compute_pdf()` function.
+
+---
 
 ## How to Run
 
 1. **Calculate Mean and Variance**:
-    - Run the `stats.py` script to calculate the mean and variance for each variable:
-    ```bash
-    python stats.py
-    ```
-    - This will generate two output files:
-        - `mean_values.dat`: Contains the mean values for each variable.
-        - `variance_values.dat`: Contains the variance values for each variable.
-        - The columns in these files are labeled according to the variable names specified in `parameters.dat`.
+   Run the `stats.py` script to calculate the mean and variance for each variable:
+
+   ```bash
+   python stats.py
+   ```
+
+   * This will generate two output files in the `processed_data/` directory:
+
+     * `mean_values.dat`: Mean values for each variable.
+     * `variance_values.dat`: Variance values for each variable.
+   * The columns in these files are labeled according to the variable names specified in `parameters.dat`.
 
 2. **Generate PDF for Scalar Dissipation Rate**:
-    - Run the `chi_pdf.py` script to calculate and plot the PDF for the log-transformed scalar dissipation rate (`chi`):
-    ```bash
-    python chi_pdf.py
-    ```
-    - This will generate a plot saved as `chi.pdf`.
+   Run the `chi_pdf.py` script to calculate and plot the PDF for the log-transformed scalar dissipation rate (`chi`):
+
+   ```bash
+   python chi_pdf.py
+   ```
+
+   * This will generate individual PDF plots saved as `chi_<variable_name>.pdf` for each relevant variable.
+
+---
 
 ## Output Files
 
-- **mean_values.dat**: Contains the mean values for each variable.
-- **variance_values.dat**: Contains the variance values for each variable.
-- **chi.pdf**: A plot showing the Probability Density Function (PDF) of the log-transformed scalar dissipation rate (`chi`).
+* **mean\_values.dat**: Contains the mean values for each variable.
+* **variance\_values.dat**: Contains the variance values for each variable.
+* **chi\_\<variable\_name>.pdf**: A plot showing the Probability Density Function (PDF) of the log-transformed scalar dissipation rate (`chi`).
+
+  * Each plot corresponds to a specific variable and is named accordingly (e.g., `chi_mixf_00.pdf`).
+
+---
 
 ## Additional Notes
 
-- The `parameters.dat` file defines the parameters for the post-processing scripts, including the number of variables (`nVar`) and the names of these variables, etc. The parameters are saved by `savaAllParameters()` function in the `hips`, The file is automatically generated by the simulation and should not require manual modification.
+* The `parameters.dat` file defines the parameters for the post-processing scripts, including the number of variables (`nVar`) and the names of these variables. The file is automatically generated by the simulation via the `saveAllParameters()` function in the `hips` module.
+* The scripts assume that the data files follow a specific naming convention (`Data_*.dat`) and are located in the `../data/` directory.
+* Temperature data is only included in the output when the **REACTIONS\_ENABLED** flag is set during compilation.
 
-- The scripts assume that the data files follow a specific naming convention (`Data_*.dat`) and are located in the `../data/` directory.
+---
+
+## Example Output Directory Structure
+
+```
+project_directory/
+├── data/
+│   └── rlz_00001/
+│       ├── Data_00001.dat
+│       ├── Data_00002.dat
+│       └── ...
+├── post/
+│   ├── parameters.dat
+│   ├── stats.py
+│   ├── chi_pdf.py
+│   └── utils.py
+└── processed_data/
+    ├── mean_values.dat
+    ├── variance_values.dat
+    └── chi_mixf_00.pdf
+```
+
 
