@@ -998,7 +998,7 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
             y[k] = (*varData[speciesIdx])[ime];
         }
         if (performReaction) {
-            bRxr->react(h, y, dtEE);
+            bRxr->react(h, y, dt);
             varRho[ime] = bRxr->getDensity();
             Temp[ime] = bRxr->temperature;
         }
@@ -1010,6 +1010,8 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
         }
 
     #endif
+
+        parcelTimes[ime] = time;
         
     }
 }
