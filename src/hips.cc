@@ -309,7 +309,7 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     else if (approach == "probability") {
         int lowerLevel = ceil(originalLevel);                    // Ceil the original level to the nearest integer
         int upperLevel = lowerLevel - 1;
-        Prob = abs((log(originalLevel) - log(lowerLevel)) / (log(upperLevel) - log(lowerLevel)));  // Calculate the probability 
+        Prob = originalLevel - upperLevel;                       // Calculate the probability 
         nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
     }  
     else if (approach == "micromixing") {
@@ -353,15 +353,21 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     for (int i = 0; i < nLevels; ++i) {
         levelLengths[i] = domainLength * pow(Afac, i);
 
-        if (approach == "4")                            //Mb---------------
+        if (approach == "dynamic_A")                            
             levelLengths[i] = domainLength * pow(Anew, i);
 
         levelTaus[i] = tau0 * pow(levelLengths[i] / domainLength, 2.0 / 3.0) / C_param;
         levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
 
-        if (approach == "3") {                         //Mb--------------
+        if (approach == "micromixing") {                         
             levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
             levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
+        }
+
+
+        if (approach == "probability"){
+            levelRates[Nm3] = levelRates[nL-3]*Prob;
+
         }
     }
 
@@ -898,8 +904,7 @@ void hips::advanceHips(const int iLevel, const int iTree) {
     for (int k = 0; k < nVar; k++) {                                    // Upon finding first variable needing micromixing
         // Combined condition check with approach condition
         if ((iLevel >= i_plus[k]) || 
-            (iLevel == i_plus[k] - 1 && rand.getRand() <= i_plus[k] - i_batchelor[k]) || 
-            (approach == "probability" && iLevel == i_plus[k] - 1 && rand.getRand() <= Prob)) {
+            (iLevel == i_plus[k] - 1 && rand.getRand() <= i_plus[k] - i_batchelor[k])) {
                 if (!rxnDone && performReaction) {
                     reactParcels_LevelTree(iLevel, iTree);
                     rxnDone = true;
