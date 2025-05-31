@@ -300,43 +300,40 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     ScHips = ScHips_;
     approach = approach_;
 
-    double originalLevel = (3.0 / 4) * log(1 / Re) / log(Afac);  // Calculate the original level
+    double baseLevelEstimate = (3.0 / 4) * log(1 / Re) / log(Afac);                              // Calculate the base tree level estimate (non-integer)
+    int baseLevel;
 
     if (approach == "rounding") {
-        int lowerLevel = round(originalLevel);                   // Round the original level to the nearest integer
-        nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
+        baseLevel = round(baseLevelEstimate);                                                    // Round the base level to the nearest integer
     } 
     else if (approach == "probability") {
-        int lowerLevel = ceil(originalLevel);                    // Ceil the original level to the nearest integer
-        int upperLevel = lowerLevel - 1;
-        Prob = originalLevel - upperLevel;                       // Calculate the probability 
-        nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
-    }  
+        baseLevel = ceil(baseLevelEstimate);                                                     // Ceil the base level to the nearest integer
+        int previousLevel = baseLevel - 1;
+        Prob = baseLevelEstimate - previousLevel;                                                // Calculate the probability
+    } 
     else if (approach == "micromixing") {
-        int lowerLevel = ceil(originalLevel);                    // Ceil the original level to the nearest integer
-        lStar = std::pow(Re, -3.0 / 4);                          // Calculate lStar based on Re
-        nL = lowerLevel + 3;                                     // Set the number of levels for the binary tree structure
+        baseLevel = ceil(baseLevelEstimate);                                                     // Ceil the base level to the nearest integer
+        lStar = std::pow(Re, -3.0 / 4);                                                          // Calculate lStar based on Re
     } 
     else if (approach == "dynamic_A") {
-        int closestLevel = round(originalLevel);                 // Round the original level to the nearest integer
-        Anew = exp(-log(Re) / ((4.0 / 3.0) * closestLevel));     // Calculate the new value of parameter A
-        nL = closestLevel + 3;                                   // Set the number of levels for the binary tree structure
-    }
+        baseLevel = round(baseLevelEstimate);                                                    // Round the base level to the nearest integer
+        Anew = exp(-log(Re) / ((4.0 / 3.0) * baseLevel));                                        // Calculate the new value of parameter A
+    } 
     else {
-        // Handle invalid approach case if needed
-        throw std::invalid_argument("Invalid approach specified");
+        throw std::invalid_argument("Invalid approach specified");                               // Handle invalid approach case if needed
     }
+
+    nL = baseLevel + 3;                                                                          // Set the number of levels for the binary tree structure
 
     //----------------------------------------------------------------------
-
     nLevels = nL;
-    iEta = nLevels - 3;                                          // Kolmogorov level 
+    iEta = nLevels - 3;  // Kolmogorov level 
 
     int maxSc = 1;
     for (const auto &sc : ScHips)
         maxSc = std::max(maxSc, static_cast<int>(sc));
     if (maxSc > 1.0)
-        nLevels += ceil(log(maxSc) / log(4));                    // Changing number of levels!
+        nLevels += ceil(log(maxSc) / log(4));                           
 
     Nm1 = nLevels - 1;
     Nm2 = nLevels - 2;
@@ -346,39 +343,35 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     parcelTimes.resize(nparcels, 0);
     i_batchelor.resize(nVar, 0);
 
-    std::vector<double> levelLengths(nLevels);                   // Including all levels, but last 2 don't count
-    std::vector<double> levelTaus(nLevels);                      // Smallest scale is 2 levels up from bottom
+    std::vector<double> levelLengths(nLevels);                                                   // Including all levels, but last 2 don't count
+    std::vector<double> levelTaus(nLevels);                                                      // Smallest scale is 2 levels up from bottom
     levelRates.resize(nLevels);
 
     for (int i = 0; i < nLevels; ++i) {
-        levelLengths[i] = domainLength * pow(Afac, i);
-
-        if (approach == "dynamic_A")                            
-            levelLengths[i] = domainLength * pow(Anew, i);
+        levelLengths[i] = domainLength * pow((approach == "dynamic_A" ? Anew : Afac), i);
 
         levelTaus[i] = tau0 * pow(levelLengths[i] / domainLength, 2.0 / 3.0) / C_param;
         levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
-
-        if (approach == "micromixing") {                         
-            levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
-            levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
-        }
-
-
-        if (approach == "probability"){
-            levelRates[Nm3] = levelRates[nL-3]*Prob;
-
-        }
     }
 
-    LScHips = !ScHips.empty();
-    if (LScHips)                                                // Correct levels for high Sc (levels > Kolmogorov)
+    if (approach == "micromixing") {                                                             // Adjust rates for micromixing model
+        levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
+        levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
+    }
+
+    if (approach == "probability") {                                                            // Adjust final mixing rate based on probability
+        levelRates[Nm3] = levelRates[nL - 3] * Prob;
+    }
+
+    LScHips = !ScHips.empty();                                                                  // Correct levels for high Sc (levels > Kolmogorov)
+    if (LScHips) {
         for (int i = iEta + 1; i < nLevels; ++i) {
             levelTaus[i] = tau0 * pow(levelLengths[iEta] / domainLength, 2.0 / 3.0) / C_param;
             levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
         }
-   
-    //-----------------------------------------------
+    }
+
+    //-----------------------------------------------------
 
     eddyRate_total = 0.0;
     for (int i = 0; i <= Nm3; ++i)
@@ -388,7 +381,7 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     for (int i = 0; i <= iEta; ++i)
         eddyRate_inertial += levelRates[i];
 
-    //-------------------------------------------------
+    //-----------------------------------------------------
 
     i_plus.resize(nVar);
     for (int k = 0; k < nVar; ++k) {
@@ -400,7 +393,7 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
             i_batchelor[k] = iEta;
         i_plus[k] = ceil(i_batchelor[k]);
     }
- 
+
     //-----------------------------------------------------
 
     varRho.resize(nparcels);
