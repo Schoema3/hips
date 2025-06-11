@@ -2,56 +2,64 @@
 
 This code implements the Hierarchal Parcel Swapping (HiPS) model for turbulent reacting or nonreacting flows. 
 
-## Documentation
- * Code documentation is available at [https://ignite.byu.edu/hips_documentation](https://ignite.byu.edu/hips_documentation)
- * Publications
-    * [A. Kerstein, Hierarchical Parcel-Swapping Representation of Turbulent Mixing. Part 1. Formulation and Scaling Properties, Journal of Statistical Physics, 153:142-161 (2013)](https://link.springer.com/content/pdf/10.1007/s10955-013-0811-z.pdf)
-    * [A. Kerstein, Hierarchical parcel-swapping representation of turbulent mixing. Part 2. Application to channel flow, Journal of Fluid Mechanics, 750:421-463 (2014)](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/hierarchical-parcelswapping-%20%20representation-of-turbulent-mixing-part-2-application-to-channel-flow/19D6D1CAC4D2FAFFC67A67925D7E527B)
-    * [A. Kerstein, Hierarchical parcel-swapping representation of turbulent mixing. III. Origins of correlation patterns observed in turbulent boundary layers, Physical Review Fluids, 6, 044611    (2021)](https://journals.aps.org/prfluids/abstract/10.1103/PhysRevFluids.6.044611)
-## Directory structure
-* `cmake_build`: build the code using cmake.
-* `data`: contains all data files output during a simulation.
-    * The code will generate a subfolder with a name corresponding to case name specified in the run script in the run folder.
-        * This case subfolder will contain subfolders `input`, `runtime`, `data`, and `post`, which contain the input data files, runtime output, simulation data files, and post-processed data, respectively.
-* `doc`: contains documentation files built using Doxygen. Also includes a simplified, python version of HiPS.
-* `input`: contains case input files, notably `input.yaml`, which is the primary input file with code parameters.
-    * Other input files are a Cantera mechanism file in `gas_mechanisms` and an optional `restart.yaml` file.
-* `post`: contains post-processing scripts and files for given cases. 
-   * Output is placed in `data/caseName/post`. These are mostly Python files. Some cases also include experimental data files for comparison and plotting.
-* `run`: contains the code executable `hips-run` and several run scripts. These scripts are run by the user to execute the code.
-    * The user specifies inputDir as the path to the input file containing the case to run and specifies a case name for variable caseName. Files are created and copied into `data/caseName`, as noted above.
-    * The user chooses one of the following run scripts to execute the code: 
-      * `runOneRlz.sh` will run a single realization of the code. This is appropriate for some cases, like a statistically stationary channel flow. Many cases require running many realizations to gather turbulent statistics.
-      * `runManRlz.sh` will run many realizations on a single processor.
-      * `slrmJob.sh` is an example script for running embarrasingly parallel simulations, i.e. one realization for each MPI process.
-      * `slrmJob_array.sh` is an example script that runs multiple realizations on a parallel machine using a slurm array.
-    * `changeInputParam.py` is a convenience script for changing a value of a variable in the input file. This is convenient when running several cases changing an input parameter and can be used within the run scripts listed above.
-* `source`: contains source code (including header files) and `CMakeLists.txt` files.
+## Documentation is available at [ignite.byu.edu/hips_documentation](https://ignite.byu.edu/hips_documentation)
+
+* Publications
+  * [Kerstein (2013)](https://link.springer.com/content/pdf/10.1007/s10955-013-0811-z): *Hierarchical Parcel-Swapping Representation of Turbulent Mixing. Part 1. Formulation and Scaling Properties*, *Journal of Statistical Physics*, 153:142–161.
+  * [Kerstein (2014)](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/hierarchical-parcelswapping-%20%20representation-of-turbulent-mixing-part-2-application-to-channel-flow/19D6D1CAC4D2FAFFC67A67925D7E527B): *Hierarchical Parcel-Swapping Representation of Turbulent Mixing. Part 2. Application to Channel Flow*, *Journal of Fluid Mechanics*, 750:421–463.
+  * [Kerstein (2021)](https://journals.aps.org/prfluids/abstract/10.1103/PhysRevFluids.6.044611): *Hierarchical Parcel-Swapping Representation of Turbulent Mixing. Part 3. Origins of Correlation Patterns Observed in Turbulent Boundary Layers*, *Physical Review Fluids*, 6:044611.
+  * Behrang et al. (2024): *Turbulent Mixing of Scalars with Nonunity Schmidt Numbers Using Hierarchical Parcel-Swapping*, under review at *Journal of Fluid Mechanics*.
+
+## Directory Structure
+
+* `build/`: This directory is not included by default and must be created by the user.
+    * To compile the code, navigate to this directory and run:
+      ```bash
+      cmake ..
+      make
+      make install
+      make documentation  # Optional: only if documentation is desired
+      ```
+
+* `src/`: Contains all source code for the HiPS implementation.
+
+* `example/`: Contains three default example cases that users can run to get started.
+
+* `run/`: Contains the compiled executables generated during the build process.
+
+* `post/`: Contains Python scripts for post-processing.
+    * When users run an example case, a file named `parameters.dat` is automatically saved in the `post/` folder. This file records the parameters used for the run, which may be required by the post-processing scripts.
+    * Post-processing results are saved into a subfolder named `processed_data/`, created automatically inside the corresponding `post/` directory.
+
+* `data/`: Created only if data writing is enabled during execution.
+    * This happens when the function:
+      ```cpp
+      void calculateSolution(const double tRun, bool shouldWriteData = true);
+      ```
+      is called with `shouldWriteData` set to `true`.
+    * A subfolder is generated with a name corresponding to the case name specified in the run script (e.g., `rlz_00001` by default).
+    * The number of realization folders corresponds to the number of realizations specified by the user.
+
+* `docs/`: Contains documentation built with Doxygen.
+
 
 ## Dependencies
+
 ### HiPS code
-* [Cantera](http://cantera.org): open-source suite of tools for problems involving chemical kinetics, thermodynamics, and transport.
-* Yaml: input file format. This installation is conveniently built into the HiPS build process. 
-* Cmake 3.12 or higher
-* (OPTIONAL) Doxygen: builds documentation. 
+* [CMake ≥ 3.15](https://cmake.org): build configuration and code compilation.
+* C++17-compatible compiler: required to compile the code.
+* (OPTIONAL) [Cantera](http://cantera.org): open-source suite for chemical kinetics, thermodynamics, and transport.
+  * Only needed if reactions are enabled via `-DREACTIONS_ENABLED=ON` in the CMake configuration.
+* (OPTIONAL) [SUNDIALS](https://computing.llnl.gov/projects/sundials): required only for the CVODE integrator used in reaction-enabled builds.
+* (OPTIONAL) [Doxygen](https://www.doxygen.nl/): used to build code documentation from annotated source files.
+
 ### Post-processing
-Post-processing data produced by HiPS is processed via Python 3 scripts. We recommend Python 3.2 or higher. Scripts may not function properly using Python 2.x. The following packages are required and can be installed via pip3:
+Post-processing of simulation data is performed using Python 3 scripts. We recommend Python 3.6 or higher. The following packages are required and can be installed via `pip`:
+
 * numpy
 * scipy
 * matplotlib
-* glob
-* yaml
-* sys
-* os
+* glob *(built-in)*
+* os *(built-in)*
+* sys *(built-in)*
 
-## Build
-The code is built using CMake. See the README file in the `cmake_build` folder for details.
-
-## Test cases
-### HiPS Test
-  1. Build the code using CMake.
-  2. Navigate to the `run` directory. Open `runOneRlz.sh` and confirm that the input file path and case name are set properly. The defaults in `runOneRlz.sh` are `inputDir="../input/hips"` and `caseName="hips_test"`.
-  3. Run `./runOneRlz.sh` to run the case. It should take less than two minutes on an average system. 
-  4. Navigate to `post/hips`. 
-  5. Run `python3 hips_stats.py [caseName]`. With the default case name, this becomes `python3 hips_stats.py hips_test`. This will generate two plots in `../data/[caseName]/post`. Navigate there to view them. 
-  6. In `../data/[caseName]/post`, there should be two newly-generated PDFs. These two plots compare the mean and RMS velocity profiles of the channel flow case just run with HiPS to previous DNS data of the same case. 
