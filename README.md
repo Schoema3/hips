@@ -47,7 +47,7 @@ This code implements the Hierarchal Parcel Swapping (HiPS) model for turbulent r
 
 ### HiPS code
 * [CMake ≥ 3.15](https://cmake.org): build configuration and code compilation.
-* C++17-compatible compiler: required to compile the code.
+* C++11-compatible compiler: required to compile the code.
 * (OPTIONAL) [Cantera](http://cantera.org): open-source suite for chemical kinetics, thermodynamics, and transport.
   * Only needed if reactions are enabled via `-DREACTIONS_ENABLED=ON` in the CMake configuration.
 * (OPTIONAL) [SUNDIALS](https://computing.llnl.gov/projects/sundials): required only for the CVODE integrator used in reaction-enabled builds.
