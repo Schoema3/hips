@@ -191,7 +191,7 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
     if (nLevels == -1)  
         nLevels = nL; 
 
-    iEta = nLevels - 3;                            // Kolmogorov level; if nLevels = 7, then 0, 1, 2, 3, (4), 5, 6; iEta=4 is the lowest swap level: swap grandchildren of iEta=4 at level 6.
+    iEta = nLevels - 3;                                // Kolmogorov level; if nLevels = 7, then 0, 1, 2, 3, (4), 5, 6; iEta=4 is the lowest swap level: swap grandchildren of iEta=4 at level 6.
            
     int maxSc = 1.0;
 
@@ -199,7 +199,7 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
         maxSc = ScHips[i]>maxSc ? ScHips[i] : maxSc;
     
     if (maxSc > 1.0)
-        nLevels += ceil(log(maxSc)/log(4));       // Changing number of levels!
+        nLevels += ceil(log(maxSc)/log(4));            // Changing number of levels!
     
     Nm1 = nLevels - 1;
     Nm2 = nLevels - 2;
@@ -211,8 +211,8 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
     parcelTimes.resize(nparcels,0);
     i_batchelor.resize(nVar,0);
     
-    vector<double> levelLengths(nLevels);            // Including all levels, but last 2 don't count:
-    vector<double> levelTaus(nLevels);               // Smallest scale is 2 levels up from bottom
+    vector<double> levelLengths(nLevels);              // Including all levels, but last 2 don't count:
+    vector<double> levelTaus(nLevels);                 // Smallest scale is 2 levels up from bottom
     levelRates   = vector<double>(nLevels);
 
     for (int i=0; i<nLevels; i++) {
@@ -300,30 +300,30 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     ScHips = ScHips_;
     approach = approach_;
 
-    double baseLevelEstimate = (3.0 / 4) * log(1 / Re) / log(Afac);                              // Calculate the base tree level estimate (non-integer)
+    double baseLevelEstimate = (3.0 / 4) * log(1 / Re) / log(Afac);                               // Calculate the base tree level estimate (non-integer)
     int baseLevel;
 
     if (approach == "rounding") {
-        baseLevel = round(baseLevelEstimate);                                                    // Round the base level to the nearest integer
+        baseLevel = round(baseLevelEstimate);                                                     // Round the base level to the nearest integer
     } 
     else if (approach == "probability") {
-        baseLevel = ceil(baseLevelEstimate);                                                     // Ceil the base level to the nearest integer
+        baseLevel = ceil(baseLevelEstimate);                                                      // Ceil the base level to the nearest integer
         int previousLevel = baseLevel - 1;
-        Prob = baseLevelEstimate - previousLevel;                                                // Calculate the probability
+        Prob = baseLevelEstimate - previousLevel;                                                 // Calculate the probability
     } 
     else if (approach == "micromixing") {
-        baseLevel = ceil(baseLevelEstimate);                                                     // Ceil the base level to the nearest integer
-        lStar = std::pow(Re, -3.0 / 4);                                                          // Calculate lStar based on Re
+        baseLevel = ceil(baseLevelEstimate);                                                      // Ceil the base level to the nearest integer
+        lStar = std::pow(Re, -3.0 / 4);                                                           // Calculate lStar based on Re
     } 
     else if (approach == "dynamic_A") {
-        baseLevel = round(baseLevelEstimate);                                                    // Round the base level to the nearest integer
-        Anew = exp(-log(Re) / ((4.0 / 3.0) * baseLevel));                                        // Calculate the new value of parameter A
+        baseLevel = round(baseLevelEstimate);                                                     // Round the base level to the nearest integer
+        Anew = exp(-log(Re) / ((4.0 / 3.0) * baseLevel));                                         // Calculate the new value of parameter A
     } 
     else {
-        throw std::invalid_argument("Invalid approach specified");                               // Handle invalid approach case if needed
+        throw std::invalid_argument("Invalid approach specified");                                // Handle invalid approach case if needed
     }
 
-    nL = baseLevel + 3;                                                                          // Set the number of levels for the binary tree structure
+    nL = baseLevel + 3;                                                                           // Set the number of levels for the binary tree structure
 
     //----------------------------------------------------------------------
     nLevels = nL;
@@ -343,8 +343,8 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     parcelTimes.resize(nparcels, 0);
     i_batchelor.resize(nVar, 0);
 
-    std::vector<double> levelLengths(nLevels);                                                   // Including all levels, but last 2 don't count
-    std::vector<double> levelTaus(nLevels);                                                      // Smallest scale is 2 levels up from bottom
+    std::vector<double> levelLengths(nLevels);                                // Including all levels, but last 2 don't count
+    std::vector<double> levelTaus(nLevels);                                   // Smallest scale is 2 levels up from bottom
     levelRates.resize(nLevels);
 
     for (int i = 0; i < nLevels; ++i) {
@@ -354,16 +354,16 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
         levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
     }
 
-    if (approach == "micromixing") {                                                             // Adjust rates for micromixing model
+    if (approach == "micromixing") {                                          // Adjust rates for micromixing model
         levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
         levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
     }
 
-    if (approach == "probability") {                                                            // Adjust final mixing rate based on probability
+    if (approach == "probability") {                                          // Adjust final mixing rate based on probability
         levelRates[Nm3] = levelRates[nL - 3] * Prob;
     }
 
-    LScHips = !ScHips.empty();                                                                  // Correct levels for high Sc (levels > Kolmogorov)
+    LScHips = !ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)
     if (LScHips) {
         for (int i = iEta + 1; i < nLevels; ++i) {
             levelTaus[i] = tau0 * pow(levelLengths[iEta] / domainLength, 2.0 / 3.0) / C_param;
@@ -461,6 +461,7 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
  
     currentIndex++; 
 }
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Projects values from flow particles onto HiPS parcels assuming constant density.
 ///
@@ -485,8 +486,8 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
 std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<double> &weight) {
     
-    xc = setGridCfd(weight);                              // Populate the physical domain for flow particles
-    xh = setGridHips(nparcels);                           // Populate the physical domain for hips parcels
+    xc = setGridCfd(weight);                               // Populate the physical domain for flow particles
+    xh = setGridHips(nparcels);                            // Populate the physical domain for hips parcels
 
     int nc = xc.size() - 1;                 
     int nh = xh.size() - 1; 
@@ -611,17 +612,17 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
 
 std::vector<double> hips::setGridCfd(std::vector<double> &w) {
     
-    std::vector<double> pos;      // Initializing a vector to hold the grid positions
-    double posL = 0.0;            // Initializing the starting position
+    std::vector<double> pos;                               // Initializing a vector to hold the grid positions
+    double posL = 0.0;                                     // Initializing the starting position
 
     int i = 0;
 
-    while (i <= w.size()) {       // Generate the grid positions based on the weights
-        pos.push_back(posL);      // Add the current position to the grid
-        posL += w[i];             // Move to the next position by adding the corresponding weight
+    while (i <= w.size()) {                               // Generate the grid positions based on the weights
+        pos.push_back(posL);                              // Add the current position to the grid
+        posL += w[i];                                     // Move to the next position by adding the corresponding weight
         i++;                                              
     }
-    return pos;                   // Return the generated grid positions
+    return pos;                                           // Return the generated grid positions
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -693,13 +694,13 @@ std::vector<double> hips::setGridHips(int N){
 
 void hips::calculateSolution(const double tRun, bool shouldWriteData) {
     
-    unsigned long long nEddies = 0;                   // Number of eddy events
-    int fileCounter = 0;                              // Number of data files written
-    int iLevel;                                       // Tree level of EE with top at iLevel=0
-    int iTree;                                        // One of two subtrees involved in swap at iLevel
+    unsigned long long nEddies = 0;                               // Number of eddy events
+    int fileCounter = 0;                                          // Number of data files written
+    int iLevel;                                                   // Tree level of EE with top at iLevel=0
+    int iTree;                                                    // One of two subtrees involved in swap at iLevel
     dtEE;                                            
-    time = 0.0;                                       // Initialize simulation time
-    int lastEddyOutput = 0;                           // Track last eddy-based output event
+    time = 0.0;                                                   // Initialize simulation time
+    int lastEddyOutput = 0;                                       // Track last eddy-based output event
 
     // Apply default values if user hasn't set them
     if (!useEddyBasedWriting && !useTimeBasedWriting) {
@@ -707,15 +708,15 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
         useEddyBasedWriting = true;  // Default to eddy-based writing
     }
 
-    sample_hips_eddy(dtEE, iLevel);                   // Get first EE at time 0+dtEE
+    sample_hips_eddy(dtEE, iLevel);                               // Get first EE at time 0+dtEE
     nEddies++;
-    eddyCounter = 0;                                  // Reset eddy counter at start
-    lastOutputTime = 0.0;                             // Reset last output time
+    eddyCounter = 0;                                              // Reset eddy counter at start
+    lastOutputTime = 0.0;                                         // Reset last output time
 
     while (time + dtEE <= tRun) {
         time += dtEE;
         selectAndSwapTwoSubtrees(iLevel, iTree);
-        advanceHips(iLevel, iTree);                   // Reaction and micromixing (if needed) to t=time
+        advanceHips(iLevel, iTree);                              // Reaction and micromixing (if needed) to t=time
 
         sample_hips_eddy(dtEE, iLevel);
         nEddies++;
@@ -743,7 +744,7 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
     iTree = 0;
 
     if (performReaction)
-        reactParcels_LevelTree(iLevel, iTree);        // React all parcels up to end time
+        reactParcels_LevelTree(iLevel, iTree);                   // React all parcels up to end time
     saveAllParameters();
 }
 
@@ -889,6 +890,7 @@ void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
 //////////////////////////////////////////////////////////////////////////////////
 
 void hips::advanceHips(const int iLevel, const int iTree) {
+
     if (forceTurb == 2 && iLevel == 0) {
         forceProfile();                                                  // Forcing for statistically stationary
     }
@@ -906,6 +908,7 @@ void hips::advanceHips(const int iLevel, const int iTree) {
         }
     }
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Retrieves the index of a variable by its name in the `varName` list.
 ///
@@ -935,6 +938,7 @@ void hips::advanceHips(const int iLevel, const int iTree) {
 ///////////////////////////////////////////////////////////////////////////////
 
 int hips::getVariableIndex(const std::string &varName) const {
+
     auto it = std::find(this->varName.begin(), this->varName.end(), varName);
     if (it == this->varName.end()) {
         throw std::runtime_error("Error: Variable name '" + varName + "' not found.");
@@ -1170,6 +1174,7 @@ void hips::forceProfile() {
 ///////////////////////////////////////////////////////////////////////////////////
 
 void hips::writeData(int real, const int ifile, const double outputTime) {
+
     stringstream ss1, ss2;
     string s1, s2;
 
@@ -1265,6 +1270,7 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
 //////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::projection_back(std::vector<double> &vh) {
+
     int nh = xh.size() - 1;
     int nc = xc.size() - 1;
 
@@ -1454,6 +1460,7 @@ std::vector<std::pair<std::vector<double>, std::vector<double>>> hips::get_varDa
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void hips::setOutputIntervalEddy(int interval) {
+
     outputIntervalEddy = interval;
     useEddyBasedWriting = true;  ///< Enables eddy-based writing
     useTimeBasedWriting = false; ///< Disables time-based writing
@@ -1472,7 +1479,8 @@ void hips::setOutputIntervalEddy(int interval) {
 ///       To revert to default settings, the user must explicitly set a new interval or avoid calling this function.
 ///////////////////////////////////////////////////////////////////////////////////////
 
-    void hips::setOutputIntervalTime(double interval) {
+void hips::setOutputIntervalTime(double interval) {
+
     outputIntervalTime = interval;
     useTimeBasedWriting = true;  ///< Enables time-based writing
     useEddyBasedWriting = false; ///< Disables eddy-based writing
@@ -1493,6 +1501,7 @@ void hips::setOutputIntervalEddy(int interval) {
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
 void hips::saveAllParameters() {
+
     std::string filepath = "../post/parameters.dat";  ///< Output file path for simulation parameters
     std::ofstream file(filepath);
 

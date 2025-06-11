@@ -18,70 +18,70 @@ class hips {
 
 public:
   
-    int nparcels;                                                 ///< number of parcels
-    int realization;                                              ///< number of realizations
-    std::vector<std::shared_ptr<std::vector<double>>> varData;    ///< vector of pointers to vector
+    int nparcels;                                                  ///< number of parcels
+    int realization;                                               ///< number of realizations
+    std::vector<std::shared_ptr<std::vector<double>>> varData;     ///< vector of pointers to vector
  
 #ifdef REACTIONS_ENABLED
-    std::shared_ptr<Cantera::ThermoPhase> gas;        ///< Shared pointer to a Cantera thermochemistry object
-    std::shared_ptr<batchReactor> bRxr;               ///< Unique pointer to the integrator object
+    std::shared_ptr<Cantera::ThermoPhase> gas;                     ///< Shared pointer to a Cantera thermochemistry object
+    std::shared_ptr<batchReactor> bRxr;                            ///< Unique pointer to the integrator object
 #endif
 
-    double domainLength;                              ///< length of domain (m)
-    double tau0;                                      ///< integral timescale
-    double C_param;                                   ///< Eddy frequency parameter
-    std::vector<double> Temp;                         ///< Vector containg temperature in each parcel;
+    double domainLength;                                           ///< length of domain (m)
+    double tau0;                                                   ///< integral timescale
+    double C_param;                                                ///< Eddy frequency parameter
+    std::vector<double> Temp;                                      ///< Vector containg temperature in each parcel;
     
 private:
     
-    int currentIndex = 0;                              ///< member variable to keep track of current index of variables
-    int nLevels;                                       ///< number of tree levels
-    int nLevels_;                                      ///< number of tree levels?
-    int forceTurb;                                     ///< forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
-    int nVar;                                          ///< number of parcel variables (e.g., h, ysp)
-    int nsp;                                           ///< number of species
-    int Nm1;                                           ///< nLevels - 1 
-    int Nm2;                                           ///< nLevels - 2                     
-    int Nm3;                                           ///< nLevels - 3 
-    int iEta;                                          ///< Kolmogorov level (needed for variable Sc scalars)
-    int nL;                                            ///< adjusted number of levels based on the Reynolds number
+    int currentIndex = 0;                                          ///< member variable to keep track of current index of variables
+    int nLevels;                                                   ///< number of tree levels
+    int nLevels_;                                                  ///< number of tree levels?
+    int forceTurb;                                                 ///< forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
+    int nVar;                                                      ///< number of parcel variables (e.g., h, ysp)
+    int nsp;                                                       ///< number of species
+    int Nm1;                                                       ///< nLevels - 1 
+    int Nm2;                                                       ///< nLevels - 2                     
+    int Nm3;                                                       ///< nLevels - 3 
+    int iEta;                                                      ///< Kolmogorov level (needed for variable Sc scalars)
+    int nL;                                                        ///< adjusted number of levels based on the Reynolds number
 
-    bool LScHips;                                      ///< hips schmidt number
-    bool performReaction;                              ///< flag indicating whether chemical reactions are performed in the simulation 
-    bool LrandSet;                                     ///< flag indicating new randomGen  --> allow deletion
+    bool LScHips;                                                  ///< hips schmidt number
+    bool performReaction;                                          ///< flag indicating whether chemical reactions are performed in the simulation 
+    bool LrandSet;                                                 ///< flag indicating new randomGen  --> allow deletion
     
-    double time;                                       ///< current simulation time
-    double eddyRate_total;                             ///< total rate of all eddies 0 through nLevels-3
-    double eddyRate_inertial;                          ///< total rate of all eddies 0 through iEta (= eddyRate_total if Sc=1) 
-    double Afac = 0.5;                                 ///< level lengthscale reduction factor (0.5)
-    double Re;                                         ///< Reynolds number
-    double dtEE;                                       ///< time increment to next eddy event 
-    double Prob;                                       ///< probability value for probability-based solution
-    double lStar;                                      ///< length of the level associated with the Reynolds number 
-    double Anew;                                       ///< adjusted level lengthscale reduction factor for dynamic adjustment of reduction factor
+    double time;                                                   ///< current simulation time
+    double eddyRate_total;                                         ///< total rate of all eddies 0 through nLevels-3
+    double eddyRate_inertial;                                      ///< total rate of all eddies 0 through iEta (= eddyRate_total if Sc=1) 
+    double Afac = 0.5;                                             ///< level lengthscale reduction factor (0.5)
+    double Re;                                                     ///< Reynolds number
+    double dtEE;                                                   ///< time increment to next eddy event 
+    double Prob;                                                   ///< probability value for probability-based solution
+    double lStar;                                                  ///< length of the level associated with the Reynolds number 
+    double Anew;                                                   ///< adjusted level lengthscale reduction factor for dynamic adjustment of reduction factor
 
-    randomGenerator rand;                                   
+    randomGenerator rand;                                               
     
-    std::vector<int> i_plus;                            ///< ceil(i_batchelor)
-    std::vector<int> pLoc;                              ///< parcel index array for fast implementation of swaps
-    std::vector<double> varRho;                           
-    std::vector<double> ScHips;                         ///< vector containing Schmidt numbers related to each variable
-    std::vector<std::string> varName;                   ///< vector containing the names of parcel variables
-    std::vector<double> parcelTimes;                    ///< current times corresponding to the parcel states
-    std::vector<double> levelRates;                     ///< list of eddy event rates at each level
-    std::vector<double> i_batchelor;                    ///< Batchelor level for variable Sc scalars; NOTE: double, as in, between levels
-    std::vector<double> xc;                             ///< vector containing physical domain of flow particles
-    std::vector<double> xh;                             ///< vector containing physical domain of HiPS parcels
+    std::vector<int> i_plus;                                       ///< ceil(i_batchelor)
+    std::vector<int> pLoc;                                         ///< parcel index array for fast implementation of swaps
+    std::vector<double> varRho;                                       
+    std::vector<double> ScHips;                                    ///< vector containing Schmidt numbers related to each variable
+    std::vector<std::string> varName;                              ///< vector containing the names of parcel variables
+    std::vector<double> parcelTimes;                               ///< current times corresponding to the parcel states
+    std::vector<double> levelRates;                                ///< list of eddy event rates at each level
+    std::vector<double> i_batchelor;                               ///< Batchelor level for variable Sc scalars; NOTE: double, as in, between levels
+    std::vector<double> xc;                                        ///< vector containing physical domain of flow particles
+    std::vector<double> xh;                                        ///< vector containing physical domain of HiPS parcels
     
     std::string  approach;
-    int outputIntervalEddy = 1000;                        ///< Default: write data every 10 eddy events
-    double outputIntervalTime = 0.1;                    ///< Default: write data every 0.1s
-    int eddyCounter = 0;                                ///< Counter for eddy events
-    double lastOutputTime = 0.0;                        ///< Last time data was written
-    bool useEddyBasedWriting = false;                   ///< Tracks if eddy writing is set
-    bool useTimeBasedWriting = false;                   ///< Tracks if time writing is set
-    const int DEFAULT_EDDY_INTERVAL = 2;             ///< Default: Write every 1000 eddies
-    const double DEFAULT_TIME_INTERVAL = 0.1;           ///< Default: Write every 0.1s
+    int outputIntervalEddy = 10;                                   ///< Default: write data every 10 eddy events
+    double outputIntervalTime = 0.1;                               ///< Default: write data every 0.1s
+    int eddyCounter = 0;                                           ///< Counter for eddy events
+    double lastOutputTime = 0.0;                                   ///< Last time data was written
+    bool useEddyBasedWriting = false;                              ///< Tracks if eddy writing is set
+    bool useTimeBasedWriting = false;                              ///< Tracks if time writing is set
+    const int DEFAULT_EDDY_INTERVAL = 1000;                        ///< Default: Write every 1000 eddies
+    const double DEFAULT_TIME_INTERVAL = 0.1;                      ///< Default: Write every 0.1s
   
 
 
@@ -162,7 +162,7 @@ public:
          int seed = 10, 
          int realization_ = 1);
 
-    void resetForNewRealization() {                                                                   // Reset the number of Index to use for new realization
+    void resetForNewRealization() {                                                                 // Reset the number of Index to use for new realization
     currentIndex = 0;
     }
  
