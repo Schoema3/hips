@@ -1,7 +1,6 @@
 # utils.py
 
 import numpy as np
-import yaml
 
 #-------------------------Function to read the parameters ------------------------
 
