@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include <vector>
+#include <memory>
 #include "randomGenerator.h"
 
 class hips {
