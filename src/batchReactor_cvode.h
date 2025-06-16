@@ -15,7 +15,7 @@ class batchReactor_cvode : public batchReactor {
 
 ////////////////////////////// DATA MEMBERS /////////////////////////////
     
-    std::shared_ptr<integrator_cvode>     integrator;     ///< cvode integrator wrappter
+    std::shared_ptr<integrator_cvode>     integrator;     ///< cvode integrator wrapper
     
 /////////////////////////////// MEMBER FUNCTIONS//////////////////////////////////////////
 

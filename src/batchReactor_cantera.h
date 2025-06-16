@@ -27,7 +27,7 @@ public:
 
     void eval(double t, double *vars, double *dvarsdt, double *not_used);   // rhsf: dydt = rhsf
 
-    size_t neq() { return nvar; }                                           // Called by Cantera
+    size_t neq() const { return nvar; }                                           // Called by Cantera
 
     void getState(double* y) {                                              // Called by cantera to set y
         gas->getMassFractions(y);

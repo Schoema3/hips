@@ -21,7 +21,6 @@ endif()
 
 ##################### build library
 
-find_library(YAML   yaml-cpp)
 
 target_include_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/include")
 target_include_directories(hips PUBLIC "/usr/local/include")
@@ -29,12 +28,13 @@ target_include_directories(hips PUBLIC "/usr/local/include")
 target_link_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/lib")
 target_link_directories(hips PUBLIC "/usr/local/lib")
 
-target_link_libraries(hips ${YAML} )
+
 
 if(REACTIONS_ENABLED)
+    find_library(SUN sundials_core)
     find_library(CVODES sundials_cvodes)
     find_library(CANTERA NAMES cantera_shared cantera)
-    target_link_libraries(hips ${CANTERA} ${CVODES})
+    target_link_libraries(hips ${CANTERA} ${CVODES} ${SUN})
 endif()
 
 ############# Installation ################

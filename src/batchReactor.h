@@ -23,8 +23,7 @@ protected:
 
     double                                h_fixed;      ///< adiabatic h during integrate
     double                                P_fixed;      ///< pressure during integrate
-    //double                                rho;
-
+    
 public:
     double                                temperature;  ///< temperature during integrate
     double                                rho;          ///< density during integrate

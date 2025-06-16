@@ -24,7 +24,6 @@
 #endif
 
 #include "randomGenerator.h"
-#include <yaml-cpp/yaml.h>
 
 #include <iostream>
 #include <iomanip>
@@ -609,8 +608,7 @@ void hips::calculateSolution(const double tRun, bool shouldWriteData) {
     unsigned long long nEddies = 0;                               // Number of eddy events
     int fileCounter = 0;                                          // Number of data files written
     int iLevel;                                                   // Tree level of EE with top at iLevel=0
-    int iTree;                                                    // One of two subtrees involved in swap at iLevel
-    dtEE;                                            
+    int iTree;                                                    // One of two subtrees involved in swap at iLevel                                           
     time = 0.0;                                                   // Initialize simulation time
     int lastEddyOutput = 0;                                       // Track last eddy-based output event
 

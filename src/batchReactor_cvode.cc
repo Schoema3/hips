@@ -12,7 +12,7 @@
 /// \return 0 on success.
 ////////////////////////////////////////////////////////////////////////////////
 
-int rhsf_cvode(realtype t, N_Vector varsCV, N_Vector dvarsdtCV, void *user_data);
+int rhsf_cvode(sunrealtype t, N_Vector varsCV, N_Vector dvarsdtCV, void *user_data);
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Constructor for the batchReactor_cvode class.
@@ -101,13 +101,13 @@ int batchReactor_cvode::rhsf(const double t, const double *vars, double *dvarsdt
 /// \return 0 on success.
 /////////////////////////////////////////////////////////////////////////////////
 
-int rhsf_cvode(realtype t, N_Vector varsCV, N_Vector dvarsdtCV, void *user_data) {
+int rhsf_cvode(sunrealtype t, N_Vector varsCV, N_Vector dvarsdtCV, void *user_data) {
  
     batchReactor_cvode *bRxr = static_cast<batchReactor_cvode *>(user_data);       // Cast user_data pointer to batchReactor_cvode pointer
 
-    double *vars    = N_VGetArrayPointer(varsCV);                                 // Get array pointers for variables and derivatives
+    double *vars    = N_VGetArrayPointer_Serial(varsCV);                                 // Get array pointers for variables and derivatives
 
-    double *dvarsdt = N_VGetArrayPointer(dvarsdtCV);                              // Call rhsf method of batchReactor_cvode instance
+    double *dvarsdt = N_VGetArrayPointer_Serial(dvarsdtCV);                              // Call rhsf method of batchReactor_cvode instance
     
     int rv = bRxr->rhsf(t, vars, dvarsdt);
 
