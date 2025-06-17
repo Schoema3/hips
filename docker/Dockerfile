@@ -81,7 +81,7 @@ RUN git clone https://github.com/BYUignite/hips.git --depth=1 \
 &&  cd hips \
 &&  mkdir build \
 &&  cd build \
-&&  cmake .. \
+&&  cmake -DREACTIONS_ENABLED=ON -DHIPS_BUILD_DOCS=ON -DHIPS_BUILD_EXAMPLES=ON .. \
 &&  make -j \
 &&  make install \
 &&  cd ../
