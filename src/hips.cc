@@ -43,9 +43,7 @@ hips::hips(int nLevels_,
            int nVar_,
            vector<double> &ScHips_,
            bool performReaction_,
-           #ifdef REACTIONS_ENABLED
-                shared_ptr<Cantera::Solution> cantSol,
-           #endif
+           shared_ptr<void> vcantSol,
            int seed,
            int realization_): 
     nLevels(nLevels_), 
@@ -61,13 +59,16 @@ hips::hips(int nLevels_,
     realization(realization_){
 
     #ifdef REACTIONS_ENABLED
-    gas = cantSol->thermo(); 
-    nsp = gas->nSpecies();
+    if(performReaction) {
+        shared_ptr<Cantera::Solution> cantSol = static_pointer_cast<Cantera::Solution>(vcantSol);
+        gas = cantSol->thermo(); 
+        nsp = gas->nSpecies();
 
-    bRxr = make_shared<batchReactor_cvode>(cantSol);                                // By default, use batchReactor_cvode
+        bRxr = make_shared<batchReactor_cvode>(cantSol);                                // By default, use batchReactor_cvode
 
-    // Uncomment the following line to switch to batchReactor_cantera
-    // bRxr = make_unique<batchReactor_cantera>(cantSol);
+        // Uncomment the following line to switch to batchReactor_cantera
+        // bRxr = make_unique<batchReactor_cantera>(cantSol);
+    }
     #endif
 
     // Resize vectors to the number of variables
@@ -83,9 +84,7 @@ hips::hips(double C_param_,
            int forceTurb_,
            int nVar_,
            bool performReaction_,
-           #ifdef REACTIONS_ENABLED
-                shared_ptr<Cantera::Solution> cantSol,
-           #endif
+           shared_ptr<void> vcantSol,
            int seed,
            int realization_): 
     C_param(C_param_), 
@@ -98,14 +97,17 @@ hips::hips(double C_param_,
 
     #ifdef REACTIONS_ENABLED
     // Initialize Cantera thermo phase and species count.
-    gas = cantSol->thermo(); 
-    nsp = gas->nSpecies();
+    if(performReaction) {
+        shared_ptr<Cantera::Solution> cantSol = static_pointer_cast<Cantera::Solution>(vcantSol);
+        gas = cantSol->thermo(); 
+        nsp = gas->nSpecies();
 
-    // Set up the default batch reactor (cvode).
-   // bRxr = make_shared<batchReactor_cvode>(cantSol);
+        // Set up the default batch reactor (cvode).
+       // bRxr = make_shared<batchReactor_cvode>(cantSol);
 
-    // Uncomment the following line to switch to batchReactor_cantera.
-     bRxr = make_shared<batchReactor_cantera>(cantSol);
+        // Uncomment the following line to switch to batchReactor_cantera.
+         bRxr = make_shared<batchReactor_cantera>(cantSol);
+    }
     #endif
 
     // Resize vectors to accommodate the number of variables.
@@ -886,6 +888,8 @@ int hips::getVariableIndex(const std::string &varName) const {
 
 void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 
+    #ifdef REACTIONS_ENABLED
+
     int enthalpyIdx = getVariableIndex("enthalpy");  // Dynamically find enthalpy index
     int nP = 1 << (Nm1 - iLevel);
     int istart = iTree * nP;
@@ -901,8 +905,6 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 
         // Access enthalpy using its index
         h = (*varData[enthalpyIdx])[ime];
-
-    #ifdef REACTIONS_ENABLED
 
           // Access species using their indices
         for (int k = 0; k < nsp; k++) {
@@ -921,11 +923,9 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
             (*varData[speciesIdx])[ime] = y[k];
         }
 
-    #endif
-
         parcelTimes[ime] = time;
-        
     }
+    #endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1116,9 +1116,8 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
     ofile << "# Grid Points = " << nparcels << "\n";
         
     // Write column names (include temperature if reactions are enabled)
-    #ifdef REACTIONS_ENABLED
+    if(performReaction)
         ofile << setw(19) << "# Temp";  // Include temperature column if reactions are enabled
-    #endif
 
     for (const auto& varN : varName) {
         ofile << setw(19) << "# " << varN;
@@ -1132,9 +1131,8 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
     // Write data
     for (int i = 0; i < nparcels; i++) {
         // Write temperature first if reactions are enabled
-        #ifdef REACTIONS_ENABLED
+        if(performReaction)
             ofile << setw(19) << Temp[pLoc[i]];
-        #endif
 
         // Write variables
         for (int k = 0; k < nVar; k++) {

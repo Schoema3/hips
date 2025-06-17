@@ -11,12 +11,6 @@ endif()
 
 # ---- Set C++ language standard ----
 
-option(REACTIONS_ENABLED "Enable reactions" OFF )
-
-if(REACTIONS_ENABLED)
-    add_compile_definitions(REACTIONS_ENABLED)
-endif()
-
 set(CMAKE_VERBOSE_MAKEFILE ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
@@ -27,8 +21,13 @@ set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}/installed")
 
 # ---- Build options ----
 
+option(REACTIONS_ENABLED     "Enable reactions"           OFF)
 option(HIPS_BUILD_EXAMPLES   "Build hips examples"        ON)
-option(HIPS_BUILD_DOCS       "Build hips documentation"   OFF)
+option(HIPS_BUILD_DOCS       "Build hips documentation"   ON)
+
+if(REACTIONS_ENABLED)
+    add_compile_definitions(REACTIONS_ENABLED)
+endif()
 
 ################### MAIN PROJECT TARGETS #####################
 

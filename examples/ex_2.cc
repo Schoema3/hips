@@ -60,11 +60,7 @@ int main() {
     int nVar = nsp + 1; // Number of variables (species + enthalpy)
 
     // Create HiPS instance with reaction support
-    hips HiPS(nLevels, domainLength, tau0, C_param, forceTurb, nVar, ScHips, true
-    #ifdef REACTIONS_ENABLED
-        , cantSol
-    #endif
-    );
+    hips HiPS(nLevels, domainLength, tau0, C_param, forceTurb, nVar, ScHips, true, cantSol);
 
     int nparcels = HiPS.nparcels;
 

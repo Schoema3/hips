@@ -6,34 +6,26 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)            # only needed if examples
 
 #---------- Example 1
 
-if(NOT REACTIONS_ENABLED)
-
-    add_executable(ex_1.x ex_1.cc)
-    target_include_directories(ex_1.x PRIVATE "${CMAKE_SOURCE_DIR}/src")
-    target_link_libraries(ex_1.x PRIVATE hips)
-    install(TARGETS ex_1.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
+add_executable(ex_1.x ex_1.cc)
+target_include_directories(ex_1.x PRIVATE "${CMAKE_SOURCE_DIR}/src")
+target_link_libraries(ex_1.x PRIVATE hips)
+install(TARGETS ex_1.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
 
 #---------- Example 2
 
-else()
+if(REACTIONS_ENABLED)
 
     add_executable(ex_2.x ex_2.cc)
-    
     target_link_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/lib")
-    
     target_link_libraries(ex_2.x PRIVATE hips ${CANTERA})
-    
     install(TARGETS ex_2.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
 
 #---------- Example 3
 
 
     add_executable(ex_3.x ex_3.cc)
-    
     target_link_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/lib")
-    
     target_link_libraries(ex_3.x PRIVATE hips ${CANTERA})
-    
     install(TARGETS ex_3.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
 
 endif()

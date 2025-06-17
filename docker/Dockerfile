@@ -1,7 +1,11 @@
+# Using the terminal. 
+#   Install Docker desktop
+#   Make sure docker executables are on the path (e.g., on mac: /Applications/Docker.app/Contents/Resources/bin)
+# 
 # Build the image: 
 #     docker build -t hips_img .
 #
-# Create and run in a container: 
+# Create and run in a container: (BE SURE TO CHANGE /PATH/TO/HIPS/DOCKER e.g., to the directory of this file)
 #     docker run --name hips_container -v /path/to/hips/docker:/home --hostname docker -it hips_img
 # 
 #     This is setup for an interactive shell. 
@@ -24,7 +28,7 @@
 #
 #################################################################################
 
-FROM alpine:3.19.0 as buildit
+FROM alpine:3.22.0
 
 # Install the necessary packages
 RUN apk add --no-cache wget tar cmake make g++ lapack-dev vim python3-dev
@@ -33,17 +37,17 @@ RUN apk add --no-cache wget tar cmake make g++ lapack-dev vim python3-dev
 
 WORKDIR /app/
 
-RUN wget https://github.com/LLNL/sundials/releases/download/v6.7.0/sundials-6.7.0.tar.gz \
-&&  tar -xvzf sundials-6.7.0.tar.gz \
-&&  rm sundials-6.7.0.tar.gz \
-&&  cd sundials-6.7.0 \
+RUN wget https://github.com/LLNL/sundials/releases/download/v7.3.0/sundials-7.3.0.tar.gz \
+&&  tar -xvzf sundials-7.3.0.tar.gz \
+&&  rm sundials-7.3.0.tar.gz \
+&&  cd sundials-7.3.0 \
 &&  mkdir build \
 &&  cd build \
 &&  cmake .. \
 &&  make -j8 \
 &&  make install \
 &&  cd ../../ \
-&&  rm -r sundials-6.7.0
+&&  rm -r sundials-7.3.0
 
 ############## Build Yaml
 
@@ -64,7 +68,7 @@ RUN git clone https://github.com/jbeder/yaml-cpp.git -b 0.8.0 --depth=1 \
 RUN apk add --no-cache scons python3 boost-dev hdf5-dev
 RUN apk add --no-cache py3-setuptools
 
-RUN git clone https://github.com/Cantera/cantera.git -b 3.0 --depth=1 \
+RUN git clone https://github.com/Cantera/cantera.git -b 3.1 --depth=1 \
 &&  cd cantera \
 &&  scons build -j8 python_package=n \
 &&  scons install \

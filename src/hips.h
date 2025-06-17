@@ -211,9 +211,7 @@ public:
          int forceTurb_,
          int nVar_,
          bool performReaction,
-         #ifdef REACTIONS_ENABLED
-            std::shared_ptr<Cantera::Solution> cantSol = nullptr,
-         #endif
+         std::shared_ptr<void> vcantSol = nullptr,
          int seed = 10,
          int realization_ = 1);
 
@@ -256,9 +254,7 @@ public:
          int nVar_,
          std::vector<double> &ScHips_,
          bool performReaction,
-         #ifdef REACTIONS_ENABLED
-            std::shared_ptr<Cantera::Solution> cantSol = nullptr,
-         #endif
+         std::shared_ptr<void> vcantSol = nullptr,
          int seed = 10, 
          int realization_ = 1);
 
