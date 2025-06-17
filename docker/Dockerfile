@@ -76,6 +76,9 @@ RUN git clone https://github.com/Cantera/cantera.git -b 3.1 --depth=1 \
 &&  rm -r cantera
 
 ############## Build hips
+# note,
+# git clone https://github.com/BYUignite/hips.git --depth=1 --branch v1.0 \
+# will download version tagged v1.0, and similarly for other tags
 
 RUN git clone https://github.com/BYUignite/hips.git --depth=1 \
 &&  cd hips \
