@@ -53,8 +53,8 @@ int main() {
     double C_param = 0.5;                      // Eddy turnover rate multiplier
     double tRun = 300.0;                       // Total simulation time
     int forceTurb = 2;                         // Forcing parameter to impose turbulent profile
-    vector<double> ScHips = {0.0625, 16.0};    // Schmidt numbers for low and high diffusivity
-    int numVariables = 2;                      // Number of scalar fields
+    vector<double> ScHips = {0.0625, 1.0, 16.0};    // Schmidt numbers for low and high diffusivity
+    int numVariables = 3;                      // Number of scalar fields
 
     // Set up HiPS tree and calculate the number of parcels
     hips HiPS(nLevels, domainLength, tau0, C_param, forceTurb, numVariables, ScHips, false);
@@ -71,7 +71,10 @@ int main() {
     }
 
     // Set output interval in terms of time
-    HiPS.setOutputIntervalTime(100.0);  // Save results every 100 seconds
+    HiPS.setOutputIntervalTime(60.0);  // Save results every 100 seconds
+
+    // Write initial condition
+    HiPS.writeData(1, 0, 0.0 );
 
     // Run the simulation and calculate mixing dynamics
     HiPS.calculateSolution(tRun, true);

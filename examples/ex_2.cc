@@ -60,7 +60,7 @@ int main() {
     int nVar = nsp + 1; // Number of variables (species + enthalpy)
 
     // Create HiPS instance with reaction support
-    hips HiPS(nLevels, domainLength, tau0, C_param, forceTurb, nVar, ScHips, true, cantSol);
+    hips HiPS(nLevels, domainLength, tau0, C_param, forceTurb, nVar, ScHips, true, cantSol, 11);
 
     int nparcels = HiPS.nparcels;
 
@@ -121,6 +121,12 @@ int main() {
     for (int k = 0; k < ysp.size(); k++) 
         HiPS.set_varData(ysp[k], weight, variableNames[k + 1]);
 
+    // Set output interval in terms of time
+    HiPS.setOutputIntervalTime(tRun/20);  // Save results every 100 seconds
+
+    // Write initial condition
+    HiPS.writeData(1, 0, 0.0 );
+  
     // Run the combustion simulation
     HiPS.calculateSolution(tRun, true);
 

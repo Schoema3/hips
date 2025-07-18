@@ -1105,6 +1105,7 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
 
     string fname = s1 + "/" + s2;
     ofstream ofile(fname.c_str());
+    cout << endl << "writing data for time " << outputTime << " to file: " << fname.c_str();
 
     // Check if file opened successfully
     if (!ofile) {
@@ -1452,6 +1453,6 @@ void hips::saveAllParameters() {
     }
 
     file.close();
-    std::cout << "All parameters saved in: " << filepath << std::endl;
+    std::cout << endl << "All parameters saved in: " << filepath << std::endl;
 }
 /////////////////////////////////////////////////////////////////////////////

@@ -150,6 +150,8 @@ public:
 
     void calculateSolution(const double tRun, bool shouldWriteData =false);                         // Running simulations 
 
+    void writeData(int real, const int ifile, const double outputTime);                                       // Writing the results for a user-defined number of eddies in the data folder.
+
 private:
 
     std::vector<double> projection(std::vector<double> &vcfd, std::vector<double> &weight);         // Perform vector projection of flow particles onto hips parcels operation without density 
@@ -177,7 +179,6 @@ private:
    
     void forceProfile();
     
-    void writeData(int real, const int ifile, const double outputTime);                                       // Writing the results for a user-defined number of eddies in the data folder.
     void saveAllParameters();                                                                       // Function to save ALL parameters
     
     /////////////////////////  COSTRUCTORS  ///////////////////////// 
