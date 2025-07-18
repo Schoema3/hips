@@ -21,7 +21,7 @@ set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}/installed")
 
 # ---- Build options ----
 
-option(REACTIONS_ENABLED     "Enable reactions"           ON)
+option(REACTIONS_ENABLED     "Enable reactions"           OFF)
 option(HIPS_BUILD_EXAMPLES   "Build hips examples"        ON)
 option(HIPS_BUILD_DOCS       "Build hips documentation"   ON)
 
