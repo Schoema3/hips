@@ -22,7 +22,6 @@ if(REACTIONS_ENABLED)
 
 #---------- Example 3
 
-
     add_executable(ex_3.x ex_3.cc)
     target_link_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/lib")
     target_link_libraries(ex_3.x PRIVATE hips ${CANTERA})
