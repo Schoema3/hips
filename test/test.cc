@@ -2,7 +2,6 @@
 #include "hips.h"
 
 #include <memory>
-#include <format>
 #include <cmath>
 
 using namespace std;
@@ -20,7 +19,7 @@ TEST_CASE( "Test HiPS library" ) {
 
     //////////////////////////////////////////////////////////////////////////
 
-    SECTION("Test variable setup: projection and back_projection") {
+    SECTION("Test variable setup: projection and back projection") {
 
         vector<double> ScHips = {1.0}; // Schmidt numbers for low and high diffusivity
         int            nvars = 1;      // Number of scalar fields

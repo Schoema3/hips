@@ -22,6 +22,7 @@ public:
     int nparcels;                                                  ///< number of parcels
     int realization;                                               ///< number of realizations
     std::vector<std::shared_ptr<std::vector<double>>> varData;     ///< vector of pointers to vector
+    std::vector<double> varRho;                                    ///< density
     std::vector<int> pLoc;                                         ///< parcel index array for fast implementation of swaps
  
 #ifdef REACTIONS_ENABLED
@@ -65,7 +66,6 @@ private:
     randomGenerator rand;                                               
     
     std::vector<int> i_plus;                                       ///< ceil(i_batchelor)
-    std::vector<double> varRho;                                       
     std::vector<double> ScHips;                                    ///< vector containing Schmidt numbers related to each variable
     std::vector<std::string> varName;                              ///< vector containing the names of parcel variables
     std::vector<double> parcelTimes;                               ///< current times corresponding to the parcel states

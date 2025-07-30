@@ -365,12 +365,20 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho) {
     
-    std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
-    std::vector<double> vh = results.first;
-    std::vector<double> rho_h = results.second;
+    //old std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
+    //old std::vector<double> vh = results.first;
+    //old std::vector<double> rho_h = results.second;
+    //old
+    //old varData[currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));            
+    //old varRho = std::vector<double>(rho_h);
+    //old varName[currentIndex] = varN;
+    //old
+    //old currentIndex++; 
 
-    varData[currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));            
-    varRho = std::vector<double>(rho_h);
+    std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
+
+    varData[currentIndex] = std::make_shared<std::vector<double>>(results.first);
+    varRho = results.second;
     varName[currentIndex] = varN;
  
     currentIndex++; 
@@ -478,18 +486,15 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
     int jprev = 0;
 
     for (int i = 0; i < nh; i++) {
-        double total_dx = 0.0;
 
         for (int j = jprev + 1; j <= nc; ++j) {
             if (xc[j] <= xh[i + 1]) {
                 double d = std::min(xc[j] - xc[j - 1], xc[j] - xh[i]);
-                total_dx += d;
                 rho_h[i] += density[j - 1] * d;
                 vh[i] += density[j - 1] * vcfd[j - 1] * d;
             } 
             else {
                 double d = std::min(xh[i + 1] - xc[j - 1], xh[i + 1] - xh[i]);
-                total_dx += d;
                 rho_h[i] += density[j - 1] * d;
                 vh[i] += density[j - 1] * vcfd[j - 1] * d;
                 jprev = j - 1;
@@ -1273,17 +1278,14 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_d
     int jprev = 0;
 
     for (int i = 0; i < nc; ++i) {
-        double total_dx = 0.0;
 
         for (int j = jprev + 1; j <= nh; ++j) {
             if (xh[j] <= xc[i + 1]) {
                 double d = std::min(xh[j] - xh[j - 1], xh[j] - xc[i]);
-                total_dx += d;
                 rho_c[i] += rho_h[j - 1] * d;
                 vc[i] += vh[j - 1] * rho_h[j - 1] * d;
             } else {
                 double d = std::min(xc[i + 1] - xh[j - 1], xc[i + 1] - xc[i]);
-                total_dx += d;
                 rho_c[i] += rho_h[j - 1] * d;
                 vc[i] += vh[j - 1] * rho_h[j - 1] * d;
 
