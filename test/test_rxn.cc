@@ -136,9 +136,6 @@ TEST_CASE( "Test HiPS library" ) {
     
         //--------- solve
 
-    // Set output interval in terms of time
-    H.setOutputIntervalTime(tRun/20);  // Save results every 100 seconds
-
         H.calculateSolution(tRun, true);
     
         //--------- test
