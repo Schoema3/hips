@@ -20,7 +20,7 @@ TEST_CASE( "Test HiPS library" ) {
 
     //////////////////////////////////////////////////////////////////////////
 
-    SECTION("Test variable setup (projection)") {
+    SECTION("Test variable setup: projection and back_projection") {
 
         vector<double> ScHips = {1.0}; // Schmidt numbers for low and high diffusivity
         int            nvars = 1;      // Number of scalar fields
@@ -28,7 +28,7 @@ TEST_CASE( "Test HiPS library" ) {
         hips H(nLevels, domainLength, tau0, C_param, forceTurb, nvars, ScHips, false);
 
         vector<double> var = {0.985, 0.784, 0.508, 0.404, 0.913, 0.126, 0.561};
-        vector<double> w   = {0.422, 6.845, 0.851, 7.806, 3.512, 4.258, 2.071};   // test: not a power of 2, not uniform
+        vector<double> w   = {0.422, 6.845, 0.851, 7.806, 3.512, 4.258, 2.071};   // test: not a power of 2, not uniform, don't sum to 1
 
         double sumw = 0.0;                  // normalize w
         for(int i=0; i<var.size(); i++)
@@ -39,27 +39,22 @@ TEST_CASE( "Test HiPS library" ) {
         for(int i=0; i<var.size(); i++)
             sum1 += var[i]*w[i];
 
-        H.set_varData(var, w, "test");      // compute HiPS projected sum
-        double sum2 = 0.0;
+        H.set_varData(var, w, "test");
+        double sum2 = 0.0;                  // compute HiPS projected sum
         for(int i=0; i<H.nparcels; i++)
             sum2 += (*H.varData[0])[H.pLoc[i]];
         sum2 /= H.nparcels;
-
-        cout << endl << "sum1 = " << sum1 << ", sum2 = " << sum2 << endl;
 
         REQUIRE( abs((sum1 - sum2)/sum1) < 1E-14 );   // results equal to within roundoff error
 
         //------------
 
         auto var2 = H.get_varData();
-        sum1 = 0.0;
-        for(int i=0; i<var2.size(); i++)
-            sum1 += var2[0][i]/H.nparcels;
+        double sum3 = 0.0;                 // compute back_projected sum
+        for(int i=0; i<var2[0].size(); i++)
+            sum3 += var2[0][i]*w[i];
 
-        cout << endl << "sum1 = " << sum1 << ", sum2 = " << sum2 << endl;
-
-        REQUIRE( abs((sum1 - sum2)/sum1) < 1E-14 );   // results equal to within roundoff error
-        
+        REQUIRE( abs((sum3 - sum2)/sum3) < 1E-14 );   // results equal to within roundoff error
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -92,8 +87,4 @@ TEST_CASE( "Test HiPS library" ) {
         REQUIRE( (*H.varData[1])[H.pLoc[580]] == 1.0837252030932285 );
         REQUIRE( (*H.varData[2])[H.pLoc[580]] == 0.9954210282686337 );
     }
-
-
-
-
 }

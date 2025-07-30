@@ -1183,6 +1183,14 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
 /// - Mismatches in data sizes between HiPS parcels and flow particles may lead to unexpected results.
 //////////////////////////////////////////////////////////////////////////////
 
+//  cfd
+//  i=    0         1         2         3
+//   |    *    |    *    |    *    |    *    |
+
+//  hips
+//   | * | * | * | * | * | * | * | * | * | * |
+//  j= 0   1   2   3   4   5   6   7   8   9
+
 std::vector<double> hips::projection_back(std::vector<double> &vh) {
 
     int nh = xh.size() - 1;
