@@ -22,6 +22,7 @@ public:
     int nparcels;                                                  ///< number of parcels
     int realization;                                               ///< number of realizations
     std::vector<std::shared_ptr<std::vector<double>>> varData;     ///< vector of pointers to vector
+    std::vector<int> pLoc;                                         ///< parcel index array for fast implementation of swaps
  
 #ifdef REACTIONS_ENABLED
     std::shared_ptr<Cantera::ThermoPhase> gas;                     ///< Shared pointer to a Cantera thermochemistry object
@@ -64,7 +65,6 @@ private:
     randomGenerator rand;                                               
     
     std::vector<int> i_plus;                                       ///< ceil(i_batchelor)
-    std::vector<int> pLoc;                                         ///< parcel index array for fast implementation of swaps
     std::vector<double> varRho;                                       
     std::vector<double> ScHips;                                    ///< vector containing Schmidt numbers related to each variable
     std::vector<std::string> varName;                              ///< vector containing the names of parcel variables
@@ -259,8 +259,8 @@ public:
          int seed = 10, 
          int realization_ = 1);
 
-    void resetForNewRealization() {                                                                 // Reset the number of Index to use for new realization
-    currentIndex = 0;
+    void resetForNewRealization() { // Reset the number of Index to use for new realization
+        currentIndex = 0;
     }
  
 };

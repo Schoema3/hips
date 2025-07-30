@@ -525,7 +525,11 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
 /////////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::setGridCfd(std::vector<double> &w) {
-    
+
+    double sumw = 0.0;
+    for(int i=0; i<w.size(); i++)
+        sumw += w[i];
+   
     std::vector<double> pos;                               // Initializing a vector to hold the grid positions
     double posL = 0.0;                                     // Initializing the starting position
 
@@ -533,7 +537,7 @@ std::vector<double> hips::setGridCfd(std::vector<double> &w) {
 
     while (i <= w.size()) {                               // Generate the grid positions based on the weights
         pos.push_back(posL);                              // Add the current position to the grid
-        posL += w[i];                                     // Move to the next position by adding the corresponding weight
+        posL += w[i]/sumw;                                // Move to the next position by adding the corresponding weight
         i++;                                              
     }
     return pos;                                           // Return the generated grid positions
@@ -1186,10 +1190,6 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 
     std::vector<double> vc(nc, 0.0);
     int jprev = 0;
-
-    for (double val : vc)
-        std::cout << val << " ";
-    std::cout << std::endl;
 
     for (int i = 0; i < nc; ++i) {
         for (int j = jprev + 1; j <= nh; ++j) {

@@ -15,15 +15,19 @@ install(TARGETS ex_1.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
 
 if(REACTIONS_ENABLED)
 
+    find_library(CANTERA NAMES cantera_shared cantera)
+
     add_executable(ex_2.x ex_2.cc)
-    target_link_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/lib")
+    target_include_directories(ex_2.x PUBLIC "$ENV{CONDA_PREFIX}/include")
+    target_link_directories(ex_2.x PUBLIC "$ENV{CONDA_PREFIX}/lib")
     target_link_libraries(ex_2.x PRIVATE hips ${CANTERA})
     install(TARGETS ex_2.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
 
 #---------- Example 3
 
     add_executable(ex_3.x ex_3.cc)
-    target_link_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/lib")
+    target_include_directories(ex_3.x PUBLIC "$ENV{CONDA_PREFIX}/include")
+    target_link_directories(ex_3.x PUBLIC "$ENV{CONDA_PREFIX}/lib")
     target_link_libraries(ex_3.x PRIVATE hips ${CANTERA})
     install(TARGETS ex_3.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
 
