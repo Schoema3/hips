@@ -2,7 +2,7 @@
 
 ############################
 
-cd ../build
+cd build
 echo "$PWD"
 #cmake -D HIPS_BUILD_TESTS=ON -D REACTIONS_ENABLED=ON..
 #make -j
