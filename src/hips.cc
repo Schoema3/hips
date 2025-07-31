@@ -1350,22 +1350,27 @@ std::vector<std::vector<double>> hips::get_varData(){
 ///   before invoking this function.
 ///////////////////////////////////////////////////////////////////////////////////
 
-std::vector<std::pair<std::vector<double>, std::vector<double>>> hips::get_varData_with_density() {
+std::pair<std::vector<std::vector<double>>, std::vector<double>> hips::get_varData_with_density() {
 
-    std::vector<std::pair<std::vector<double>, std::vector<double>>> varDataProjections;  // Vector to store data projections with densities
+    std::vector<std::vector<double>> varDataProjections;
+
+    std::vector<double> rho_h = varRho;
+    std::vector<double> rho_c;  // this will store the result density
 
     for (int i = 0; i < varData.size(); i++) {
-        // Extract the value and density data
-        std::vector<double> vh = (*varData[i]);  // Assuming varData[i][0] holds the values
-        std::vector<double> rho_h = varRho;      // Assuming varData[i][1] holds the densities
+        std::vector<double> vh = (*varData[i]);
+        auto [vc, rho_c_tmp] = projection_back_with_density(vh, rho_h);
 
-        // Project the data back with density and store the result
-        varDataProjections.push_back(projection_back_with_density(vh, rho_h));
+        varDataProjections.push_back(vc);
+
+        // Only keep density from the first variable
+        if (i == 0) {
+            rho_c = rho_c_tmp;
+        }
     }
 
-    return varDataProjections;  // Return the vector containing modified data projections with densities
+    return {varDataProjections, rho_c};
 }
-
 /////////////////////////////////////////////////////////////////////////////////////
 /// \brief Sets the interval (in number of eddy events) for writing simulation data.
 ///
