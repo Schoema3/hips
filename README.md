@@ -42,6 +42,9 @@ This code implements the Hierarchal Parcel Swapping (HiPS) model for turbulent r
 
 * `docs/`: Contains documentation built with Doxygen.
 
+* test/: contains unit/integration tests using the Catch2 library. There is a git hook in `.githooks/pre-push` that runs the tests before the code can be pushed.
+    * configure the hook location by running `git config core.hooksPath .githooks`
+
 
 ## Dependencies
 
@@ -52,6 +55,8 @@ This code implements the Hierarchal Parcel Swapping (HiPS) model for turbulent r
   * Only needed if reactions are enabled via `-DREACTIONS_ENABLED=ON` in the CMake configuration.
 * (OPTIONAL) [SUNDIALS](https://computing.llnl.gov/projects/sundials): required only for the CVODE integrator used in reaction-enabled builds.
 * (OPTIONAL) [Doxygen](https://www.doxygen.nl/): used to build code documentation from annotated source files.
+* (OPTIONAL) [Catch2](https://github.com/catchorg/Catch2): library for unit tests. 
+    * Only available if the `HIPS_BUILD_TESTS` flag is on, in which case the Catch2 library should be available of the system.
 
 ### Post-processing
 Post-processing of simulation data is performed using Python 3 scripts. We recommend Python 3.6 or higher. The following packages are required and can be installed via `pip`:

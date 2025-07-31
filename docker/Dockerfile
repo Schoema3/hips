@@ -31,7 +31,7 @@
 FROM alpine:3.22.0
 
 # Install the necessary packages
-RUN apk add --no-cache wget tar cmake make g++ lapack-dev vim python3-dev
+RUN apk add --no-cache wget tar cmake make g++ lapack-dev vim python3-dev catch2-3
 
 ############## Build Sundials
 
@@ -84,7 +84,7 @@ RUN git clone https://github.com/BYUignite/hips.git --depth=1 \
 &&  cd hips \
 &&  mkdir build \
 &&  cd build \
-&&  cmake -DREACTIONS_ENABLED=ON -DHIPS_BUILD_DOCS=ON -DHIPS_BUILD_EXAMPLES=ON .. \
+&&  cmake -D REACTIONS_ENABLED=ON -D HIPS_BUILD_DOCS=ON -D HIPS_BUILD_EXAMPLES=ON -D HIPB_BUILD_TESTS=ON .. \
 &&  make -j \
 &&  make install \
 &&  cd ../

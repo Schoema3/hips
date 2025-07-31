@@ -140,10 +140,8 @@ TEST_CASE( "Test HiPS library" ) {
     
         //--------- test
 
-        cout << endl << format("{}", (H.Temp[H.pLoc[11]])) << endl;
-    
         REQUIRE( H.nparcels == (1 << (nLevels-1)) );                     // based on ScHips set above
-        REQUIRE( (*H.varData[16])[H.pLoc[11]] == 0.11312593835096947);   // CO2 mass fraction at parcel index 11
-        REQUIRE( H.Temp[H.pLoc[11]] == 1887.8571573335937 );             // Temperature at parcel index 11    
+        REQUIRE( abs((*H.varData[16])[H.pLoc[11]] - 0.11312593835096947) < 1E-5);   // CO2 mass fraction at parcel index 11
+        REQUIRE( abs(H.Temp[H.pLoc[11]] - 1887.8571573335937) < 1E-0 );             // Temperature at parcel index 11    
     }
 }

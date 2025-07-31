@@ -82,8 +82,8 @@ TEST_CASE( "Test HiPS library" ) {
         //--------- test
 
         REQUIRE( H.nparcels == (1 << (nLevels+1)) );                     // based on ScHips set above
-        REQUIRE( (*H.varData[0])[H.pLoc[580]] == 0.3863866554595461 );   // for given setup
-        REQUIRE( (*H.varData[1])[H.pLoc[580]] == 1.0837252030932285 );
-        REQUIRE( (*H.varData[2])[H.pLoc[580]] == 0.9954210282686337 );
+        REQUIRE( abs((*H.varData[0])[H.pLoc[580]] - 0.3863866554595461) < 1E-14 );   // for given setup
+        REQUIRE( abs((*H.varData[1])[H.pLoc[580]] - 1.0837252030932285) < 1E-14 );
+        REQUIRE( abs((*H.varData[2])[H.pLoc[580]] - 0.9954210282686337) < 1E-14 );
     }
 }
