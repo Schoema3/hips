@@ -84,6 +84,7 @@ hips::hips(int nLevels_,
 hips::hips(double C_param_, 
            int forceTurb_,
            int nVar_,
+           vector<double> &ScHips_,
            bool performReaction_,
            shared_ptr<void> vcantSol,
            int seed,
@@ -91,6 +92,7 @@ hips::hips(double C_param_,
     C_param(C_param_), 
     forceTurb(forceTurb_),       
     nVar(nVar_),                       
+    ScHips(ScHips_),   
     LrandSet(true),              
     rand(seed),
     performReaction(performReaction_),
@@ -118,12 +120,11 @@ hips::hips(double C_param_,
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<double> &ScHips_){    
+void hips::set_tree(int nLevels_, double domainLength_, double tau0_){    
  
     nLevels= nLevels_; 
     domainLength = domainLength_; 
     tau0 = tau0_; 
-    ScHips = ScHips_; 
 
     if (nLevels == -1)  
         nLevels = nL; 
@@ -207,11 +208,10 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_) {
+void hips::set_tree(double Re_, double domainLength_, double tau0_, std::string approach_) {
     Re = Re_;
     domainLength = domainLength_;
     tau0 = tau0_;
-    ScHips = ScHips_;
     approach = approach_;
 
     double baseLevelEstimate = (3.0 / 4) * log(1 / Re) / log(Afac);                               // Calculate the base tree level estimate (non-integer)
