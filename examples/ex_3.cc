@@ -1,16 +1,11 @@
 
 /// \file ex_3.cc
-/// \brief Example demonstrating non-premixed combustion using HiPS and Cantera.
-/// 
-/// This example simulates non-premixed turbulent flames using a HiPS domain with six levels. 
-/// It initializes separate parcels for fuel and oxidizer with a temperature gradient. 
-/// The simulation uses Cantera to handle chemical kinetics and calculates the resulting 
-/// temperature and species mass fractions.
+/// \brief Example showing possible structure of HiPS as a subgrid model
 /// 
 /// ## Compilation:
 /// ```bash
 /// cd build
-/// cmake .. -DREACTIONS_ENABLED=ON
+/// cmake ..
 /// make
 /// sudo make install
 /// ```
@@ -20,117 +15,85 @@
 /// cd ../run
 /// ./ex_3.x
 /// ```
-/// 
-/// ## Output:
-/// The simulation generates a file containing temperature and species concentration profiles.
-/// 
-/// ## Dependencies:
-/// - HiPS library (compiled with reaction support)
-/// - Cantera library (for chemical kinetics)
 
 ///////////////////////////////////////////////////////////////////////////////////////
-#include "hips.h"
-#include "cantera/base/Solution.h"
-#include "cantera/thermo.h"
 
-#include <vector>
-#include <string>
-#include <fstream>
-#include <sstream>
 #include <iostream>
-#include <iomanip>  // For setting precision in output
-#include <cmath>    // For isnan and isfinite
+#include <vector>
+#include <memory>
+#include "hips.h"
 
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////////////
 int main() {
-    // HiPS simulation parameters for non-premixed combustion
-    int nLevels = 6;             // Number of hierarchical levels
-    double domainLength = 0.01;  // HiPS domain length scale
-    double tau0 = 0.0005;        // Mixing timescale
-    double C_param = 0.5;        // Eddy rate multiplier
-    double tRun = 0.05;          // Simulation runtime
-    int forceTurb = 0;           // No forced turbulence
-    vector<double> ScHips(54, 1); // Unity Schmidt number for all species
 
-    // Initialize Cantera for combustion chemistry
-    auto cantSol = Cantera::newSolution("gri30.yaml");
-    auto gas = cantSol->thermo();
-    size_t nsp = gas->nSpecies();
-    int nVar = nsp + 1; // Number of variables (species + enthalpy)
+    double C_param = 0.5;             // Eddy turnover rate multiplier
+    int forceTurb = 2;                // Forcing parameter to impose turbulent profile
+    int nVar = 1;                     // Number of scalar fields
+    vector<double> ScHips = {1.0};    // Schmidt numbers for low and high diffusivity
+    bool performReaction = false;
 
-    // Create HiPS instance with reaction support
-    hips HiPS(nLevels, domainLength, tau0, C_param, forceTurb, nVar, ScHips, true, cantSol);
+    hips HiPS(C_param, forceTurb, nVar, ScHips, performReaction);
 
-    int nparcels = HiPS.nparcels;
+    //--------- initialize pseudo CFD variable
 
-    // Species mass fractions, temperature, and enthalpy for each parcel
-    vector<vector<double>> ysp(nsp, vector<double>(nparcels, 0));
-    vector<double> h(nparcels, 0.0), T(nparcels, 0.0), Z(nparcels, 0.0); // Enthalpy, temperature, mixture fraction
-    vector<string> variableNames(nsp + 1); // Variable names (enthalpy + species)
+    int nCFD = 4;                                // number of CFD grid cells
 
-    // Debugging: print the number of species
-    cout << "Number of species (nsp) = " << nsp << endl;
+    vector<vector<double>> var(nCFD);      // var[iCell][iParticle]
+    var[0] = vector<double>(20, 0.0);      // 20 particles in cell 0
+    var[1] = vector<double>(40, 0.0);      // 40 particles in cell 1
+    var[2] = vector<double>(60, 0.0);      // 60 particles in cell 2
+    var[3] = vector<double>(80, 0.0);      // 80 particles in cell 3
 
-    // Define temperature profile parameters
-    double T_ox = 300.0;  // Oxidizer temperature
-    double T_fuel = 1500.0; // Fuel temperature
-    double n_temp = 1.0;   // Exponent for interpolation
+    vector<vector<double>> w(nCFD);
+    w[0] = vector<double>(20, 1.0/20);     // uniform particle weights in cell 0
+    w[1] = vector<double>(40, 1.0/40);     // uniform particle weights in cell 1
+    w[2] = vector<double>(60, 1.0/60);     // uniform particle weights in cell 2
+    w[3] = vector<double>(80, 1.0/80);     // uniform particle weights in cell 3
 
-    // Initialize mixture fraction (Z) from 0 (oxidizer) to 1 (fuel)
-    for (int j = 0; j < nparcels; j++) {
-        Z[j] = static_cast<double>(j) / (nparcels - 1);
+    for(int i=0; i<nCFD; i++)                    // initialize variable values
+        for(int k=var[i].size()/2; k<var[i].size(); k++)
+            var[i][k] = 1.0;
+
+    /////////////// USER CFD steps...
+    
+    /////////////// do HiPS mixing in each CFD cell:
+
+    for(int iCell=0; iCell<nCFD; iCell++) {
+
+        cout << endl << "running HiPS in cell " << iCell << endl;
+
+        //---------- reset tree
+
+        double tau0 = 1.0;                         // time scale for the largest eddies
+        int nLevels = 9;                           // Number of levels
+        double domainLength = 1.0;                 // domain length scale
+
+        HiPS.set_tree(nLevels, domainLength, tau0);
+
+        //---------- set variables (CFD particles to HiPS parcels)
+
+        HiPS.set_varData(var[iCell], w[iCell], "mixf");
+        
+        //---------- advance hips
+
+        double tRun = 300.0;
+        HiPS.calculateSolution(tRun);
+
+        //---------- get variables (HiPS parcels to CFD particles)
+
+        var[iCell] = HiPS.get_varData()[0];
     }
 
-    double min_oxidizer = 0.05; // Minimum oxidizer fraction for stability
+    //HiPS.writeData( 1, 0, 300 );        // compare the output from HiPS to the projected profile output below (but plot on a scaled x axis, --> good!)
 
-    for (int j = 0; j < nparcels; j++) {
-        double Zj = Z[j];
-        double fuel_fraction = Zj;
-        double oxidizer_fraction = max(1.0 - Zj, min_oxidizer); // Prevent zero oxidizer
+    //cout << endl;
+    //for(int k=0; k<var[3].size(); k++)
+    //    cout << endl << var[3][k];
+    //cout << endl;
 
-        // Adjusted composition for fuel and oxidizer
-        string composition = "C2H4:" + to_string(fuel_fraction) + 
-                             ", O2:" + to_string(oxidizer_fraction * 3.5) +
-                             ", N2:" + to_string(oxidizer_fraction * 13.2); // Realistic air composition
-
-        // Calculate initial temperature based on mixture fraction
-        double T_init = T_ox + (T_fuel - T_ox) * pow(Zj, n_temp);
-
-        // Set gas state and calculate enthalpy
-        gas->setState_TPX(T_init, Cantera::OneAtm, composition);
-        h[j] = gas->enthalpy_mass();
-        gas->setState_HP(h[j], gas->pressure());
-        gas->equilibrate("HP", "auto", 50); // Equilibrate the gas state
-
-        // Store calculated temperature
-        T[j] = gas->temperature();
-
-        // Retrieve species mass fractions
-        for (int i = 0; i < nsp; i++) {
-            ysp[i][j] = gas->massFraction(i);
-        }
-    }
-
-    // Set temperature and variable names in HiPS
-    HiPS.Temp.assign(T.begin(), T.end());
-    variableNames[0] = "enthalpy";
-    for (int i = 0; i < nsp; i++) {
-        variableNames[i + 1] = gas->speciesName(i);
-    }
-
-    // Set uniform weight for each parcel
-    vector<double> weight(nparcels, 1.0 / nparcels);
-
-    // Assign variables to HiPS
-    HiPS.set_varData(h, weight, variableNames[0]);
-    for (int k = 0; k < nsp; k++) 
-        HiPS.set_varData(ysp[k], weight, variableNames[k + 1]);
-
-    // Run the combustion simulation
-    HiPS.calculateSolution(tRun, true);
+    /////////////// USER CFD steps ...
 
     return 0;
 }
-

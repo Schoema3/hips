@@ -12,8 +12,12 @@ The example `ex_1.cc` demonstrates a simulation of scalar mixing dynamics, showi
 The example `ex_2.cc` illustrates HiPS mixing coupled with chemical reactions, focusing on combustion processes. The premixed example simulates turbulent flames using a stoichiometric ethylene/air mixture to initialize a HiPS domain with six levels. In this setup, 25% of the parcels are pre-combusted, while the remaining 75% are fresh reactants. The Schmidt number is set to unity for all species, and the domain length scale is 0.01.
 
 
-## Example 3: Non-Premixed Combustion (ex_3.cc)
-The example `ex_3.cc` also demonstrates HiPS mixing coupled with chemical reactions, but focuses on non-premixed combustion processes. In this setup, the initial condition consists of separate parcels for fuel and oxidizer. The mixing dynamics and ignition/extinction behavior are similar to the premixed case but differ in initialization. The flexibility of HiPS allows users to switch between premixed and non-premixed scenarios by altering the initial configuration.
+## Example 3: Subgrid mixing (ex_3.cc)
+The example `ex_3.cc` demonstrates use of HiPS as a subgrid mixing model for CFD, providing an outline of the code and calls to the user interface.  Simple mixing similar to Example 1 is done.The example assumes a simple configuration with a few CFD grid cells with each cell containing a different number of flow particles. The user code loops over the grid cells, and in each pass through the loop: 
+- resets the HiPS tree, 
+- assigns variables from the CFD particles to the HiPS parcels, 
+- performs the HiPS mixing, 
+- transfers the HiPS parcel data back to the CFD particle data.
 
 
 ### Chemical Reaction Integrators

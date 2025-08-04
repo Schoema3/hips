@@ -130,6 +130,8 @@ int main() {
     // Run the combustion simulation
     HiPS.calculateSolution(tRun, true);
 
+    cout << endl;
+
     return 0;
 }
 
