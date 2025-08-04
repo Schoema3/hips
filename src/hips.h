@@ -144,8 +144,8 @@ public:
                      const std::vector<double> &rho);                                               // passing all variables to vector of pointer
 
     std::vector<std::vector<double>> get_varData();                                                 // Retrieves modified data from the HiPS library and stores it in the provided vector. 
-    std::vector<std::pair<std::vector<double>, std::vector<double>>> get_varData_with_density();
-    
+    std::pair<std::vector<std::vector<double>>, std::vector<double>> get_varData_with_density();
+   
     void setOutputIntervalTime(double interval);
     void setOutputIntervalEddy(int interval);
 

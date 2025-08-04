@@ -58,14 +58,16 @@ TEST_CASE( "Test HiPS library" ) {
         //------------
 
         auto pairs = H.get_varData_with_density();
-        auto var2 = pairs[0].first;
-        auto rho2 = pairs[0].second;
-        double sum3 = 0.0;                 // compute back_projected sum
-        for(int i=0; i<var2.size(); i++) {
-            sum3 += var2[i]*rho2[i]*w[i];
-        }
+        auto var2 = pairs.first[0];      // First variable (back-projected values)
+        auto rho2 = pairs.second;        // Back-projected density (shared for all variables)
 
-        //REQUIRE( abs((sum3 - sum2)/sum3) < 1E-14 );   // results equal to within roundoff error
+        double sum3 = 0.0;
+        for (int i = 0; i < var2.size(); i++) {
+            sum3 += var2[i] * rho2[i] * w[i];
+        }
+ 
+
+        REQUIRE( abs((sum3 - sum2)/sum3) < 1E-14 );   // results equal to within roundoff error
     }
 
     //////////////////////////////////////////////////////////////////////////
