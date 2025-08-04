@@ -76,7 +76,7 @@ hips::hips(int nLevels_,
     varData.resize(nVar);
     varName.resize(nVar); 
 
-    set_tree(nLevels, domainLength, tau0, ScHips);
+    set_tree(nLevels, domainLength, tau0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
