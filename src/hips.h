@@ -162,7 +162,7 @@ private:
     
     std::vector<double> setGridHips(int N);                                                         // Set Hips grid with a specified number of grid points equal to number of parcels   
     std::vector<double> setGridCfd(std::vector<double> &w);                                         // Set CFD grid using provided weight vector
-    std::vector<double>  projection_back(std::vector<double> &vb);                       
+    std::vector<double> projection_back(std::vector<double> &vb);                       
     std::vector<double> projection_back_with_density(std::vector<double> &vh, 
                                                      std::vector<double> &rho_h,
                                                      std::vector<double> &rho_c);

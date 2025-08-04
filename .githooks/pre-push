@@ -1,10 +1,13 @@
 #!/bin/sh
 
+# run this to setup:
+# git config core.hooksPath .githooks
+
 ############################
 
 cd build
 echo "$PWD"
-cmake -D HIPS_BUILD_TESTS=ON -D REACTIONS_ENABLED=ON..
+cmake -D HIPS_BUILD_TESTS=ON -D REACTIONS_ENABLED=ON ..
 make -j
 make install
 cd ../run
@@ -30,5 +33,3 @@ if [ $? -ne 0 ]; then
   echo "TEST FAILED, ABORT"
   exit 1
 fi
-
-

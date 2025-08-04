@@ -38,7 +38,7 @@ int main() {
 
     //--------- initialize pseudo CFD variable
 
-    int nCFD = 4;                                // number of CFD grid cells
+    int nCFD = 4;                          // number of CFD grid cells
 
     vector<vector<double>> var(nCFD);      // var[iCell][iParticle]
     var[0] = vector<double>(20, 0.0);      // 20 particles in cell 0
