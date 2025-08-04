@@ -11,6 +11,13 @@ target_include_directories(ex_1.x PRIVATE "${CMAKE_SOURCE_DIR}/src")
 target_link_libraries(ex_1.x PRIVATE hips)
 install(TARGETS ex_1.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
 
+#---------- Example 4
+
+add_executable(ex_4.x ex_4.cc)
+target_include_directories(ex_4.x PRIVATE "${CMAKE_SOURCE_DIR}/src")
+target_link_libraries(ex_4.x PRIVATE hips)
+install(TARGETS ex_4.x DESTINATION "${PROJECT_SOURCE_DIR}/run")
+
 #---------- Example 2
 
 if(REACTIONS_ENABLED)

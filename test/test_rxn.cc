@@ -5,6 +5,7 @@
 
 #include <memory>
 #include <cmath>
+#include <format>
 
 using namespace std;
 
@@ -135,15 +136,24 @@ TEST_CASE( "Test HiPS library" ) {
         H.set_varData(h, weight, variableNames[0]);
         for (int k = 0; k < ysp.size(); k++) 
             H.set_varData(ysp[k], weight, variableNames[k + 1]);
+
+        //todo: compute vector of sum1 for all of the variables
     
         //--------- solve
 
         H.calculateSolution(tRun, true);
+
+        //todo: compute vector of sum2 for all of the variables
     
         //--------- test
+
+        //cout << endl << format("{}" << H.Temp[H.pLoc[11]]) << endl;
+        //cout << endl << format("{}" << (*H.varData[16])[H.pLoc[11]]) << endl;
 
         REQUIRE( H.nparcels == (1 << (nLevels-1)) );                     // based on ScHips set above
         REQUIRE( abs((*H.varData[16])[H.pLoc[11]] - 0.11312593835096947) < 1E-5);   // CO2 mass fraction at parcel index 11
         REQUIRE( abs(H.Temp[H.pLoc[11]] - 1887.8571573335937) < 1E-0 );             // Temperature at parcel index 11    
+
+        //todo: require that sum1 = sum2
     }
 }

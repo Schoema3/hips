@@ -204,6 +204,8 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_){
     pLoc.resize(nparcels);
     for (int i=0; i<nparcels; i++)
         pLoc[i] = i;
+
+    currentIndex = 0.0;
 } 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -315,6 +317,8 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::string 
     pLoc.resize(nparcels);
     for (int i = 0; i < nparcels; ++i)
         pLoc[i] = i;
+
+    currentIndex = 0.0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -1255,6 +1259,7 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 ///
 /// \param vh           Vector of values from HiPS parcels to be projected back.
 /// \param rho_h        Vector of density values from HiPS parcels.
+/// \param rho_c        Vector of density values (new) on CFD grid
 /// \return             A pair of vectors:
 ///                     - The first vector contains the values projected back onto the flow particles.
 ///                     - The second vector contains the densities redistributed to the flow particles.
@@ -1268,13 +1273,13 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 /// - Mismatches in data sizes between HiPS parcels and flow particles may lead to inaccurate results.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_density(std::vector<double> &vh, 
-                                                                                       std::vector<double> &rho_h) {
+vector<double> hips::projection_back_with_density(std::vector<double> &vh, 
+                                                  std::vector<double> &rho_h,
+                                                  std::vector<double> &rho_c) {
     int nh = xh.size() - 1;
     int nc = xc.size() - 1;
 
     std::vector<double> vc(nc, 0.0);
-    std::vector<double> rho_c(nc, 0.0);
     int jprev = 0;
 
     for (int i = 0; i < nc; ++i) {
@@ -1282,11 +1287,9 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_d
         for (int j = jprev + 1; j <= nh; ++j) {
             if (xh[j] <= xc[i + 1]) {
                 double d = std::min(xh[j] - xh[j - 1], xh[j] - xc[i]);
-                rho_c[i] += rho_h[j - 1] * d;
                 vc[i] += vh[j - 1] * rho_h[j - 1] * d;
             } else {
                 double d = std::min(xc[i + 1] - xh[j - 1], xc[i + 1] - xc[i]);
-                rho_c[i] += rho_h[j - 1] * d;
                 vc[i] += vh[j - 1] * rho_h[j - 1] * d;
 
                 jprev = j - 1;
@@ -1297,7 +1300,7 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_d
         // Normalize the results
         vc[i] /= rho_c[i] * (xc[i + 1] - xc[i]);
     }
-    return {vc, rho_c};
+    return vc;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -1324,12 +1327,11 @@ std::vector<std::vector<double>> hips::get_varData() {
     std::vector<std::vector<double>> varDataProjections;
 
     for (int i = 0; i < varData.size(); i++) {
-        std::vector<double> vh_raw = *varData[i];
 
         // Reorder using pLoc
         std::vector<double> vh(nparcels);
         for (int j = 0; j < nparcels; j++) {
-            vh[j] = vh_raw[pLoc[j]];
+            vh[j] = (*varData[i])[pLoc[j]];
         }
 
         std::vector<double> vc = projection_back(vh);
@@ -1369,20 +1371,18 @@ std::pair<std::vector<std::vector<double>>, std::vector<double>> hips::get_varDa
         rho_h[i] = varRho[pLoc[i]];
     }
 
-    std::vector<double> rho_c;
+    std::vector<double> rho_c = projection_back(rho_h);
 
     for (int i = 0; i < varData.size(); i++) {
-        std::vector<double> vh_raw = *varData[i];
 
         // Reorder variable data using pLoc
         std::vector<double> vh(nparcels);
         for (int j = 0; j < nparcels; j++) {
-            vh[j] = vh_raw[pLoc[j]];
+            vh[j] = (*varData[i])[pLoc[j]];
         }
 
-        auto [vc, rho_c_tmp] = projection_back_with_density(vh, rho_h);
+        auto vc = projection_back_with_density(vh, rho_h, rho_c);
         varDataProjections.push_back(vc);
-        if (i == 0) rho_c = rho_c_tmp;
     }
 
     return {varDataProjections, rho_c};
@@ -1485,6 +1485,6 @@ void hips::saveAllParameters() {
     }
 
     file.close();
-    std::cout << endl << "All parameters saved in: " << filepath << std::endl;
+    //cout << endl << "All parameters saved in: " << filepath << std::endl;
 }
 /////////////////////////////////////////////////////////////////////////////
