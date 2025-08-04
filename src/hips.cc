@@ -1295,7 +1295,7 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_d
         }
 
         // Normalize the results
-        vc[i] /= rho_c[i];
+        vc[i] /= rho_c[i] * (xc[i + 1] - xc[i]);
     }
     return {vc, rho_c};
 }
@@ -1320,15 +1320,25 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_d
 /// - The returned data structure should be interpreted according to the simulation setup and variable ordering.
 //////////////////////////////////////////////////////////////////////////////////////////
 
-std::vector<std::vector<double>> hips::get_varData(){
+std::vector<std::vector<double>> hips::get_varData() {
+    std::vector<std::vector<double>> varDataProjections;
 
-    std::vector<std::vector<double>> varDataProjections;               // Vector to store modified data projections
+    for (int i = 0; i < varData.size(); i++) {
+        std::vector<double> vh_raw = *varData[i];
 
-    for (int i = 0; i < varData.size(); i++)                           // Loop through each element of varData and project the data back
-        varDataProjections.push_back(projection_back((*varData[i])));  // Project the data back and store it in vh
+        // Reorder using pLoc
+        std::vector<double> vh(nparcels);
+        for (int j = 0; j < nparcels; j++) {
+            vh[j] = vh_raw[pLoc[j]];
+        }
 
-    return varDataProjections;                                         // Return the vector containing modified data projections
+        std::vector<double> vc = projection_back(vh);
+        varDataProjections.push_back(vc);
+    }
+
+    return varDataProjections;
 }
+
 ////////////////////////////////////////////////////////////////////////////////////
 /// \brief Retrieves final simulation data, including both values and densities.
 ///
@@ -1351,26 +1361,33 @@ std::vector<std::vector<double>> hips::get_varData(){
 ///////////////////////////////////////////////////////////////////////////////////
 
 std::pair<std::vector<std::vector<double>>, std::vector<double>> hips::get_varData_with_density() {
-
     std::vector<std::vector<double>> varDataProjections;
+    
+    // Reorder varRho based on pLoc
+    std::vector<double> rho_h(nparcels);
+    for (int i = 0; i < nparcels; i++) {
+        rho_h[i] = varRho[pLoc[i]];
+    }
 
-    std::vector<double> rho_h = varRho;
-    std::vector<double> rho_c;  // this will store the result density
+    std::vector<double> rho_c;
 
     for (int i = 0; i < varData.size(); i++) {
-        std::vector<double> vh = (*varData[i]);
-        auto [vc, rho_c_tmp] = projection_back_with_density(vh, rho_h);
+        std::vector<double> vh_raw = *varData[i];
 
-        varDataProjections.push_back(vc);
-
-        // Only keep density from the first variable
-        if (i == 0) {
-            rho_c = rho_c_tmp;
+        // Reorder variable data using pLoc
+        std::vector<double> vh(nparcels);
+        for (int j = 0; j < nparcels; j++) {
+            vh[j] = vh_raw[pLoc[j]];
         }
+
+        auto [vc, rho_c_tmp] = projection_back_with_density(vh, rho_h);
+        varDataProjections.push_back(vc);
+        if (i == 0) rho_c = rho_c_tmp;
     }
 
     return {varDataProjections, rho_c};
 }
+
 /////////////////////////////////////////////////////////////////////////////////////
 /// \brief Sets the interval (in number of eddy events) for writing simulation data.
 ///
