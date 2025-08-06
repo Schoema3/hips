@@ -1,4 +1,5 @@
-#include <catch2/catch_test_macros.hpp>
+#include <catch2/catch_all.hpp>
+
 #include "hips.h"
 #include "cantera/base/Solution.h"
 #include "cantera/thermo.h"
@@ -6,6 +7,7 @@
 #include <memory>
 #include <cmath>
 #include <format>
+using Catch::Approx;
 
 using namespace std;
 
@@ -24,6 +26,8 @@ TEST_CASE( "Test HiPS library" ) {
     auto   cantSol = Cantera::newSolution("gri30.yaml");
     auto   gas     = cantSol->thermo();  // cantera thermo object
     size_t nsp     = gas->nSpecies();    // # of gas species
+
+
     int    nVar    = nsp + 1;            // Number of variables (species + enthalpy)
 
     //////////////////////////////////////////////////////////////////////////
@@ -90,6 +94,8 @@ TEST_CASE( "Test HiPS library" ) {
 
         vector<double> y0(nsp);    // fresh reactant mass fractions                              
         vector<double> y1(nsp);    // burnt reactant mass fractions;
+        vector<double> rho(H.nparcels);  // density array
+
         double T0 = 300.0;         // fresh temperature
         double T1 = 300.0;         // burnt temperature
         double h0;                 // fresh enthalpy
@@ -101,6 +107,7 @@ TEST_CASE( "Test HiPS library" ) {
         gas->setState_TPX(T0, Cantera::OneAtm, "C2H4:1, O2:3, N2:11.25");
         h0 = gas->enthalpy_mass();
         gas->getMassFractions(y0.data());
+        double rho0 = gas->density();
 
         // Assign fresh reactant properties to parcels
         for (int i = 0; i < nsp; i++) {
@@ -115,6 +122,10 @@ TEST_CASE( "Test HiPS library" ) {
         gas->setState_TPX(T1, Cantera::OneAtm, "C2H4:1, O2:3, N2:11.25");
         gas->equilibrate("HP");
         gas->getMassFractions(y1.data());
+        double rho_burnt = gas->density();  // burnt gas density
+        h1 = gas->enthalpy_mass();  //  assign h1 for burnt gas
+
+
 
         // Assign pre-combusted properties to parcels
         for (int i = 0; i < nsp; i++) {
@@ -124,7 +135,15 @@ TEST_CASE( "Test HiPS library" ) {
                 ysp[i][j] = y1[i];
             }
         }
+        int fresh_end = static_cast<int>((1 - fracBurn) * H.nparcels);  // upper index for fresh
 
+        for (int j = 0; j < fresh_end; j++) {
+            rho[j] = rho0;
+        }
+        for (int j = fresh_end; j < H.nparcels; j++) {
+            rho[j] = rho_burnt;
+        }
+        
         // Assign variables to HiPS
         vector<string> variableNames(nsp + 1); // Variable names: enthalpy and species
         variableNames[0] = "enthalpy";
@@ -133,18 +152,48 @@ TEST_CASE( "Test HiPS library" ) {
 
         vector<double> weight(H.nparcels, 1.0 / H.nparcels); // Uniform weights
 
-        H.set_varData(h, weight, variableNames[0]);
-        for (int k = 0; k < ysp.size(); k++) 
-            H.set_varData(ysp[k], weight, variableNames[k + 1]);
+        H.set_varData(h, weight, variableNames[0], rho);  //
 
-        //todo: compute vector of sum1 for all of the variables
-    
+          //todo: compute vector of sum1 for all of the variables
+        for (int k = 0; k < ysp.size(); k++) 
+            H.set_varData(ysp[k], weight, variableNames[k + 1], rho);  // includes density
+
         //--------- solve
+       
+        auto initial = H.get_varData_with_density();
+        const std::vector<std::vector<double>>& var1 = initial.first;
+        const std::vector<double>& rho1 = initial.second;
+
+        std::vector<double> sum1(nVar, 0.0);
+        for (int k = 0; k < nVar; ++k) {
+            for (int i = 0; i < H.nparcels; ++i) {
+                sum1[k] += var1[k][i] * rho1[i] / H.nparcels;
+            } 
+        }
+
+        for (int k = 0; k < nVar; ++k) {
+            std::cout << "sum1[" << k << "] = " << sum1[k] << std::endl;
+        }
 
         H.calculateSolution(tRun, true);
+        
+        auto result = H.get_varData_with_density();
+        const std::vector<std::vector<double>>& var2 = result.first;
+        const std::vector<double>& rho2 = result.second;
+        
+        std::vector<double> sum2(nVar, 0.0);
+        for (int k = 0; k < nVar; ++k) {
+            for (int i = 0; i < H.nparcels; ++i) {
+                sum2[k] += var2[k][i] * rho2[i] / H.nparcels;
+            }
+        }
+        
+        for (int k = 0; k < nVar; ++k) {
+            REQUIRE(sum2[k] == Approx(sum1[k]).epsilon(1e-10));
+        }
+                  
 
-        //todo: compute vector of sum2 for all of the variables
-    
+
         //--------- test
 
         //cout << endl << format("{}" << H.Temp[H.pLoc[11]]) << endl;

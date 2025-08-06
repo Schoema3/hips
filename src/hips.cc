@@ -978,43 +978,92 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 /// \warning Ensure that \p iLevel and \p iTree correspond to valid levels and subtrees in the HiPS structure to prevent undefined behavior.
 ////////////////////////////////////////////////////////////////////////////////////////////
 
+//void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
+//    
+//    int istart;
+//    int iend;
+//
+//    int nPmix = 1 << (nLevels - iLevel - 2);                   // Number of parcels mixed together
+//
+//    int ime;
+//
+//    //---------- Mix left branch of iTree
+//
+//    istart = iTree << (Nm1-iLevel);  
+//    iend = istart + nPmix;
+//
+//    double s = 0;                                               // Initialize sum to 0
+//    for (int i=istart; i<iend; i++) {
+//        ime = pLoc[i];
+//        s += (*varData[kVar])[ime];
+//    }
+//    for (int i=istart; i<iend; i++) {
+//        ime = pLoc[i];
+//        (*varData[kVar])[ime] = s / nPmix; 
+//    }
+//
+//    //--------- Mix right branch of iTree
+//
+//    istart = iend;
+//    iend = istart + nPmix;
+//
+//    s = 0;                   // initialize sum to 0
+//    for (int i=istart; i<iend; i++) {
+//        ime = pLoc[i];
+//        s += (*varData[kVar])[ime];
+//    }
+//    for (int i=istart; i<iend; i++) {
+//        ime = pLoc[i];
+//        (*varData[kVar])[ime] = s / nPmix; 
+//    }
+//}
 void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
-    
+
     int istart;
     int iend;
-
-    int nPmix = 1 << (nLevels - iLevel - 2);                   // Number of parcels mixed together
-
+    int nPmix = 1 << (nLevels - iLevel - 2);   // Number of parcels mixed together
     int ime;
 
     //---------- Mix left branch of iTree
 
-    istart = iTree << (Nm1-iLevel);  
+    istart = iTree << (Nm1 - iLevel);
     iend = istart + nPmix;
 
-    double s = 0;                                               // Initialize sum to 0
-    for (int i=istart; i<iend; i++) {
+    double sum_rhoY = 0.0;
+    double sum_rho = 0.0;
+    for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        s += (*varData[kVar])[ime];
-    }
-    for (int i=istart; i<iend; i++) {
-        ime = pLoc[i];
-        (*varData[kVar])[ime] = s / nPmix; 
+        double rho = varRho[ime];
+        sum_rho += rho;
+        sum_rhoY += rho * (*varData[kVar])[ime];
     }
 
-    //--------- Mix right branch of iTree
+    double Ymix_left = (sum_rho > 1e-12) ? sum_rhoY / sum_rho : 0.0;
+
+    for (int i = istart; i < iend; i++) {
+        ime = pLoc[i];
+        (*varData[kVar])[ime] = Ymix_left;
+    }
+
+    //---------- Mix right branch of iTree
 
     istart = iend;
     iend = istart + nPmix;
 
-    s = 0;                   // initialize sum to 0
-    for (int i=istart; i<iend; i++) {
+    sum_rhoY = 0.0;
+    sum_rho = 0.0;
+    for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        s += (*varData[kVar])[ime];
+        double rho = varRho[ime];
+        sum_rho += rho;
+        sum_rhoY += rho * (*varData[kVar])[ime];
     }
-    for (int i=istart; i<iend; i++) {
+
+    double Ymix_right = (sum_rho > 1e-12) ? sum_rhoY / sum_rho : 0.0;
+
+    for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        (*varData[kVar])[ime] = s / nPmix; 
+        (*varData[kVar])[ime] = Ymix_right;
     }
 }
 
