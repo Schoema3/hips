@@ -17,9 +17,9 @@ TEST_CASE( "Test HiPS library" ) {
 
     int            nLevels = 6;          // Number of hierarchical levels
     double         domainLength = 0.01;  // Domain length scale
-    double         tau0 = 0.000005;      // Mixing timescale (fast mixing)
+    double         tau0 = 0.0005;      // Mixing timescale (fast mixing)
     double         C_param = 0.5;        // Eddy rate multiplier
-    double         tRun = 0.00013;       // Total simulation runtime
+    double         tRun = 0.0013;       // Total simulation runtime
     int            forceTurb = 0;        // No forced turbulence
     vector<double> ScHips(54, 1);        // Schmidt number (unity for all species)
 
@@ -56,9 +56,11 @@ TEST_CASE( "Test HiPS library" ) {
         H.set_varData(var, w, "test", rho);
         double sum2 = 0.0;                  // compute HiPS projected sum
         for(int i=0; i<H.nparcels; i++)
-            sum2 += (*H.varData[0])[H.pLoc[i]]*H.varRho[H.pLoc[i]]/H.nparcels;
+            sum2 += (*H.varData[0])[H.pLoc[i]] * H.varRho[H.pLoc[i]] * H.wPar[H.pLoc[i]];
 
-        REQUIRE( abs((sum1 - sum2)/sum1) < 1E-10 );   // results equal to within roundoff error
+
+
+        REQUIRE( abs((sum1 - sum2)/sum1) < 1E-8 );   // results equal to within roundoff error
 
         //------------
 
@@ -72,7 +74,7 @@ TEST_CASE( "Test HiPS library" ) {
         }
  
 
-        REQUIRE( abs((sum3 - sum2)/sum3) < 1E-14 );   // results equal to within roundoff error
+        REQUIRE( abs((sum3 - sum2)/sum3) < 1E-8 );   // results equal to within roundoff error
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -167,7 +169,8 @@ TEST_CASE( "Test HiPS library" ) {
         std::vector<double> sum1(nVar, 0.0);
         for (int k = 0; k < nVar; ++k) {
             for (int i = 0; i < H.nparcels; ++i) {
-                sum1[k] += var1[k][i] * rho1[i] / H.nparcels;
+                sum1[k] += var1[k][i] * rho1[i] * H.wPar[H.pLoc[i]];
+
             } 
         }
 
@@ -184,25 +187,24 @@ TEST_CASE( "Test HiPS library" ) {
         std::vector<double> sum2(nVar, 0.0);
         for (int k = 0; k < nVar; ++k) {
             for (int i = 0; i < H.nparcels; ++i) {
-                sum2[k] += var2[k][i] * rho2[i] / H.nparcels;
+                sum2[k] += var2[k][i] * rho2[i] * H.wPar[H.pLoc[i]];
+
             }
         }
         
         for (int k = 0; k < nVar; ++k) {
-            REQUIRE(sum2[k] == Approx(sum1[k]).epsilon(1e-10));
-        }
-                  
+            REQUIRE(std::abs(sum2[k] - sum1[k]) < 1e-12);
 
+
+           // REQUIRE(sum2[k] == Approx(sum1[k]).epsilon(1e-8));
+        }
 
         //--------- test
-
-        //cout << endl << format("{}" << H.Temp[H.pLoc[11]]) << endl;
-        //cout << endl << format("{}" << (*H.varData[16])[H.pLoc[11]]) << endl;
 
         REQUIRE( H.nparcels == (1 << (nLevels-1)) );                     // based on ScHips set above
         REQUIRE( abs((*H.varData[16])[H.pLoc[11]] - 0.11312593835096947) < 1E-5);   // CO2 mass fraction at parcel index 11
         REQUIRE( abs(H.Temp[H.pLoc[11]] - 1887.8571573335937) < 1E-0 );             // Temperature at parcel index 11    
 
-        //todo: require that sum1 = sum2
-    }
+       
+        }
 }

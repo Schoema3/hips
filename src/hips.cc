@@ -199,6 +199,7 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_){
     //------------------- Set the parcel addresses (index array)
 
     varRho.resize(nparcels);
+    wPar.assign(nparcels, 1.0 / nparcels);
     Temp.resize(nparcels);
  
     pLoc.resize(nparcels);
@@ -313,6 +314,7 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::string 
     //-----------------------------------------------------
 
     varRho.resize(nparcels);
+    wPar.assign(nparcels, 1.0 / nparcels);
     Temp.resize(nparcels);
     pLoc.resize(nparcels);
     for (int i = 0; i < nparcels; ++i)
@@ -473,44 +475,60 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 /// \warning Discrepancies in the size of the input vectors (`vcfd`, `weight`, and `density`) may lead 
 ///          to undefined behavior or inaccurate projections. Verify the inputs before calling this function.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector<double> &vcfd, 
-                                                                     std::vector<double> &weight, 
-                                                                     const std::vector<double> &density) {
-    
+std::pair<std::vector<double>, std::vector<double>> 
+hips::projection(std::vector<double> &vcfd, 
+                 std::vector<double> &weight, 
+                 const std::vector<double> &density) 
+{
+    // Build CFD and HiPS grids
     xc = setGridCfd(weight);
     xh = setGridHips(nparcels);
 
-    // Initialize variables
-    int nc = xc.size() - 1;
-    int nh = xh.size() - 1;
+    int nc = xc.size() - 1; // CFD cell count
+    int nh = xh.size() - 1; // HiPS parcel count
 
-    std::vector<double> vh(nh, 0.0);
-    std::vector<double> rho_h(nh, 0.0);
-    int jprev = 0;
+    std::vector<double> vh(nh, 0.0);     // parcel-averaged phi
+    std::vector<double> rho_h(nh, 0.0);  // parcel-averaged density
 
-    for (int i = 0; i < nh; i++) {
+    int jprev = 0; // remember where we left off in CFD cells
 
-        for (int j = jprev + 1; j <= nc; ++j) {
-            if (xc[j] <= xh[i + 1]) {
-                double d = std::min(xc[j] - xc[j - 1], xc[j] - xh[i]);
-                rho_h[i] += density[j - 1] * d;
-                vh[i] += density[j - 1] * vcfd[j - 1] * d;
-            } 
-            else {
-                double d = std::min(xh[i + 1] - xc[j - 1], xh[i + 1] - xh[i]);
-                rho_h[i] += density[j - 1] * d;
-                vh[i] += density[j - 1] * vcfd[j - 1] * d;
+    for (int i = 0; i < nh; i++) 
+    {
+        double M = 0.0;     // total mass in this parcel
+        double Mphi = 0.0;  // total (mass * phi) in this parcel
+
+        double parcel_length = xh[i + 1] - xh[i];
+
+        for (int j = jprev + 1; j <= nc; ++j) 
+        {
+            // Find geometric overlap between CFD cell and HiPS parcel
+            double overlap_start = std::max(xh[i], xc[j - 1]);
+            double overlap_end   = std::min(xh[i + 1], xc[j]);
+
+            double overlap_len = overlap_end - overlap_start;
+            if (overlap_len <= 0.0) continue;
+
+            // Effective length scaled by wPar[i]
+            double effective_len = overlap_len * (wPar[i] / parcel_length);
+
+            // Accumulate mass and mass*phi
+            double rho = density[j - 1];
+            double phi = vcfd[j - 1];
+            M    += rho * effective_len;
+            Mphi += rho * phi * effective_len;
+
+            // If CFD cell ends after parcel end  move to next parcel
+            if (xc[j] >= xh[i + 1]) {
                 jprev = j - 1;
                 break;
             }
         }
 
-        // ------------------------ Normalize results
-
-        rho_h[i] /= (xh[i + 1] - xh[i]);
-        vh[i] /= rho_h[i] * (xh[i + 1] - xh[i]);
+        // Convert total mass  average density and phi
+        if (wPar[i] > 0.0) rho_h[i] = M / wPar[i];
+        if (M > 0.0)       vh[i]    = Mphi / M;
     }
+
     return {vh, rho_h};
 }
 
@@ -899,47 +917,63 @@ int hips::getVariableIndex(const std::string &varName) const {
 ///          Missing or incorrectly configured `varName` entries may lead to runtime errors.
 /// \see set_varData, getVariableIndex
 ///////////////////////////////////////////////////////////////////////////////
-
 void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
+#ifdef REACTIONS_ENABLED
+    // ---- cache indices once
+    const int enthalpyIdx = getVariableIndex("enthalpy");
+    std::vector<int> yIdx(nsp);
+    for (int k = 0; k < nsp; ++k) {
+        yIdx[k] = getVariableIndex(gas->speciesName(k)); // map species name -> var index
+    }
 
-    #ifdef REACTIONS_ENABLED
+    const int nP     = 1 << (Nm1 - iLevel);
+    const int istart = iTree * nP;
+    const int iend   = istart + nP;
 
-    int enthalpyIdx = getVariableIndex("enthalpy");  // Dynamically find enthalpy index
-    int nP = 1 << (Nm1 - iLevel);
-    int istart = iTree * nP;
-    int iend = istart + nP;
-    int ime;
-    double dt;
-    double h;
     std::vector<double> y(nsp);
 
-    for (int i = istart; i < iend; i++) {
-        ime = pLoc[i];
-        dt = time - parcelTimes[ime];
+    for (int i = istart; i < iend; ++i) {
+        const int ime = pLoc[i];
+        const double dt = time - parcelTimes[ime];
 
-        // Access enthalpy using its index
-        h = (*varData[enthalpyIdx])[ime];
-
-          // Access species using their indices
-        for (int k = 0; k < nsp; k++) {
-            int speciesIdx = getVariableIndex(gas->speciesName(k));
-            y[k] = (*varData[speciesIdx])[ime];
+        // Pull current state
+        double h = (*varData[enthalpyIdx])[ime];
+        for (int k = 0; k < nsp; ++k) {
+            y[k] = (*varData[yIdx[k]])[ime];
         }
+
+        // ---- store old density BEFORE chemistry
+        const double rho_old = varRho[ime];
+
         if (performReaction) {
+            // Advance chemistry; bRxr updates its state internally
             bRxr->react(h, y, dt);
-            varRho[ime] = bRxr->getDensity();
+
+            // Push back temperature (for diagnostics/next EOS use)
             Temp[ime] = bRxr->temperature;
+
+            // Get new density from the reactor/EOS
+            const double rho_new = bRxr->getDensity();
+
+            // Keep per-parcel mass m = rho * wPar * V_tot constant
+            if (rho_new > 0.0) {
+                wPar[ime] *= (rho_old / rho_new);
+                varRho[ime] = rho_new;
+            }
+
         }
-        // Update enthalpy and species
+
+        // Write back enthalpy and species (post-reaction)
         (*varData[enthalpyIdx])[ime] = h;
-        for (int k = 0; k < nsp; k++) {
-            int speciesIdx = getVariableIndex(gas->speciesName(k));
-            (*varData[speciesIdx])[ime] = y[k];
+        for (int k = 0; k < nsp; ++k) {
+            (*varData[yIdx[k]])[ime] = y[k];
         }
 
         parcelTimes[ime] = time;
     }
-    #endif
+
+
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -977,94 +1011,45 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 ///
 /// \warning Ensure that \p iLevel and \p iTree correspond to valid levels and subtrees in the HiPS structure to prevent undefined behavior.
 ////////////////////////////////////////////////////////////////////////////////////////////
+void hips::mixAcrossLevelTree(int kVar, int iLevel, int iTree) {
+    const int nPmix = 1 << (nLevels - iLevel - 2);
 
-//void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
-//    
-//    int istart;
-//    int iend;
-//
-//    int nPmix = 1 << (nLevels - iLevel - 2);                   // Number of parcels mixed together
-//
-//    int ime;
-//
-//    //---------- Mix left branch of iTree
-//
-//    istart = iTree << (Nm1-iLevel);  
-//    iend = istart + nPmix;
-//
-//    double s = 0;                                               // Initialize sum to 0
-//    for (int i=istart; i<iend; i++) {
-//        ime = pLoc[i];
-//        s += (*varData[kVar])[ime];
-//    }
-//    for (int i=istart; i<iend; i++) {
-//        ime = pLoc[i];
-//        (*varData[kVar])[ime] = s / nPmix; 
-//    }
-//
-//    //--------- Mix right branch of iTree
-//
-//    istart = iend;
-//    iend = istart + nPmix;
-//
-//    s = 0;                   // initialize sum to 0
-//    for (int i=istart; i<iend; i++) {
-//        ime = pLoc[i];
-//        s += (*varData[kVar])[ime];
-//    }
-//    for (int i=istart; i<iend; i++) {
-//        ime = pLoc[i];
-//        (*varData[kVar])[ime] = s / nPmix; 
-//    }
-//}
-void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
-
-    int istart;
-    int iend;
-    int nPmix = 1 << (nLevels - iLevel - 2);   // Number of parcels mixed together
-    int ime;
-
-    //---------- Mix left branch of iTree
-
-    istart = iTree << (Nm1 - iLevel);
-    iend = istart + nPmix;
-
-    double sum_rhoY = 0.0;
-    double sum_rho = 0.0;
-    for (int i = istart; i < iend; i++) {
-        ime = pLoc[i];
-        double rho = varRho[ime];
-        sum_rho += rho;
-        sum_rhoY += rho * (*varData[kVar])[ime];
+    // Decide if we should mass-weight or not
+    bool useMassWeighted = performReaction;
+    if (!useMassWeighted) {
+        // Check if density is non-constant
+        for (size_t i = 1; i < varRho.size(); ++i) {
+            if (std::abs(varRho[i] - varRho[0]) > 1e-14) {
+                useMassWeighted = true;
+                break;
+            }
+        }
     }
 
-    double Ymix_left = (sum_rho > 1e-12) ? sum_rhoY / sum_rho : 0.0;
+    // Helper lambda to mix one branch
+    auto mixBranch = [&](int istart, int iend) {
+        double sum_w = 0.0, sum_wY = 0.0;
+        for (int i = istart; i < iend; ++i) {
+            const int ime = pLoc[i];
+            double w = useMassWeighted ? varRho[ime] * wPar[ime] : 1.0;
+            sum_w  += w;
+            sum_wY += w * (*varData[kVar])[ime];
+        }
+        double Ymix = (sum_w > 1e-30) ? (sum_wY / sum_w) : 0.0;
+        for (int i = istart; i < iend; ++i) {
+            (*varData[kVar])[pLoc[i]] = Ymix;
+        }
+    };
 
-    for (int i = istart; i < iend; i++) {
-        ime = pLoc[i];
-        (*varData[kVar])[ime] = Ymix_left;
-    }
+    // Left branch
+    int istart = iTree << (Nm1 - iLevel);
+    int iend   = istart + nPmix;
+    mixBranch(istart, iend);
 
-    //---------- Mix right branch of iTree
-
+    // Right branch
     istart = iend;
-    iend = istart + nPmix;
-
-    sum_rhoY = 0.0;
-    sum_rho = 0.0;
-    for (int i = istart; i < iend; i++) {
-        ime = pLoc[i];
-        double rho = varRho[ime];
-        sum_rho += rho;
-        sum_rhoY += rho * (*varData[kVar])[ime];
-    }
-
-    double Ymix_right = (sum_rho > 1e-12) ? sum_rhoY / sum_rho : 0.0;
-
-    for (int i = istart; i < iend; i++) {
-        ime = pLoc[i];
-        (*varData[kVar])[ime] = Ymix_right;
-    }
+    iend   = istart + nPmix;
+    mixBranch(istart, iend);
 }
 
 ///////////////////////////////////////////////////////////////////////////

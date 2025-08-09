@@ -24,7 +24,9 @@ public:
     std::vector<std::shared_ptr<std::vector<double>>> varData;     ///< vector of pointers to vector
     std::vector<double> varRho;                                    ///< density
     std::vector<int> pLoc;                                         ///< parcel index array for fast implementation of swaps
- 
+    std::vector<double> wPar;                                      ///< parcel volume fractions
+
+
 #ifdef REACTIONS_ENABLED
     std::shared_ptr<Cantera::ThermoPhase> gas;                     ///< Shared pointer to a Cantera thermochemistry object
     std::shared_ptr<batchReactor> bRxr;                            ///< Unique pointer to the integrator object
