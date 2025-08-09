@@ -56,9 +56,12 @@ TEST_CASE( "Test HiPS library" ) {
             sum1 += var[i]*w[i]*rho[i];
 
         H.set_varData(var, w, "test", rho);
+        const auto& pLoc    = H.get_pLoc();
+        const auto& varData = H.get_varData_ptr();
+
         double sum2 = 0.0;                  // compute HiPS projected sum
         for(int i=0; i<nparcels; i++)
-            sum2 += (*H.varData[0])[H.pLoc[i]] * H.varRho[H.pLoc[i]] * H.wPar[H.pLoc[i]];
+            sum2 += (*varData[0])[pLoc[i]] * H.varRho[pLoc[i]] * H.wPar[pLoc[i]];
 
 
 
@@ -155,6 +158,8 @@ TEST_CASE( "Test HiPS library" ) {
             variableNames[k+1] = gas->speciesName(k);
 
         vector<double> weight(nparcels, 1.0 / nparcels); // Uniform weights
+        const auto& pLoc    = H.get_pLoc();
+        const auto& varData = H.get_varData_ptr();
 
         H.set_varData(h, weight, variableNames[0], rho);  //
 
@@ -189,7 +194,7 @@ TEST_CASE( "Test HiPS library" ) {
         std::vector<double> sum2(nVar, 0.0);
         for (int k = 0; k < nVar; ++k) {
             for (int i = 0; i < nparcels; ++i) {
-                sum2[k] += var2[k][i] * rho2[i] * H.wPar[H.pLoc[i]];
+                sum2[k] += var2[k][i] * rho2[i] * H.wPar[pLoc[i]];
 
             }
         }
@@ -204,7 +209,7 @@ TEST_CASE( "Test HiPS library" ) {
         //--------- test
 
         REQUIRE( nparcels == (1 << (nLevels-1)) );                     // based on ScHips set above
-        REQUIRE( abs((*H.varData[16])[H.pLoc[11]] - 0.11312593835096947) < 1E-5);   // CO2 mass fraction at parcel index 11
+        REQUIRE( abs((*varData[16])[H.pLoc[11]] - 0.11312593835096947) < 1E-5);   // CO2 mass fraction at parcel index 11
         REQUIRE( abs(H.Temp[H.pLoc[11]] - 1887.8571573335937) < 1E-0 );             // Temperature at parcel index 11    
 
        

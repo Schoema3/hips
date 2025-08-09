@@ -154,6 +154,9 @@ public:
 
     void writeData(int real, const int ifile, const double outputTime);                                       // Writing the results for a user-defined number of eddies in the data folder.
     int get_nparcels() const { return nparcels; }
+    
+    const std::vector<int>& get_pLoc() const { return pLoc; }
+    const std::vector<std::shared_ptr<std::vector<double>>>& get_varData_ptr() const { return varData; }
 
 
 

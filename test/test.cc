@@ -41,9 +41,19 @@ TEST_CASE( "Test HiPS library" ) {
             sum1 += var[i]*w[i];
 
         H.set_varData(var, w, "test");
+        const auto& pLoc    = H.get_pLoc();
+        const auto& varData = H.get_varData_ptr();
+
+   
+       // now you can write exactly like before:
+       // sum1[k] += var1[k][i] * rho1[i] * H.wPar[pLoc[i]];
+       // REQUIRE( std::abs((*varData[16])[pLoc[11]] - 0.11312593835096947) < 1E-5 );
+       
+        
+
         double sum2 = 0.0;                  // compute HiPS projected sum
         for(int i=0; i<nparcels; i++)
-            sum2 += (*H.varData[0])[H.pLoc[i]];
+            sum2 += (*varData[0])[pLoc[i]];
         sum2 /= nparcels;
 
         REQUIRE( abs((sum1 - sum2)/sum1) < 1E-14 );   // results equal to within roundoff error
@@ -71,6 +81,8 @@ TEST_CASE( "Test HiPS library" ) {
         int nparcels = H.get_nparcels();
         vector<vector<double>> vars(nvars, vector<double>(nparcels));
         vector<double> weights(nparcels, 1.0/nparcels);  // Uniform weights
+        const auto& pLoc    = H.get_pLoc();
+        const auto& varData = H.get_varData_ptr();
 
         for (int k=0; k<nvars; k++) {
             for (int i=0; i<nparcels; i++)
@@ -84,8 +96,8 @@ TEST_CASE( "Test HiPS library" ) {
         //--------- test
 
         REQUIRE( nparcels == (1 << (nLevels+1)) );                     // based on ScHips set above
-        REQUIRE( abs((*H.varData[0])[H.pLoc[580]] - 0.3863866554595461) < 1E-14 );   // for given setup
-        REQUIRE( abs((*H.varData[1])[H.pLoc[580]] - 1.0837252030932285) < 1E-14 );
-        REQUIRE( abs((*H.varData[2])[H.pLoc[580]] - 0.9954210282686337) < 1E-14 );
+        REQUIRE( abs((*varData[0])[pLoc[580]] - 0.3863866554595461) < 1E-14 );   // for given setup
+        REQUIRE( abs((*varData[1])[pLoc[580]] - 1.0837252030932285) < 1E-14 );
+        REQUIRE( abs((*varData[2])[pLoc[580]] - 0.9954210282686337) < 1E-14 );
     }
 }
