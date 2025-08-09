@@ -62,7 +62,7 @@ int main() {
     // Create HiPS instance with reaction support
     hips HiPS(nLevels, domainLength, tau0, C_param, forceTurb, nVar, ScHips, true, cantSol, 11);
 
-    int nparcels = HiPS.nparcels;
+    int nparcels = HiPS.get_nparcels();
 
     // Define variables for species mass fractions, temperature, and enthalpy
     vector<vector<double>> ysp(53, vector<double>(nparcels, 0));

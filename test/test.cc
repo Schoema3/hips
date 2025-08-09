@@ -28,6 +28,8 @@ TEST_CASE( "Test HiPS library" ) {
 
         vector<double> var = {0.985, 0.784, 0.508, 0.404, 0.913, 0.126, 0.561};
         vector<double> w   = {0.422, 6.845, 0.851, 7.806, 3.512, 4.258, 2.071};   // test: not a power of 2, not uniform, don't sum to 1
+        int nparcels = H.get_nparcels();
+
 
         double sumw = 0.0;                  // normalize w
         for(int i=0; i<var.size(); i++)
@@ -40,9 +42,9 @@ TEST_CASE( "Test HiPS library" ) {
 
         H.set_varData(var, w, "test");
         double sum2 = 0.0;                  // compute HiPS projected sum
-        for(int i=0; i<H.nparcels; i++)
+        for(int i=0; i<nparcels; i++)
             sum2 += (*H.varData[0])[H.pLoc[i]];
-        sum2 /= H.nparcels;
+        sum2 /= nparcels;
 
         REQUIRE( abs((sum1 - sum2)/sum1) < 1E-14 );   // results equal to within roundoff error
 
@@ -66,13 +68,13 @@ TEST_CASE( "Test HiPS library" ) {
         hips H(nLevels, domainLength, tau0, C_param, forceTurb, nvars, ScHips, false);
 
         //--------- initialize vars
-
-        vector<vector<double>> vars(nvars, vector<double>(H.nparcels));
-        vector<double> weights(H.nparcels, 1.0/H.nparcels);  // Uniform weights
+        int nparcels = H.get_nparcels();
+        vector<vector<double>> vars(nvars, vector<double>(nparcels));
+        vector<double> weights(nparcels, 1.0/nparcels);  // Uniform weights
 
         for (int k=0; k<nvars; k++) {
-            for (int i=0; i<H.nparcels; i++)
-                vars[k][i] = (i<H.nparcels) ? 0 : 1;
+            for (int i=0; i<nparcels; i++)
+                vars[k][i] = (i<nparcels) ? 0 : 1;
             H.set_varData(vars[k], weights, "mixf_0" + to_string(k));
         }
         //--------- solve
@@ -81,7 +83,7 @@ TEST_CASE( "Test HiPS library" ) {
 
         //--------- test
 
-        REQUIRE( H.nparcels == (1 << (nLevels+1)) );                     // based on ScHips set above
+        REQUIRE( nparcels == (1 << (nLevels+1)) );                     // based on ScHips set above
         REQUIRE( abs((*H.varData[0])[H.pLoc[580]] - 0.3863866554595461) < 1E-14 );   // for given setup
         REQUIRE( abs((*H.varData[1])[H.pLoc[580]] - 1.0837252030932285) < 1E-14 );
         REQUIRE( abs((*H.varData[2])[H.pLoc[580]] - 0.9954210282686337) < 1E-14 );

@@ -43,6 +43,8 @@ TEST_CASE( "Test HiPS library" ) {
         //vector<double> w   = {0.5, 0.6, 0.7, 0.7, 0.6, 0.2};               // test: not a power of 2, not uniform, don't sum to 1
         vector<double> w(6,1.0/6); //   = {0.5, 0.6, 0.7, 0.7, 0.6, 0.2};               // test: not a power of 2, not uniform, don't sum to 1
         vector<double> rho = {1.300, 0.474, 0.303, 0.171, 0.335, 1.057};   // equilibrium for O2, CH4/5N2 mix
+        int nparcels = H.get_nparcels();
+
 
         double sumw = 0.0;                  // normalize w
         for(int i=0; i<var.size(); i++)
@@ -55,7 +57,7 @@ TEST_CASE( "Test HiPS library" ) {
 
         H.set_varData(var, w, "test", rho);
         double sum2 = 0.0;                  // compute HiPS projected sum
-        for(int i=0; i<H.nparcels; i++)
+        for(int i=0; i<nparcels; i++)
             sum2 += (*H.varData[0])[H.pLoc[i]] * H.varRho[H.pLoc[i]] * H.wPar[H.pLoc[i]];
 
 
@@ -89,14 +91,14 @@ TEST_CASE( "Test HiPS library" ) {
         hips H(nLevels, domainLength, tau0, C_param, forceTurb, nVar, ScHips, true, cantSol, 10);
     
         //--------- initialize vars
-
-        vector<vector<double>> ysp(nsp, vector<double>(H.nparcels, 0));     // species
-        vector<double> h(H.nparcels);                                       // enthalpy
-        vector<double> T(H.nparcels);                                       // temperature
+        int nparcels = H.get_nparcels();
+        vector<vector<double>> ysp(nsp, vector<double>(nparcels, 0));     // species
+        vector<double> h(nparcels);                                       // enthalpy
+        vector<double> T(nparcels);                                       // temperature
 
         vector<double> y0(nsp);    // fresh reactant mass fractions                              
         vector<double> y1(nsp);    // burnt reactant mass fractions;
-        vector<double> rho(H.nparcels);  // density array
+        vector<double> rho(nparcels);  // density array
 
         double T0 = 300.0;         // fresh temperature
         double T1 = 300.0;         // burnt temperature
@@ -113,7 +115,7 @@ TEST_CASE( "Test HiPS library" ) {
 
         // Assign fresh reactant properties to parcels
         for (int i = 0; i < nsp; i++) {
-            for (int j = 0; j <= (1 - fracBurn) * H.nparcels; j++) {
+            for (int j = 0; j <= (1 - fracBurn) * nparcels; j++) {
                 h[j] = h0;
                 T[j] = gas->temperature();
                 ysp[i][j] = y0[i];
@@ -131,18 +133,18 @@ TEST_CASE( "Test HiPS library" ) {
 
         // Assign pre-combusted properties to parcels
         for (int i = 0; i < nsp; i++) {
-            for (int j = ((1 - fracBurn) * H.nparcels + 1); j < H.nparcels; j++) {
+            for (int j = ((1 - fracBurn) * nparcels + 1); j < nparcels; j++) {
                 h[j] = h1;
                 T[j] = gas->temperature();
                 ysp[i][j] = y1[i];
             }
         }
-        int fresh_end = static_cast<int>((1 - fracBurn) * H.nparcels);  // upper index for fresh
+        int fresh_end = static_cast<int>((1 - fracBurn) * nparcels);  // upper index for fresh
 
         for (int j = 0; j < fresh_end; j++) {
             rho[j] = rho0;
         }
-        for (int j = fresh_end; j < H.nparcels; j++) {
+        for (int j = fresh_end; j < nparcels; j++) {
             rho[j] = rho_burnt;
         }
         
@@ -152,7 +154,7 @@ TEST_CASE( "Test HiPS library" ) {
         for (int k=0; k<ysp.size(); k++)
             variableNames[k+1] = gas->speciesName(k);
 
-        vector<double> weight(H.nparcels, 1.0 / H.nparcels); // Uniform weights
+        vector<double> weight(nparcels, 1.0 / nparcels); // Uniform weights
 
         H.set_varData(h, weight, variableNames[0], rho);  //
 
@@ -168,7 +170,7 @@ TEST_CASE( "Test HiPS library" ) {
 
         std::vector<double> sum1(nVar, 0.0);
         for (int k = 0; k < nVar; ++k) {
-            for (int i = 0; i < H.nparcels; ++i) {
+            for (int i = 0; i < nparcels; ++i) {
                 sum1[k] += var1[k][i] * rho1[i] * H.wPar[H.pLoc[i]];
 
             } 
@@ -186,7 +188,7 @@ TEST_CASE( "Test HiPS library" ) {
         
         std::vector<double> sum2(nVar, 0.0);
         for (int k = 0; k < nVar; ++k) {
-            for (int i = 0; i < H.nparcels; ++i) {
+            for (int i = 0; i < nparcels; ++i) {
                 sum2[k] += var2[k][i] * rho2[i] * H.wPar[H.pLoc[i]];
 
             }
@@ -201,7 +203,7 @@ TEST_CASE( "Test HiPS library" ) {
 
         //--------- test
 
-        REQUIRE( H.nparcels == (1 << (nLevels-1)) );                     // based on ScHips set above
+        REQUIRE( nparcels == (1 << (nLevels-1)) );                     // based on ScHips set above
         REQUIRE( abs((*H.varData[16])[H.pLoc[11]] - 0.11312593835096947) < 1E-5);   // CO2 mass fraction at parcel index 11
         REQUIRE( abs(H.Temp[H.pLoc[11]] - 1887.8571573335937) < 1E-0 );             // Temperature at parcel index 11    
 

@@ -19,7 +19,6 @@ class hips {
 
 public:
   
-    int nparcels;                                                  ///< number of parcels
     int realization;                                               ///< number of realizations
     std::vector<std::shared_ptr<std::vector<double>>> varData;     ///< vector of pointers to vector
     std::vector<double> varRho;                                    ///< density
@@ -38,7 +37,8 @@ public:
     std::vector<double> Temp;                                      ///< Vector containg temperature in each parcel;
     
 private:
-    
+
+    int nparcels;                                                  ///< number of parcels
     int currentIndex = 0;                                          ///< member variable to keep track of current index of variables
     int nLevels;                                                   ///< number of tree levels
     int nLevels_;                                                  ///< number of tree levels?
@@ -153,6 +153,10 @@ public:
     void calculateSolution(const double tRun, bool shouldWriteData =false);                         // Running simulations 
 
     void writeData(int real, const int ifile, const double outputTime);                                       // Writing the results for a user-defined number of eddies in the data folder.
+    int get_nparcels() const { return nparcels; }
+
+
+
 
 private:
 
