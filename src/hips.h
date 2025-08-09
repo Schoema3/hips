@@ -53,8 +53,7 @@ private:
 
     bool LScHips;                                                  ///< hips schmidt number
     bool performReaction;                                          ///< flag indicating whether chemical reactions are performed in the simulation 
-    bool LrandSet;                                                 ///< flag indicating new randomGen  --> allow deletion
-    
+        
     double time;                                                   ///< current simulation time
     double eddyRate_total;                                         ///< total rate of all eddies 0 through nLevels-3
     double eddyRate_inertial;                                      ///< total rate of all eddies 0 through iEta (= eddyRate_total if Sc=1) 
