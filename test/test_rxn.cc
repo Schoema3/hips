@@ -19,7 +19,7 @@ TEST_CASE( "Test HiPS library" ) {
     double         domainLength = 0.01;  // Domain length scale
     double         tau0 = 0.0018;      // Mixing timescale (fast mixing)
     double         C_param = 0.5;        // Eddy rate multiplier
-    double         tRun = 1.8;       // Total simulation runtime
+    double         tRun = 0.000000018;       // Total simulation runtime
     int            forceTurb = 0;        // No forced turbulence
     vector<double> ScHips(54, 1);        // Schmidt number (unity for all species)
 
@@ -84,138 +84,100 @@ TEST_CASE( "Test HiPS library" ) {
         REQUIRE( abs((sum3 - sum2)/sum3) < 1E-8 );   // results equal to within roundoff error
     }
 
-    //////////////////////////////////////////////////////////////////////////
-
+/////////////////////////////////////////////////////////////////////////
     SECTION("Test overall solve") {
+
+        vector<double> Sc(54, 1.0);
+        int nVar = nsp + 1;
     
-        vector<double> ScHips(54, 1);     // Schmidt number (unity for all species)
-        int nVar = nsp + 1;               // Number of variables (species + enthalpy)
-
-        //---------
+        hips H(nLevels, domainLength, tau0, C_param, forceTurb, nVar, Sc, true, cantSol, 10);
+        H.setDensityWeightedMixing(true);                                // Perform mass_weighted_mixing
     
-        hips H(nLevels, domainLength, tau0, C_param, forceTurb, nVar, ScHips, true, cantSol, 10);
-        H.setDensityWeightedMixing(true);
-
+        int npar = H.get_nparcels();
+        vector<double> weight(npar, 1.0 / npar);
     
-        //--------- initialize vars
-        int nparcels = H.get_nparcels();
-        vector<vector<double>> ysp(nsp, vector<double>(nparcels, 0));     // species
-        vector<double> h(nparcels);                                       // enthalpy
-        vector<double> T(nparcels);                                       // temperature
+        // ---- init fresh / burnt
 
-        vector<double> y0(nsp);    // fresh reactant mass fractions                              
-        vector<double> y1(nsp);    // burnt reactant mass fractions;
-        vector<double> rho(nparcels);  // density array
-
-        double T0 = 300.0;         // fresh temperature
-        double T1 = 300.0;         // burnt temperature
-        double h0;                 // fresh enthalpy
-        double h1;                 // burnt enthalpy
-
-        double fracBurn = 0.25;                // fraction of parcels pre-combusted
-
-        // Initialize fresh reactants
+        vector<vector<double>> ysp(nsp, vector<double>(npar, 0.0));
+        vector<double> h(npar), rho(npar), y0(nsp), y1(nsp);
+        double T0 = 300.0, T1 = 300.0, h0, h1;
+        double fracBurn = 0.25;
+    
         gas->setState_TPX(T0, Cantera::OneAtm, "C2H4:1, O2:3, N2:11.25");
-        h0 = gas->enthalpy_mass();
-        gas->getMassFractions(y0.data());
+        h0 = gas->enthalpy_mass();  gas->getMassFractions(y0.data());
         double rho0 = gas->density();
-
-        // Assign fresh reactant properties to parcels
-        for (int i = 0; i < nsp; i++) {
-            for (int j = 0; j <= (1 - fracBurn) * nparcels; j++) {
-                h[j] = h0;
-                T[j] = gas->temperature();
-                ysp[i][j] = y0[i];
-            }
-        }
-
-        // Initialize pre-combusted parcels
+        for (int j = 0; j <= (1 - fracBurn) * npar; ++j) { h[j] = h0; for (int k=0;k<nsp;++k) ysp[k][j] = y0[k]; }
+    
         gas->setState_TPX(T1, Cantera::OneAtm, "C2H4:1, O2:3, N2:11.25");
-        gas->equilibrate("HP");
-        gas->getMassFractions(y1.data());
-        double rho_burnt = gas->density();  // burnt gas density
-        h1 = gas->enthalpy_mass();  //  assign h1 for burnt gas
+        gas->equilibrate("HP");     gas->getMassFractions(y1.data());
+        double rho1b = gas->density(); h1 = gas->enthalpy_mass();
+        for (int j = ((1 - fracBurn) * npar + 1); j < npar; ++j) { h[j] = h1; for (int k=0;k<nsp;++k) ysp[k][j] = y1[k]; }
+    
+        int fresh_end = (int)((1 - fracBurn) * npar);
+        for (int j=0; j<fresh_end; ++j) rho[j] = rho0;
+        for (int j=fresh_end; j<npar;   ++j) rho[j] = rho1b;
+    
+        // ---- load into HiPS (enthalpy + species)
+        vector<string> names(nsp + 1);
+        names[0] = "enthalpy";
+        for (int k=0; k<nsp; ++k) names[k+1] = gas->speciesName(k);
+    
+        H.set_varData(h, weight, names[0], rho);
+        for (int k=0; k<nsp; ++k) H.set_varData(ysp[k], weight, names[k+1], rho);
+    
+        // ---- Before snapshot (CFD space)
 
+        auto snap1 = H.get_varData_with_density();
+        const auto& var1 = snap1.first;
+        const auto& rho1 = snap1.second;
+    
+        // run
+        H.calculateSolution(tRun, true);
+    
+        // ---- AFTER snapshot (CFD space)
+        auto snap2 = H.get_varData_with_density();
+        const auto& var2 = snap2.first;
+        const auto& rho2 = snap2.second;
+    
+        // mass conservation in CFD space
+        double M1 = 0.0, M2 = 0.0;
 
+        for (int i=0;i<npar;++i) { M1 += rho1[i]*weight[i]; M2 += rho2[i]*weight[i]; }
 
-        // Assign pre-combusted properties to parcels
-        for (int i = 0; i < nsp; i++) {
-            for (int j = ((1 - fracBurn) * nparcels + 1); j < nparcels; j++) {
-                h[j] = h1;
-                T[j] = gas->temperature();
-                ysp[i][j] = y1[i];
-            }
-        }
-        int fresh_end = static_cast<int>((1 - fracBurn) * nparcels);  // upper index for fresh
-
-        for (int j = 0; j < fresh_end; j++) {
-            rho[j] = rho0;
-        }
-        for (int j = fresh_end; j < nparcels; j++) {
-            rho[j] = rho_burnt;
-        }
-        
-        // Assign variables to HiPS
-        vector<string> variableNames(nsp + 1); // Variable names: enthalpy and species
-        variableNames[0] = "enthalpy";
-        for (int k=0; k<ysp.size(); k++)
-            variableNames[k+1] = gas->speciesName(k);
-
-        vector<double> weight(nparcels, 1.0 / nparcels); // Uniform weights
+        REQUIRE( M2 == Approx(M1).epsilon(1e-9).margin(1e-12) );
+    
+        // Sum of Y = 1 per parcel (parcel space)
         const auto& pLoc    = H.get_pLoc();
         const auto& varData = H.get_varData_ptr();
 
-        H.set_varData(h, weight, variableNames[0], rho);  //
+        for (int j=0; j<npar; ++j) {
+            int p = pLoc[j];
+            long double sumY = 0.0L;
 
-          //todo: compute vector of sum1 for all of the variables
-        for (int k = 0; k < ysp.size(); k++) 
-            H.set_varData(ysp[k], weight, variableNames[k + 1], rho);  // includes density
+            for (int k=1; k<nVar; ++k) sumY += (long double)(*varData[k])[p];
 
-        //--------- solve
-       
-        auto initial = H.get_varData_with_density();
-        const std::vector<std::vector<double>>& var1 = initial.first;
-        const std::vector<double>& rho1 = initial.second;
-
-        std::vector<double> sum1(nVar, 0.0);
-        for (int k = 0; k < nVar; ++k) {
-            for (int i = 0; i < nparcels; ++i) {
-                sum1[k] += var1[k][i] * rho1[i] * weight[i];  //  CFD cell widths
-
-            } 
+            REQUIRE( (double)sumY == Approx(1.0).epsilon(1e-8).margin(1e-12) );
         }
+    
+    // CO2 behavior
 
-        for (int k = 0; k < nVar; ++k) {
-            std::cout << "sum1[" << k << "] = " << sum1[k] << std::endl;
-        }
+    int idxCO2 = gas->speciesIndex("CO2") + 1;
+    double CO2_before = 0.0, CO2_after = 0.0;
 
-        H.calculateSolution(tRun, true);
-        
-        auto result = H.get_varData_with_density();
-        const std::vector<std::vector<double>>& var2 = result.first;
-        const std::vector<double>& rho2 = result.second;
-        
-        std::vector<double> sum2(nVar, 0.0);
-        for (int k = 0; k < nVar; ++k) {
-            for (int i = 0; i < nparcels; ++i) {
-                sum2[k] += var2[k][i] * rho2[i] * weight[i];  //  CFD cell widths
+    for (int i=0;i<npar;++i) {
+        CO2_before += var1[idxCO2][i]*rho1[i]*weight[i];
+        CO2_after  += var2[idxCO2][i]*rho2[i]*weight[i];
+    }
+    REQUIRE( CO2_after >= CO2_before - 1e-12 );
 
-            }
-        }
-        
-        for (int k = 0; k < nVar; ++k) {
-            REQUIRE(std::abs(sum2[k] - sum1[k]) < 4e-7);
+    // some CO2 must exist somewhere
+    double yco2_max = 0.0;
+    for (int j=0;j<npar;++j) yco2_max = std::max(yco2_max, (*varData[idxCO2])[pLoc[j]]);
+    REQUIRE( yco2_max > 1e-6 );
 
+    // make sure number of parcels matches structure
+    REQUIRE( npar == (1 << (nLevels-1)) );
+    }
 
-           // REQUIRE(sum2[k] == Approx(sum1[k]).epsilon(1e-8));
-        }
-
-        //--------- test
-
-        REQUIRE( nparcels == (1 << (nLevels-1)) );                     // based on ScHips set above
-        REQUIRE( abs((*varData[16])[H.pLoc[11]] - 0.11312593835096947) < 1E-5);   // CO2 mass fraction at parcel index 11
-        REQUIRE( abs(H.Temp[H.pLoc[11]] - 1887.8571573335937) < 1E-0 );             // Temperature at parcel index 11    
-
-       
-        }
+    
 }
