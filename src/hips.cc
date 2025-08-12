@@ -1009,45 +1009,67 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 ///
 /// \warning Ensure that \p iLevel and \p iTree correspond to valid levels and subtrees in the HiPS structure to prevent undefined behavior.
 ////////////////////////////////////////////////////////////////////////////////////////////
-void hips::mixAcrossLevelTree(int kVar, int iLevel, int iTree) {
-    const int nPmix = 1 << (nLevels - iLevel - 2);
+void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
+    
+    int istart;
+    int iend;
 
-    // Decide if we should mass-weight or not
-    bool useMassWeighted = performReaction;
-    if (!useMassWeighted) {
-        // Check if density is non-constant
-        for (size_t i = 1; i < varRho.size(); ++i) {
-            if (std::abs(varRho[i] - varRho[0]) > 1e-14) {
-                useMassWeighted = true;
-                break;
-            }
+    int nPmix = 1 << (nLevels - iLevel - 2);   // Number of parcels mixed together
+    int ime;
+
+    //---------- Mix left branch of iTree ----------
+    istart = iTree << (Nm1 - iLevel);  
+    iend   = istart + nPmix;
+
+    double s    = 0.0;  // sum (value or value*mass)
+    double msum = 0.0;  // mass sum (only used if weighted)
+
+    for (int i = istart; i < iend; i++) {
+        ime = pLoc[i];
+        if (density_weighted_mixing) {
+            double m = varRho[ime] * wPar[ime];
+            s    += (*varData[kVar])[ime] * m;   
+            msum += m;
+        } else {
+            s += (*varData[kVar])[ime];          
         }
     }
 
-    // Helper lambda to mix one branch
-    auto mixBranch = [&](int istart, int iend) {
-        double sum_w = 0.0, sum_wY = 0.0;
-        for (int i = istart; i < iend; ++i) {
-            const int ime = pLoc[i];
-            double w = useMassWeighted ? varRho[ime] * wPar[ime] : 1.0;
-            sum_w  += w;
-            sum_wY += w * (*varData[kVar])[ime];
-        }
-        double Ymix = (sum_w > 1e-30) ? (sum_wY / sum_w) : 0.0;
-        for (int i = istart; i < iend; ++i) {
-            (*varData[kVar])[pLoc[i]] = Ymix;
-        }
-    };
+    double avg = density_weighted_mixing
+               ? ((msum > 0.0) ? (s / msum) : 0.0)   
+               : (s / nPmix);
 
-    // Left branch
-    int istart = iTree << (Nm1 - iLevel);
-    int iend   = istart + nPmix;
-    mixBranch(istart, iend);
+    for (int i = istart; i < iend; i++) {
+        ime = pLoc[i];
+        (*varData[kVar])[ime] = avg;              
+    }
 
-    // Right branch
+    //---------- Mix right branch of iTree ----------
     istart = iend;
     iend   = istart + nPmix;
-    mixBranch(istart, iend);
+
+    s    = 0.0;
+    msum = 0.0;
+
+    for (int i = istart; i < iend; i++) {
+        ime = pLoc[i];
+        if (density_weighted_mixing) {
+            double m = varRho[ime] * wPar[ime];
+            s    += (*varData[kVar])[ime] * m;       
+            msum += m;
+        } else {
+            s += (*varData[kVar])[ime];              
+        }
+    }
+
+    avg = density_weighted_mixing
+        ? ((msum > 0.0) ? (s / msum) : 0.0)
+        : (s / nPmix);
+
+    for (int i = istart; i < iend; i++) {
+        ime = pLoc[i];
+        (*varData[kVar])[ime] = avg;                 
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////

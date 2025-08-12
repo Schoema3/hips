@@ -84,8 +84,9 @@ private:
     bool useTimeBasedWriting = false;                              ///< Tracks if time writing is set
     const int DEFAULT_EDDY_INTERVAL = 1000;                        ///< Default: Write every 1000 eddies
     const double DEFAULT_TIME_INTERVAL = 0.1;                      ///< Default: Write every 0.1s
-  
+    bool density_weighted_mixing = false;                          ///< default: simple (uniform) mixing
 
+   
 
     ////////////////////////////// MEMBER FUNCTIONS /////////////////////////////
 
@@ -157,6 +158,8 @@ public:
     
     const std::vector<int>& get_pLoc() const { return pLoc; }
     const std::vector<std::shared_ptr<std::vector<double>>>& get_varData_ptr() const { return varData; }
+    void setDensityWeightedMixing(bool on) { density_weighted_mixing = on; }
+    bool getDensityWeightedMixing() const { return density_weighted_mixing; }
 
 
 
