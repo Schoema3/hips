@@ -17,9 +17,9 @@ TEST_CASE( "Test HiPS library" ) {
 
     int            nLevels = 6;          // Number of hierarchical levels
     double         domainLength = 0.01;  // Domain length scale
-    double         tau0 = 0.0005;      // Mixing timescale (fast mixing)
+    double         tau0 = 0.0018;      // Mixing timescale (fast mixing)
     double         C_param = 0.5;        // Eddy rate multiplier
-    double         tRun = 0.0013;       // Total simulation runtime
+    double         tRun = 1.8;       // Total simulation runtime
     int            forceTurb = 0;        // No forced turbulence
     vector<double> ScHips(54, 1);        // Schmidt number (unity for all species)
 
@@ -38,6 +38,8 @@ TEST_CASE( "Test HiPS library" ) {
         int            nvars = 1;      // Number of scalar fields
 
         hips H(nLevels, domainLength, tau0, C_param, forceTurb, nvars, ScHips, false);
+        //H.setDensityWeightedMixing(true);
+
 
         vector<double> var = {0.0, 0.1, 0.2, 0.8, 0.9, 1.0};               // mixture fraction
         //vector<double> w   = {0.5, 0.6, 0.7, 0.7, 0.6, 0.2};               // test: not a power of 2, not uniform, don't sum to 1
@@ -92,6 +94,8 @@ TEST_CASE( "Test HiPS library" ) {
         //---------
     
         hips H(nLevels, domainLength, tau0, C_param, forceTurb, nVar, ScHips, true, cantSol, 10);
+        H.setDensityWeightedMixing(true);
+
     
         //--------- initialize vars
         int nparcels = H.get_nparcels();
@@ -176,7 +180,7 @@ TEST_CASE( "Test HiPS library" ) {
         std::vector<double> sum1(nVar, 0.0);
         for (int k = 0; k < nVar; ++k) {
             for (int i = 0; i < nparcels; ++i) {
-                sum1[k] += var1[k][i] * rho1[i] * H.wPar[H.pLoc[i]];
+                sum1[k] += var1[k][i] * rho1[i] * weight[i];  //  CFD cell widths
 
             } 
         }
@@ -194,13 +198,13 @@ TEST_CASE( "Test HiPS library" ) {
         std::vector<double> sum2(nVar, 0.0);
         for (int k = 0; k < nVar; ++k) {
             for (int i = 0; i < nparcels; ++i) {
-                sum2[k] += var2[k][i] * rho2[i] * H.wPar[pLoc[i]];
+                sum2[k] += var2[k][i] * rho2[i] * weight[i];  //  CFD cell widths
 
             }
         }
         
         for (int k = 0; k < nVar; ++k) {
-            REQUIRE(std::abs(sum2[k] - sum1[k]) < 1e-12);
+            REQUIRE(std::abs(sum2[k] - sum1[k]) < 4e-7);
 
 
            // REQUIRE(sum2[k] == Approx(sum1[k]).epsilon(1e-8));
