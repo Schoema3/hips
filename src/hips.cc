@@ -1327,34 +1327,47 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 /// - Mismatches in data sizes between HiPS parcels and flow particles may lead to inaccurate results.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-vector<double> hips::projection_back_with_density(std::vector<double> &vh, 
-                                                  std::vector<double> &rho_h,
-                                                  std::vector<double> &rho_c) {
-    int nh = xh.size() - 1;
-    int nc = xc.size() - 1;
+std::vector<double> hips::projection_back_with_density(std::vector<double> &vh, 
+                                                       std::vector<double> &rho_h,
+                                                       std::vector<double> &rho_c) {
+    const int nh = static_cast<int>(xh.size()) - 1;  // # HiPS parcels
+    const int nc = static_cast<int>(xc.size()) - 1;  // # CFD cells
 
-    std::vector<double> vc(nc, 0.0);
+    std::vector<double> phi_c(nc, 0.0);   // CFD-side variable (output)
+    std::vector<double> M_cfd(nc, 0.0);   // mass in each CFD cell
+    std::vector<double> Mphi_cfd(nc, 0.0);// mass*phi in each CFD cell
+
     int jprev = 0;
-
     for (int i = 0; i < nc; ++i) {
+        // cell geometry (normalized length, since xc is 0..1)
+        const double cell_len = xc[i + 1] - xc[i];
 
         for (int j = jprev + 1; j <= nh; ++j) {
-            if (xh[j] <= xc[i + 1]) {
-                double d = std::min(xh[j] - xh[j - 1], xh[j] - xc[i]);
-                vc[i] += vh[j - 1] * rho_h[j - 1] * d;
-            } else {
-                double d = std::min(xc[i + 1] - xh[j - 1], xc[i + 1] - xc[i]);
-                vc[i] += vh[j - 1] * rho_h[j - 1] * d;
+            // geometric overlap between parcel j-1 and CFD cell i
+            const double overlap_start = std::max(xh[j - 1], xc[i]);
+            const double overlap_end   = std::min(xh[j],     xc[i + 1]);
+            const double overlap_len   = overlap_end - overlap_start;
+            if (overlap_len <= 0.0) continue;
 
-                jprev = j - 1;
-                break;
-            }
+            // scale overlap by current parcel volume fraction wPar
+            const double parcel_len    = xh[j] - xh[j - 1]; // = 1.0/nh
+            const double effective_len = overlap_len * (wPar[j - 1] / parcel_len);
+
+            // accumulate mass and mass*phi into CFD cell i
+            const double rhoP = rho_h[j - 1];
+            const double phiP = vh[j - 1];
+            M_cfd[i]    += rhoP * effective_len;
+            Mphi_cfd[i] += rhoP * phiP * effective_len;
+
+            // advance parcel index if we reached end of this CFD cell
+            if (xc[i + 1] <= xh[j]) { jprev = j - 1; break; }
         }
 
-        // Normalize the results
-        vc[i] /= rho_c[i] * (xc[i + 1] - xc[i]);
+        // recover CFD density and variable
+        rho_c[i] = (cell_len > 0.0)        ? (M_cfd[i] / cell_len) : 0.0;
+        phi_c[i] = (M_cfd[i] > 1e-300)     ? (Mphi_cfd[i] / M_cfd[i]) : 0.0;
     }
-    return vc;
+    return phi_c;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
