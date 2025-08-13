@@ -86,13 +86,6 @@ int main() {
         var[iCell] = HiPS.get_varData()[0];
     }
 
-    //HiPS.writeData( 1, 0, 300 );        // compare the output from HiPS to the projected profile output below (but plot on a scaled x axis, --> good!)
-
-    //cout << endl;
-    //for(int k=0; k<var[3].size(); k++)
-    //    cout << endl << var[3][k];
-    //cout << endl;
-
     /////////////// USER CFD steps ...
 
     return 0;
