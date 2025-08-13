@@ -1098,7 +1098,7 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
 void hips::forceProfile() {
     // Loop through each variable in the HiPS profile
     for (int k = 0; k < varData.size(); k++) {
-        double s;                                                    // Temporary variable for summation
+        double s=0;                                                  // Temporary variable for summation
 
         //---------- Force the left half of parcels to average 0 ----------
 

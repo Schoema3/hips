@@ -45,11 +45,11 @@ using namespace std;
 ///////////////////////////////////////////////////////////////////////////////////////
 int main() {
     // HiPS simulation parameters for premixed combustion
-    int nLevels = 6;             // Number of hierarchical levels
+    int nLevels = 8;             // Number of hierarchical levels
     double domainLength = 0.01;  // Domain length scale
     double tau0 = 0.000005;      // Mixing timescale (fast mixing)
     double C_param = 0.5;        // Eddy rate multiplier
-    double tRun = 0.0005;        // Total simulation runtime
+    double tRun = 0.00012;             // Total simulation runtime
     int forceTurb = 0;           // No forced turbulence
     vector<double> ScHips(54, 1); // Schmidt number (unity for all species)
 
@@ -122,7 +122,7 @@ int main() {
         HiPS.set_varData(ysp[k], weight, variableNames[k + 1]);
 
     // Set output interval in terms of time
-    HiPS.setOutputIntervalTime(tRun/20);  // Save results every 100 seconds
+    HiPS.setOutputIntervalTime(tRun/12);  // Save results every 100 seconds
 
     // Write initial condition
     HiPS.writeData(1, 0, 0.0 );
