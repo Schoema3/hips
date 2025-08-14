@@ -34,7 +34,6 @@ public:
     double domainLength;                                           ///< length of domain (m)
     double tau0;                                                   ///< integral timescale
     double C_param;                                                ///< Eddy frequency parameter
-    std::vector<double> Temp;                                      ///< Vector containg temperature in each parcel;
     
 private:
 

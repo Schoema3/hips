@@ -66,7 +66,6 @@ int main() {
 
     // Define variables for species mass fractions, temperature, and enthalpy
     vector<vector<double>> ysp(53, vector<double>(nparcels, 0));
-    vector<double> h(nparcels), T(nparcels);
 
     vector<double> y0(nsp), y1(nsp); // Initial species mass fractions
     double T0 = 300.0, T1 = 300.0;   // Initial temperature
@@ -86,7 +85,6 @@ int main() {
     for (int i = 0; i < nsp; i++) {
         for (int j = 0; j <= (1 - fracBurn) * nparcels; j++) {
             h[j] = h0;
-            T[j] = gas->temperature();
             ysp[i][j] = y0[i];
         }
     }
@@ -102,13 +100,12 @@ int main() {
     for (int i = 0; i < nsp; i++) {
         for (int j = ((1 - fracBurn) * nparcels + 1); j < nparcels; j++) {
             h[j] = h1;
-            T[j] = gas->temperature();
             ysp[i][j] = y1[i];
         }
     }
 
     // Set initial conditions in HiPS
-    HiPS.Temp = T;
+
     variableNames[0] = "enthalpy";
     for (int i = 0; i < ysp.size(); i++) {
         variableNames[i + 1] = gas->speciesName(i);
