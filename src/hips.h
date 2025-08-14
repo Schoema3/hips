@@ -42,7 +42,6 @@ private:
     int currentIndex = 0;                                          ///< member variable to keep track of current index of variables
     int nLevels;                                                   ///< number of tree levels
     int nLevels_;                                                  ///< number of tree levels?
-    int forceTurb;                                                 ///< forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
     int nVar;                                                      ///< number of parcel variables (e.g., h, ysp)
     int nsp;                                                       ///< number of species
     int Nm1;                                                       ///< nLevels - 1 
@@ -50,6 +49,7 @@ private:
     int Nm3;                                                       ///< nLevels - 3 
     int iEta;                                                      ///< Kolmogorov level (needed for variable Sc scalars)
     int nL;                                                        ///< adjusted number of levels based on the Reynolds number
+    bool forceTurb;                                                ///< forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
 
     bool LScHips;                                                  ///< hips schmidt number
     bool performReaction;                                          ///< flag indicating whether chemical reactions are performed in the simulation 
@@ -75,7 +75,7 @@ private:
     std::vector<double> xc;                                        ///< vector containing physical domain of flow particles
     std::vector<double> xh;                                        ///< vector containing physical domain of HiPS parcels
     
-    std::string  approach;
+    std::string  ReApproach;
     int outputIntervalEddy = 10;                                   ///< Default: write data every 10 eddy events
     double outputIntervalTime = 0.1;                               ///< Default: write data every 0.1s
     int eddyCounter = 0;                                           ///< Counter for eddy events
@@ -84,7 +84,7 @@ private:
     bool useTimeBasedWriting = false;                              ///< Tracks if time writing is set
     const int DEFAULT_EDDY_INTERVAL = 1000;                        ///< Default: Write every 1000 eddies
     const double DEFAULT_TIME_INTERVAL = 0.1;                      ///< Default: Write every 0.1s
-    bool density_weighted_mixing = false;                          ///< default: simple (uniform) mixing
+    //bool density_weighted_mixing = false;                          ///< default: simple (uniform) mixing
 
    
 
@@ -124,7 +124,7 @@ public:
     /// \param domainLength_    Domain length for spatial scaling.
     /// \param tau0_            Base time scale for the largest eddy.
     /// \param ScHips_          Vector of Schmidt numbers (one per variable).
-    /// \param approach_        Strategy to convert continuous Re to tree level:
+    /// \param ReApproach_        Strategy to convert continuous Re to tree level:
     ///                         - "rounding"     → Round to nearest discrete level
     ///                         - "probability"  → Use probabilistic interpolation between levels
     ///                         - "micromixing"  → Use fixed level with adjusted mixing rate
@@ -133,11 +133,11 @@ public:
     /// \note This method is ideal for Lagrangian simulations using grid cells with different Re values.
     ///       It supports runtime reconfiguration of the tree without reinitializing the hips object.
     ///
-    /// \warning Ensure consistent `approach_` handling across the simulation to avoid inconsistencies.
+    /// \warning Ensure consistent `ReApproach_` handling across the simulation to avoid inconsistencies.
     ///
     /// \see hips::set_tree(int, ...) for direct-level setup.
   
-    void set_tree(double Re_, double domainLength_, double tau0_, std::string approach_ = "rounding");
+    void set_tree(double Re_, double domainLength_, double tau0_, std::string ReApproach_ = "rounding");
   
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -145,7 +145,7 @@ public:
     void set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN,
                      const std::vector<double> &rho);                                               // passing all variables to vector of pointer
 
-    std::vector<std::vector<double>> get_varData();                                                 // Retrieves modified data from the HiPS library and stores it in the provided vector. 
+    std::vector<std::vector<double>> get_varData();                                                 // Retrieves modified data from the HiPS library and stores it in the provided vector, projection to CFD
     std::pair<std::vector<std::vector<double>>, std::vector<double>> get_varData_with_density();
    
     void setOutputIntervalTime(double interval);
@@ -157,9 +157,7 @@ public:
     int get_nparcels() const { return nparcels; }
     
     const std::vector<int>& get_pLoc() const { return pLoc; }
-    const std::vector<std::shared_ptr<std::vector<double>>>& get_varData_ptr() const { return varData; }
-    void setDensityWeightedMixing(bool on) { density_weighted_mixing = on; }
-    bool getDensityWeightedMixing() const { return density_weighted_mixing; }
+    const std::vector<std::shared_ptr<std::vector<double>>>& get_HipsVarData_ptr() const { return varData; } // internal HiPS varData, sized to nparcels
 
 
 
@@ -222,7 +220,7 @@ public:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
    
     hips(double C_param_,
-         int forceTurb_,
+         bool forceTurb_,
          int nVar_,
          std::vector<double> &ScHips_,
          bool performReaction,
@@ -265,7 +263,7 @@ public:
          double domainLength_,
          double tau0_,
          double C_param_,
-         int forceTurb_,
+         bool forceTurb_,
          int nVar_,
          std::vector<double> &ScHips_,
          bool performReaction,

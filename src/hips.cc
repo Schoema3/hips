@@ -40,7 +40,7 @@ hips::hips(int nLevels_,
            double domainLength_, 
            double tau0_, 
            double C_param_, 
-           int forceTurb_,
+           bool forceTurb_,
            int nVar_,
            vector<double> &ScHips_,
            bool performReaction_,
@@ -68,6 +68,9 @@ hips::hips(int nLevels_,
 
         // Uncomment the following line to switch to batchReactor_cantera
         // bRxr = make_unique<batchReactor_cantera>(cantSol);
+
+        if(forceTurb)
+            throw std::runtime_error("Error: forceTurb should be false if preformReaction is true");
     }
     #endif
 
@@ -81,7 +84,7 @@ hips::hips(int nLevels_,
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 hips::hips(double C_param_, 
-           int forceTurb_,
+           bool forceTurb_,
            int nVar_,
            vector<double> &ScHips_,
            bool performReaction_,
@@ -198,7 +201,6 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_){
 
     varRho.resize(nparcels);
     wPar.assign(nparcels, 1.0 / nparcels);
-    Temp.resize(nparcels);
  
     pLoc.resize(nparcels);
     for (int i=0; i<nparcels; i++)
@@ -209,33 +211,33 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_){
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void hips::set_tree(double Re_, double domainLength_, double tau0_, std::string approach_) {
+void hips::set_tree(double Re_, double domainLength_, double tau0_, std::string ReApproach_) {
     Re = Re_;
     domainLength = domainLength_;
     tau0 = tau0_;
-    approach = approach_;
+    ReApproach = ReApproach_;
 
     double baseLevelEstimate = (3.0 / 4) * log(1 / Re) / log(Afac);                               // Calculate the base tree level estimate (non-integer)
     int baseLevel;
 
-    if (approach == "rounding") {
+    if (ReApproach == "rounding") {
         baseLevel = round(baseLevelEstimate);                                                     // Round the base level to the nearest integer
     } 
-    else if (approach == "probability") {
+    else if (ReApproach == "probability") {
         baseLevel = ceil(baseLevelEstimate);                                                      // Ceil the base level to the nearest integer
         int previousLevel = baseLevel - 1;
         Prob = baseLevelEstimate - previousLevel;                                                 // Calculate the probability
     } 
-    else if (approach == "micromixing") {
+    else if (ReApproach == "micromixing") {
         baseLevel = ceil(baseLevelEstimate);                                                      // Ceil the base level to the nearest integer
         lStar = std::pow(Re, -3.0 / 4);                                                           // Calculate lStar based on Re
     } 
-    else if (approach == "dynamic_A") {
+    else if (ReApproach == "dynamic_A") {
         baseLevel = round(baseLevelEstimate);                                                     // Round the base level to the nearest integer
         Anew = exp(-log(Re) / ((4.0 / 3.0) * baseLevel));                                         // Calculate the new value of parameter A
     } 
     else {
-        throw std::invalid_argument("Invalid approach specified");                                // Handle invalid approach case if needed
+        throw std::invalid_argument("Invalid ReApproach specified");                                // Handle invalid approach case if needed
     }
 
     nL = baseLevel + 3;                                                                           // Set the number of levels for the binary tree structure
@@ -263,18 +265,18 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::string 
     levelRates.resize(nLevels);
 
     for (int i = 0; i < nLevels; ++i) {
-        levelLengths[i] = domainLength * pow((approach == "dynamic_A" ? Anew : Afac), i);
+        levelLengths[i] = domainLength * pow((ReApproach == "dynamic_A" ? Anew : Afac), i);
 
         levelTaus[i] = tau0 * pow(levelLengths[i] / domainLength, 2.0 / 3.0) / C_param;
         levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
     }
 
-    if (approach == "micromixing") {                                          // Adjust rates for micromixing model
+    if (ReApproach == "micromixing") {                                          // Adjust rates for micromixing model
         levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
         levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
     }
 
-    if (approach == "probability") {                                          // Adjust final mixing rate based on probability
+    if (ReApproach == "probability") {                                          // Adjust final mixing rate based on probability
         levelRates[Nm3] = levelRates[nL - 3] * Prob;
     }
 
@@ -313,7 +315,6 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::string 
 
     varRho.resize(nparcels);
     wPar.assign(nparcels, 1.0 / nparcels);
-    Temp.resize(nparcels);
     pLoc.resize(nparcels);
     for (int i = 0; i < nparcels; ++i)
         pLoc[i] = i;
@@ -473,11 +474,11 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 /// \warning Discrepancies in the size of the input vectors (`vcfd`, `weight`, and `density`) may lead 
 ///          to undefined behavior or inaccurate projections. Verify the inputs before calling this function.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+
 std::pair<std::vector<double>, std::vector<double>> 
 hips::projection(std::vector<double> &vcfd, 
                  std::vector<double> &weight, 
-                 const std::vector<double> &density) 
-{
+                 const std::vector<double> &density) {
     // Build CFD and HiPS grids
     xc = setGridCfd(weight);
     xh = setGridHips(nparcels);
@@ -833,7 +834,7 @@ void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
 
 void hips::advanceHips(const int iLevel, const int iTree) {
 
-    if (forceTurb == 2 && iLevel == 0) {
+    if (forceTurb && iLevel == 0) {
         forceProfile();                                                  // Forcing for statistically stationary
     }
 
@@ -915,7 +916,9 @@ int hips::getVariableIndex(const std::string &varName) const {
 ///          Missing or incorrectly configured `varName` entries may lead to runtime errors.
 /// \see set_varData, getVariableIndex
 ///////////////////////////////////////////////////////////////////////////////
+
 void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
+
 #ifdef REACTIONS_ENABLED
     // ---- cache indices once
     const int enthalpyIdx = getVariableIndex("enthalpy");
@@ -947,9 +950,6 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
             // Advance chemistry; bRxr updates its state internally
             bRxr->react(h, y, dt);
 
-            // Push back temperature (for diagnostics/next EOS use)
-            Temp[ime] = bRxr->temperature;
-
             // Get new density from the reactor/EOS
             const double rho_new = bRxr->getDensity();
 
@@ -969,7 +969,6 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 
         parcelTimes[ime] = time;
     }
-
 
 #endif
 }
@@ -1026,7 +1025,7 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
 
     for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        if (density_weighted_mixing) {
+        if (performReaction) {
             double m = varRho[ime] * wPar[ime];
             s    += (*varData[kVar])[ime] * m;   
             msum += m;
@@ -1035,7 +1034,7 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
         }
     }
 
-    double avg = density_weighted_mixing
+    double avg = performReaction
                ? ((msum > 0.0) ? (s / msum) : 0.0)   
                : (s / nPmix);
 
@@ -1053,7 +1052,7 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
 
     for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        if (density_weighted_mixing) {
+        if (performReaction) {
             double m = varRho[ime] * wPar[ime];
             s    += (*varData[kVar])[ime] * m;       
             msum += m;
@@ -1062,7 +1061,7 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
         }
     }
 
-    avg = density_weighted_mixing
+    avg = performReaction
         ? ((msum > 0.0) ? (s / msum) : 0.0)
         : (s / nPmix);
 
@@ -1200,8 +1199,16 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
     // Write data
     for (int i = 0; i < nparcels; i++) {
         // Write temperature first if reactions are enabled
-        if(performReaction)
-            ofile << setw(19) << Temp[pLoc[i]];
+        #ifdef REACTIONS_ENABLED
+        if(performReaction) {
+            vector<double> yy(nsp);
+            for(int k=0; k<nsp; k++)
+                yy[k] = (*varData[k+1])[pLoc[i]];
+            gas->setMassFractions(yy.data());
+            gas->setState_HP((*varData[0])[pLoc[i]], gas->pressure());
+            ofile << setw(19) << gas->temperature();
+        }
+        #endif
 
         // Write variables
         for (int k = 0; k < nVar; k++) {
@@ -1351,7 +1358,7 @@ std::vector<double> hips::projection_back_with_density(std::vector<double> &vh,
 
             // scale overlap by current parcel volume fraction wPar
             const double parcel_len    = xh[j] - xh[j - 1]; // = 1.0/nh
-            const double effective_len = overlap_len * (wPar[j - 1] / parcel_len);
+            const double effective_len = overlap_len * (wPar[pLoc[j - 1]] / parcel_len);
 
             // accumulate mass and mass*phi into CFD cell i
             const double rhoP = rho_h[j - 1];
@@ -1376,6 +1383,8 @@ std::vector<double> hips::projection_back_with_density(std::vector<double> &vh,
 /// This function returns the final state of the simulation, packaged as a vector of vectors. 
 /// It is particularly useful when integrating HiPS as a subgrid model in CFD simulations, 
 /// enabling seamless transfer of data for further analysis or post-processing.
+///
+/// Projects data from HiPS varData (size nparcels) to number of CFD particles corresponding to initial set_varData call
 ///
 /// \return A vector of vectors containing the final results, where:
 ///         - Each inner vector represents a specific variable or property.

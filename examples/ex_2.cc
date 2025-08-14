@@ -50,7 +50,7 @@ int main() {
     double tau0 = 0.000005;      // Mixing timescale (fast mixing)
     double C_param = 0.5;        // Eddy rate multiplier
     double tRun = 0.00012;             // Total simulation runtime
-    int forceTurb = 0;           // No forced turbulence
+    bool forceTurb = false;           // No forced turbulence
     vector<double> ScHips(54, 1); // Schmidt number (unity for all species)
 
     // Initialize Cantera for combustion chemistry

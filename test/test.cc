@@ -1,10 +1,14 @@
 #include <catch2/catch_test_macros.hpp>
+#include <catch2/matchers/catch_matchers_floating_point.hpp>
+
 #include "hips.h"
 
 #include <memory>
 #include <cmath>
+#include <format>
 
 using namespace std;
+using Catch::Matchers::WithinRel;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -15,89 +19,170 @@ TEST_CASE( "Test HiPS library" ) {
     double         tau0 = 1.0;                   // Initial time scale for the largest eddies
     double         C_param = 0.5;                // Eddy turnover rate multiplier
     double         tRun = 300.0;                 // Total simulation time
-    int            forceTurb = 2;                // Forcing parameter to impose turbulent profile
 
     //////////////////////////////////////////////////////////////////////////
 
     SECTION("Test variable setup: projection and back projection") {
 
-        vector<double> ScHips = {1.0}; // Schmidt numbers for low and high diffusivity
-        int            nvars = 1;      // Number of scalar fields
+        vector<double> ScHips = {1.0};    // Schmidt numbers for low and high diffusivity
+        int            nvars = 1;         // Number of scalar fields
+        bool           forceTurb = true;  // Forcing parameter to impose turbulent profile (not applicable here)
 
         hips H(nLevels, domainLength, tau0, C_param, forceTurb, nvars, ScHips, false);
 
         vector<double> var = {0.985, 0.784, 0.508, 0.404, 0.913, 0.126, 0.561};
         vector<double> w   = {0.422, 6.845, 0.851, 7.806, 3.512, 4.258, 2.071};   // test: not a power of 2, not uniform, don't sum to 1
-        int nparcels = H.get_nparcels();
 
+        //--------- compute raw input sum
 
-        double sumw = 0.0;                  // normalize w
-        for(int i=0; i<var.size(); i++)
-            sumw += w[i];
-        for(int i=0; i<var.size(); i++)
-            w[i] /= sumw;
-        double sum1 = 0.0;                  // compute raw input sum
-        for(int i=0; i<var.size(); i++)
-            sum1 += var[i]*w[i];
+        double sumw = 0.0;                                  // normalize w
+        for(int i=0; i<var.size(); i++) sumw += w[i];
+        for(int i=0; i<var.size(); i++) w[i] /= sumw;
+        double sum1 = 0.0;
+        for(int i=0; i<var.size(); i++) sum1 += var[i]*w[i];
+
+        //--------- compute sum of HiPS projected variable
 
         H.set_varData(var, w, "test");
-        const auto& pLoc    = H.get_pLoc();
-        const auto& varData = H.get_varData_ptr();
+        auto pLoc    = H.get_pLoc();
+        auto varData = H.get_HipsVarData_ptr();
 
-   
-       // now you can write exactly like before:
-       // sum1[k] += var1[k][i] * rho1[i] * H.wPar[pLoc[i]];
-       // REQUIRE( std::abs((*varData[16])[pLoc[11]] - 0.11312593835096947) < 1E-5 );
-       
-        
-
-        double sum2 = 0.0;                  // compute HiPS projected sum
-        for(int i=0; i<nparcels; i++)
+        double sum2 = 0.0;
+        for(int i=0; i<H.get_nparcels(); i++)
             sum2 += (*varData[0])[pLoc[i]];
-        sum2 /= nparcels;
+        sum2 /= H.get_nparcels();
 
-        REQUIRE( abs((sum1 - sum2)/sum1) < 1E-14 );   // results equal to within roundoff error
-
-        //------------
+        //------------ compute back_projected sum
 
         auto var2 = H.get_varData();
-        double sum3 = 0.0;                 // compute back_projected sum
+        double sum3 = 0.0;
         for(int i=0; i<var2[0].size(); i++)
             sum3 += var2[0][i]*w[i];
 
-        REQUIRE( abs((sum3 - sum2)/sum3) < 1E-14 );   // results equal to within roundoff error
+        //------------ test sum1=sum2 and sum2=sum3
+
+        REQUIRE_THAT( sum1, WithinRel(sum2, 1E-14) );
+        REQUIRE_THAT( sum2, WithinRel(sum3, 1E-14) );
+
     }
 
     //////////////////////////////////////////////////////////////////////////
 
-    SECTION("Test overall solve") {
+    SECTION("Test overall solve with forcing") {
 
         vector<double> ScHips = {0.0625, 1.0, 16.0}; // Schmidt numbers for low and high diffusivity
         int            nvars = 3;                    // Number of scalar fields
+        bool           forceTurb = true;             // Forcing parameter to impose turbulent profile
 
         hips H(nLevels, domainLength, tau0, C_param, forceTurb, nvars, ScHips, false);
 
         //--------- initialize vars
-        int nparcels = H.get_nparcels();
-        vector<vector<double>> vars(nvars, vector<double>(nparcels));
-        vector<double> weights(nparcels, 1.0/nparcels);  // Uniform weights
-        const auto& pLoc    = H.get_pLoc();
-        const auto& varData = H.get_varData_ptr();
+
+        vector<vector<double>> vars(nvars, vector<double>(H.get_nparcels()));
+        vector<double> weights(H.get_nparcels(), 1.0/H.get_nparcels());  // Uniform weights
 
         for (int k=0; k<nvars; k++) {
-            for (int i=0; i<nparcels; i++)
-                vars[k][i] = (i<nparcels) ? 0 : 1;
+            for (int i=0; i<H.get_nparcels(); i++)
+                vars[k][i] = (i<H.get_nparcels()/2) ? 0 : 1;
             H.set_varData(vars[k], weights, "mixf_0" + to_string(k));
         }
+        
+        //--------- inititial raw conservation
+
+        vector<double> sum1(nvars, 0.0);
+        for(int i=0; i<H.get_nparcels(); i++)
+            for(int k=0; k<nvars; k++)
+                sum1[k] += vars[k][i]*weights[i];
+
         //--------- solve
 
         H.calculateSolution(tRun, false);
 
+        //--------- recover variables, final conservation
+
+        auto var2 = H.get_varData();
+
+        vector<double> sum2(var2.size(), 0.0);
+        for(int i=0; i<var2[0].size(); i++)
+            for(int k=0; k<var2.size(); k++)
+                sum2[k] += var2[k][i]*weights[i];
+
         //--------- test
 
-        REQUIRE( nparcels == (1 << (nLevels+1)) );                     // based on ScHips set above
-        REQUIRE( abs((*varData[0])[pLoc[580]] - 0.3863866554595461) < 1E-14 );   // for given setup
-        REQUIRE( abs((*varData[1])[pLoc[580]] - 1.0837252030932285) < 1E-14 );
-        REQUIRE( abs((*varData[2])[pLoc[580]] - 0.9954210282686337) < 1E-14 );
+        REQUIRE( H.get_nparcels() == (1 << (nLevels+1)) );        // based on ScHips set above
+        REQUIRE_THAT(sum1[0],      WithinRel(sum2[0], 1E-14));
+        REQUIRE_THAT(sum1[1],      WithinRel(sum2[1], 1E-14));
+        REQUIRE_THAT(sum1[2],      WithinRel(sum2[2], 1E-14));
+        REQUIRE_THAT(var2[0][849], WithinRel(1.7783400336213617, 1E-14));
+        REQUIRE_THAT(var2[1][849], WithinRel(1.6986828219520567, 1E-14)); 
+        REQUIRE_THAT(var2[2][849], WithinRel(1.2389359078700295, 1E-14));
+
+    }
+
+    //////////////////////////////////////////////////////////////////////////
+
+    SECTION("Test overall solve no forcing") {
+
+        vector<double> ScHips = {0.0625, 1.0, 16.0}; // Schmidt numbers for low and high diffusivity
+        int            nvars = 3;                    // Number of scalar fields
+        bool           forceTurb = false;            // Forcing parameter to impose turbulent profile
+
+        hips H(nLevels, domainLength, tau0, C_param, forceTurb, nvars, ScHips, false);
+
+        //--------- initialize vars
+
+        vector<vector<double>> vars(nvars, vector<double>(H.get_nparcels()));
+        vector<double> weights(H.get_nparcels(), 1.0/H.get_nparcels());  // Uniform weights
+
+        for (int k=0; k<nvars; k++) {
+            for (int i=0; i<H.get_nparcels(); i++)
+                vars[k][i] = (i<H.get_nparcels()/2) ? 0 : 1;
+            H.set_varData(vars[k], weights, "mixf_0" + to_string(k));
+        }
+        
+        //--------- inititial raw conservation
+
+        vector<double> sum1(nvars, 0.0);
+        for(int i=0; i<H.get_nparcels(); i++)
+            for(int k=0; k<nvars; k++)
+                sum1[k] += vars[k][i]*weights[i];
+
+        //--------- solve
+
+        H.calculateSolution(tRun, false);
+
+        //--------- recover variables, final conservation
+
+        auto var2 = H.get_varData();
+
+        vector<double> sum2(var2.size(), 0.0);
+        for(int i=0; i<var2[0].size(); i++)
+            for(int k=0; k<var2.size(); k++)
+                sum2[k] += var2[k][i]*weights[i];
+
+        //--------- long time --> all parcels become uniform, find max/min, compare to 0.5 (unif value)
+
+        vector<double> vmax(nvars, -1E10);
+        vector<double> vmin(nvars, 1E10);
+
+        for(int i=0; i<var2[0].size(); i++)
+            for(int k=0; k<var2.size(); k++){
+                if(var2[k][i] > vmax[k]) vmax[k] = var2[k][i];
+                if(var2[k][i] < vmin[k]) vmin[k] = var2[k][i];
+            }
+
+        //--------- test
+
+        REQUIRE( H.get_nparcels() == (1 << (nLevels+1)) );        // based on ScHips set above
+        REQUIRE_THAT(sum1[0], WithinRel(sum2[0], 1E-14));
+        REQUIRE_THAT(sum1[1], WithinRel(sum2[1], 1E-14));
+        REQUIRE_THAT(sum1[2], WithinRel(sum2[2], 1E-14));
+        REQUIRE_THAT(vmin[0], WithinRel(0.5,     1E-14));
+        REQUIRE_THAT(vmin[1], WithinRel(0.5,     1E-14));
+        REQUIRE_THAT(vmin[2], WithinRel(0.5,     1E-14));
+        REQUIRE_THAT(vmax[0], WithinRel(0.5,     1E-14));
+        REQUIRE_THAT(vmax[1], WithinRel(0.5,     1E-14));
+        REQUIRE_THAT(vmax[2], WithinRel(0.5,     1E-14));
+
     }
 }
