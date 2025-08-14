@@ -65,8 +65,9 @@ int main() {
     int nparcels = HiPS.get_nparcels();
 
     // Define variables for species mass fractions, temperature, and enthalpy
-    vector<vector<double>> ysp(53, vector<double>(nparcels, 0));
+    vector<vector<double>> ysp(nsp, vector<double>(nparcels, 0));
     vector<double> h(nparcels);
+    vector<double> rho(nparcels);
 
     vector<double> y0(nsp), y1(nsp); // Initial species mass fractions
     double T0 = 300.0, T1 = 300.0;   // Initial temperature
@@ -87,6 +88,7 @@ int main() {
         for (int j = 0; j <= (1 - fracBurn) * nparcels; j++) {
             h[j] = h0;
             ysp[i][j] = y0[i];
+            rho[j] = gas->density();
         }
     }
 
@@ -102,6 +104,7 @@ int main() {
         for (int j = ((1 - fracBurn) * nparcels + 1); j < nparcels; j++) {
             h[j] = h1;
             ysp[i][j] = y1[i];
+            rho[j] = gas->density();
         }
     }
 
@@ -115,9 +118,9 @@ int main() {
     vector<double> weight(nparcels, 1.0 / nparcels); // Uniform weights
 
     // Assign variables to HiPS
-    HiPS.set_varData(h, weight, variableNames[0]);
+    HiPS.set_varData(h, weight, variableNames[0], rho);
     for (int k = 0; k < ysp.size(); k++) 
-        HiPS.set_varData(ysp[k], weight, variableNames[k + 1]);
+        HiPS.set_varData(ysp[k], weight, variableNames[k + 1], rho);
 
     // Set output interval in terms of time
     HiPS.setOutputIntervalTime(tRun/12);  // Save results every 100 seconds
@@ -127,8 +130,6 @@ int main() {
   
     // Run the combustion simulation
     HiPS.calculateSolution(tRun, true);
-
-    cout << endl;
 
     return 0;
 }
