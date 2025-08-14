@@ -66,6 +66,7 @@ int main() {
 
     // Define variables for species mass fractions, temperature, and enthalpy
     vector<vector<double>> ysp(53, vector<double>(nparcels, 0));
+    vector<double> h(nparcels);
 
     vector<double> y0(nsp), y1(nsp); // Initial species mass fractions
     double T0 = 300.0, T1 = 300.0;   // Initial temperature
