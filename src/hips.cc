@@ -449,7 +449,7 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 /// \param vcfd     CFD cell values to project (aligned with CFD cells).
 /// \param weight   CFD cell weights (e.g., widths) used to build the CFD grid.
 /// \param density  CFD cell densities aligned with \p vcfd.
-/// \return A pair {values_h, rho_h} where:
+/// \return A pair {vh, rho_h} where:
 ///         - \c vh : parcel-averaged values on the HiPS parcels
 ///         - \c rho_h    : parcel-averaged densities on the HiPS parcels
 ///
