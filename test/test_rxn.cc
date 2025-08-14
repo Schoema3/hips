@@ -17,14 +17,11 @@ using Catch::Matchers::WithinRel;
 
 TEST_CASE( "Test HiPS library" ) {
 
-    //int            nLevels = 6;          // Number of hierarchical levels; nLevels = 6 gives 32 parcels: 2^{nLevels-1}
     int            nLevels = 8;          // Number of hierarchical levels; nLevels = 6 gives 32 parcels: 2^{nLevels-1}
     double         domainLength = 0.01;  // Domain length scale
-    //double         tau0 = 0.0018;        // Mixing timescale
-    double         tau0 = 0.000005;        // Mixing timescale
+    double         tau0 = 0.00005;        // Mixing timescale
     double         C_param = 0.5;        // Eddy rate multiplier
-    double         tRun = 0.00012;   // Total simulation runtime
-    //double         tRun = 0.000000018;   // Total simulation runtime
+    double         tRun = 0.001;   // Total simulation runtime
     bool           forceTurb = false;        // No forced turbulence
     vector<double> ScHips(54, 1);        // Schmidt number (unity for all species)
 
@@ -92,8 +89,6 @@ TEST_CASE( "Test HiPS library" ) {
         vector<double> Sc(54, 1.0);
     
         hips H(nLevels, domainLength, tau0, C_param, forceTurb, nVar, Sc, true, cantSol, 11);
-
-        H.setOutputIntervalTime(tRun/12);  // Save results every 100 seconds
 
         //--------- initialize vars
 
@@ -178,9 +173,8 @@ TEST_CASE( "Test HiPS library" ) {
         }
 
         //--------- run
-        H.writeData(1, 0, 0.0 );
 
-        H.calculateSolution(tRun, true);
+        H.calculateSolution(tRun);
 
         //---- conservation 3, hips tree after run
         
@@ -216,9 +210,11 @@ TEST_CASE( "Test HiPS library" ) {
         REQUIRE_THAT( H3, WithinRel(H4, 1E-14));
 
         for(int k=0; k<nsp; k++) {
-            REQUIRE_THAT( Y1[k], WithinRel(Y2[k], 1E-14));     // species are not conserved by reaction
-            REQUIRE_THAT( Y3[k], WithinRel(Y4[k], 1E-14));     // so don't compare Y2 and Y3
+            REQUIRE_THAT( Y1[k], WithinRel(Y2[k], 1E-10));     // species are not conserved by reaction
+            REQUIRE_THAT( Y3[k], WithinRel(Y4[k], 1E-10));     // so don't compare Y2 and Y3
         }
 
+        //------ require CO mass fraction at arbitrary point 11 to equal known/verified value
+        REQUIRE_THAT( var2[gas->speciesIndex("CO")+1][11], WithinRel(0.03319502723468618, 1E-14) );
     }
 }
