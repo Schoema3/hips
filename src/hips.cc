@@ -450,29 +450,49 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
     return vh;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Projects the values from flow particles onto HiPS parcels, accounting for particle density.
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Project values from CFD cells onto HiPS parcels, accounting for cell density.
 ///
-/// This function calculates the projection of values from flow particles onto HiPS parcels, 
-/// incorporating the density of each particle into the computation. The resulting projection 
-/// ensures conservation of both the property values and the density. The function returns a 
-/// pair of vectors: one representing the projected values on the HiPS parcels and another for 
-/// the densities.
+/// Projects a CFD field onto HiPS parcels using density weighting so that both the
+/// property (mass-weighted) and the density are conserved.
 ///
-/// \param vcfd         Vector of variables from flow particles to be projected onto HiPS parcels.
-/// \param weight       Vector of weights corresponding to each flow particle.
-/// \param density      Vector of densities associated with each flow particle.
+/// \param[in] vcfd     CFD cell values to project (aligned with CFD cells).
+/// \param[in] weight   CFD cell weights (e.g., widths) used to build the CFD grid.
+/// \param[in] density  CFD cell densities aligned with \p vcfd.
+/// \return A pair {values_h, rho_h} where:
+///         - \c vh : parcel-averaged values on the HiPS parcels
+///         - \c rho_h    : parcel-averaged densities on the HiPS parcels
 ///
-/// \return A pair of vectors:
-///         - First vector: Projected values on the HiPS parcels.
-///         - Second vector: Densities on the HiPS parcels.
+/// \details
+/// Parcel averages are formed via geometric overlaps between CFD cells and HiPS parcels:
+/// \f[
+///   \phi_h(i) =
+///   \frac{\sum_j \rho_c(j)\,\phi_c(j)\,\Delta x_{ij}}
+///        {\sum_j \rho_c(j)\,\Delta x_{ij}},\qquad
+///   \rho_h(i) =
+///   \frac{\sum_j \rho_c(j)\,\Delta x_{ij}}
+///        {\sum_j \Delta x_{ij}},
+/// \f]
+/// where \f$\Delta x_{ij}\f$ is the overlap length between CFD cell \f$j\f$ and parcel \f$i\f$.
 ///
-/// \note This is an overloaded version of the projection function, designed to include particle density 
-///       in the computation. Ensure that the `vcfd`, `weight`, and `density` vectors are of equal size 
-///       for consistency.
+/// \par Consistency with parcel weights
+/// The overlap is scaled by \f$w_{\mathrm{par}}(i)/\ell_i\f$ so forward/backward projection
+/// remain consistent when \c wPar changes during chemistry. This preserves the mass-weighted integrals:
+/// \f[
+///   \sum_i \rho_h(i)\, w_{\mathrm{par}}(i) \approx \sum_j \rho_c(j)\, w_c(j), \qquad
+///   \sum_i \rho_h(i)\,\phi_h(i)\, w_{\mathrm{par}}(i) \approx
+///   \sum_j \rho_c(j)\,\phi_c(j)\, w_c(j).
+/// \f]
 ///
-/// \warning Discrepancies in the size of the input vectors (`vcfd`, `weight`, and `density`) may lead 
-///          to undefined behavior or inaccurate projections. Verify the inputs before calling this function.
+/// \note This overload includes density in the computation. Ensure that \p vcfd, \p weight,
+///       and \p density have identical sizes. Weights are typically normalized
+///       (\f$\sum_j w_c(j)=1\f$), but only their relative magnitudes matter.
+///
+/// \warning Size mismatches among \p vcfd, \p weight, and \p density will lead to incorrect
+///          projections. Verify inputs before calling. Non-positive parcel lengths or negative
+///          weights are invalid.
+///
+/// \see set_varData, get_varData_with_density, projection_back_with_density
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 std::pair<std::vector<double>, std::vector<double>> 
@@ -892,34 +912,37 @@ int hips::getVariableIndex(const std::string &varName) const {
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Simulates chemical reactions for parcels affected by a micromixing event.
 ///
-/// This function performs chemical reactions for parcels involved in a micromixing process at a specific 
-/// level and tree node within the HiPS structure. The reaction times are determined based on the last 
-/// reaction time stored in `parcelTimes`. It dynamically retrieves the indices of relevant variables 
-/// such as `enthalpy` and species mass fractions for accurate state updates.
+/// This function performs chemical reactions for parcels involved in a micromixing process
+/// at a specific level and tree node within the HiPS structure. The reaction times are
+/// determined based on the last reaction time stored in parcelTimes. It dynamically
+/// retrieves the indices of relevant variables such as enthalpy and species mass fractions
+/// for accurate state updates.
 ///
 /// \param iLevel         The tree level where the eddy event occurred.
 /// \param iTree          The root node of the eddy event at the specified level.
 ///
 /// \details
-/// - `getVariableIndex("enthalpy")` is used to retrieve the index for `enthalpy`.
-/// - Indices for species are dynamically retrieved using `gas->speciesName(i)`.
-/// - The function updates parcel states, including `enthalpy` and species mass fractions, based on the reactions.
+/// - getVariableIndex("enthalpy") is used to retrieve the index for enthalpy.
+/// - Indices for species are dynamically retrieved using gas->speciesName(i).
+/// - The function updates parcel states, including enthalpy and species mass fractions,
+///   based on the reactions.
+/// - **New behavior**: The old parcel density is cached before chemistry, and the new density
+///   is retrieved from the reactor after the reaction step. Parcel weights (wPar) are rescaled
+///   by (rho_old / rho_new) so that the per-parcel mass m = rho * wPar remains constant even
+///   when density changes due to chemistry. Temperature is also written back for diagnostics.
 ///
-/// \throws std::runtime_error If a variable name is not found in the `varName` list.
-///
-/// \note 
-/// - The `varName` list must be populated using `set_varData` before invoking this function.
-/// - Reaction functionality is only available if `REACTIONS_ENABLED` is defined during compilation.
-/// - This function relies on the HiPS model's proper initialization and an accurate setup of `parcelTimes`.
+/// \note
+/// - The varName list must be populated using set_varData before invoking this function.
+/// - Reaction functionality is only available if REACTIONS_ENABLED is defined during compilation.
+/// - This function relies on the HiPS model's proper initialization and an accurate setup of parcelTimes.
 ///
 /// \warning Ensure that the necessary reaction data and variable names are correctly configured.
-///          Missing or incorrectly configured `varName` entries may lead to runtime errors.
-/// \see set_varData, getVariableIndex
+///          Missing or incorrectly configured varName entries may lead to runtime errors.
 ///////////////////////////////////////////////////////////////////////////////
 
 void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 
-#ifdef REACTIONS_ENABLED
+  #ifdef REACTIONS_ENABLED
     // ---- cache indices once
     const int enthalpyIdx = getVariableIndex("enthalpy");
     std::vector<int> yIdx(nsp);
@@ -970,16 +993,20 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
         parcelTimes[ime] = time;
     }
 
-#endif
+ #endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Uniformly mixes parcels at a specified level and subtree within the HiPS model.
 ///
+/// This function performs mixing of parcels at a given level and subtree of the 
+/// HiPS tree. It can operate in two modes:
+/// - **Uniform mixing**: Averages variable values directly (original behavior).
+/// - **Density-weighted mixing**: Computes a mass-weighted mean using each parcel’s 
+///   density (`varRho`) and statistical weight (`wPar`), ensuring conservation of 
+///   the total mixed quantity when densities differ.
 /// This function performs uniform mixing of parcels based on their average values at a specified 
-/// level and subtree of the HiPS tree. It is particularly suited for low Schmidt number (\f$Sc\f$) 
-/// variables and supports mixing at levels above the lowest in the tree. Parcels are mixed in pairs 
-/// or groups depending on the level and subtree index.
+/// level and subtree of the HiPS tree.
 ///
 /// \param kVar   Index of the variable to be mixed (typically a transported variable determined by the caller).
 /// \param iLevel The tree level whose grandchildren will be mixed.
@@ -1297,8 +1324,8 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
     return vc;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Projects HiPS parcel values and densities back onto the flow particles.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Projects HiPS parcel values and densities back onto the flow particles (CFD cells).
 ///
 /// This function reverses the projection process, redistributing both the values and densities stored 
 /// in the HiPS parcels back to the flow particles. It ensures conservation of both the property values 
@@ -1318,12 +1345,13 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 /// - \f$\rho_{\text{FP}}\f$: Densities in flow particles.
 /// - \f$\mathrm{d}x_{\text{FP}}\f$: Differential volume elements for flow particles.
 ///
+/// \note In the new implementation, geometric overlaps are scaled by \f$w_{\text{Par}}/\mathrm{d}x_{\text{HP}}\f$
+///       so that mass is preserved when parcel volumes change during chemistry.
+///
 /// \param vh           Vector of values from HiPS parcels to be projected back.
 /// \param rho_h        Vector of density values from HiPS parcels.
-/// \param rho_c        Vector of density values (new) on CFD grid
-/// \return             A pair of vectors:
-///                     - The first vector contains the values projected back onto the flow particles.
-///                     - The second vector contains the densities redistributed to the flow particles.
+/// \param rho_c        (output) Vector to receive the densities redistributed to the flow particles.
+/// \return             A vector containing the values projected back onto the flow particles.
 ///
 /// \note 
 /// - This function is the reverse of the projection function that includes density.
