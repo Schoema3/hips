@@ -369,16 +369,6 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 ////////////////////////////////////////////////////////////////////////////////////
 
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho) {
-    
-    //old std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
-    //old std::vector<double> vh = results.first;
-    //old std::vector<double> rho_h = results.second;
-    //old
-    //old varData[currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));            
-    //old varRho = std::vector<double>(rho_h);
-    //old varName[currentIndex] = varN;
-    //old
-    //old currentIndex++; 
 
     std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
 
@@ -456,9 +446,9 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
 /// Projects a CFD field onto HiPS parcels using density weighting so that both the
 /// property (mass-weighted) and the density are conserved.
 ///
-/// \param[in] vcfd     CFD cell values to project (aligned with CFD cells).
-/// \param[in] weight   CFD cell weights (e.g., widths) used to build the CFD grid.
-/// \param[in] density  CFD cell densities aligned with \p vcfd.
+/// \param vcfd     CFD cell values to project (aligned with CFD cells).
+/// \param weight   CFD cell weights (e.g., widths) used to build the CFD grid.
+/// \param density  CFD cell densities aligned with \p vcfd.
 /// \return A pair {values_h, rho_h} where:
 ///         - \c vh : parcel-averaged values on the HiPS parcels
 ///         - \c rho_h    : parcel-averaged densities on the HiPS parcels
