@@ -5,10 +5,13 @@ This code implements the Hierarchal Parcel Swapping (HiPS) model for turbulent r
 ## Documentation is available at [ignite.byu.edu/hips_documentation](https://ignite.byu.edu/hips_documentation)
 
 * Publications
-  * [Kerstein (2013)](https://link.springer.com/content/pdf/10.1007/s10955-013-0811-z): *Hierarchical Parcel-Swapping Representation of Turbulent Mixing. Part 1. Formulation and Scaling Properties*, *Journal of Statistical Physics*, 153:142–161.
-  * [Kerstein (2014)](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/hierarchical-parcelswapping-%20%20representation-of-turbulent-mixing-part-2-application-to-channel-flow/19D6D1CAC4D2FAFFC67A67925D7E527B): *Hierarchical Parcel-Swapping Representation of Turbulent Mixing. Part 2. Application to Channel Flow*, *Journal of Fluid Mechanics*, 750:421–463.
+
+  * Behrang et al. (2025): *A C++ library for turbulent mixing simulation using hierarchical parcel swapping (HiPS)*, SoftwareX, accepted for publication.
+  * Behrang et al. (2025): *Turbulent Mixing of Scalars with Nonunity Schmidt Numbers Using Hierarchical Parcel-Swapping*, *Journal of Fluid Mechanics*, accepted for publication. [Paper](https://ignite.byu.edu/publications/).
   * [Kerstein (2021)](https://journals.aps.org/prfluids/abstract/10.1103/PhysRevFluids.6.044611): *Hierarchical Parcel-Swapping Representation of Turbulent Mixing. Part 3. Origins of Correlation Patterns Observed in Turbulent Boundary Layers*, *Physical Review Fluids*, 6:044611.
-  * Behrang et al. (2024): *Turbulent Mixing of Scalars with Nonunity Schmidt Numbers Using Hierarchical Parcel-Swapping*, under review at *Journal of Fluid Mechanics*.
+  * [Kerstein (2014)](https://www.cambridge.org/core/journals/journal-of-fluid-mechanics/article/abs/hierarchical-parcelswapping-%20%20representation-of-turbulent-mixing-part-2-application-to-channel-flow/19D6D1CAC4D2FAFFC67A67925D7E527B): *Hierarchical Parcel-Swapping Representation of Turbulent Mixing. Part 2. Application to Channel Flow*, *Journal of Fluid Mechanics*, 750:421–463.
+  * [Kerstein (2013)](https://link.springer.com/content/pdf/10.1007/s10955-013-0811-z): *Hierarchical Parcel-Swapping Representation of Turbulent Mixing. Part 1. Formulation and Scaling Properties*, *Journal of Statistical Physics*, 153:142–161.
+
 
 ## Directory Structure
 
