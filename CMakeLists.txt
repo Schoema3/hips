@@ -12,7 +12,7 @@ endif()
 # ---- Set C++ language standard ----
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED YES)
 set(CMAKE_CXX_EXTENSIONS NO)
 
@@ -23,7 +23,8 @@ set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}/installed")
 
 option(REACTIONS_ENABLED     "Enable reactions"           OFF)
 option(HIPS_BUILD_EXAMPLES   "Build hips examples"        ON)
-option(HIPS_BUILD_DOCS       "Build hips documentation"   ON)
+option(HIPS_BUILD_DOCS       "Build hips documentation"   OFF)
+option(HIPS_BUILD_TESTS      "Build hips tests"           OFF)
 
 if(REACTIONS_ENABLED)
     add_compile_definitions(REACTIONS_ENABLED)
@@ -45,4 +46,10 @@ endif()
 
 if (HIPS_BUILD_DOCS )
     add_subdirectory(docs)
+endif()
+
+# -------- TESTS ----------
+
+if (HIPS_BUILD_TESTS)
+    add_subdirectory(test)
 endif()

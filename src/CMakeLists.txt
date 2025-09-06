@@ -21,14 +21,11 @@ endif()
 
 ##################### build library
 
-
 target_include_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/include")
 target_include_directories(hips PUBLIC "/usr/local/include")
 
 target_link_directories(hips PUBLIC "$ENV{CONDA_PREFIX}/lib")
 target_link_directories(hips PUBLIC "/usr/local/lib")
-
-
 
 if(REACTIONS_ENABLED)
     find_library(SUN sundials_core)

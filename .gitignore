@@ -1,7 +1,6 @@
 build
 run
 installed
-data
 .DS_Store
 examples/**
 post/**

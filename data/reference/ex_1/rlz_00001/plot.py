@@ -1,0 +1,27 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+d0 = np.loadtxt('Data_00000.dat')
+d1 = np.loadtxt('Data_00001.dat')
+d2 = np.loadtxt('Data_00002.dat')
+d3 = np.loadtxt('Data_00003.dat')
+d4 = np.loadtxt('Data_00004.dat')
+dd = [d0, d1, d2, d3, d4]
+
+fig, ax = plt.subplots(5,1, figsize=(5,12))     # create a figure and axes
+
+i = np.arange(1024)
+for k in range(5):
+    ax[k].plot(i, dd[k][:,0], lw=0.5, label='Sc=1/16')
+    ax[k].plot(i, dd[k][:,1], lw=0.5, label='Sc=1')
+    ax[k].plot(i, dd[k][:,2], lw=0.5, label='Sc=16')
+    ax[k].set_xticks([]) 
+    ax[k].set_yticks([-2,-1,0,1,2,3])
+    ax[k].set_ylabel('scalar value')
+    ax[k].text(500,-1,'Data_0000'+str(k)+'.dat')
+    
+ax[-1].set_xlabel('parcel index')
+ax[-1].set_xticks([0, 256, 512, 768, 1024])
+ax[0].legend(frameon=False)
+
+plt.show()

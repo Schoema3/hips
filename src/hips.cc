@@ -40,7 +40,7 @@ hips::hips(int nLevels_,
            double domainLength_, 
            double tau0_, 
            double C_param_, 
-           int forceTurb_,
+           bool forceTurb_,
            int nVar_,
            vector<double> &ScHips_,
            bool performReaction_,
@@ -53,8 +53,7 @@ hips::hips(int nLevels_,
     C_param(C_param_), 
     forceTurb(forceTurb_),       
     ScHips(ScHips_),   
-    nVar(nVar_),                       
-    LrandSet(true),              
+    nVar(nVar_),                                     
     rand(seed),
     performReaction(performReaction_),
     realization(realization_){
@@ -69,6 +68,9 @@ hips::hips(int nLevels_,
 
         // Uncomment the following line to switch to batchReactor_cantera
         // bRxr = make_unique<batchReactor_cantera>(cantSol);
+
+        if(forceTurb)
+            throw std::runtime_error("Error: forceTurb should be false if preformReaction is true");
     }
     #endif
 
@@ -76,14 +78,15 @@ hips::hips(int nLevels_,
     varData.resize(nVar);
     varName.resize(nVar); 
 
-    set_tree(nLevels, domainLength, tau0, ScHips);
+    set_tree(nLevels, domainLength, tau0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 hips::hips(double C_param_, 
-           int forceTurb_,
+           bool forceTurb_,
            int nVar_,
+           vector<double> &ScHips_,
            bool performReaction_,
            shared_ptr<void> vcantSol,
            int seed,
@@ -91,7 +94,7 @@ hips::hips(double C_param_,
     C_param(C_param_), 
     forceTurb(forceTurb_),       
     nVar(nVar_),                       
-    LrandSet(true),              
+    ScHips(ScHips_),                 
     rand(seed),
     performReaction(performReaction_),
     realization(realization_){
@@ -118,12 +121,11 @@ hips::hips(double C_param_,
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<double> &ScHips_){    
+void hips::set_tree(int nLevels_, double domainLength_, double tau0_){    
  
     nLevels= nLevels_; 
     domainLength = domainLength_; 
     tau0 = tau0_; 
-    ScHips = ScHips_; 
 
     if (nLevels == -1)  
         nLevels = nL; 
@@ -198,43 +200,44 @@ void hips::set_tree(int nLevels_, double domainLength_, double tau0_, vector<dou
     //------------------- Set the parcel addresses (index array)
 
     varRho.resize(nparcels);
-    Temp.resize(nparcels);
+    wPar.assign(nparcels, 1.0 / nparcels);
  
     pLoc.resize(nparcels);
     for (int i=0; i<nparcels; i++)
         pLoc[i] = i;
+
+    currentIndex = 0.0;
 } 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<double> &ScHips_, std::string approach_) {
+void hips::set_tree(double Re_, double domainLength_, double tau0_, std::string ReApproach_) {
     Re = Re_;
     domainLength = domainLength_;
     tau0 = tau0_;
-    ScHips = ScHips_;
-    approach = approach_;
+    ReApproach = ReApproach_;
 
     double baseLevelEstimate = (3.0 / 4) * log(1 / Re) / log(Afac);                               // Calculate the base tree level estimate (non-integer)
     int baseLevel;
 
-    if (approach == "rounding") {
+    if (ReApproach == "rounding") {
         baseLevel = round(baseLevelEstimate);                                                     // Round the base level to the nearest integer
     } 
-    else if (approach == "probability") {
+    else if (ReApproach == "probability") {
         baseLevel = ceil(baseLevelEstimate);                                                      // Ceil the base level to the nearest integer
         int previousLevel = baseLevel - 1;
         Prob = baseLevelEstimate - previousLevel;                                                 // Calculate the probability
     } 
-    else if (approach == "micromixing") {
+    else if (ReApproach == "micromixing") {
         baseLevel = ceil(baseLevelEstimate);                                                      // Ceil the base level to the nearest integer
         lStar = std::pow(Re, -3.0 / 4);                                                           // Calculate lStar based on Re
     } 
-    else if (approach == "dynamic_A") {
+    else if (ReApproach == "dynamic_A") {
         baseLevel = round(baseLevelEstimate);                                                     // Round the base level to the nearest integer
         Anew = exp(-log(Re) / ((4.0 / 3.0) * baseLevel));                                         // Calculate the new value of parameter A
     } 
     else {
-        throw std::invalid_argument("Invalid approach specified");                                // Handle invalid approach case if needed
+        throw std::invalid_argument("Invalid ReApproach specified");                                // Handle invalid approach case if needed
     }
 
     nL = baseLevel + 3;                                                                           // Set the number of levels for the binary tree structure
@@ -262,18 +265,18 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     levelRates.resize(nLevels);
 
     for (int i = 0; i < nLevels; ++i) {
-        levelLengths[i] = domainLength * pow((approach == "dynamic_A" ? Anew : Afac), i);
+        levelLengths[i] = domainLength * pow((ReApproach == "dynamic_A" ? Anew : Afac), i);
 
         levelTaus[i] = tau0 * pow(levelLengths[i] / domainLength, 2.0 / 3.0) / C_param;
         levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
     }
 
-    if (approach == "micromixing") {                                          // Adjust rates for micromixing model
+    if (ReApproach == "micromixing") {                                          // Adjust rates for micromixing model
         levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
         levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
     }
 
-    if (approach == "probability") {                                          // Adjust final mixing rate based on probability
+    if (ReApproach == "probability") {                                          // Adjust final mixing rate based on probability
         levelRates[Nm3] = levelRates[nL - 3] * Prob;
     }
 
@@ -311,10 +314,12 @@ void hips::set_tree(double Re_, double domainLength_, double tau0_, std::vector<
     //-----------------------------------------------------
 
     varRho.resize(nparcels);
-    Temp.resize(nparcels);
+    wPar.assign(nparcels, 1.0 / nparcels);
     pLoc.resize(nparcels);
     for (int i = 0; i < nparcels; ++i)
         pLoc[i] = i;
+
+    currentIndex = 0.0;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -364,13 +369,11 @@ void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 ////////////////////////////////////////////////////////////////////////////////////
 
 void hips::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho) {
-    
-    std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
-    std::vector<double> vh = results.first;
-    std::vector<double> rho_h = results.second;
 
-    varData[currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));            
-    varRho = std::vector<double>(rho_h);
+    std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
+
+    varData[currentIndex] = std::make_shared<std::vector<double>>(results.first);
+    varRho = results.second;
     varName[currentIndex] = varN;
  
     currentIndex++; 
@@ -437,71 +440,104 @@ std::vector<double> hips::projection(std::vector<double> &vcfd, std::vector<doub
     return vh;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Projects the values from flow particles onto HiPS parcels, accounting for particle density.
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Project values from CFD cells onto HiPS parcels, accounting for cell density.
 ///
-/// This function calculates the projection of values from flow particles onto HiPS parcels, 
-/// incorporating the density of each particle into the computation. The resulting projection 
-/// ensures conservation of both the property values and the density. The function returns a 
-/// pair of vectors: one representing the projected values on the HiPS parcels and another for 
-/// the densities.
+/// Projects a CFD field onto HiPS parcels using density weighting so that both the
+/// property (mass-weighted) and the density are conserved.
 ///
-/// \param vcfd         Vector of variables from flow particles to be projected onto HiPS parcels.
-/// \param weight       Vector of weights corresponding to each flow particle.
-/// \param density      Vector of densities associated with each flow particle.
+/// \param vcfd     CFD cell values to project (aligned with CFD cells).
+/// \param weight   CFD cell weights (e.g., widths) used to build the CFD grid.
+/// \param density  CFD cell densities aligned with \p vcfd.
+/// \return A pair {vh, rho_h} where:
+///         - \c vh : parcel-averaged values on the HiPS parcels
+///         - \c rho_h    : parcel-averaged densities on the HiPS parcels
 ///
-/// \return A pair of vectors:
-///         - First vector: Projected values on the HiPS parcels.
-///         - Second vector: Densities on the HiPS parcels.
+/// \details
+/// Parcel averages are formed via geometric overlaps between CFD cells and HiPS parcels:
+/// \f[
+///   \phi_h(i) =
+///   \frac{\sum_j \rho_c(j)\,\phi_c(j)\,\Delta x_{ij}}
+///        {\sum_j \rho_c(j)\,\Delta x_{ij}},\qquad
+///   \rho_h(i) =
+///   \frac{\sum_j \rho_c(j)\,\Delta x_{ij}}
+///        {\sum_j \Delta x_{ij}},
+/// \f]
+/// where \f$\Delta x_{ij}\f$ is the overlap length between CFD cell \f$j\f$ and parcel \f$i\f$.
 ///
-/// \note This is an overloaded version of the projection function, designed to include particle density 
-///       in the computation. Ensure that the `vcfd`, `weight`, and `density` vectors are of equal size 
-///       for consistency.
+/// \par Consistency with parcel weights
+/// The overlap is scaled by \f$w_{\mathrm{par}}(i)/\ell_i\f$ so forward/backward projection
+/// remain consistent when \c wPar changes during chemistry. This preserves the mass-weighted integrals:
+/// \f[
+///   \sum_i \rho_h(i)\, w_{\mathrm{par}}(i) \approx \sum_j \rho_c(j)\, w_c(j), \qquad
+///   \sum_i \rho_h(i)\,\phi_h(i)\, w_{\mathrm{par}}(i) \approx
+///   \sum_j \rho_c(j)\,\phi_c(j)\, w_c(j).
+/// \f]
 ///
-/// \warning Discrepancies in the size of the input vectors (`vcfd`, `weight`, and `density`) may lead 
-///          to undefined behavior or inaccurate projections. Verify the inputs before calling this function.
+/// \note This overload includes density in the computation. Ensure that \p vcfd, \p weight,
+///       and \p density have identical sizes. Weights are typically normalized
+///       (\f$\sum_j w_c(j)=1\f$), but only their relative magnitudes matter.
+///
+/// \warning Size mismatches among \p vcfd, \p weight, and \p density will lead to incorrect
+///          projections. Verify inputs before calling. Non-positive parcel lengths or negative
+///          weights are invalid.
+///
+/// \see set_varData, get_varData_with_density, projection_back_with_density
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector<double> &vcfd, 
-                                                                     std::vector<double> &weight, 
-                                                                     const std::vector<double> &density) {
-    
+std::pair<std::vector<double>, std::vector<double>> 
+hips::projection(std::vector<double> &vcfd, 
+                 std::vector<double> &weight, 
+                 const std::vector<double> &density) {
+    // Build CFD and HiPS grids
     xc = setGridCfd(weight);
     xh = setGridHips(nparcels);
 
-    // Initialize variables
-    int nc = xc.size() - 1;
-    int nh = xh.size() - 1;
+    int nc = xc.size() - 1; // CFD cell count
+    int nh = xh.size() - 1; // HiPS parcel count
 
-    std::vector<double> vh(nh, 0.0);
-    std::vector<double> rho_h(nh, 0.0);
-    int jprev = 0;
+    std::vector<double> vh(nh, 0.0);     // parcel-averaged phi
+    std::vector<double> rho_h(nh, 0.0);  // parcel-averaged density
 
-    for (int i = 0; i < nh; i++) {
-        double total_dx = 0.0;
+    int jprev = 0; // remember where we left off in CFD cells
 
-        for (int j = jprev + 1; j <= nc; ++j) {
-            if (xc[j] <= xh[i + 1]) {
-                double d = std::min(xc[j] - xc[j - 1], xc[j] - xh[i]);
-                total_dx += d;
-                rho_h[i] += density[j - 1] * d;
-                vh[i] += density[j - 1] * vcfd[j - 1] * d;
-            } 
-            else {
-                double d = std::min(xh[i + 1] - xc[j - 1], xh[i + 1] - xh[i]);
-                total_dx += d;
-                rho_h[i] += density[j - 1] * d;
-                vh[i] += density[j - 1] * vcfd[j - 1] * d;
+    for (int i = 0; i < nh; i++) 
+    {
+        double M = 0.0;     // total mass in this parcel
+        double Mphi = 0.0;  // total (mass * phi) in this parcel
+
+        double parcel_length = xh[i + 1] - xh[i];
+
+        for (int j = jprev + 1; j <= nc; ++j) 
+        {
+            // Find geometric overlap between CFD cell and HiPS parcel
+            double overlap_start = std::max(xh[i], xc[j - 1]);
+            double overlap_end   = std::min(xh[i + 1], xc[j]);
+
+            double overlap_len = overlap_end - overlap_start;
+            if (overlap_len <= 0.0) continue;
+
+            // Effective length scaled by wPar[i]
+            double effective_len = overlap_len * (wPar[i] / parcel_length);
+
+            // Accumulate mass and mass*phi
+            double rho = density[j - 1];
+            double phi = vcfd[j - 1];
+            M    += rho * effective_len;
+            Mphi += rho * phi * effective_len;
+
+            // If CFD cell ends after parcel end  move to next parcel
+            if (xc[j] >= xh[i + 1]) {
                 jprev = j - 1;
                 break;
             }
         }
 
-        // ------------------------ Normalize results
-
-        rho_h[i] /= (xh[i + 1] - xh[i]);
-        vh[i] /= rho_h[i] * (xh[i + 1] - xh[i]);
+        // Convert total mass  average density and phi
+        if (wPar[i] > 0.0) rho_h[i] = M / wPar[i];
+        if (M > 0.0)       vh[i]    = Mphi / M;
     }
+
     return {vh, rho_h};
 }
 
@@ -525,7 +561,11 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection(std::vector
 /////////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> hips::setGridCfd(std::vector<double> &w) {
-    
+
+    double sumw = 0.0;
+    for(int i=0; i<w.size(); i++)
+        sumw += w[i];
+   
     std::vector<double> pos;                               // Initializing a vector to hold the grid positions
     double posL = 0.0;                                     // Initializing the starting position
 
@@ -533,7 +573,7 @@ std::vector<double> hips::setGridCfd(std::vector<double> &w) {
 
     while (i <= w.size()) {                               // Generate the grid positions based on the weights
         pos.push_back(posL);                              // Add the current position to the grid
-        posL += w[i];                                     // Move to the next position by adding the corresponding weight
+        posL += w[i]/sumw;                                // Move to the next position by adding the corresponding weight
         i++;                                              
     }
     return pos;                                           // Return the generated grid positions
@@ -804,7 +844,7 @@ void hips::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
 
 void hips::advanceHips(const int iLevel, const int iTree) {
 
-    if (forceTurb == 2 && iLevel == 0) {
+    if (forceTurb && iLevel == 0) {
         forceProfile();                                                  // Forcing for statistically stationary
     }
 
@@ -862,80 +902,101 @@ int hips::getVariableIndex(const std::string &varName) const {
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Simulates chemical reactions for parcels affected by a micromixing event.
 ///
-/// This function performs chemical reactions for parcels involved in a micromixing process at a specific 
-/// level and tree node within the HiPS structure. The reaction times are determined based on the last 
-/// reaction time stored in `parcelTimes`. It dynamically retrieves the indices of relevant variables 
-/// such as `enthalpy` and species mass fractions for accurate state updates.
+/// This function performs chemical reactions for parcels involved in a micromixing process
+/// at a specific level and tree node within the HiPS structure. The reaction times are
+/// determined based on the last reaction time stored in parcelTimes. It dynamically
+/// retrieves the indices of relevant variables such as enthalpy and species mass fractions
+/// for accurate state updates.
 ///
 /// \param iLevel         The tree level where the eddy event occurred.
 /// \param iTree          The root node of the eddy event at the specified level.
 ///
 /// \details
-/// - `getVariableIndex("enthalpy")` is used to retrieve the index for `enthalpy`.
-/// - Indices for species are dynamically retrieved using `gas->speciesName(i)`.
-/// - The function updates parcel states, including `enthalpy` and species mass fractions, based on the reactions.
+/// - getVariableIndex("enthalpy") is used to retrieve the index for enthalpy.
+/// - Indices for species are dynamically retrieved using gas->speciesName(i).
+/// - The function updates parcel states, including enthalpy and species mass fractions,
+///   based on the reactions.
+/// - **New behavior**: The old parcel density is cached before chemistry, and the new density
+///   is retrieved from the reactor after the reaction step. Parcel weights (wPar) are rescaled
+///   by (rho_old / rho_new) so that the per-parcel mass m = rho * wPar remains constant even
+///   when density changes due to chemistry. Temperature is also written back for diagnostics.
 ///
-/// \throws std::runtime_error If a variable name is not found in the `varName` list.
-///
-/// \note 
-/// - The `varName` list must be populated using `set_varData` before invoking this function.
-/// - Reaction functionality is only available if `REACTIONS_ENABLED` is defined during compilation.
-/// - This function relies on the HiPS model's proper initialization and an accurate setup of `parcelTimes`.
+/// \note
+/// - The varName list must be populated using set_varData before invoking this function.
+/// - Reaction functionality is only available if REACTIONS_ENABLED is defined during compilation.
+/// - This function relies on the HiPS model's proper initialization and an accurate setup of parcelTimes.
 ///
 /// \warning Ensure that the necessary reaction data and variable names are correctly configured.
-///          Missing or incorrectly configured `varName` entries may lead to runtime errors.
-/// \see set_varData, getVariableIndex
+///          Missing or incorrectly configured varName entries may lead to runtime errors.
 ///////////////////////////////////////////////////////////////////////////////
 
 void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 
-    #ifdef REACTIONS_ENABLED
+  #ifdef REACTIONS_ENABLED
+    // ---- cache indices once
+    const int enthalpyIdx = getVariableIndex("enthalpy");
+    std::vector<int> yIdx(nsp);
+    for (int k = 0; k < nsp; ++k) {
+        yIdx[k] = getVariableIndex(gas->speciesName(k)); // map species name -> var index
+    }
 
-    int enthalpyIdx = getVariableIndex("enthalpy");  // Dynamically find enthalpy index
-    int nP = 1 << (Nm1 - iLevel);
-    int istart = iTree * nP;
-    int iend = istart + nP;
-    int ime;
-    double dt;
-    double h;
+    const int nP     = 1 << (Nm1 - iLevel);
+    const int istart = iTree * nP;
+    const int iend   = istart + nP;
+
     std::vector<double> y(nsp);
 
-    for (int i = istart; i < iend; i++) {
-        ime = pLoc[i];
-        dt = time - parcelTimes[ime];
+    for (int i = istart; i < iend; ++i) {
+        const int ime = pLoc[i];
+        const double dt = time - parcelTimes[ime];
 
-        // Access enthalpy using its index
-        h = (*varData[enthalpyIdx])[ime];
-
-          // Access species using their indices
-        for (int k = 0; k < nsp; k++) {
-            int speciesIdx = getVariableIndex(gas->speciesName(k));
-            y[k] = (*varData[speciesIdx])[ime];
+        // Pull current state
+        double h = (*varData[enthalpyIdx])[ime];
+        for (int k = 0; k < nsp; ++k) {
+            y[k] = (*varData[yIdx[k]])[ime];
         }
+
+        // ---- store old density BEFORE chemistry
+        const double rho_old = varRho[ime];
+
         if (performReaction) {
+            // Advance chemistry; bRxr updates its state internally
             bRxr->react(h, y, dt);
-            varRho[ime] = bRxr->getDensity();
-            Temp[ime] = bRxr->temperature;
+
+            // Get new density from the reactor/EOS
+            const double rho_new = bRxr->getDensity();
+
+            // Keep per-parcel mass m = rho * wPar * V_tot constant
+            if (rho_new > 0.0) {
+                wPar[ime] *= (rho_old / rho_new);
+                varRho[ime] = rho_new;
+            }
+
         }
-        // Update enthalpy and species
+
+        // Write back enthalpy and species (post-reaction)
         (*varData[enthalpyIdx])[ime] = h;
-        for (int k = 0; k < nsp; k++) {
-            int speciesIdx = getVariableIndex(gas->speciesName(k));
-            (*varData[speciesIdx])[ime] = y[k];
+        for (int k = 0; k < nsp; ++k) {
+            (*varData[yIdx[k]])[ime] = y[k];
         }
 
         parcelTimes[ime] = time;
     }
-    #endif
+
+ #endif
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 /// \brief Uniformly mixes parcels at a specified level and subtree within the HiPS model.
 ///
+/// This function performs mixing of parcels at a given level and subtree of the 
+/// HiPS tree. It can operate in two modes:
+/// - **Uniform mixing**: Averages variable values directly (original behavior).
+/// - **Density-weighted mixing**: Computes a mass-weighted mean using each parcel’s 
+///   density (`varRho`) and statistical weight (`wPar`), ensuring conservation of 
+///   the total mixed quantity when densities differ.
 /// This function performs uniform mixing of parcels based on their average values at a specified 
-/// level and subtree of the HiPS tree. It is particularly suited for low Schmidt number (\f$Sc\f$) 
-/// variables and supports mixing at levels above the lowest in the tree. Parcels are mixed in pairs 
-/// or groups depending on the level and subtree index.
+/// level and subtree of the HiPS tree.
 ///
 /// \param kVar   Index of the variable to be mixed (typically a transported variable determined by the caller).
 /// \param iLevel The tree level whose grandchildren will be mixed.
@@ -964,44 +1025,66 @@ void hips::reactParcels_LevelTree(const int iLevel, const int iTree) {
 ///
 /// \warning Ensure that \p iLevel and \p iTree correspond to valid levels and subtrees in the HiPS structure to prevent undefined behavior.
 ////////////////////////////////////////////////////////////////////////////////////////////
-
 void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
     
     int istart;
     int iend;
 
-    int nPmix = 1 << (nLevels - iLevel - 2);                   // Number of parcels mixed together
-
+    int nPmix = 1 << (nLevels - iLevel - 2);   // Number of parcels mixed together
     int ime;
 
-    //---------- Mix left branch of iTree
+    //---------- Mix left branch of iTree ----------
+    istart = iTree << (Nm1 - iLevel);  
+    iend   = istart + nPmix;
 
-    istart = iTree << (Nm1-iLevel);  
-    iend = istart + nPmix;
+    double s    = 0.0;  // sum (value or value*mass)
+    double msum = 0.0;  // mass sum (only used if weighted)
 
-    double s = 0;                                               // Initialize sum to 0
-    for (int i=istart; i<iend; i++) {
+    for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        s += (*varData[kVar])[ime];
+        if (performReaction) {
+            double m = varRho[ime] * wPar[ime];
+            s    += (*varData[kVar])[ime] * m;   
+            msum += m;
+        } else {
+            s += (*varData[kVar])[ime];          
+        }
     }
-    for (int i=istart; i<iend; i++) {
+
+    double avg = performReaction
+               ? ((msum > 0.0) ? (s / msum) : 0.0)   
+               : (s / nPmix);
+
+    for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        (*varData[kVar])[ime] = s / nPmix; 
+        (*varData[kVar])[ime] = avg;              
     }
 
-    //--------- Mix right branch of iTree
-
+    //---------- Mix right branch of iTree ----------
     istart = iend;
-    iend = istart + nPmix;
+    iend   = istart + nPmix;
 
-    s = 0;                   // initialize sum to 0
-    for (int i=istart; i<iend; i++) {
+    s    = 0.0;
+    msum = 0.0;
+
+    for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        s += (*varData[kVar])[ime];
+        if (performReaction) {
+            double m = varRho[ime] * wPar[ime];
+            s    += (*varData[kVar])[ime] * m;       
+            msum += m;
+        } else {
+            s += (*varData[kVar])[ime];              
+        }
     }
-    for (int i=istart; i<iend; i++) {
+
+    avg = performReaction
+        ? ((msum > 0.0) ? (s / msum) : 0.0)
+        : (s / nPmix);
+
+    for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        (*varData[kVar])[ime] = s / nPmix; 
+        (*varData[kVar])[ime] = avg;                 
     }
 }
 
@@ -1031,7 +1114,7 @@ void hips::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree) {
 void hips::forceProfile() {
     // Loop through each variable in the HiPS profile
     for (int k = 0; k < varData.size(); k++) {
-        double s;                                                    // Temporary variable for summation
+        double s=0;                                                  // Temporary variable for summation
 
         //---------- Force the left half of parcels to average 0 ----------
 
@@ -1133,8 +1216,16 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
     // Write data
     for (int i = 0; i < nparcels; i++) {
         // Write temperature first if reactions are enabled
-        if(performReaction)
-            ofile << setw(19) << Temp[pLoc[i]];
+        #ifdef REACTIONS_ENABLED
+        if(performReaction) {
+            vector<double> yy(nsp);
+            for(int k=0; k<nsp; k++)
+                yy[k] = (*varData[k+1])[pLoc[i]];
+            gas->setMassFractions(yy.data());
+            gas->setState_HP((*varData[0])[pLoc[i]], gas->pressure());
+            ofile << setw(19) << gas->temperature();
+        }
+        #endif
 
         // Write variables
         for (int k = 0; k < nVar; k++) {
@@ -1179,6 +1270,14 @@ void hips::writeData(int real, const int ifile, const double outputTime) {
 /// - Mismatches in data sizes between HiPS parcels and flow particles may lead to unexpected results.
 //////////////////////////////////////////////////////////////////////////////
 
+//  cfd
+//  i=    0         1         2         3
+//   |    *    |    *    |    *    |    *    |
+
+//  hips
+//   | * | * | * | * | * | * | * | * | * | * |
+//  j= 0   1   2   3   4   5   6   7   8   9
+
 std::vector<double> hips::projection_back(std::vector<double> &vh) {
 
     int nh = xh.size() - 1;
@@ -1186,10 +1285,6 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 
     std::vector<double> vc(nc, 0.0);
     int jprev = 0;
-
-    for (double val : vc)
-        std::cout << val << " ";
-    std::cout << std::endl;
 
     for (int i = 0; i < nc; ++i) {
         for (int j = jprev + 1; j <= nh; ++j) {
@@ -1219,8 +1314,8 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
     return vc;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Projects HiPS parcel values and densities back onto the flow particles.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief Projects HiPS parcel values and densities back onto the flow particles (CFD cells).
 ///
 /// This function reverses the projection process, redistributing both the values and densities stored 
 /// in the HiPS parcels back to the flow particles. It ensures conservation of both the property values 
@@ -1240,11 +1335,13 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 /// - \f$\rho_{\text{FP}}\f$: Densities in flow particles.
 /// - \f$\mathrm{d}x_{\text{FP}}\f$: Differential volume elements for flow particles.
 ///
+/// \note In the new implementation, geometric overlaps are scaled by \f$w_{\text{Par}}/\mathrm{d}x_{\text{HP}}\f$
+///       so that mass is preserved when parcel volumes change during chemistry.
+///
 /// \param vh           Vector of values from HiPS parcels to be projected back.
 /// \param rho_h        Vector of density values from HiPS parcels.
-/// \return             A pair of vectors:
-///                     - The first vector contains the values projected back onto the flow particles.
-///                     - The second vector contains the densities redistributed to the flow particles.
+/// \param rho_c        (output) Vector to receive the densities redistributed to the flow particles.
+/// \return             A vector containing the values projected back onto the flow particles.
 ///
 /// \note 
 /// - This function is the reverse of the projection function that includes density.
@@ -1255,39 +1352,47 @@ std::vector<double> hips::projection_back(std::vector<double> &vh) {
 /// - Mismatches in data sizes between HiPS parcels and flow particles may lead to inaccurate results.
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_density(std::vector<double> &vh, 
-                                                                                       std::vector<double> &rho_h) {
-    int nh = xh.size() - 1;
-    int nc = xc.size() - 1;
+std::vector<double> hips::projection_back_with_density(std::vector<double> &vh, 
+                                                       std::vector<double> &rho_h,
+                                                       std::vector<double> &rho_c) {
+    const int nh = static_cast<int>(xh.size()) - 1;  // # HiPS parcels
+    const int nc = static_cast<int>(xc.size()) - 1;  // # CFD cells
 
-    std::vector<double> vc(nc, 0.0);
-    std::vector<double> rho_c(nc, 0.0);
+    std::vector<double> phi_c(nc, 0.0);   // CFD-side variable (output)
+    std::vector<double> M_cfd(nc, 0.0);   // mass in each CFD cell
+    std::vector<double> Mphi_cfd(nc, 0.0);// mass*phi in each CFD cell
+
     int jprev = 0;
-
     for (int i = 0; i < nc; ++i) {
-        double total_dx = 0.0;
+        // cell geometry (normalized length, since xc is 0..1)
+        const double cell_len = xc[i + 1] - xc[i];
 
         for (int j = jprev + 1; j <= nh; ++j) {
-            if (xh[j] <= xc[i + 1]) {
-                double d = std::min(xh[j] - xh[j - 1], xh[j] - xc[i]);
-                total_dx += d;
-                rho_c[i] += rho_h[j - 1] * d;
-                vc[i] += vh[j - 1] * rho_h[j - 1] * d;
-            } else {
-                double d = std::min(xc[i + 1] - xh[j - 1], xc[i + 1] - xc[i]);
-                total_dx += d;
-                rho_c[i] += rho_h[j - 1] * d;
-                vc[i] += vh[j - 1] * rho_h[j - 1] * d;
+            // geometric overlap between parcel j-1 and CFD cell i
+            const double overlap_start = std::max(xh[j - 1], xc[i]);
+            const double overlap_end   = std::min(xh[j],     xc[i + 1]);
+            const double overlap_len   = overlap_end - overlap_start;
+            if (overlap_len <= 0.0) continue;
 
-                jprev = j - 1;
-                break;
-            }
+            // scale overlap by current parcel volume fraction wPar
+            const double parcel_len    = xh[j] - xh[j - 1]; // = 1.0/nh
+            const double effective_len = overlap_len * (wPar[pLoc[j - 1]] / parcel_len);
+
+            // accumulate mass and mass*phi into CFD cell i
+            const double rhoP = rho_h[j - 1];
+            const double phiP = vh[j - 1];
+            M_cfd[i]    += rhoP * effective_len;
+            Mphi_cfd[i] += rhoP * phiP * effective_len;
+
+            // advance parcel index if we reached end of this CFD cell
+            if (xc[i + 1] <= xh[j]) { jprev = j - 1; break; }
         }
 
-        // Normalize the results
-        vc[i] /= rho_c[i];
+        // recover CFD density and variable
+        rho_c[i] = (cell_len > 0.0)        ? (M_cfd[i] / cell_len) : 0.0;
+        phi_c[i] = (M_cfd[i] > 1e-300)     ? (Mphi_cfd[i] / M_cfd[i]) : 0.0;
     }
-    return {vc, rho_c};
+    return phi_c;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -1296,6 +1401,8 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_d
 /// This function returns the final state of the simulation, packaged as a vector of vectors. 
 /// It is particularly useful when integrating HiPS as a subgrid model in CFD simulations, 
 /// enabling seamless transfer of data for further analysis or post-processing.
+///
+/// Projects data from HiPS varData (size nparcels) to number of CFD particles corresponding to initial set_varData call
 ///
 /// \return A vector of vectors containing the final results, where:
 ///         - Each inner vector represents a specific variable or property.
@@ -1310,15 +1417,24 @@ std::pair<std::vector<double>, std::vector<double>> hips::projection_back_with_d
 /// - The returned data structure should be interpreted according to the simulation setup and variable ordering.
 //////////////////////////////////////////////////////////////////////////////////////////
 
-std::vector<std::vector<double>> hips::get_varData(){
+std::vector<std::vector<double>> hips::get_varData() {
+    std::vector<std::vector<double>> varDataProjections;
 
-    std::vector<std::vector<double>> varDataProjections;               // Vector to store modified data projections
+    for (int i = 0; i < varData.size(); i++) {
 
-    for (int i = 0; i < varData.size(); i++)                           // Loop through each element of varData and project the data back
-        varDataProjections.push_back(projection_back((*varData[i])));  // Project the data back and store it in vh
+        // Reorder using pLoc
+        std::vector<double> vh(nparcels);
+        for (int j = 0; j < nparcels; j++) {
+            vh[j] = (*varData[i])[pLoc[j]];
+        }
 
-    return varDataProjections;                                         // Return the vector containing modified data projections
+        std::vector<double> vc = projection_back(vh);
+        varDataProjections.push_back(vc);
+    }
+
+    return varDataProjections;
 }
+
 ////////////////////////////////////////////////////////////////////////////////////
 /// \brief Retrieves final simulation data, including both values and densities.
 ///
@@ -1340,20 +1456,30 @@ std::vector<std::vector<double>> hips::get_varData(){
 ///   before invoking this function.
 ///////////////////////////////////////////////////////////////////////////////////
 
-std::vector<std::pair<std::vector<double>, std::vector<double>>> hips::get_varData_with_density() {
-
-    std::vector<std::pair<std::vector<double>, std::vector<double>>> varDataProjections;  // Vector to store data projections with densities
-
-    for (int i = 0; i < varData.size(); i++) {
-        // Extract the value and density data
-        std::vector<double> vh = (*varData[i]);  // Assuming varData[i][0] holds the values
-        std::vector<double> rho_h = varRho;      // Assuming varData[i][1] holds the densities
-
-        // Project the data back with density and store the result
-        varDataProjections.push_back(projection_back_with_density(vh, rho_h));
+std::pair<std::vector<std::vector<double>>, std::vector<double>> hips::get_varData_with_density() {
+    std::vector<std::vector<double>> varDataProjections;
+    
+    // Reorder varRho based on pLoc
+    std::vector<double> rho_h(nparcels);
+    for (int i = 0; i < nparcels; i++) {
+        rho_h[i] = varRho[pLoc[i]];
     }
 
-    return varDataProjections;  // Return the vector containing modified data projections with densities
+    std::vector<double> rho_c = projection_back(rho_h);
+
+    for (int i = 0; i < varData.size(); i++) {
+
+        // Reorder variable data using pLoc
+        std::vector<double> vh(nparcels);
+        for (int j = 0; j < nparcels; j++) {
+            vh[j] = (*varData[i])[pLoc[j]];
+        }
+
+        auto vc = projection_back_with_density(vh, rho_h, rho_c);
+        varDataProjections.push_back(vc);
+    }
+
+    return {varDataProjections, rho_c};
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -1453,6 +1579,6 @@ void hips::saveAllParameters() {
     }
 
     file.close();
-    std::cout << endl << "All parameters saved in: " << filepath << std::endl;
+    //cout << endl << "All parameters saved in: " << filepath << std::endl;
 }
 /////////////////////////////////////////////////////////////////////////////

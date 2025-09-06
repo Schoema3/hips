@@ -45,12 +45,12 @@ using namespace std;
 ///////////////////////////////////////////////////////////////////////////////////////
 int main() {
     // HiPS simulation parameters for premixed combustion
-    int nLevels = 6;             // Number of hierarchical levels
+    int nLevels = 8;             // Number of hierarchical levels
     double domainLength = 0.01;  // Domain length scale
-    double tau0 = 0.000005;      // Mixing timescale (fast mixing)
+    double tau0 = 0.00005;      // Mixing timescale (fast mixing)
     double C_param = 0.5;        // Eddy rate multiplier
-    double tRun = 0.0005;        // Total simulation runtime
-    int forceTurb = 0;           // No forced turbulence
+    double tRun = 0.002;             // Total simulation runtime
+    bool forceTurb = false;           // No forced turbulence
     vector<double> ScHips(54, 1); // Schmidt number (unity for all species)
 
     // Initialize Cantera for combustion chemistry
@@ -62,11 +62,12 @@ int main() {
     // Create HiPS instance with reaction support
     hips HiPS(nLevels, domainLength, tau0, C_param, forceTurb, nVar, ScHips, true, cantSol, 11);
 
-    int nparcels = HiPS.nparcels;
+    int nparcels = HiPS.get_nparcels();
 
     // Define variables for species mass fractions, temperature, and enthalpy
-    vector<vector<double>> ysp(53, vector<double>(nparcels, 0));
-    vector<double> h(nparcels), T(nparcels);
+    vector<vector<double>> ysp(nsp, vector<double>(nparcels, 0));
+    vector<double> h(nparcels);
+    vector<double> rho(nparcels);
 
     vector<double> y0(nsp), y1(nsp); // Initial species mass fractions
     double T0 = 300.0, T1 = 300.0;   // Initial temperature
@@ -86,8 +87,8 @@ int main() {
     for (int i = 0; i < nsp; i++) {
         for (int j = 0; j <= (1 - fracBurn) * nparcels; j++) {
             h[j] = h0;
-            T[j] = gas->temperature();
             ysp[i][j] = y0[i];
+            rho[j] = gas->density();
         }
     }
 
@@ -102,13 +103,13 @@ int main() {
     for (int i = 0; i < nsp; i++) {
         for (int j = ((1 - fracBurn) * nparcels + 1); j < nparcels; j++) {
             h[j] = h1;
-            T[j] = gas->temperature();
             ysp[i][j] = y1[i];
+            rho[j] = gas->density();
         }
     }
 
     // Set initial conditions in HiPS
-    HiPS.Temp = T;
+
     variableNames[0] = "enthalpy";
     for (int i = 0; i < ysp.size(); i++) {
         variableNames[i + 1] = gas->speciesName(i);
@@ -117,12 +118,12 @@ int main() {
     vector<double> weight(nparcels, 1.0 / nparcels); // Uniform weights
 
     // Assign variables to HiPS
-    HiPS.set_varData(h, weight, variableNames[0]);
+    HiPS.set_varData(h, weight, variableNames[0], rho);
     for (int k = 0; k < ysp.size(); k++) 
-        HiPS.set_varData(ysp[k], weight, variableNames[k + 1]);
+        HiPS.set_varData(ysp[k], weight, variableNames[k + 1], rho);
 
     // Set output interval in terms of time
-    HiPS.setOutputIntervalTime(tRun/20);  // Save results every 100 seconds
+    HiPS.setOutputIntervalTime(tRun/10);  // Save results every 100 seconds
 
     // Write initial condition
     HiPS.writeData(1, 0, 0.0 );

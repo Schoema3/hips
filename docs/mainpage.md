@@ -1,6 +1,3 @@
-
-
-
 \mainpage
 
 <!-- #################################################################### -->
@@ -22,6 +19,7 @@ HiPS is designed for Linux-based systems, including macOS and the Linux subsyste
 * Cantera and Sundials (for reaction support)
 * Doxygen (for building documentation)
 * Graphviz (for Doxygen)
+* Catch2 (for unit tests)
 
 ## Build and Installation Instructions:
 1. Create and navigate to a top-level `build` directory.
@@ -35,17 +33,18 @@ HiPS is designed for Linux-based systems, including macOS and the Linux subsyste
 The default CMake configuration is suitable for users who do not require examples, tests, or documentation immediately. CMake configuration options can be modified by editing the top-level `CMakeLists.txt`, the `CMakeCache.txt` (generated in the `build` directory after running CMake once), or by specifying them on the command line during step 2:
 
 ```
-cmake -DHIPSLIB_BUILD_EXAMPLES=ON ..
+cmake -D HIPS_BUILD_EXAMPLES=ON ..
 ```
 
 The following project-specific CMake variables can be set by the user:
 
 | CMake variable            | Default                       | Description                                                                 |
 | ------------------------- | ----------------------------- | --------------------------------------------------------------------------- |
-| `CMAKE_INSTALL_PREFIX`     | Top-level project directory    | Installation location                                                       |
-| `REACTIONS_ENABLED`        | `OFF`                         | Enable support for chemical reactions                                       |
-| `HIPSLIB_BUILD_EXAMPLES`   | `ON`                          | Build HiPS examples                                                         |
-| `HIPSLIB_BUILD_DOCS`       | `OFF`                         | Build HiPS documentation with Doxygen                                       |
+| `CMAKE_INSTALL_PREFIX`    | Top-level project directory   | Installation location                                                       |
+| `REACTIONS_ENABLED`       | `OFF`                         | Enable support for chemical reactions                                       |
+| `HIPS_BUILD_EXAMPLES`     | `ON`                          | Build HiPS examples                                                         |
+| `HIPS_BUILD_DOCS`         | `OFF`                         | Build HiPS documentation with Doxygen                                       |
+| `HIPS_BUILD_TESTS`        | `OFF`                         | Build HiPS tests using the Catch2 library                                   |
 
 The `REACTIONS_ENABLED` flag determines if HiPS supports chemical reactions. If set to `ON`, additional libraries like Cantera or Sundials are required. For simple mixing without reactions, set this flag to `OFF`.
 # Using HiPS
@@ -133,7 +132,3 @@ Documented example files are available on the [Examples](pages/Examples.md) page
 
 
 <!-- Example files are documented on the [Examples](pages/examples.md).-->
-
-
-
-
