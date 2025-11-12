@@ -32,11 +32,11 @@ class HiPS {
 
 public:
   
-    int realization;                                               ///< number of realizations
-    std::vector<std::shared_ptr<std::vector<double>>> varData;     ///< vector of pointers to vector
-    std::vector<double> varRho;                                    ///< density
-    std::vector<int> pLoc;                                         ///< parcel index array for fast implementation of swaps
-    std::vector<double> wPar;                                      ///< parcel volume fractions
+    int realization;                                               ///< Number of realizations
+    std::vector<std::shared_ptr<std::vector<double>>> varData;     ///< Vector of pointers to vector
+    std::vector<double> varRho;                                    ///< Density
+    std::vector<int> pLoc;                                         ///< Parcel index array for fast implementation of swaps
+    std::vector<double> wPar;                                      ///< Parcel volume fractions
 
 
 #ifdef REACTIONS_ENABLED
@@ -44,48 +44,47 @@ public:
     std::shared_ptr<BatchReactor> bRxr;                            ///< Unique pointer to the integrator object
 #endif
 
-    double domainLength;                                           ///< length of domain (m)
-    double tau0;                                                   ///< integral timescale
+    double domainLength;                                           ///< Length of domain (m)
+    double tau0;                                                   ///< Integral timescale
     double C_param;                                                ///< Eddy frequency parameter
     
 private:
 
-    int nparcels;                                                  ///< number of parcels
-    int currentIndex = 0;                                          ///< member variable to keep track of current index of variables
-    int nLevels;                                                   ///< number of tree levels
-    int nLevels_;                                                  ///< number of tree levels?
-    int nVar;                                                      ///< number of parcel variables (e.g., h, ysp)
-    int nsp;                                                       ///< number of species
+    int nparcels;                                                  ///< Number of parcels
+    int currentIndex = 0;                                          ///< Member variable to keep track of current index of variables
+    int nLevels;                                                   ///< Number of tree levels
+    int nVar;                                                      ///< Number of parcel variables (e.g., h, ysp)
+    int nsp;                                                       ///< Number of species
     int Nm1;                                                       ///< nLevels - 1 
     int Nm2;                                                       ///< nLevels - 2                     
     int Nm3;                                                       ///< nLevels - 3 
     int iEta;                                                      ///< Kolmogorov level (needed for variable Sc scalars)
-    int nL;                                                        ///< adjusted number of levels based on the Reynolds number
-    bool forceTurb;                                                ///< forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
+    int nL;                                                        ///< Adjusted number of levels based on the Reynolds number
+    bool forceTurb;                                                ///< Forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
 
     bool LScHips;                                                  ///< HiPS schmidt number
-    bool performReaction;                                          ///< flag indicating whether chemical reactions are performed in the simulation 
+    bool performReaction;                                          ///< Flag indicating whether chemical reactions are performed in the simulation
         
-    double time;                                                   ///< current simulation time
-    double eddyRate_total;                                         ///< total rate of all eddies 0 through nLevels-3
-    double eddyRate_inertial;                                      ///< total rate of all eddies 0 through iEta (= eddyRate_total if Sc=1) 
-    double Afac = 0.5;                                             ///< level lengthscale reduction factor (0.5)
+    double time;                                                   ///< Current simulation time
+    double eddyRate_total;                                         ///< Total rate of all eddies 0 through nLevels-3
+    double eddyRate_inertial;                                      ///< Total rate of all eddies 0 through iEta (= eddyRate_total if Sc=1)
+    double Afac = 0.5;                                             ///< Level lengthscale reduction factor (0.5)
     double Re;                                                     ///< Reynolds number
-    double dtEE;                                                   ///< time increment to next eddy event 
-    double Prob;                                                   ///< probability value for probability-based solution
-    double lStar;                                                  ///< length of the level associated with the Reynolds number 
-    double Anew;                                                   ///< adjusted level lengthscale reduction factor for dynamic adjustment of reduction factor
+    double dtEE;                                                   ///< Time increment to next eddy event
+    double Prob;                                                   ///< Probability value for probability-based solution
+    double lStar;                                                  ///< Length of the level associated with the Reynolds number
+    double Anew;                                                   ///< Adjusted level length scale reduction factor for dynamic adjustment of reduction factor
 
     RandomGenerator rand;
     
     std::vector<int> i_plus;                                       ///< ceil(i_batchelor)
-    std::vector<double> ScHips;                                    ///< vector containing Schmidt numbers related to each variable
-    std::vector<std::string> varName;                              ///< vector containing the names of parcel variables
-    std::vector<double> parcelTimes;                               ///< current times corresponding to the parcel states
-    std::vector<double> levelRates;                                ///< list of eddy event rates at each level
+    std::vector<double> ScHips;                                    ///< Vector containing Schmidt numbers related to each variable
+    std::vector<std::string> varName;                              ///< Vector containing the names of parcel variables
+    std::vector<double> parcelTimes;                               ///< Current times corresponding to the parcel states
+    std::vector<double> levelRates;                                ///< List of eddy event rates at each level
     std::vector<double> i_batchelor;                               ///< Batchelor level for variable Sc scalars; NOTE: double, as in, between levels
-    std::vector<double> xc;                                        ///< vector containing physical domain of flow particles
-    std::vector<double> xh;                                        ///< vector containing physical domain of HiPS parcels
+    std::vector<double> xc;                                        ///< Vector containing physical domain of flow particles
+    std::vector<double> xh;                                        ///< Vector containing physical domain of HiPS parcels
     
     std::string  ReApproach;
     int outputIntervalEddy = 10;                                   ///< Default: write data every 10 eddy events
@@ -96,9 +95,6 @@ private:
     bool useTimeBasedWriting = false;                              ///< Tracks if time writing is set
     const int DEFAULT_EDDY_INTERVAL = 1000;                        ///< Default: Write every 1000 eddies
     const double DEFAULT_TIME_INTERVAL = 0.1;                      ///< Default: Write every 0.1s
-    //bool density_weighted_mixing = false;                          ///< default: simple (uniform) mixing
-
-   
 
     ////////////////////////////// MEMBER FUNCTIONS /////////////////////////////
 
@@ -111,7 +107,7 @@ public:
     /// It also automatically adjusts the number of levels to account for high Schmidt numbers, ensuring that
     /// micromixing is properly resolved.
     ///
-    /// \param nLevels_         Base number of levels in the HiPS tree.
+    /// \param nLevels          Number of levels in the HiPS tree.
     /// \param domainLength_    Domain size for determining eddy length scales.
     /// \param tau0_            Time scale of the smallest eddy (Kolmogorov scale).
     /// \param ScHips_          Vector of Schmidt numbers (one per variable).
@@ -122,7 +118,7 @@ public:
     /// \warning The number of levels may be increased automatically for large Schmidt numbers 
     ///          to ensure accurate scalar mixing across scales.
 
-    void set_tree(int nLevels_, double domainLength_, double tau0_);  // setting the HiPS tree based on the number of levels
+    void set_tree(int nLevels, double domainLength_, double tau0_);  // setting the HiPS tree based on the number of levels
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -248,7 +244,7 @@ public:
 /// The HiPS tree is initialized immediately using the provided parameters, and the 
 /// structure remains constant throughout the simulation.
 ///
-/// \param nLevels_         Number of levels in the HiPS binary tree (can be adjusted for high Sc).
+/// \param nLevels         Number of levels in the HiPS binary tree (can be adjusted for high Sc).
 /// \param domainLength_    Domain length for defining spatial scales.
 /// \param tau0_            Characteristic time scale for the smallest eddy.
 /// \param C_param_         Eddy coefficient controlling mixing rate.
@@ -271,7 +267,7 @@ public:
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    HiPS(int nLevels_,
+    HiPS(int nLevels,
          double domainLength_,
          double tau0_,
          double C_param_,

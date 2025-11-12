@@ -17,7 +17,7 @@
 
 using namespace std;
 
-HiPS::HiPS(int nLevels_,
+HiPS::HiPS(int nLevels,
            double domainLength_, 
            double tau0_, 
            double C_param_, 
@@ -28,7 +28,7 @@ HiPS::HiPS(int nLevels_,
            shared_ptr<void> vcantSol,
            int seed,
            int realization_): 
-    nLevels(nLevels_), 
+    nLevels(nLevels),
     domainLength(domainLength_), 
     tau0(tau0_),
     C_param(C_param_), 
@@ -100,9 +100,9 @@ HiPS::HiPS(double C_param_,
 
 
 
-void HiPS::set_tree(int nLevels_, double domainLength_, double tau0_){
+void HiPS::set_tree(int nBaseLevels, double domainLength_, double tau0_){
  
-    nLevels= nLevels_; 
+    nLevels = nBaseLevels;
     domainLength = domainLength_; 
     tau0 = tau0_; 
 
@@ -299,24 +299,28 @@ void HiPS::set_tree(double Re_, double domainLength_, double tau0_, std::string 
     currentIndex = 0.0;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-/// \brief Assigns variables, their corresponding weights, and names to the parcels in the HiPS tree.
+////////////////////////////////////////////////////////////////////////////////
+/// \brief Assigns variables, their corresponding weights, and names to the
+/// parcels in the HiPS tree.
 ///
-/// This function projects the provided variables onto the parcels within the HiPS tree structure, 
-/// using their corresponding weights. It ensures that each parcel in the tree is associated with 
-/// the correct variable and weight, along with a descriptive name for better identification.
+/// This function projects the provided variables onto the parcels within the
+/// HiPS tree structure, using their corresponding weights. It ensures that each
+/// parcel in the tree is associated with the correct variable and weight, along
+/// with a descriptive name for better identification.
 ///
-/// \param v         Vector of variables to be assigned to the parcels in the HiPS tree.
+/// \param v         Vector of variables to be assigned to the parcels in the
+///                  HiPS tree.
 /// \param w         Vector of weights corresponding to each variable or parcel.
 /// \param varN      String representing the name of the variable being assigned.
 ///
-/// \note The size of `v` and `w` must match to ensure a one-to-one correspondence between 
-///       variables and their weights. The function does not perform size validation internally.
+/// \note The size of `v` and `w` must match to ensure a one-to-one
+///       correspondence between variables and their weights. The function does
+///       not perform size validation internally.
 ///
-/// \warning Ensure that the weights in `w` are normalized or appropriately scaled, as they 
-///          directly influence the projection and subsequent simulations.
-////////////////////////////////////////////////////////////////////////////////////
-
+/// \warning Ensure that the weights in `w` are normalized or appropriately
+///          scaled, as they directly influence the projection and subsequent
+///          simulations.
+///////////////////////////////////////////////////////////////////////////////
 void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN) {
     
     varData[currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));
