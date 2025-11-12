@@ -13,8 +13,8 @@ However, to achieve the main goal of these code conventions, which is to keep th
 - Maximum number of characters per line: 80
 - Indentation: [4 spaces] 
 - Do not use trailing white spaces.
-- & (reference) and * (pointer) are part of the type and not the name of the variable. Therefore, '*int& anInt*;' is okay, but '*int %anInt*;' is not.
-- Don't overdue it with the indentation. 4 levels should be enough. every level more is a good indicator of some need for function encapsulation (https://youtu.be/CFRhGnuXG-4)
+- & (reference) and * (pointer) are part of the type and not the name of the variable. Therefore, '*int& anInt*;' is okay, but '*int &anInt*;' is not.
+- Don't overdue it with the indentation. 4 levels should be enough, every level more is a good indicator for some need to restructure. (https://youtu.be/CFRhGnuXG-4)
 # Names for variables, objects and functions
 Apart from some rules about special characters and syntax, naming things is where freedom of expression is at its highest. It is acceptable to use names consisting of a single character, such as the well-known for-loop *int i* to completeSentencesInOneSingeWordForAPublicFunction(). The main goal of naming things is to convey intention and meaning to the next person who reads it. As a rule of thumb, a name should be short if it is used often; if it is used rarely, the name should be long enough to make it clear what it does without having to read the documentation( or the code).
 
@@ -32,6 +32,7 @@ To use the syntax of names to transport more meaning, here are some rules to kee
 | Type indirection            | type* name or type& name  | `int* a` / `int& a`            |
 | Template parameters         | Pascal_Case_With_Dashes   | `template< class Class_A >`    |
 | Magic Numbers/Math constans | ALL_CAPS                  | `MIN_EDDY_SIZE`                |
+
 Combinations of the above mentioned are possible. For example a class private magic number shall look like this: 
 ```
 const int _MIN_EDDY_SIZE = 6; 
