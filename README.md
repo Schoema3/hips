@@ -72,4 +72,4 @@ Post-processing of simulation data is performed using Python 3 scripts. We recom
 * sys *(built-in)*
 
 ## Codeing Convention
-If you whish to contribute to this project, pleas consider to addhere to the [coding conventions](Code Convention)
+If you whish to contribute to this project, please addhere to the [coding conventions](CodeConvention.md)
