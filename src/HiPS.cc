@@ -316,34 +316,7 @@ void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std
     currentIndex++; 
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Projects values from flow particles onto HiPS parcels assuming
-/// constant density.
-///
-/// This function maps the values of flow particles onto HiPS parcels under the
-/// assumption of constant density. The projection is performed using the
-/// following equation:
-/// \f[
-/// \sum_{i=0}^{\text{Number of Flow Particles (FP)}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i} = 
-/// \sum_{j=0}^{\text{Number of HiPS Parcels (HP)}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j}
-/// \f]
-/// This ensures conservation of properties such as mass or concentration during
-/// the projection.
-///
-/// \param vcfd          Vector of variables from flow particles to be mapped to HiPS parcels.
-/// \param weight        Vector of weights, with one weight assigned to each flow particle.
-/// \return              Vector of projected values for HiPS parcels.
-///
-/// \note The function assumes constant density throughout the domain. For cases
-///       with varying density, use an appropriate overloaded function or
-///       method.
-/// 
-/// \warning Ensure that the `vcfd` and `weight` vectors have matching sizes, as
-///          any discrepancy may result in undefined behavior or incorrect
-///          projections.
-///////////////////////////////////////////////////////////////////////////////
-
-std::vector<double> HiPS::projection(std::vector<double> &vcfd, std::vector<double> &weight) {
+std::vector<double> HiPS::projection(std::vector<double> &vcfd, std::vector<double> &weight){
     
     xc = setGridCfd(weight);                               // Populate the physical domain for flow particles
     xh = setGridHips(nparcels);                            // Populate the physical domain for HiPS parcels
@@ -382,55 +355,10 @@ std::vector<double> HiPS::projection(std::vector<double> &vcfd, std::vector<doub
     return vh;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Project values from CFD cells onto HiPS parcels, accounting for cell density.
-///
-/// Projects a CFD field onto HiPS parcels using density weighting so that both the
-/// property (mass-weighted) and the density are conserved.
-///
-/// \param vcfd     CFD cell values to project (aligned with CFD cells).
-/// \param weight   CFD cell weights (e.g., widths) used to build the CFD grid.
-/// \param density  CFD cell densities aligned with \p vcfd.
-/// \return A pair {vh, rho_h} where:
-///         - \c vh : parcel-averaged values on the HiPS parcels
-///         - \c rho_h    : parcel-averaged densities on the HiPS parcels
-///
-/// \details
-/// Parcel averages are formed via geometric overlaps between CFD cells and HiPS parcels:
-/// \f[
-///   \phi_h(i) =
-///   \frac{\sum_j \rho_c(j)\,\phi_c(j)\,\Delta x_{ij}}
-///        {\sum_j \rho_c(j)\,\Delta x_{ij}},\qquad
-///   \rho_h(i) =
-///   \frac{\sum_j \rho_c(j)\,\Delta x_{ij}}
-///        {\sum_j \Delta x_{ij}},
-/// \f]
-/// where \f$\Delta x_{ij}\f$ is the overlap length between CFD cell \f$j\f$ and parcel \f$i\f$.
-///
-/// \par Consistency with parcel weights
-/// The overlap is scaled by \f$w_{\mathrm{par}}(i)/\ell_i\f$ so forward/backward projection
-/// remain consistent when \c wPar changes during chemistry. This preserves the mass-weighted integrals:
-/// \f[
-///   \sum_i \rho_h(i)\, w_{\mathrm{par}}(i) \approx \sum_j \rho_c(j)\, w_c(j), \qquad
-///   \sum_i \rho_h(i)\,\phi_h(i)\, w_{\mathrm{par}}(i) \approx
-///   \sum_j \rho_c(j)\,\phi_c(j)\, w_c(j).
-/// \f]
-///
-/// \note This overload includes density in the computation. Ensure that \p vcfd, \p weight,
-///       and \p density have identical sizes. Weights are typically normalized
-///       (\f$\sum_j w_c(j)=1\f$), but only their relative magnitudes matter.
-///
-/// \warning Size mismatches among \p vcfd, \p weight, and \p density will lead to incorrect
-///          projections. Verify inputs before calling. Non-positive parcel lengths or negative
-///          weights are invalid.
-///
-/// \see set_varData, get_varData_with_density, projection_back_with_density
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
-std::pair<std::vector<double>, std::vector<double>> 
-HiPS::projection(std::vector<double> &vcfd,
-                 std::vector<double> &weight, 
-                 const std::vector<double> &density) {
+std::pair<std::vector<double>, std::vector<double>>
+HiPS::projection(      std::vector<double> &vcfd,
+                       std::vector<double> &weight,
+                 const std::vector<double> &density){
     // Build CFD and HiPS grids
     xc = setGridCfd(weight);
     xh = setGridHips(nparcels);
@@ -483,26 +411,7 @@ HiPS::projection(std::vector<double> &vcfd,
     return {vh, rho_h};
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-/// \brief Generates a physical domain for flow particles based on their weights.
-///
-/// This function creates a grid of positions for flow particles, where each particle occupies a portion 
-/// of the domain proportional to its weight. The total length of the domain is assumed to be 1, and the 
-/// sum of all portions equals 1. The resulting vector represents the positions of particles along the domain.
-///
-/// \param w         Vector of weights, where each weight determines the portion of the domain occupied 
-///                  by a particle.
-/// \return          A vector of grid positions for the flow particles.
-///
-/// \note The function assumes that the weights in `w` are normalized or properly scaled such that the 
-///       total sum matches the domain length of 1. If the weights are not normalized, the resulting grid 
-///       may not represent a valid physical domain.
-///
-/// \warning Ensure that the input weight vector `w` is non-empty and contains positive values. Zero or 
-///          negative weights may lead to undefined behavior or invalid domain generation.
-/////////////////////////////////////////////////////////////////////////////////
-
-std::vector<double> HiPS::setGridCfd(std::vector<double> &w) {
+std::vector<double> HiPS::setGridCfd(std::vector<double> &w){
 
     double sumw = 0.0;
     for(int i=0; i<w.size(); i++)
@@ -520,25 +429,6 @@ std::vector<double> HiPS::setGridCfd(std::vector<double> &w) {
     }
     return pos;                                           // Return the generated grid positions
 }
-
-///////////////////////////////////////////////////////////////////////////////
-/// \brief Generates a physical domain for HiPS parcels.
-///
-/// This function creates a grid of positions for HiPS parcels, where each parcel occupies 
-/// an equal portion of the physical domain. The total size of the domain corresponds to the 
-/// size specified in the `setGridCfd()` function, ensuring consistency between the HiPS 
-/// and flow particle domains.
-///
-/// \param N         The number of grid points for the HiPS parcels.
-/// \return          A vector representing the grid positions for the HiPS parcels.
-///
-/// \note The function assumes that the physical domain is evenly divided among the parcels. 
-///       Ensure that the number of grid points (`N`) is consistent with the physical domain size 
-///       defined in the simulation setup.
-///
-/// \warning If `N` is less than or equal to zero, the function may produce an empty or invalid grid. 
-///          Validate the input to avoid unexpected behavior.
-///////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> HiPS::setGridHips(int N){
 

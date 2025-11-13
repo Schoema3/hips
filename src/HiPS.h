@@ -328,7 +328,6 @@ public:
     void setOutputIntervalTime(double interval);
     void setOutputIntervalEddy(int interval);
 
-    void calculateSolution(const double tRun, bool shouldWriteData =false);                         // Running simulations 
 
     void writeData(int real, const int ifile, const double outputTime);                                       // Writing the results for a user-defined number of eddies in the data folder.
     int get_nparcels() const { return nparcels; }
@@ -370,11 +369,180 @@ private:
     ////////////////////////////////////////////////////////////////////////////
     std::vector<double> projection(std::vector<double> &vcfd, std::vector<double> &weight);
     
-    std::pair<std::vector<double>, std::vector<double>>  projection(std::vector<double> &vcfd, std::vector<double> &weight,                     
-                                   const std::vector<double> &density);                             // Perform vector projection flow particles onto HiPS parcels operation with density
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Project values from CFD cells onto HiPS parcels, accounting for
+    /// cell density.
+    ///
+    /// Projects a CFD field onto HiPS parcels using density weighting so that
+    /// both the property (mass-weighted) and the density are conserved.
+    ///
+    /// \param vcfd     CFD cell values to project (aligned with CFD cells).
+    /// \param weight   CFD cell weights (e.g., widths) used to build the CFD
+    ///                 grid.
+    /// \param density  CFD cell densities aligned with \p vcfd.
+    ///
+    /// \return A pair {vh, rho_h} where:
+    ///         - \c vh     : parcel-averaged values on the HiPS parcels
+    ///         - \c rho_h  : parcel-averaged densities on the HiPS parcels
+    ///
+    /// \details Parcel averages are formed via geometric overlaps between CFD
+    ///     cells and HiPS parcels:
+    /// \f[
+    ///   \phi_h(i) =
+    ///   \frac{\sum_j \rho_c(j)\,\phi_c(j)\,\Delta x_{ij}}
+    ///        {\sum_j \rho_c(j)\,\Delta x_{ij}},\qquad
+    ///   \rho_h(i) =
+    ///   \frac{\sum_j \rho_c(j)\,\Delta x_{ij}}
+    ///        {\sum_j \Delta x_{ij}},
+    /// \f]
+    /// where \f$\Delta x_{ij}\f$ is the overlap length between CFD cell \f$j\f$
+    /// and parcel \f$i\f$.
+    ///
+    /// \par Consistency with parcel weights
+    /// The overlap is scaled by \f$w_{\mathrm{par}}(i)/\ell_i\f$ so
+    /// forward/backward projection remain consistent when \c wPar changes
+    /// during chemistry. This preserves the mass-weighted integrals:
+    /// \f[
+    ///   \sum_i \rho_h(i)\, w_{\mathrm{par}}(i) \approx \sum_j \rho_c(j)\, w_c(j), \qquad
+    ///   \sum_i \rho_h(i)\,\phi_h(i)\, w_{\mathrm{par}}(i) \approx
+    ///   \sum_j \rho_c(j)\,\phi_c(j)\, w_c(j).
+    /// \f]
+    ///
+    /// \note This overload includes density in the computation. Ensure that \p
+    ///     vcfd, \p weight, and \p density have identical sizes. Weights are
+    ///     typically normalized (\f$\sum_j w_c(j)=1\f$), but only their
+    ///     relative magnitudes matter.
+    ///
+    /// \warning Size mismatches among \p vcfd, \p weight, and \p density will
+    ///          lead to incorrect projections. Verify inputs before calling.
+    ///          Non-positive parcel lengths or negative weights are invalid.
+    ///
+    /// \see set_varData(), get_varData_with_density(),
+    ///      projection_back_with_density().
+    ////////////////////////////////////////////////////////////////////////////
+    std::pair<std::vector<double>, std::vector<double>>
+    projection(      std::vector<double> &vcfd,
+                     std::vector<double> &weight,
+               const std::vector<double> &density);
     
-    std::vector<double> setGridHips(int N);                                                         // Set HiPS grid with a specified number of grid points equal to number of parcels
-    std::vector<double> setGridCfd(std::vector<double> &w);                                         // Set CFD grid using provided weight vector
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Generates a physical domain for flow particles based on their
+    /// weights.
+    ///
+    /// This function creates a grid of positions for flow particles, where each
+    /// particle occupies a portion of the domain proportional to its weight.
+    /// The total length of the domain is assumed to be 1, and the sum of all
+    /// portions equals 1. The resulting vector represents the positions of
+    /// particles along the domain.
+    ///
+    /// \param w    Vector of weights, where each weight determines the
+    ///             portion of the domain occupied by a particle.
+    ///
+    /// \return     A vector of grid positions for the flow particles.
+    ///
+    /// \note The function assumes that the weights in `w` are normalized or
+    ///       properly scaled such that the total sum matches the domain length
+    ///       of 1. If the weights are not normalized, the resulting grid may
+    ///       not represent a valid physical domain.
+    ///
+    /// \warning Ensure that the input weight vector `w` is non-empty and
+    ///          contains positive values. Zero or negative weights may lead to
+    ///          undefined behavior or invalid domain generation.
+    ////////////////////////////////////////////////////////////////////////////
+    std::vector<double> setGridCfd(std::vector<double> &w);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Generates a physical domain for HiPS parcels.
+    ///
+    /// This function creates a grid of positions for HiPS parcels, where each
+    /// parcel occupies an equal portion of the physical domain. The total size
+    /// of the domain corresponds to the size specified in the `setGridCfd()`
+    /// function, ensuring consistency between the HiPS and flow particle
+    /// domains.
+    ///
+    /// \param N    The number of grid points for the HiPS parcels.
+    ///
+    /// \return     A vector representing the grid positions for the HiPS
+    ///             parcels.
+    ///
+    /// \note The function assumes that the physical domain is evenly divided
+    ///       among the parcels. Ensure that the number of grid points (`N`) is
+    ///       consistent with the physical domain size defined in the simulation
+    ///       setup.
+    ///
+    /// \warning If `N` is less than or equal to zero, the function may produce
+    ///          an empty or invalid grid. Validate the input to avoid
+    ///          unexpected behavior.
+    ///          ///////////////////////////////////////////////////////////////
+    std::vector<double> setGridHips(int N);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Runs the HiPS simulation, advancing the solution using eddy
+    /// events.
+    ///
+    /// This function performs the core HiPS loop: sampling eddy events,
+    /// performing subtree swaps, advancing parcels, and optionally triggering
+    /// reactions. It runs until the specified simulation time (`tRun`) is
+    /// reached and writes data periodically based on either eddy count or
+    /// elapsed simulation time.
+    ///
+    /// ### Key operations:
+    /// - Samples the next eddy event time (`dtEE`)
+    /// - Selects and swaps subtrees at a given level
+    /// - Applies micromixing and reactions (if enabled)
+    /// - Writes output data either:
+    ///     - Every `outputIntervalEddy` eddy events (if enabled), or
+    ///     - Every `outputIntervalTime` seconds (if enabled)
+    /// - At the end of the simulation, calls `saveAllParameters()` to store
+    ///   input and configuration data in `../post/parameters.dat`.
+    ///
+    /// \param tRun              Total simulation run time (in seconds).
+    /// \param shouldWriteData   Flag to enable/disable periodic data writing.
+    ///
+    /// \note To control output frequency, use:
+    ///       - `setOutputIntervalEddy(int interval)`
+    ///       - `setOutputIntervalTime(double interval)`
+    ///       - If neither is called, the default behavior is writing every 1000
+    ///         eddy events.
+    ///
+    /// \note Output files are saved using `writeData(realization, ...)` and
+    ///       include the realization index.
+    ///
+    /// \note At the end of the run, `saveAllParameters()` is automatically
+    ///       called to document simulation settings.
+    ///
+    /// \warning Long simulations may generate many output files. Adjust output
+    ///          intervals or disable writing (`shouldWriteData = false`) to
+    ///          manage storage needs.
+    ///
+    /// \see HiPS::writeData(), HiPS::saveAllParameters()
+    ////////////////////////////////////////////////////////////////////////////
+    void calculateSolution(const double tRun, bool shouldWriteData =false);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Samples stochastic eddy events on the HiPS tree, determining the
+    /// time increment and tree level.
+    ///
+    /// This function performs stochastic sampling to determine when (\f$\Delta
+    /// t_{EE}\f$) and at what level (\f$i_{Level}\f$) in the HiPS tree the next
+    /// eddy event will occur. The time to the next eddy event is sampled based
+    /// on the total eddy rate. The tree level of the event is chosen depending
+    /// on whether it occurs in the inertial or Batchelor region of turbulence.
+    ///
+    /// \param dtEE     Time increment to the next eddy event (\f$\Delta
+    ///                 t_{EE}\f$), sampled stochastically.
+    /// \param iLevel   Tree level (\f$i_{Level}\f$) at which the eddy event
+    ///                 occurs, determined probabilistically.
+    ///
+    /// \note The function distinguishes between events in the inertial and
+    ///       Batchelor regions based on turbulence properties. Ensure that the
+    ///       HiPS tree is correctly initialized before calling this function.
+    ///
+    /// \warning The stochastic nature of this function requires a properly
+    ///          seeded random generator to ensure reproducibility in
+    ///          simulations where determinism is necessary.
+    ///          ///////////////////////////////////////////////////////////////
+    void sample_hips_eddy(double &dt, int &iLevel);
     std::vector<double> projection_back(std::vector<double> &vb);                       
 
     ////////////////////////////////////////////////////////////////////////////
@@ -405,23 +573,26 @@ private:
     ///       \f$w_{\text{Par}}/\mathrm{d}x_{\text{HP}}\f$ so that mass is
     ///       preserved when parcel volumes change during chemistry.
     ///
-    /// \param vh           Vector of values from HiPS parcels to be projected back.
-    /// \param rho_h        Vector of density values from HiPS parcels.
-    /// \param rho_c        (output) Vector to receive the densities redistributed to the flow particles.
-    /// \return             A vector containing the values projected back onto the flow particles.
+    /// \param vh       Vector of values from HiPS parcels to be projected back.
+    /// \param rho_h    Vector of density values from HiPS parcels.
+    /// \param rho_c    (output) Vector to receive the densities redistributed
+    ///                 to the flow particles.
+    ///
+    /// \return         A vector containing the values projected back onto the
+    ///                 flow particles.
     ///
     /// \note
-    /// - This function is the reverse of the projection function that includes
-    ///   density.
-    /// - The input vectors \p vh and \p rho_h should be consistent with the
-    ///   HiPS parcel structure and sizes.
+    ///     - This function is the reverse of the projection function that
+    ///       includes density.
+    ///     - The input vectors \p vh and \p rho_h should be consistent with the
+    ///       HiPS parcel structure and sizes.
     ///
     /// \warning
-    /// - Ensure that the HiPS parcels are populated with valid values and
-    ///   densities before invoking this function.
-    /// - Mismatches in data sizes between HiPS parcels and flow particles may
-    ///   lead to inaccurate results.
-    ////////////////////////////////////////////////////////////////////////////
+    ///     - Ensure that the HiPS parcels are populated with valid values and
+    ///       densities before invoking this function.
+    ///     - Mismatches in data sizes between HiPS parcels and flow particles
+    ///       may lead to inaccurate results.
+    ///       //////////////////////////////////////////////////////////////////
     std::vector<double> projection_back_with_density(std::vector<double> &vh,
                                                      std::vector<double> &rho_h,
                                                      std::vector<double> &rho_c);
@@ -429,7 +600,6 @@ private:
 
 
 
-    void sample_hips_eddy(double &dt, int &iLevel);                                                 // Sample HiPS eddy with specified time step and level
     void selectAndSwapTwoSubtrees(const int iLevel, int &iTree);                                    // Select and swap two subtrees in the level tree
     void advanceHips(const int iLevel, const int iTree);                                            // Advancing simulations to do mixing and reaction
    
