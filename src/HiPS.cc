@@ -581,58 +581,7 @@ void HiPS::sample_hips_eddy(double &dtEE, int &iLevel) {
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// \brief Performs eddy events by swapping parcels within the HiPS tree.
-///
-/// This function executes parcel swaps by randomly selecting nodes at the specified level of the HiPS tree.
-/// It identifies the starting indices of subtrees to be swapped, calculates the number of parcels to swap, 
-/// and performs the swap operation efficiently using bitwise operations. The process mimics the hierarchical 
-/// structure of turbulent mixing.
-///
-/// \param iLevel         Input level of the tree where the base of the swap occurs.
-/// \param iTree          Output parameter indicating which subtree at the given level is selected for swapping.
-///
-/// The process is as follows:
-/// - Randomly select a node on `iLevel`.
-/// - Traverse two levels down to identify subtrees `0q` and `1r`, where `q` and `r` are random binary values (0 or 1).
-/// - Determine the starting indices of the `Q-tree` and `R-tree` for the swap and compute the number of parcels.
-/// - Swap the corresponding parcels between the subtrees.
-///
-/// ### Example for a 6-level tree:
-/// - Tree levels: 0, 1, 2, 3, 4, 5.
-/// - If `iLevel = 1`:
-///   - Suppose the selected node is `i = 01`.
-///   - Subtrees for swapping are `0q = 00` and `1r = 11`.
-///   - Swapping involves parcels `0100**` with `0111**`, or `(01|00|**)` with `(01|11|**)`.
-///   - In binary terms, the swap is equivalent to exchanging `i0qs` with `i1rs`, where:
-///     - `i = 01`
-///     - `0q = 00`
-///     - `1r = 11`
-///     - `s = **` (remaining bits).
-///
-/// ### Implementation:
-/// - Bitwise operations are used for efficient calculations of powers of 2.
-/// - The swap operation is performed by flipping the bits for `0q` and `1r`, which effectively swaps the subtrees.
-///
-/// ### Visual Representation of Tree:
-/// ```
-/// Level 0          * (root)
-///                /     \
-/// Level 1      *       (*)
-///              / \       / \
-/// Level 2    *   *     *   *
-/// Level 3   *   [*]    *   [*]
-/// Level 4  * *   * *   * *   * *
-/// Level 5 00 01  02 03  ...  30 31
-/// ```
-/// - Subtrees `0q` and `1r` correspond to specific branches of the tree.
-/// - Swapping occurs within highlighted sections of Level 3, identified by bit manipulation.
-///
-/// \warning Ensure that the input `iLevel` is within the valid range of tree levels and that the tree is 
-///          properly initialized before invoking this function.
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-void HiPS::selectAndSwapTwoSubtrees(const int iLevel, int &iTree) {
+void HiPS::selectAndSwapTwoSubtrees(const int iLevel, int &iTree){
 
     iTree = rand.getRandInt((1 << iLevel)-1);
     int zero_q = rand.getRandInt(1);                                    // 0q where q is 0 or 1

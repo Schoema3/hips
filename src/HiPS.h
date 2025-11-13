@@ -543,6 +543,73 @@ private:
     ///          simulations where determinism is necessary.
     ///          ///////////////////////////////////////////////////////////////
     void sample_hips_eddy(double &dt, int &iLevel);
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Performs eddy events by swapping parcels within the HiPS tree.
+    ///
+    /// This function executes parcel swaps by randomly selecting nodes at the
+    /// specified level of the HiPS tree. It identifies the starting indices of
+    /// subtrees to be swapped, calculates the number of parcels to swap, and
+    /// performs the swap operation efficiently using bitwise operations. The
+    /// process mimics the hierarchical structure of turbulent mixing.
+    ///
+    /// \param iLevel   Input level of the tree where the base of the swap occurs.
+    /// \param iTree    Output parameter indicating which subtree at the given
+    ///                 level is selected for swapping.
+    ///
+    /// The process is as follows:
+    /// (1) Randomly select a node on `iLevel`.
+    /// (2) Traverse two levels down to identify subtrees `Q` and `R`, where
+    ///     `Q` and `R` are random binary values (0 or 1).
+    /// (3) Determine the starting indices of the `Q-tree` and `R-tree` for the
+    ///     swap and compute the number of parcels.
+    /// (4) Swap the corresponding parcels between the subtrees Q and R.
+    ///
+    /// ### Example for a 6-level tree:
+    /// - Tree levels: 0, 1, 2, 3, 4, 5.
+    /// - If `iLevel == 1`:
+    ///   - Suppose the selected node `i` on the iLevel is `i = 01`.
+    ///   - Suppose the Subtrees for swapping are `Q = 00` and `R = 11`.
+    ///   - In binary terms, the swap is equivalent to exchanging `iQs`
+    ///     with `iRs`, where:
+    ///     - `i = 01`
+    ///     - `Q = 00`
+    ///     - `R = 11`
+    ///     - `s = **` (remaining bits).
+    ///   - Swapping parcels `0100**` with `0111**`
+    ///     respectively `(01|00|**)` with `(01|11|**)`.
+    ///
+    /// ### Implementation:
+    /// - Bitwise operations are used for efficient calculations of powers of 2.
+    /// - The swap operation is performed by flipping the bits for `Q` and `R`,
+    ///   which effectively swaps the subtrees.
+    ///
+    /// ### Visual Representation of Tree:
+    /// ```
+    /// Level 0:           *  (root)             ///
+    ///                  /         \             ///
+    /// Level 1:        *          (*)           ///
+    ///                / \        /   \          ///
+    /// Level 2:      *   *      *     *         ///
+    ///              /\   /\    / \   / \        ///
+    /// Level 3:    *         [*]  * *  [*]      ///
+    /// Level 4:   /|         / \       / \      ///
+    /// Level 4:  * *   ...  *   *     *   *     ///
+    /// Level 5: 00 01  ... 16...19   28...31    ///
+    /// ```
+    /// - Subtrees `Q` and `R` correspond to specific branches of the tree.
+    /// - Swapping occurs within highlighted [] sections of Level 3, identified
+    ///   by bit manipulation. Whereas leaf 16 swaps with 28,
+    ///   17 <-> 29, 18 <-> 30, and 19 <-> 31
+    ///
+    /// \warning Ensure that the input `iLevel` is within the valid range of
+    ///          tree levels and that the tree is properly initialized before
+    ///          invoking this function.
+    ////////////////////////////////////////////////////////////////////////////
+    void selectAndSwapTwoSubtrees(const int iLevel, int &iTree);
+
+
     std::vector<double> projection_back(std::vector<double> &vb);                       
 
     ////////////////////////////////////////////////////////////////////////////
@@ -600,7 +667,6 @@ private:
 
 
 
-    void selectAndSwapTwoSubtrees(const int iLevel, int &iTree);                                    // Select and swap two subtrees in the level tree
     void advanceHips(const int iLevel, const int iTree);                                            // Advancing simulations to do mixing and reaction
    
     int getVariableIndex(const std::string &varName) const;
