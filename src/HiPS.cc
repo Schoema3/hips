@@ -98,8 +98,6 @@ HiPS::HiPS(double C_param_,
     varName.resize(nVar);        
 }
 
-
-
 void HiPS::set_tree(int nBaseLevels, double domainLength_, double tau0_){
  
     nLevels = nBaseLevels;
@@ -188,7 +186,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength_, double tau0_){
     currentIndex = 0.0;
 } 
 
-void HiPS::set_tree(double Re_, double domainLength_, double tau0_, std::string ReApproach_) {
+void HiPS::set_tree(double Re_, double domainLength_, double tau0_, std::string ReApproach_){
     Re = Re_;
     domainLength = domainLength_;
     tau0 = tau0_;
@@ -299,29 +297,7 @@ void HiPS::set_tree(double Re_, double domainLength_, double tau0_, std::string 
     currentIndex = 0.0;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-/// \brief Assigns variables, their corresponding weights, and names to the
-/// parcels in the HiPS tree.
-///
-/// This function projects the provided variables onto the parcels within the
-/// HiPS tree structure, using their corresponding weights. It ensures that each
-/// parcel in the tree is associated with the correct variable and weight, along
-/// with a descriptive name for better identification.
-///
-/// \param v         Vector of variables to be assigned to the parcels in the
-///                  HiPS tree.
-/// \param w         Vector of weights corresponding to each variable or parcel.
-/// \param varN      String representing the name of the variable being assigned.
-///
-/// \note The size of `v` and `w` must match to ensure a one-to-one
-///       correspondence between variables and their weights. The function does
-///       not perform size validation internally.
-///
-/// \warning Ensure that the weights in `w` are normalized or appropriately
-///          scaled, as they directly influence the projection and subsequent
-///          simulations.
-///////////////////////////////////////////////////////////////////////////////
-void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN) {
+void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN){
     
     varData[currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));
     varName[currentIndex] = varN;
@@ -329,27 +305,7 @@ void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std
     currentIndex++; 
 }
 
-//////////////////////////////////////////////////////////////////////////////////// 
-/// \brief Assigns variables, weights, names, and densities to the parcels in the HiPS tree.
-///
-/// This overloaded function assigns the specified variables, along with their associated weights, 
-/// names, and densities, to the parcels within the HiPS tree structure. The function incorporates 
-/// particle density during the projection process, ensuring a more accurate representation of 
-/// parcel properties in the simulation.
-///
-/// \param v         Vector of variables to be assigned to the HiPS tree.
-/// \param w         Vector of weights corresponding to each variable or parcel.
-/// \param varN      String representing the name of the variable being assigned.
-/// \param rho       Vector of densities corresponding to each flow particle.
-///
-/// \note This function is specifically overloaded to account for particle density, which enhances 
-///       the accuracy of the parcel projection. Ensure that the size of `v`, `w`, and `rho` are consistent.
-///
-/// \warning The values in `rho` should be physically meaningful and consistent with the simulation's 
-///          requirements. Improper density values may lead to inaccuracies or instabilities in the simulation.
-////////////////////////////////////////////////////////////////////////////////////
-
-void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho) {
+void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho){
 
     std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
 
@@ -361,25 +317,30 @@ void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Projects values from flow particles onto HiPS parcels assuming constant density.
+/// \brief Projects values from flow particles onto HiPS parcels assuming
+/// constant density.
 ///
-/// This function maps the values of flow particles onto HiPS parcels under the assumption of constant density.
-/// The projection is performed using the following equation:
+/// This function maps the values of flow particles onto HiPS parcels under the
+/// assumption of constant density. The projection is performed using the
+/// following equation:
 /// \f[
 /// \sum_{i=0}^{\text{Number of Flow Particles (FP)}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i} = 
 /// \sum_{j=0}^{\text{Number of HiPS Parcels (HP)}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j}
 /// \f]
-/// This ensures conservation of properties such as mass or concentration during the projection.
+/// This ensures conservation of properties such as mass or concentration during
+/// the projection.
 ///
 /// \param vcfd          Vector of variables from flow particles to be mapped to HiPS parcels.
 /// \param weight        Vector of weights, with one weight assigned to each flow particle.
 /// \return              Vector of projected values for HiPS parcels.
 ///
-/// \note The function assumes constant density throughout the domain. For cases with varying density, 
-///       use an appropriate overloaded function or method.
+/// \note The function assumes constant density throughout the domain. For cases
+///       with varying density, use an appropriate overloaded function or
+///       method.
 /// 
-/// \warning Ensure that the `vcfd` and `weight` vectors have matching sizes, as any discrepancy 
-///          may result in undefined behavior or incorrect projections.
+/// \warning Ensure that the `vcfd` and `weight` vectors have matching sizes, as
+///          any discrepancy may result in undefined behavior or incorrect
+///          projections.
 ///////////////////////////////////////////////////////////////////////////////
 
 std::vector<double> HiPS::projection(std::vector<double> &vcfd, std::vector<double> &weight) {
@@ -1296,42 +1257,6 @@ std::vector<double> HiPS::projection_back(std::vector<double> &vh) {
 }
 
 
-/// \brief Projects HiPS parcel values and densities back onto the flow particles (CFD cells).
-///
-/// This function reverses the projection process, redistributing both the values and densities stored 
-/// in the HiPS parcels back to the flow particles. It ensures conservation of both the property values 
-/// and densities, maintaining consistency between the HiPS parcels and flow particles.
-///
-/// ### Conservation Principle:
-/// The projection follows the equation:
-/// \f[
-/// \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \rho_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j} = 
-/// \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \rho_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i}
-/// \f]
-/// where:
-/// - \f$\phi_{\text{HP}}\f$: Values in HiPS parcels.
-/// - \f$\rho_{\text{HP}}\f$: Densities in HiPS parcels.
-/// - \f$\mathrm{d}x_{\text{HP}}\f$: Differential volume elements for HiPS parcels.
-/// - \f$\phi_{\text{FP}}\f$: Values in flow particles.
-/// - \f$\rho_{\text{FP}}\f$: Densities in flow particles.
-/// - \f$\mathrm{d}x_{\text{FP}}\f$: Differential volume elements for flow particles.
-///
-/// \note In the new implementation, geometric overlaps are scaled by \f$w_{\text{Par}}/\mathrm{d}x_{\text{HP}}\f$
-///       so that mass is preserved when parcel volumes change during chemistry.
-///
-/// \param vh           Vector of values from HiPS parcels to be projected back.
-/// \param rho_h        Vector of density values from HiPS parcels.
-/// \param rho_c        (output) Vector to receive the densities redistributed to the flow particles.
-/// \return             A vector containing the values projected back onto the flow particles.
-///
-/// \note 
-/// - This function is the reverse of the projection function that includes density.
-/// - The input vectors \p vh and \p rho_h should be consistent with the HiPS parcel structure and sizes.
-///
-/// \warning 
-/// - Ensure that the HiPS parcels are populated with valid values and densities before invoking this function.
-/// - Mismatches in data sizes between HiPS parcels and flow particles may lead to inaccurate results.
-
 
 std::vector<double> HiPS::projection_back_with_density(std::vector<double> &vh,
                                                        std::vector<double> &rho_h,
@@ -1375,28 +1300,6 @@ std::vector<double> HiPS::projection_back_with_density(std::vector<double> &vh,
     }
     return phi_c;
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////
-/// \brief Retrieves the final data from the simulation.
-///
-/// This function returns the final state of the simulation, packaged as a vector of vectors. 
-/// It is particularly useful when integrating HiPS as a subgrid model in CFD simulations, 
-/// enabling seamless transfer of data for further analysis or post-processing.
-///
-/// Projects data from HiPS varData (size nparcels) to number of CFD particles corresponding to initial set_varData call
-///
-/// \return A vector of vectors containing the final results, where:
-///         - Each inner vector represents a specific variable or property.
-///         - The outer vector contains all variables across parcels.
-///
-/// \note 
-/// - This function is specifically designed for use when HiPS is employed as a subgrid model in CFD simulations.
-/// - The structure of the returned data ensures compatibility with CFD solvers that require parcel-level data.
-///
-/// \warning 
-/// - Ensure the simulation has reached completion before calling this function to avoid incomplete or inconsistent data.
-/// - The returned data structure should be interpreted according to the simulation setup and variable ordering.
-//////////////////////////////////////////////////////////////////////////////////////////
 
 std::vector<std::vector<double>> HiPS::get_varData() {
     std::vector<std::vector<double>> varDataProjections;
