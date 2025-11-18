@@ -36,8 +36,8 @@ public:
   
     int _realization;                                              ///< Number of realizations
     std::vector<std::shared_ptr<std::vector<double>>> _varData;    ///< Vector of pointers to vector
-    std::vector<double> _varRho;                                    ///< Density
-    std::vector<int> pLoc;                                         ///< Parcel index array for fast implementation of swaps
+    std::vector<double> _varRho;                                   ///< Density
+    std::vector<int> _pLoc;                                        ///< Parcel index array for fast implementation of swaps
     std::vector<double> wPar;                                      ///< Parcel volume fractions
 
 
@@ -427,7 +427,7 @@ public:
 
     int get_nparcels() const { return nparcels; }
     
-    const std::vector<int>& get_pLoc() const { return pLoc; }
+    const std::vector<int>& get_pLoc() const { return _pLoc; }
     const std::vector<std::shared_ptr<std::vector<double>>>& get_HipsVarData_ptr() const { return _varData; } // internal HiPS varData, sized to nparcels
 
     ////////////////////////////////////////////////////////////////////////////

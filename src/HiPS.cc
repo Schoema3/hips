@@ -179,9 +179,9 @@ void HiPS::set_tree(int nBaseLevels, double domainLength_, double tau0_){
     _varRho.resize(nparcels);
     wPar.assign(nparcels, 1.0 / nparcels);
  
-    pLoc.resize(nparcels);
+    _pLoc.resize(nparcels);
     for (int i=0; i<nparcels; i++)
-        pLoc[i] = i;
+        _pLoc[i] = i;
 
     currentIndex = 0.0;
 } 
@@ -290,9 +290,9 @@ void HiPS::set_tree(double Re_, double domainLength_, double tau0_, std::string 
 
     _varRho.resize(nparcels);
     wPar.assign(nparcels, 1.0 / nparcels);
-    pLoc.resize(nparcels);
+    _pLoc.resize(nparcels);
     for (int i = 0; i < nparcels; ++i)
-        pLoc[i] = i;
+        _pLoc[i] = i;
 
     currentIndex = 0.0;
 }
@@ -539,9 +539,9 @@ void HiPS::selectAndSwapTwoSubtrees(const int iLevel, int &iTree){
 
     int Qend = Qstart + nPswap;                                          // inclusive indices are Qstart to Qend-1
     int Rend = Rstart + nPswap;                                          // inclusive indices are Rstart to Rend-1
-    vector<int> aa(pLoc.begin()+Qstart, pLoc.begin()+Qend);
-    copy(pLoc.begin()+Rstart, pLoc.begin()+Rend, pLoc.begin()+Qstart);   // python: pLoc[Qstart:Qend]=pLoc[Rstart:Rend]
-    copy(aa.begin(), aa.end(), pLoc.begin()+Rstart);                     // python: pLoc[Rstart:Rend]=aa
+    vector<int> aa(_pLoc.begin()+Qstart, _pLoc.begin()+Qend);
+    copy(_pLoc.begin()+Rstart, _pLoc.begin()+Rend, _pLoc.begin()+Qstart); // python: _pLoc[Qstart:Qend]=_pLoc[Rstart:Rend]
+    copy(aa.begin(), aa.end(), _pLoc.begin()+Rstart);                     // python: _pLoc[Rstart:Rend]=aa
 }
 
 void HiPS::advanceHips(const int iLevel, const int iTree){
@@ -590,7 +590,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
     std::vector<double> y(nsp);
 
     for (int i = istart; i < iend; ++i) {
-        const int ime = pLoc[i];
+        const int ime = _pLoc[i];
         const double dt = time - parcelTimes[ime];
 
         // Pull current state
@@ -646,7 +646,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
     double msum = 0.0;  // mass sum (only used if weighted)
 
     for (int i = istart; i < iend; i++) {
-        ime = pLoc[i];
+        ime = _pLoc[i];
         if (performReaction) {
             double m = _varRho[ime] * wPar[ime];
             s    += (*_varData[kVar])[ime] * m;
@@ -661,7 +661,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
                : (s / nPmix);
 
     for (int i = istart; i < iend; i++) {
-        ime = pLoc[i];
+        ime = _pLoc[i];
         (*_varData[kVar])[ime] = avg;
     }
 
@@ -673,7 +673,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
     msum = 0.0;
 
     for (int i = istart; i < iend; i++) {
-        ime = pLoc[i];
+        ime = _pLoc[i];
         if (performReaction) {
             double m = _varRho[ime] * wPar[ime];
             s    += (*_varData[kVar])[ime] * m;
@@ -688,7 +688,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
         : (s / nPmix);
 
     for (int i = istart; i < iend; i++) {
-        ime = pLoc[i];
+        ime = _pLoc[i];
         (*_varData[kVar])[ime] = avg;
     }
 }
@@ -701,23 +701,23 @@ void HiPS::forceProfile(){
         //---------- Force the left half of parcels to average 0 ----------
 
         for (int i = 0; i < nparcels >> 1; i++)
-            s += (*_varData[k])[pLoc[i]];                             // Calculate the sum of values in the left half of parcels
+            s += (*_varData[k])[_pLoc[i]];                             // Calculate the sum of values in the left half of parcels
         
         s /= (nparcels >> 1); // Calculate the average of values in the left half of parcels
         
         for (int i = 0; i < nparcels >> 1; i++)
-            (*_varData[k])[pLoc[i]] += (-s - 0.0);                    // Adjust values in the left half of parcels to achieve an average of 0
+            (*_varData[k])[_pLoc[i]] += (-s - 0.0);                    // Adjust values in the left half of parcels to achieve an average of 0
 
         //---------- Force the right half of parcels to average 1 ----------
         s = 0.0;
 
         for (int i = nparcels >> 1; i < nparcels; i++)
-            s += (*_varData[k])[pLoc[i]];                             // Calculate the sum of values in the right half of parcels
+            s += (*_varData[k])[_pLoc[i]];                             // Calculate the sum of values in the right half of parcels
         
         s /= (nparcels >> 1);                                        // Calculate the average of values in the right half of parcels
         
         for (int i = nparcels >> 1; i < nparcels; i++)
-            (*_varData[k])[pLoc[i]] += (-s + 1.0);                    // Adjust values in the right half of parcels to achieve an average of 1
+            (*_varData[k])[_pLoc[i]] += (-s + 1.0);                    // Adjust values in the right half of parcels to achieve an average of 1
     }
 }
 
@@ -774,16 +774,16 @@ void HiPS::writeData(int real, const int ifile, const double outputTime){
         if(performReaction) {
             vector<double> yy(nsp);
             for(int k=0; k<nsp; k++)
-                yy[k] = (*_varData[k+1])[pLoc[i]];
+                yy[k] = (*_varData[k+1])[_pLoc[i]];
             gas->setMassFractions(yy.data());
-            gas->setState_HP((*_varData[0])[pLoc[i]], gas->pressure());
+            gas->setState_HP((*_varData[0])[_pLoc[i]], gas->pressure());
             ofile << setw(19) << gas->temperature();
         }
         #endif
 
         // Write variables
         for (int k = 0; k < nVar; k++) {
-            ofile << setw(19) << (*_varData[k])[pLoc[i]];
+            ofile << setw(19) << (*_varData[k])[_pLoc[i]];
         }
         ofile << endl;
     }
@@ -854,7 +854,7 @@ std::vector<double> HiPS::projection_back_with_density(std::vector<double> &vh,
 
             // scale overlap by current parcel volume fraction wPar
             const double parcel_len    = xh[j] - xh[j - 1]; // = 1.0/nh
-            const double effective_len = overlap_len * (wPar[pLoc[j - 1]] / parcel_len);
+            const double effective_len = overlap_len * (wPar[_pLoc[j - 1]] / parcel_len);
 
             // accumulate mass and mass*phi into CFD cell i
             const double rhoP = rho_h[j - 1];
@@ -878,10 +878,10 @@ std::vector<std::vector<double>> HiPS::get_varData(){
 
     for (int i = 0; i < _varData.size(); i++) {
 
-        // Reorder using pLoc
+        // Reorder using _pLoc
         std::vector<double> vh(nparcels);
         for (int j = 0; j < nparcels; j++) {
-            vh[j] = (*_varData[i])[pLoc[j]];
+            vh[j] = (*_varData[i])[_pLoc[j]];
         }
 
         std::vector<double> vc = projection_back(vh);
@@ -895,20 +895,20 @@ std::pair< std::vector<std::vector<double>>, std::vector<double>>
 HiPS::get_varData_with_density(){
     std::vector<std::vector<double>> varDataProjections;
     
-    // Reorder _varRho based on pLoc
+    // Reorder _varRho based on _pLoc
     std::vector<double> rho_h(nparcels);
     for (int i = 0; i < nparcels; i++) {
-        rho_h[i] = _varRho[pLoc[i]];
+        rho_h[i] = _varRho[_pLoc[i]];
     }
 
     std::vector<double> rho_c = projection_back(rho_h);
 
     for (int i = 0; i < _varData.size(); i++) {
 
-        // Reorder variable data using pLoc
+        // Reorder variable data using _pLoc
         std::vector<double> vh(nparcels);
         for (int j = 0; j < nparcels; j++) {
-            vh[j] = (*_varData[i])[pLoc[j]];
+            vh[j] = (*_varData[i])[_pLoc[j]];
         }
 
         auto vc = projection_back_with_density(vh, rho_h, rho_c);
