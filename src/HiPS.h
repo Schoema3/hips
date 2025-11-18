@@ -35,7 +35,7 @@ class HiPS {
 public:
   
     int _realization;                                              ///< Number of realizations
-    std::vector<std::shared_ptr<std::vector<double>>> varData;     ///< Vector of pointers to vector
+    std::vector<std::shared_ptr<std::vector<double>>> _varData;    ///< Vector of pointers to vector
     std::vector<double> varRho;                                    ///< Density
     std::vector<int> pLoc;                                         ///< Parcel index array for fast implementation of swaps
     std::vector<double> wPar;                                      ///< Parcel volume fractions
@@ -302,7 +302,7 @@ public:
     /// subgrid model in CFD simulations, enabling seamless transfer of data for
     /// further analysis or post-processing.
     ///
-    /// Projects data from HiPS varData (size nparcels) to number of CFD
+    /// Projects data from HiPS _varData (size nparcels) to number of CFD
     /// particles corresponding to initial set_varData call
     ///
     /// \return A vector of vectors containing the final results, where:
@@ -428,7 +428,7 @@ public:
     int get_nparcels() const { return nparcels; }
     
     const std::vector<int>& get_pLoc() const { return pLoc; }
-    const std::vector<std::shared_ptr<std::vector<double>>>& get_HipsVarData_ptr() const { return varData; } // internal HiPS varData, sized to nparcels
+    const std::vector<std::shared_ptr<std::vector<double>>>& get_HipsVarData_ptr() const { return _varData; } // internal HiPS varData, sized to nparcels
 
     ////////////////////////////////////////////////////////////////////////////
     /// \brief Runs the HiPS simulation, advancing the solution using eddy

@@ -56,7 +56,7 @@ HiPS::HiPS(int nLevels,
     #endif
 
     // Resize vectors to the number of variables
-    varData.resize(nVar);
+    _varData.resize(nVar);
     varName.resize(nVar); 
 
     set_tree(nLevels, domainLength, tau0);
@@ -94,7 +94,7 @@ HiPS::HiPS(double C_param_,
     #endif
 
     // Resize vectors to accommodate the number of variables.
-    varData.resize(nVar);
+    _varData.resize(nVar);
     varName.resize(nVar);        
 }
 
@@ -299,7 +299,7 @@ void HiPS::set_tree(double Re_, double domainLength_, double tau0_, std::string 
 
 void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN){
     
-    varData[currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));
+    _varData[currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));
     varName[currentIndex] = varN;
 
     currentIndex++; 
@@ -309,7 +309,7 @@ void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
     std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
 
-    varData[currentIndex] = std::make_shared<std::vector<double>>(results.first);
+    _varData[currentIndex] = std::make_shared<std::vector<double>>(results.first);
     varRho = results.second;
     varName[currentIndex] = varN;
  
@@ -594,9 +594,9 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
         const double dt = time - parcelTimes[ime];
 
         // Pull current state
-        double h = (*varData[enthalpyIdx])[ime];
+        double h = (*_varData[enthalpyIdx])[ime];
         for (int k = 0; k < nsp; ++k) {
-            y[k] = (*varData[yIdx[k]])[ime];
+            y[k] = (*_varData[yIdx[k]])[ime];
         }
 
         // ---- store old density BEFORE chemistry
@@ -618,9 +618,9 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
         }
 
         // Write back enthalpy and species (post-reaction)
-        (*varData[enthalpyIdx])[ime] = h;
+        (*_varData[enthalpyIdx])[ime] = h;
         for (int k = 0; k < nsp; ++k) {
-            (*varData[yIdx[k]])[ime] = y[k];
+            (*_varData[yIdx[k]])[ime] = y[k];
         }
 
         parcelTimes[ime] = time;
@@ -649,10 +649,10 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
         ime = pLoc[i];
         if (performReaction) {
             double m = varRho[ime] * wPar[ime];
-            s    += (*varData[kVar])[ime] * m;   
+            s    += (*_varData[kVar])[ime] * m;
             msum += m;
         } else {
-            s += (*varData[kVar])[ime];          
+            s += (*_varData[kVar])[ime];
         }
     }
 
@@ -662,7 +662,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
 
     for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        (*varData[kVar])[ime] = avg;              
+        (*_varData[kVar])[ime] = avg;
     }
 
     //---------- Mix right branch of iTree ----------
@@ -676,10 +676,10 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
         ime = pLoc[i];
         if (performReaction) {
             double m = varRho[ime] * wPar[ime];
-            s    += (*varData[kVar])[ime] * m;       
+            s    += (*_varData[kVar])[ime] * m;
             msum += m;
         } else {
-            s += (*varData[kVar])[ime];              
+            s += (*_varData[kVar])[ime];
         }
     }
 
@@ -689,35 +689,35 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
 
     for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
-        (*varData[kVar])[ime] = avg;                 
+        (*_varData[kVar])[ime] = avg;
     }
 }
 
 void HiPS::forceProfile(){
     // Loop through each variable in the HiPS profile
-    for (int k = 0; k < varData.size(); k++) {
+    for (int k = 0; k < _varData.size(); k++) {
         double s=0;                                                  // Temporary variable for summation
 
         //---------- Force the left half of parcels to average 0 ----------
 
         for (int i = 0; i < nparcels >> 1; i++)
-            s += (*varData[k])[pLoc[i]];                             // Calculate the sum of values in the left half of parcels
+            s += (*_varData[k])[pLoc[i]];                             // Calculate the sum of values in the left half of parcels
         
         s /= (nparcels >> 1); // Calculate the average of values in the left half of parcels
         
         for (int i = 0; i < nparcels >> 1; i++)
-            (*varData[k])[pLoc[i]] += (-s - 0.0);                    // Adjust values in the left half of parcels to achieve an average of 0
+            (*_varData[k])[pLoc[i]] += (-s - 0.0);                    // Adjust values in the left half of parcels to achieve an average of 0
 
         //---------- Force the right half of parcels to average 1 ----------
         s = 0.0;
 
         for (int i = nparcels >> 1; i < nparcels; i++)
-            s += (*varData[k])[pLoc[i]];                             // Calculate the sum of values in the right half of parcels
+            s += (*_varData[k])[pLoc[i]];                             // Calculate the sum of values in the right half of parcels
         
         s /= (nparcels >> 1);                                        // Calculate the average of values in the right half of parcels
         
         for (int i = nparcels >> 1; i < nparcels; i++)
-            (*varData[k])[pLoc[i]] += (-s + 1.0);                    // Adjust values in the right half of parcels to achieve an average of 1
+            (*_varData[k])[pLoc[i]] += (-s + 1.0);                    // Adjust values in the right half of parcels to achieve an average of 1
     }
 }
 
@@ -774,16 +774,16 @@ void HiPS::writeData(int real, const int ifile, const double outputTime){
         if(performReaction) {
             vector<double> yy(nsp);
             for(int k=0; k<nsp; k++)
-                yy[k] = (*varData[k+1])[pLoc[i]];
+                yy[k] = (*_varData[k+1])[pLoc[i]];
             gas->setMassFractions(yy.data());
-            gas->setState_HP((*varData[0])[pLoc[i]], gas->pressure());
+            gas->setState_HP((*_varData[0])[pLoc[i]], gas->pressure());
             ofile << setw(19) << gas->temperature();
         }
         #endif
 
         // Write variables
         for (int k = 0; k < nVar; k++) {
-            ofile << setw(19) << (*varData[k])[pLoc[i]];
+            ofile << setw(19) << (*_varData[k])[pLoc[i]];
         }
         ofile << endl;
     }
@@ -876,12 +876,12 @@ std::vector<double> HiPS::projection_back_with_density(std::vector<double> &vh,
 std::vector<std::vector<double>> HiPS::get_varData(){
     std::vector<std::vector<double>> varDataProjections;
 
-    for (int i = 0; i < varData.size(); i++) {
+    for (int i = 0; i < _varData.size(); i++) {
 
         // Reorder using pLoc
         std::vector<double> vh(nparcels);
         for (int j = 0; j < nparcels; j++) {
-            vh[j] = (*varData[i])[pLoc[j]];
+            vh[j] = (*_varData[i])[pLoc[j]];
         }
 
         std::vector<double> vc = projection_back(vh);
@@ -903,12 +903,12 @@ HiPS::get_varData_with_density(){
 
     std::vector<double> rho_c = projection_back(rho_h);
 
-    for (int i = 0; i < varData.size(); i++) {
+    for (int i = 0; i < _varData.size(); i++) {
 
         // Reorder variable data using pLoc
         std::vector<double> vh(nparcels);
         for (int j = 0; j < nparcels; j++) {
-            vh[j] = (*varData[i])[pLoc[j]];
+            vh[j] = (*_varData[i])[pLoc[j]];
         }
 
         auto vc = projection_back_with_density(vh, rho_h, rho_c);
