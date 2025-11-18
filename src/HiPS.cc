@@ -42,8 +42,8 @@ HiPS::HiPS(int nLevels,
     #ifdef REACTIONS_ENABLED
     if(performReaction) {
         shared_ptr<Cantera::Solution> cantSol = static_pointer_cast<Cantera::Solution>(vcantSol);
-        gas = cantSol->thermo(); 
-        nsp = gas->nSpecies();
+        _gas = cantSol->thermo();
+        nsp = _gas->nSpecies();
 
         bRxr = make_shared<BatchReactor_cvode>(cantSol);                                // By default, use BatchReactor_cvode
 
@@ -82,8 +82,8 @@ HiPS::HiPS(double C_param_,
     // Initialize Cantera thermo phase and species count.
     if(performReaction) {
         shared_ptr<Cantera::Solution> cantSol = static_pointer_cast<Cantera::Solution>(vcantSol);
-        gas = cantSol->thermo(); 
-        nsp = gas->nSpecies();
+        _gas = cantSol->thermo();
+        nsp = _gas->nSpecies();
 
         // Set up the default batch reactor (cvode).
        // bRxr = make_shared<BatchReactor_cvode>(cantSol);
@@ -580,7 +580,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
     const int enthalpyIdx = getVariableIndex("enthalpy");
     std::vector<int> yIdx(nsp);
     for (int k = 0; k < nsp; ++k) {
-        yIdx[k] = getVariableIndex(gas->speciesName(k)); // map species name -> var index
+        yIdx[k] = getVariableIndex(_gas->speciesName(k)); // map species name -> var index
     }
 
     const int nP     = 1 << (Nm1 - iLevel);
@@ -775,9 +775,9 @@ void HiPS::writeData(int real, const int ifile, const double outputTime){
             vector<double> yy(nsp);
             for(int k=0; k<nsp; k++)
                 yy[k] = (*_varData[k+1])[_pLoc[i]];
-            gas->setMassFractions(yy.data());
-            gas->setState_HP((*_varData[0])[_pLoc[i]], gas->pressure());
-            ofile << setw(19) << gas->temperature();
+            _gas->setMassFractions(yy.data());
+            _gas->setState_HP((*_varData[0])[_pLoc[i]], _gas->pressure());
+            ofile << setw(19) << _gas->temperature();
         }
         #endif
 

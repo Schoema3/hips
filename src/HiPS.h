@@ -42,7 +42,7 @@ public:
 
 
 #ifdef REACTIONS_ENABLED
-    std::shared_ptr<Cantera::ThermoPhase> gas;                     ///< Shared pointer to a Cantera thermochemistry object
+    std::shared_ptr<Cantera::ThermoPhase> _gas;                     ///< Shared pointer to a Cantera thermochemistry object
     std::shared_ptr<BatchReactor> bRxr;                            ///< Unique pointer to the integrator object
 #endif
 
@@ -890,7 +890,7 @@ private:
     /// - getVariableIndex("enthalpy") is used to retrieve the index for
     ///   enthalpy.
     /// - Indices for species are dynamically retrieved using
-    ///   gas->speciesName(i).
+    ///   _gas->speciesName(i).
     /// - The function updates parcel states, including enthalpy and species
     ///   mass fractions, based on the reactions.
     /// - The old parcel density is cached before chemistry, and the new density
