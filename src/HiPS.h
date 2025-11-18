@@ -47,7 +47,7 @@ public:
 #endif
 
     double _domainLength;                                          ///< Length of domain (m)
-    double tau0;                                                   ///< Integral timescale
+    double _tau0;                                                  ///< Integral timescale
     double C_param;                                                ///< Eddy frequency parameter
     
 private:
@@ -148,7 +148,7 @@ public:
     /// \param nLevels          Number of levels in the HiPS binary tree (can be
     ///                         adjusted for high Sc).
     /// \param domainLength     Domain length for defining spatial scales.
-    /// \param tau0_            Characteristic time scale for the smallest eddy.
+    /// \param tau0             Characteristic time scale for the smallest eddy.
     /// \param C_param_         Eddy coefficient controlling mixing rate.
     /// \param forceTurb_       Flag to enforce turbulence activation.
     /// \param nVar_            Number of transported variables.
@@ -172,7 +172,7 @@ public:
     ////////////////////////////////////////////////////////////////////////////
     HiPS(int nLevels,
          double domainLength,
-         double tau0_,
+         double tau0,
          double C_param_,
          bool forceTurb_,
          int nVar_,
@@ -193,7 +193,7 @@ public:
     ///
     /// \param nLevels          Number of levels in the HiPS tree.
     /// \param domainLength     Domain size for determining eddy length scales.
-    /// \param tau0_            Time scale of the smallest eddy (Kolmogorov scale).
+    /// \param tau0            Time scale of the smallest eddy (Kolmogorov scale).
     /// \param ScHips_          Vector of Schmidt numbers (one per variable).
     ///
     /// \note This function is used by the full constructor and can also be
@@ -202,7 +202,7 @@ public:
     /// \warning The number of levels may be increased automatically for large
     ///          Schmidt numbers to ensure accurate scalar mixing across scales.
     ////////////////////////////////////////////////////////////////////////////
-    void set_tree(int nLevels, double domainLength, double tau0_);
+    void set_tree(int nLevels, double domainLength, double tau0);
 
 
     ////////////////////////////////////////////////////////////////////////////
@@ -216,7 +216,7 @@ public:
     ///
     /// \param Re_              Reynolds number used to determine base tree level.
     /// \param domainLength     Domain length for spatial scaling.
-    /// \param tau0_            Base time scale for the largest eddy.
+    /// \param tau0            Base time scale for the largest eddy.
     /// \param ScHips_          Vector of Schmidt numbers (one per variable).
     /// \param ReApproach_      Strategy to convert continuous Re to tree level:
     ///                         - "rounding"     → Round to nearest discrete level
@@ -233,7 +233,7 @@ public:
     ///
     /// \see HiPS::set_tree(int, ...) for direct-level setup.
     ////////////////////////////////////////////////////////////////////////////
-    void set_tree(double Re_, double domainLength, double tau0_, std::string ReApproach_ = "rounding");
+    void set_tree(double Re_, double domainLength, double tau0, std::string ReApproach_ = "rounding");
   
     ////////////////////////////////////////////////////////////////////////////
     /// \brief Assigns variables, their corresponding weights, and names to the

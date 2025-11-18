@@ -19,7 +19,7 @@ using namespace std;
 
 HiPS::HiPS(int nLevels,
            double domainLength,
-           double tau0_, 
+           double tau0,
            double C_param_, 
            bool forceTurb_,
            int nVar_,
@@ -30,7 +30,7 @@ HiPS::HiPS(int nLevels,
            int realization):
     nLevels(nLevels),
     _domainLength(domainLength),
-    tau0(tau0_),
+    _tau0(tau0),
     C_param(C_param_), 
     forceTurb(forceTurb_),       
     ScHips(ScHips_),   
@@ -98,11 +98,11 @@ HiPS::HiPS(double C_param_,
     varName.resize(nVar);        
 }
 
-void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0_){
+void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
  
     nLevels = nBaseLevels;
     _domainLength = domainLength;
-    tau0 = tau0_; 
+    _tau0 = tau0;
 
     if (nLevels == -1)  
         nLevels = nL; 
@@ -186,10 +186,10 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0_){
     currentIndex = 0.0;
 } 
 
-void HiPS::set_tree(double Re_, double domainLength, double tau0_, std::string ReApproach_){
+void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string ReApproach_){
     Re = Re_;
     _domainLength = domainLength;
-    tau0 = tau0_;
+    _tau0 = tau0;
     ReApproach = ReApproach_;
 
     double baseLevelEstimate = (3.0 / 4) * log(1 / Re) / log(Afac);                               // Calculate the base tree level estimate (non-integer)
@@ -946,7 +946,7 @@ void HiPS::saveAllParameters(){
     // Write user-defined input parameters
     file << "nLevels " << nLevels << "\n";            ///< Number of hierarchical levels in the HiPS model
     file << "domainLength " << _domainLength << "\n";  ///< Length of the computational domain
-    file << "tau0 " << tau0 << "\n";                  ///< Reference eddy turnover time
+    file << "tau0 " << _tau0 << "\n";                  ///< Reference eddy turnover time
     file << "C_param " << C_param << "\n";            ///< Model constant controlling turbulence behavior
     file << "forceTurb " << forceTurb << "\n";        ///< Flag for forced turbulence (1 = enabled, 0 = disabled)
     file << "nVar " << nVar << "\n";                  ///< Number of variables tracked in the simulation
