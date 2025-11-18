@@ -18,7 +18,7 @@
 using namespace std;
 
 HiPS::HiPS(int nLevels,
-           double domainLength_, 
+           double domainLength,
            double tau0_, 
            double C_param_, 
            bool forceTurb_,
@@ -29,7 +29,7 @@ HiPS::HiPS(int nLevels,
            int seed,
            int realization):
     nLevels(nLevels),
-    domainLength(domainLength_), 
+    _domainLength(domainLength),
     tau0(tau0_),
     C_param(C_param_), 
     forceTurb(forceTurb_),       
@@ -98,10 +98,10 @@ HiPS::HiPS(double C_param_,
     varName.resize(nVar);        
 }
 
-void HiPS::set_tree(int nBaseLevels, double domainLength_, double tau0_){
+void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0_){
  
     nLevels = nBaseLevels;
-    domainLength = domainLength_; 
+    _domainLength = domainLength;
     tau0 = tau0_; 
 
     if (nLevels == -1)  
@@ -186,9 +186,9 @@ void HiPS::set_tree(int nBaseLevels, double domainLength_, double tau0_){
     currentIndex = 0.0;
 } 
 
-void HiPS::set_tree(double Re_, double domainLength_, double tau0_, std::string ReApproach_){
+void HiPS::set_tree(double Re_, double domainLength, double tau0_, std::string ReApproach_){
     Re = Re_;
-    domainLength = domainLength_;
+    _domainLength = domainLength;
     tau0 = tau0_;
     ReApproach = ReApproach_;
 
@@ -945,7 +945,7 @@ void HiPS::saveAllParameters(){
 
     // Write user-defined input parameters
     file << "nLevels " << nLevels << "\n";            ///< Number of hierarchical levels in the HiPS model
-    file << "domainLength " << domainLength << "\n";  ///< Length of the computational domain
+    file << "domainLength " << _domainLength << "\n";  ///< Length of the computational domain
     file << "tau0 " << tau0 << "\n";                  ///< Reference eddy turnover time
     file << "C_param " << C_param << "\n";            ///< Model constant controlling turbulence behavior
     file << "forceTurb " << forceTurb << "\n";        ///< Flag for forced turbulence (1 = enabled, 0 = disabled)
