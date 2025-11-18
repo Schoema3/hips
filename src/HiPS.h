@@ -37,8 +37,8 @@ public:
     int _realization;                                              ///< Number of realizations
     std::vector<std::shared_ptr<std::vector<double>>> _varData;    ///< Vector of pointers to vector
     std::vector<double> _varRho;                                   ///< Density
-    std::vector<int> _pLoc;                                        ///< Parcel index array for fast implementation of swaps
-    std::vector<double> wPar;                                      ///< Parcel volume fractions
+    std::vector<int>    _pLoc;                                     ///< Parcel index array for fast implementation of swaps
+    std::vector<double> _wPar;                                     ///< Parcel volume fractions
 
 
 #ifdef REACTIONS_ENABLED
@@ -538,7 +538,7 @@ private:
     ///
     /// \par Consistency with parcel weights
     /// The overlap is scaled by \f$w_{\mathrm{par}}(i)/\ell_i\f$ so
-    /// forward/backward projection remain consistent when \c wPar changes
+    /// forward/backward projection remain consistent when \c _wPar changes
     /// during chemistry. This preserves the mass-weighted integrals:
     /// \f[
     ///   \sum_i \rho_h(i)\, w_{\mathrm{par}}(i) \approx \sum_j \rho_c(j)\, w_c(j), \qquad
@@ -895,8 +895,8 @@ private:
     ///   mass fractions, based on the reactions.
     /// - The old parcel density is cached before chemistry, and the new density
     ///   is retrieved from the reactor after the reaction step. Parcel weights
-    ///   (wPar) are rescaled by (rho_old / rho_new) so that the per-parcel mass
-    ///   m = rho * wPar remains constant even when density changes due to
+    ///   (_wPar) are rescaled by (rho_old / rho_new) so that the per-parcel mass
+    ///   m = rho * _wPar remains constant even when density changes due to
     ///   chemistry. Temperature is also written back for diagnostics.
     ///
     /// \note
@@ -923,7 +923,7 @@ private:
     ///                       behavior).
     /// - **Density-weighted mixing**: Computes a mass-weighted mean using each
     ///                                parcel’s density (`_varRho`) and
-    ///                                statistical weight (`wPar`), ensuring
+    ///                                statistical weight (`_wPar`), ensuring
     ///                                conservation of the total mixed quantity
     ///                                when densities differ. This function
     ///                                performs uniform mixing of parcels based

@@ -177,7 +177,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength_, double tau0_){
     //------------------- Set the parcel addresses (index array)
 
     _varRho.resize(nparcels);
-    wPar.assign(nparcels, 1.0 / nparcels);
+    _wPar.assign(nparcels, 1.0 / nparcels);
  
     _pLoc.resize(nparcels);
     for (int i=0; i<nparcels; i++)
@@ -289,7 +289,7 @@ void HiPS::set_tree(double Re_, double domainLength_, double tau0_, std::string 
     //-----------------------------------------------------
 
     _varRho.resize(nparcels);
-    wPar.assign(nparcels, 1.0 / nparcels);
+    _wPar.assign(nparcels, 1.0 / nparcels);
     _pLoc.resize(nparcels);
     for (int i = 0; i < nparcels; ++i)
         _pLoc[i] = i;
@@ -387,8 +387,8 @@ HiPS::projection(      std::vector<double> &vcfd,
             double overlap_len = overlap_end - overlap_start;
             if (overlap_len <= 0.0) continue;
 
-            // Effective length scaled by wPar[i]
-            double effective_len = overlap_len * (wPar[i] / parcel_length);
+            // Effective length scaled by _wPar[i]
+            double effective_len = overlap_len * (_wPar[i] / parcel_length);
 
             // Accumulate mass and mass*phi
             double rho = density[j - 1];
@@ -404,8 +404,8 @@ HiPS::projection(      std::vector<double> &vcfd,
         }
 
         // Convert total mass  average density and phi
-        if (wPar[i] > 0.0) rho_h[i] = M / wPar[i];
-        if (M > 0.0)       vh[i]    = Mphi / M;
+        if (_wPar[i] > 0.0) rho_h[i] = M    / _wPar[i];
+        if (       M > 0.0) vh[i]    = Mphi / M;
     }
 
     return {vh, rho_h};
@@ -609,10 +609,10 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
             // Get new density from the reactor/EOS
             const double rho_new = bRxr->getDensity();
 
-            // Keep per-parcel mass m = rho * wPar * V_tot constant
+            // Keep per-parcel mass m = rho * _wPar * V_tot constant
             if (rho_new > 0.0) {
-                wPar[ime] *= (rho_old / rho_new);
-                _varRho[ime] = rho_new;
+                _wPar[ime]  *= (rho_old / rho_new);
+                _varRho[ime] =  rho_new;
             }
 
         }
@@ -648,7 +648,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
     for (int i = istart; i < iend; i++) {
         ime = _pLoc[i];
         if (performReaction) {
-            double m = _varRho[ime] * wPar[ime];
+            double m = _varRho[ime] * _wPar[ime];
             s    += (*_varData[kVar])[ime] * m;
             msum += m;
         } else {
@@ -675,7 +675,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
     for (int i = istart; i < iend; i++) {
         ime = _pLoc[i];
         if (performReaction) {
-            double m = _varRho[ime] * wPar[ime];
+            double m = _varRho[ime] * _wPar[ime];
             s    += (*_varData[kVar])[ime] * m;
             msum += m;
         } else {
@@ -852,9 +852,9 @@ std::vector<double> HiPS::projection_back_with_density(std::vector<double> &vh,
             const double overlap_len   = overlap_end - overlap_start;
             if (overlap_len <= 0.0) continue;
 
-            // scale overlap by current parcel volume fraction wPar
+            // scale overlap by current parcel volume fraction _wPar
             const double parcel_len    = xh[j] - xh[j - 1]; // = 1.0/nh
-            const double effective_len = overlap_len * (wPar[_pLoc[j - 1]] / parcel_len);
+            const double effective_len = overlap_len * (_wPar[_pLoc[j - 1]] / parcel_len);
 
             // accumulate mass and mass*phi into CFD cell i
             const double rhoP = rho_h[j - 1];
