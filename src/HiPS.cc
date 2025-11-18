@@ -45,10 +45,10 @@ HiPS::HiPS(int nLevels,
         _gas = cantSol->thermo();
         nsp = _gas->nSpecies();
 
-        bRxr = make_shared<BatchReactor_cvode>(cantSol);                                // By default, use BatchReactor_cvode
+        _bRxr = make_shared<BatchReactor_cvode>(cantSol);                                // By default, use BatchReactor_cvode
 
         // Uncomment the following line to switch to BatchReactor_cantera
-        // bRxr = make_unique<BatchReactor_cantera>(cantSol);
+        // _bRxr = make_unique<BatchReactor_cantera>(cantSol);
 
         if(forceTurb)
             throw std::runtime_error("Error: forceTurb should be false if preformReaction is true");
@@ -86,10 +86,10 @@ HiPS::HiPS(double C_param_,
         nsp = _gas->nSpecies();
 
         // Set up the default batch reactor (cvode).
-       // bRxr = make_shared<BatchReactor_cvode>(cantSol);
+       // _bRxr = make_shared<BatchReactor_cvode>(cantSol);
 
         // Uncomment the following line to switch to BatchReactor_cantera.
-         bRxr = make_shared<BatchReactor_cantera>(cantSol);
+         _bRxr = make_shared<BatchReactor_cantera>(cantSol);
     }
     #endif
 
@@ -603,11 +603,11 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
         const double rho_old = _varRho[ime];
 
         if (performReaction) {
-            // Advance chemistry; bRxr updates its state internally
-            bRxr->react(h, y, dt);
+            // Advance chemistry; _bRxr updates its state internally
+            _bRxr->react(h, y, dt);
 
             // Get new density from the reactor/EOS
-            const double rho_new = bRxr->getDensity();
+            const double rho_new = _bRxr->getDensity();
 
             // Keep per-parcel mass m = rho * _wPar * V_tot constant
             if (rho_new > 0.0) {

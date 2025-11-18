@@ -42,8 +42,8 @@ public:
 
 
 #ifdef REACTIONS_ENABLED
-    std::shared_ptr<Cantera::ThermoPhase> _gas;                     ///< Shared pointer to a Cantera thermochemistry object
-    std::shared_ptr<BatchReactor> bRxr;                            ///< Unique pointer to the integrator object
+    std::shared_ptr<Cantera::ThermoPhase> _gas;                    ///< Shared pointer to a Cantera thermochemistry object
+    std::shared_ptr<BatchReactor> _bRxr;                           ///< Unique pointer to the integrator object
 #endif
 
     double domainLength;                                           ///< Length of domain (m)
