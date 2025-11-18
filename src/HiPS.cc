@@ -176,7 +176,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength_, double tau0_){
     
     //------------------- Set the parcel addresses (index array)
 
-    varRho.resize(nparcels);
+    _varRho.resize(nparcels);
     wPar.assign(nparcels, 1.0 / nparcels);
  
     pLoc.resize(nparcels);
@@ -288,7 +288,7 @@ void HiPS::set_tree(double Re_, double domainLength_, double tau0_, std::string 
 
     //-----------------------------------------------------
 
-    varRho.resize(nparcels);
+    _varRho.resize(nparcels);
     wPar.assign(nparcels, 1.0 / nparcels);
     pLoc.resize(nparcels);
     for (int i = 0; i < nparcels; ++i)
@@ -310,7 +310,7 @@ void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std
     std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
 
     _varData[currentIndex] = std::make_shared<std::vector<double>>(results.first);
-    varRho = results.second;
+    _varRho = results.second;
     varName[currentIndex] = varN;
  
     currentIndex++; 
@@ -600,7 +600,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
         }
 
         // ---- store old density BEFORE chemistry
-        const double rho_old = varRho[ime];
+        const double rho_old = _varRho[ime];
 
         if (performReaction) {
             // Advance chemistry; bRxr updates its state internally
@@ -612,7 +612,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
             // Keep per-parcel mass m = rho * wPar * V_tot constant
             if (rho_new > 0.0) {
                 wPar[ime] *= (rho_old / rho_new);
-                varRho[ime] = rho_new;
+                _varRho[ime] = rho_new;
             }
 
         }
@@ -648,7 +648,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
     for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
         if (performReaction) {
-            double m = varRho[ime] * wPar[ime];
+            double m = _varRho[ime] * wPar[ime];
             s    += (*_varData[kVar])[ime] * m;
             msum += m;
         } else {
@@ -675,7 +675,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
     for (int i = istart; i < iend; i++) {
         ime = pLoc[i];
         if (performReaction) {
-            double m = varRho[ime] * wPar[ime];
+            double m = _varRho[ime] * wPar[ime];
             s    += (*_varData[kVar])[ime] * m;
             msum += m;
         } else {
@@ -895,10 +895,10 @@ std::pair< std::vector<std::vector<double>>, std::vector<double>>
 HiPS::get_varData_with_density(){
     std::vector<std::vector<double>> varDataProjections;
     
-    // Reorder varRho based on pLoc
+    // Reorder _varRho based on pLoc
     std::vector<double> rho_h(nparcels);
     for (int i = 0; i < nparcels; i++) {
-        rho_h[i] = varRho[pLoc[i]];
+        rho_h[i] = _varRho[pLoc[i]];
     }
 
     std::vector<double> rho_c = projection_back(rho_h);

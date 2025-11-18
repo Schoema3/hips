@@ -36,7 +36,7 @@ public:
   
     int _realization;                                              ///< Number of realizations
     std::vector<std::shared_ptr<std::vector<double>>> _varData;    ///< Vector of pointers to vector
-    std::vector<double> varRho;                                    ///< Density
+    std::vector<double> _varRho;                                    ///< Density
     std::vector<int> pLoc;                                         ///< Parcel index array for fast implementation of swaps
     std::vector<double> wPar;                                      ///< Parcel volume fractions
 
@@ -922,7 +922,7 @@ private:
     /// - **Uniform mixing**: Averages variable values directly (original
     ///                       behavior).
     /// - **Density-weighted mixing**: Computes a mass-weighted mean using each
-    ///                                parcel’s density (`varRho`) and
+    ///                                parcel’s density (`_varRho`) and
     ///                                statistical weight (`wPar`), ensuring
     ///                                conservation of the total mixed quantity
     ///                                when densities differ. This function
