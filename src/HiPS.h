@@ -48,7 +48,7 @@ public:
 
     double _domainLength;                                          ///< Length of domain (m)
     double _tau0;                                                  ///< Integral timescale
-    double C_param;                                                ///< Eddy frequency parameter
+    double _C_param;                                               ///< Eddy frequency parameter
     
 private:
 
@@ -108,7 +108,7 @@ public:
     /// configured dynamically, such as grid-based simulations with
     /// cell-specific turbulence properties. The tree can be created or updated
     /// later using one of the `set_tree` functions.
-    /// \param C_param_         Eddy coefficient controlling mixing rate.
+    /// \param C_param          Eddy coefficient controlling mixing rate.
     /// \param forceTurb_       Flag to enforce turbulence activation.
     /// \param nVar_            Number of transported variables.
     /// \param performReaction_ Enables chemical reactions if set to true.
@@ -126,7 +126,7 @@ public:
     ///
     /// \see HiPS::set_tree() for deferred tree construction.
     ////////////////////////////////////////////////////////////////////////////
-    HiPS(double C_param_,
+    HiPS(double C_param,
          bool forceTurb_,
          int nVar_,
          std::vector<double> &ScHips_,
@@ -149,7 +149,7 @@ public:
     ///                         adjusted for high Sc).
     /// \param domainLength     Domain length for defining spatial scales.
     /// \param tau0             Characteristic time scale for the smallest eddy.
-    /// \param C_param_         Eddy coefficient controlling mixing rate.
+    /// \param C_param          Eddy coefficient controlling mixing rate.
     /// \param forceTurb_       Flag to enforce turbulence activation.
     /// \param nVar_            Number of transported variables.
     /// \param ScHips_          Vector of Schmidt numbers (one per variable).
@@ -173,7 +173,7 @@ public:
     HiPS(int nLevels,
          double domainLength,
          double tau0,
-         double C_param_,
+         double C_param,
          bool forceTurb_,
          int nVar_,
          std::vector<double> &ScHips_,

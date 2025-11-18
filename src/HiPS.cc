@@ -20,7 +20,7 @@ using namespace std;
 HiPS::HiPS(int nLevels,
            double domainLength,
            double tau0,
-           double C_param_, 
+           double C_param,
            bool forceTurb_,
            int nVar_,
            vector<double> &ScHips_,
@@ -31,7 +31,7 @@ HiPS::HiPS(int nLevels,
     nLevels(nLevels),
     _domainLength(domainLength),
     _tau0(tau0),
-    C_param(C_param_), 
+    _C_param(C_param),
     forceTurb(forceTurb_),       
     ScHips(ScHips_),   
     nVar(nVar_),                                     
@@ -62,7 +62,7 @@ HiPS::HiPS(int nLevels,
     set_tree(nLevels, domainLength, tau0);
 }
 
-HiPS::HiPS(double C_param_,
+HiPS::HiPS(double C_param,
            bool forceTurb_,
            int nVar_,
            vector<double> &ScHips_,
@@ -70,7 +70,7 @@ HiPS::HiPS(double C_param_,
            shared_ptr<void> vcantSol,
            int seed,
            int realization):
-    C_param(C_param_), 
+    _C_param(C_param),
     forceTurb(forceTurb_),       
     nVar(nVar_),                       
     ScHips(ScHips_),                 
@@ -135,7 +135,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
         levelLengths[i] = domainLength * pow(Afac,i);
        //levelLengths[i] = domainLength * pow(Anew,i);
 
-        levelTaus[i] = tau0 * pow(levelLengths[i]/domainLength, 2.0/3.0) / C_param;
+        levelTaus[i] = tau0 * pow(levelLengths[i]/domainLength, 2.0/3.0) / _C_param;
         levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
     }
 
@@ -143,8 +143,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     if (LScHips) {                                     // Ccorrect levels for high Sc (levels > Kolmogorov)
         for (int i=iEta+1; i<nLevels; i++) {
             levelTaus[i] = tau0 *
-            pow(levelLengths[iEta]/domainLength, 2.0/3.0) /
-            C_param;
+            pow(levelLengths[iEta]/domainLength, 2.0/3.0) / _C_param;
             levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
         }
     }
@@ -242,12 +241,12 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
     for (int i = 0; i < nLevels; ++i) {
         levelLengths[i] = domainLength * pow((ReApproach == "dynamic_A" ? Anew : Afac), i);
 
-        levelTaus[i] = tau0 * pow(levelLengths[i] / domainLength, 2.0 / 3.0) / C_param;
+        levelTaus[i] = tau0 * pow(levelLengths[i] / domainLength, 2.0 / 3.0) / _C_param;
         levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
     }
 
     if (ReApproach == "micromixing") {                                          // Adjust rates for micromixing model
-        levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / C_param;
+        levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / _C_param;
         levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
     }
 
@@ -258,7 +257,7 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
     LScHips = !ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)
     if (LScHips) {
         for (int i = iEta + 1; i < nLevels; ++i) {
-            levelTaus[i] = tau0 * pow(levelLengths[iEta] / domainLength, 2.0 / 3.0) / C_param;
+            levelTaus[i] = tau0 * pow(levelLengths[iEta] / domainLength, 2.0 / 3.0) / _C_param;
             levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
         }
     }
@@ -947,7 +946,7 @@ void HiPS::saveAllParameters(){
     file << "nLevels " << nLevels << "\n";            ///< Number of hierarchical levels in the HiPS model
     file << "domainLength " << _domainLength << "\n";  ///< Length of the computational domain
     file << "tau0 " << _tau0 << "\n";                  ///< Reference eddy turnover time
-    file << "C_param " << C_param << "\n";            ///< Model constant controlling turbulence behavior
+    file << "C_param " << _C_param << "\n";            ///< Model constant controlling turbulence behavior
     file << "forceTurb " << forceTurb << "\n";        ///< Flag for forced turbulence (1 = enabled, 0 = disabled)
     file << "nVar " << nVar << "\n";                  ///< Number of variables tracked in the simulation
     file << "performReaction " << performReaction << "\n";  ///< Flag indicating whether chemical reactions are simulated
