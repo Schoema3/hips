@@ -34,7 +34,7 @@ class HiPS {
 
 public:
   
-    int realization;                                               ///< Number of realizations
+    int _realization;                                              ///< Number of realizations
     std::vector<std::shared_ptr<std::vector<double>>> varData;     ///< Vector of pointers to vector
     std::vector<double> varRho;                                    ///< Density
     std::vector<int> pLoc;                                         ///< Parcel index array for fast implementation of swaps
@@ -115,7 +115,7 @@ public:
     /// \param cantSol          Cantera solution object (required when
     ///                         REACTIONS_ENABLED).
     /// \param seed             Random seed (negative for random initialization).
-    /// \param realization_     Realization index for ensemble or parallel runs.
+    /// \param realization      Realization index for ensemble or parallel runs.
     ///
     /// \note This constructor does not call any `set_tree()` function. The user
     ///       is responsible for building the tree explicitly by calling either
@@ -133,7 +133,7 @@ public:
          bool performReaction,
          std::shared_ptr<void> vcantSol = nullptr,
          int seed = 10,
-         int realization_ = 1);
+         int realization = 1);
 
     ////////////////////////////////////////////////////////////////////////////
     /// \brief Constructor for initializing the full HiPS tree at the time of
@@ -157,7 +157,7 @@ public:
     /// \param cantSol          Cantera solution object (required when
     ///                         REACTIONS_ENABLED).
     /// \param seed             Random seed (negative for random initialization).
-    /// \param realization_     Realization index for ensemble or parallel runs.
+    /// \param realization      Realization index for ensemble or parallel runs.
     ///
     /// \note This constructor calls `set_tree(nLevels, domainLength, tau0,
     ///       ScHips)` internally to fully build the tree at initialization
@@ -180,7 +180,7 @@ public:
          bool performReaction,
          std::shared_ptr<void> vcantSol = nullptr,
          int seed = 10,
-         int realization_ = 1);
+         int realization = 1);
 
 
     ////////////////////////////////////////////////////////////////////////////

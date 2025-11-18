@@ -27,7 +27,7 @@ HiPS::HiPS(int nLevels,
            bool performReaction_,
            shared_ptr<void> vcantSol,
            int seed,
-           int realization_): 
+           int realization):
     nLevels(nLevels),
     domainLength(domainLength_), 
     tau0(tau0_),
@@ -37,7 +37,7 @@ HiPS::HiPS(int nLevels,
     nVar(nVar_),                                     
     rand(seed),
     performReaction(performReaction_),
-    realization(realization_){
+    _realization(realization){
 
     #ifdef REACTIONS_ENABLED
     if(performReaction) {
@@ -69,14 +69,14 @@ HiPS::HiPS(double C_param_,
            bool performReaction_,
            shared_ptr<void> vcantSol,
            int seed,
-           int realization_): 
+           int realization):
     C_param(C_param_), 
     forceTurb(forceTurb_),       
     nVar(nVar_),                       
     ScHips(ScHips_),                 
     rand(seed),
     performReaction(performReaction_),
-    realization(realization_){
+    _realization(realization){
 
     #ifdef REACTIONS_ENABLED
     // Initialize Cantera thermo phase and species count.
@@ -476,11 +476,11 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
 
         if (shouldWriteData) {
             if (writeByEddy) {  //  Only write if using eddy-based writing
-                writeData(realization, ++fileCounter, time);
+                writeData(_realization, ++fileCounter, time);
                 lastEddyOutput = eddyCounter;  //  Update last output event
             }
             else if (writeByTime) {  // Only write if using time-based writing
-                 writeData(realization, ++fileCounter, time);
+                 writeData(_realization, ++fileCounter, time);
                 lastOutputTime = time;
             }
         }
@@ -951,7 +951,7 @@ void HiPS::saveAllParameters(){
     file << "forceTurb " << forceTurb << "\n";        ///< Flag for forced turbulence (1 = enabled, 0 = disabled)
     file << "nVar " << nVar << "\n";                  ///< Number of variables tracked in the simulation
     file << "performReaction " << performReaction << "\n";  ///< Flag indicating whether chemical reactions are simulated
-    file << "realization " << realization << "\n";    ///< Current simulation realization (for multiple runs)
+    file << "realization " << _realization << "\n";    ///< Current simulation realization (for multiple runs)
 
     // Write variable names
     if (!varName.empty()) {
