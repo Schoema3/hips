@@ -450,7 +450,7 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
     int lastEddyOutput = 0;                                       // Track last eddy-based output event
 
     // Apply default values if user hasn't set them
-    if (!_useEddyBasedWriting && !useTimeBasedWriting) {
+    if (!_useEddyBasedWriting && !_useTimeBasedWriting) {
         _outputIntervalEddy = DEFAULT_EDDY_INTERVAL;
         _useEddyBasedWriting = true;  // Default to eddy-based writing
     }
@@ -471,7 +471,7 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
 
         //  Only check the selected mode (set in example code or by default)
         bool writeByEddy = (_useEddyBasedWriting && _eddyCounter >= lastEddyOutput + _outputIntervalEddy);
-        bool writeByTime = (useTimeBasedWriting && _time - _lastOutputTime >= _outputIntervalTime);
+        bool writeByTime = (_useTimeBasedWriting && _time - _lastOutputTime >= _outputIntervalTime);
 
         if (shouldWriteData) {
             if (writeByEddy) {  //  Only write if using eddy-based writing
@@ -921,13 +921,13 @@ void HiPS::setOutputIntervalEddy(int interval){
 
     _outputIntervalEddy = interval;
     _useEddyBasedWriting = true;  ///< Enables eddy-based writing
-    useTimeBasedWriting = false; ///< Disables time-based writing
+    _useTimeBasedWriting = false; ///< Disables time-based writing
 }
 
 void HiPS::setOutputIntervalTime(double interval){
 
     _outputIntervalTime = interval;
-    useTimeBasedWriting = true;  ///< Enables time-based writing
+    _useTimeBasedWriting = true;  ///< Enables time-based writing
     _useEddyBasedWriting = false; ///< Disables eddy-based writing
 }
 
