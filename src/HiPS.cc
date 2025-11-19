@@ -123,8 +123,8 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     
     // -------------------------- 
     
-    nparcels = static_cast<int>(pow(2, Nm1));
-    parcelTimes.resize(nparcels,0);
+    _nparcels = static_cast<int>(pow(2, Nm1));
+    parcelTimes.resize(_nparcels,0);
     i_batchelor.resize(nVar,0);
     
     vector<double> levelLengths(nLevels);              // Including all levels, but last 2 don't count:
@@ -175,11 +175,11 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     
     //------------------- Set the parcel addresses (index array)
 
-    _varRho.resize(nparcels);
-    _wPar.assign(nparcels, 1.0 / nparcels);
+    _varRho.resize(_nparcels);
+    _wPar.assign(_nparcels, 1.0 / _nparcels);
  
-    _pLoc.resize(nparcels);
-    for (int i=0; i<nparcels; i++)
+    _pLoc.resize(_nparcels);
+    for (int i=0; i<_nparcels; i++)
         _pLoc[i] = i;
 
     currentIndex = 0.0;
@@ -230,8 +230,8 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
     Nm2 = nLevels - 2;
     Nm3 = nLevels - 3;
 
-    nparcels = static_cast<int>(pow(2, Nm1));
-    parcelTimes.resize(nparcels, 0);
+    _nparcels = static_cast<int>(pow(2, Nm1));
+    parcelTimes.resize(_nparcels, 0);
     i_batchelor.resize(nVar, 0);
 
     std::vector<double> levelLengths(nLevels);                                // Including all levels, but last 2 don't count
@@ -287,10 +287,10 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
 
     //-----------------------------------------------------
 
-    _varRho.resize(nparcels);
-    _wPar.assign(nparcels, 1.0 / nparcels);
-    _pLoc.resize(nparcels);
-    for (int i = 0; i < nparcels; ++i)
+    _varRho.resize(_nparcels);
+    _wPar.assign(_nparcels, 1.0 / _nparcels);
+    _pLoc.resize(_nparcels);
+    for (int i = 0; i < _nparcels; ++i)
         _pLoc[i] = i;
 
     currentIndex = 0.0;
@@ -318,7 +318,7 @@ void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 std::vector<double> HiPS::projection(std::vector<double> &vcfd, std::vector<double> &weight){
     
     xc = setGridCfd(weight);                               // Populate the physical domain for flow particles
-    xh = setGridHips(nparcels);                            // Populate the physical domain for HiPS parcels
+    xh = setGridHips(_nparcels);                            // Populate the physical domain for HiPS parcels
 
     int nc = xc.size() - 1;                 
     int nh = xh.size() - 1; 
@@ -360,7 +360,7 @@ HiPS::projection(      std::vector<double> &vcfd,
                  const std::vector<double> &density){
     // Build CFD and HiPS grids
     xc = setGridCfd(weight);
-    xh = setGridHips(nparcels);
+    xh = setGridHips(_nparcels);
 
     int nc = xc.size() - 1; // CFD cell count
     int nh = xh.size() - 1; // HiPS parcel count
@@ -699,23 +699,23 @@ void HiPS::forceProfile(){
 
         //---------- Force the left half of parcels to average 0 ----------
 
-        for (int i = 0; i < nparcels >> 1; i++)
+        for (int i = 0; i < _nparcels >> 1; i++)
             s += (*_varData[k])[_pLoc[i]];                             // Calculate the sum of values in the left half of parcels
         
-        s /= (nparcels >> 1); // Calculate the average of values in the left half of parcels
+        s /= (_nparcels >> 1); // Calculate the average of values in the left half of parcels
         
-        for (int i = 0; i < nparcels >> 1; i++)
+        for (int i = 0; i < _nparcels >> 1; i++)
             (*_varData[k])[_pLoc[i]] += (-s - 0.0);                    // Adjust values in the left half of parcels to achieve an average of 0
 
         //---------- Force the right half of parcels to average 1 ----------
         s = 0.0;
 
-        for (int i = nparcels >> 1; i < nparcels; i++)
+        for (int i = _nparcels >> 1; i < _nparcels; i++)
             s += (*_varData[k])[_pLoc[i]];                             // Calculate the sum of values in the right half of parcels
         
-        s /= (nparcels >> 1);                                        // Calculate the average of values in the right half of parcels
+        s /= (_nparcels >> 1);                                        // Calculate the average of values in the right half of parcels
         
-        for (int i = nparcels >> 1; i < nparcels; i++)
+        for (int i = _nparcels >> 1; i < _nparcels; i++)
             (*_varData[k])[_pLoc[i]] += (-s + 1.0);                    // Adjust values in the right half of parcels to achieve an average of 1
     }
 }
@@ -751,7 +751,7 @@ void HiPS::writeData(int real, const int ifile, const double outputTime){
 
     // Write metadata (header information)
     ofile << "# time = " << outputTime << "\n";
-    ofile << "# Grid Points = " << nparcels << "\n";
+    ofile << "# Grid Points = " << _nparcels << "\n";
         
     // Write column names (include temperature if reactions are enabled)
     if(performReaction)
@@ -767,7 +767,7 @@ void HiPS::writeData(int real, const int ifile, const double outputTime){
     ofile << setprecision(10);
 
     // Write data
-    for (int i = 0; i < nparcels; i++) {
+    for (int i = 0; i < _nparcels; i++) {
         // Write temperature first if reactions are enabled
         #ifdef REACTIONS_ENABLED
         if(performReaction) {
@@ -878,8 +878,8 @@ std::vector<std::vector<double>> HiPS::get_varData(){
     for (int i = 0; i < _varData.size(); i++) {
 
         // Reorder using _pLoc
-        std::vector<double> vh(nparcels);
-        for (int j = 0; j < nparcels; j++) {
+        std::vector<double> vh(_nparcels);
+        for (int j = 0; j < _nparcels; j++) {
             vh[j] = (*_varData[i])[_pLoc[j]];
         }
 
@@ -895,8 +895,8 @@ HiPS::get_varData_with_density(){
     std::vector<std::vector<double>> varDataProjections;
     
     // Reorder _varRho based on _pLoc
-    std::vector<double> rho_h(nparcels);
-    for (int i = 0; i < nparcels; i++) {
+    std::vector<double> rho_h(_nparcels);
+    for (int i = 0; i < _nparcels; i++) {
         rho_h[i] = _varRho[_pLoc[i]];
     }
 
@@ -905,8 +905,8 @@ HiPS::get_varData_with_density(){
     for (int i = 0; i < _varData.size(); i++) {
 
         // Reorder variable data using _pLoc
-        std::vector<double> vh(nparcels);
-        for (int j = 0; j < nparcels; j++) {
+        std::vector<double> vh(_nparcels);
+        for (int j = 0; j < _nparcels; j++) {
             vh[j] = (*_varData[i])[_pLoc[j]];
         }
 

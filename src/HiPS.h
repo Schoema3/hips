@@ -52,7 +52,7 @@ public:
     
 private:
 
-    int nparcels;                                                  ///< Number of parcels
+    int _nparcels;                                                 ///< Number of parcels
     int currentIndex = 0;                                          ///< Member variable to keep track of current index of variables
     int nLevels;                                                   ///< Number of tree levels
     int nVar;                                                      ///< Number of parcel variables (e.g., h, ysp)
@@ -302,7 +302,7 @@ public:
     /// subgrid model in CFD simulations, enabling seamless transfer of data for
     /// further analysis or post-processing.
     ///
-    /// Projects data from HiPS _varData (size nparcels) to number of CFD
+    /// Projects data from HiPS _varData (size _nparcels) to number of CFD
     /// particles corresponding to initial set_varData call
     ///
     /// \return A vector of vectors containing the final results, where:
@@ -425,10 +425,10 @@ public:
     ////////////////////////////////////////////////////////////////////////////
     void writeData(int real, const int ifile, const double outputTime);
 
-    int get_nparcels() const { return nparcels; }
+    int get_nparcels() const { return _nparcels; }
     
     const std::vector<int>& get_pLoc() const { return _pLoc; }
-    const std::vector<std::shared_ptr<std::vector<double>>>& get_HipsVarData_ptr() const { return _varData; } // internal HiPS varData, sized to nparcels
+    const std::vector<std::shared_ptr<std::vector<double>>>& get_HipsVarData_ptr() const { return _varData; } // internal HiPS varData, sized to _nparcels
 
     ////////////////////////////////////////////////////////////////////////////
     /// \brief Runs the HiPS simulation, advancing the solution using eddy
