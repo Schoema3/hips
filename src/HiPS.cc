@@ -129,14 +129,14 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     
     vector<double> levelLengths(_nLevels);              // Including all levels, but last 2 don't count:
     vector<double> levelTaus(_nLevels);                 // Smallest scale is 2 levels up from bottom
-    levelRates   = vector<double>(_nLevels);
+    _levelRates   = vector<double>(_nLevels);
 
     for (int i=0; i<_nLevels; i++) {
         levelLengths[i] = domainLength * pow(_Afac,i);
        //levelLengths[i] = domainLength * pow(_Anew,i);
 
         levelTaus[i] = tau0 * pow(levelLengths[i]/domainLength, 2.0/3.0) / _C_param;
-        levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
+        _levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
     }
 
     _LScHips = _ScHips.size() > 0 ? true : false;
@@ -144,7 +144,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
         for (int i=_iEta+1; i<_nLevels; i++) {
             levelTaus[i] = tau0 *
             pow(levelLengths[_iEta]/domainLength, 2.0/3.0) / _C_param;
-            levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
+            _levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
         }
     }
 
@@ -152,11 +152,11 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
 
     _eddyRate_total = 0.0;
     for (int i=0; i<=_Nm3; i++)
-        _eddyRate_total += levelRates[i];
+        _eddyRate_total += _levelRates[i];
     
     _eddyRate_inertial = 0.0;
     for (int i=0; i<=_iEta; i++)
-        _eddyRate_inertial += levelRates[i];
+        _eddyRate_inertial += _levelRates[i];
     
     //-------------------
     
@@ -236,29 +236,29 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
 
     std::vector<double> levelLengths(_nLevels);                                // Including all levels, but last 2 don't count
     std::vector<double> levelTaus(_nLevels);                                   // Smallest scale is 2 levels up from bottom
-    levelRates.resize(_nLevels);
+    _levelRates.resize(_nLevels);
 
     for (int i = 0; i < _nLevels; ++i) {
         levelLengths[i] = domainLength * pow((ReApproach == "dynamic_A" ? _Anew : _Afac), i);
 
         levelTaus[i] = tau0 * pow(levelLengths[i] / domainLength, 2.0 / 3.0) / _C_param;
-        levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
+        _levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
     }
 
     if (ReApproach == "micromixing") {                                          // Adjust rates for micromixing model
         levelTaus[_Nm3] = tau0 * pow(_lStar / domainLength, 2.0 / 3.0) / _C_param;
-        levelRates[_Nm3] = 1.0 / levelTaus[_Nm3] * pow(2.0, _Nm3);
+        _levelRates[_Nm3] = 1.0 / levelTaus[_Nm3] * pow(2.0, _Nm3);
     }
 
     if (ReApproach == "probability") {                                          // Adjust final mixing rate based on probability
-        levelRates[_Nm3] = levelRates[_nL - 3] * _probability;
+        _levelRates[_Nm3] = _levelRates[_nL - 3] * _probability;
     }
 
     _LScHips = !_ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)
     if (_LScHips) {
         for (int i = _iEta + 1; i < _nLevels; ++i) {
             levelTaus[i] = tau0 * pow(levelLengths[_iEta] / domainLength, 2.0 / 3.0) / _C_param;
-            levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
+            _levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
         }
     }
 
@@ -266,11 +266,11 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
 
     _eddyRate_total = 0.0;
     for (int i = 0; i <= _Nm3; ++i)
-        _eddyRate_total += levelRates[i];
+        _eddyRate_total += _levelRates[i];
 
     _eddyRate_inertial = 0.0;
     for (int i = 0; i <= _iEta; ++i)
-        _eddyRate_inertial += levelRates[i];
+        _eddyRate_inertial += _levelRates[i];
 
     //-----------------------------------------------------
 
