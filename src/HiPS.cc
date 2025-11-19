@@ -182,7 +182,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     for (int i=0; i<_nparcels; i++)
         _pLoc[i] = i;
 
-    currentIndex = 0.0;
+    _currentIndex = 0;
 } 
 
 void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string ReApproach_){
@@ -293,26 +293,26 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
     for (int i = 0; i < _nparcels; ++i)
         _pLoc[i] = i;
 
-    currentIndex = 0.0;
+    _currentIndex = 0;
 }
 
 void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN){
     
-    _varData[currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));
-    varName[currentIndex] = varN;
+    _varData[_currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));
+    varName[_currentIndex] = varN;
 
-    currentIndex++; 
+    _currentIndex++;
 }
 
 void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN, const std::vector<double> &rho){
 
     std::pair<std::vector<double>, std::vector<double>> results = projection(v, w, rho);
 
-    _varData[currentIndex] = std::make_shared<std::vector<double>>(results.first);
+    _varData[_currentIndex] = std::make_shared<std::vector<double>>(results.first);
     _varRho = results.second;
-    varName[currentIndex] = varN;
+    varName[_currentIndex] = varN;
  
-    currentIndex++; 
+    _currentIndex++;
 }
 
 std::vector<double> HiPS::projection(std::vector<double> &vcfd, std::vector<double> &weight){

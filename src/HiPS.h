@@ -53,7 +53,7 @@ public:
 private:
 
     int _nparcels;                                                 ///< Number of parcels
-    int currentIndex = 0;                                          ///< Member variable to keep track of current index of variables
+    int _currentIndex = 0;                                         ///< Member variable to keep track of current index of variables
     int nLevels;                                                   ///< Number of tree levels
     int nVar;                                                      ///< Number of parcel variables (e.g., h, ysp)
     int nsp;                                                       ///< Number of species
