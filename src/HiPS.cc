@@ -24,7 +24,7 @@ HiPS::HiPS(int nLevels,
            bool forceTurb,
            int nVar,
            vector<double> &ScHips_,
-           bool performReaction_,
+           bool performReaction,
            shared_ptr<void> vcantSol,
            int seed,
            int realization):
@@ -36,11 +36,11 @@ HiPS::HiPS(int nLevels,
     ScHips(ScHips_),   
     _nVar(nVar),
     rand(seed),
-    performReaction(performReaction_),
+    _performReaction(performReaction),
     _realization(realization){
 
     #ifdef REACTIONS_ENABLED
-    if(performReaction) {
+    if(_performReaction) {
         shared_ptr<Cantera::Solution> cantSol = static_pointer_cast<Cantera::Solution>(vcantSol);
         _gas = cantSol->thermo();
         _nsp =    _gas->nSpecies();
@@ -66,7 +66,7 @@ HiPS::HiPS(double C_param,
            bool forceTurb,
            int nVar,
            vector<double> &ScHips_,
-           bool performReaction_,
+           bool performReaction,
            shared_ptr<void> vcantSol,
            int seed,
            int realization):
@@ -75,12 +75,12 @@ HiPS::HiPS(double C_param,
     _nVar(nVar),
     ScHips(ScHips_),                 
     rand(seed),
-    performReaction(performReaction_),
+    _performReaction(performReaction),
     _realization(realization){
 
     #ifdef REACTIONS_ENABLED
     // Initialize Cantera thermo phase and species count.
-    if(performReaction) {
+    if(_performReaction) {
         shared_ptr<Cantera::Solution> cantSol = static_pointer_cast<Cantera::Solution>(vcantSol);
         _gas = cantSol->thermo();
         _nsp =    _gas->nSpecies();
@@ -490,7 +490,7 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
     iLevel = 0; 
     iTree = 0;
 
-    if (performReaction)
+    if (_performReaction)
         reactParcels_LevelTree(iLevel, iTree);                   // React all parcels up to end time
     saveAllParameters();
 }
@@ -554,7 +554,7 @@ void HiPS::advanceHips(const int iLevel, const int iTree){
         // Combined condition check with approach condition
         if ((iLevel >= i_plus[k]) || 
             (iLevel == i_plus[k] - 1 && rand.getRand() <= i_plus[k] - i_batchelor[k])) {
-                if (!rxnDone && performReaction) {
+                if (!rxnDone && _performReaction) {
                     reactParcels_LevelTree(iLevel, iTree);
                     rxnDone = true;
                 }
@@ -601,7 +601,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
         // ---- store old density BEFORE chemistry
         const double rho_old = _varRho[ime];
 
-        if (performReaction) {
+        if (_performReaction) {
             // Advance chemistry; _bRxr updates its state internally
             _bRxr->react(h, y, dt);
 
@@ -646,7 +646,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
 
     for (int i = istart; i < iend; i++) {
         ime = _pLoc[i];
-        if (performReaction) {
+        if (_performReaction) {
             double m = _varRho[ime] * _wPar[ime];
             s    += (*_varData[kVar])[ime] * m;
             msum += m;
@@ -655,7 +655,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
         }
     }
 
-    double avg = performReaction
+    double avg = _performReaction
                ? ((msum > 0.0) ? (s / msum) : 0.0)   
                : (s / nPmix);
 
@@ -673,7 +673,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
 
     for (int i = istart; i < iend; i++) {
         ime = _pLoc[i];
-        if (performReaction) {
+        if (_performReaction) {
             double m = _varRho[ime] * _wPar[ime];
             s    += (*_varData[kVar])[ime] * m;
             msum += m;
@@ -682,7 +682,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
         }
     }
 
-    avg = performReaction
+    avg = _performReaction
         ? ((msum > 0.0) ? (s / msum) : 0.0)
         : (s / nPmix);
 
@@ -754,7 +754,7 @@ void HiPS::writeData(int real, const int ifile, const double outputTime){
     ofile << "# Grid Points = " << _nparcels << "\n";
         
     // Write column names (include temperature if reactions are enabled)
-    if(performReaction)
+    if(_performReaction)
         ofile << setw(19) << "# Temp";  // Include temperature column if reactions are enabled
 
     for (const auto& varN : varName) {
@@ -770,7 +770,7 @@ void HiPS::writeData(int real, const int ifile, const double outputTime){
     for (int i = 0; i < _nparcels; i++) {
         // Write temperature first if reactions are enabled
         #ifdef REACTIONS_ENABLED
-        if(performReaction) {
+        if(_performReaction) {
             vector<double> yy(_nsp);
             for(int k=0; k<_nsp; k++)
                 yy[k] = (*_varData[k+1])[_pLoc[i]];
@@ -949,7 +949,7 @@ void HiPS::saveAllParameters(){
     file << "C_param " << _C_param << "\n";            ///< Model constant controlling turbulence behavior
     file << "forceTurb " << _forceTurb << "\n";        ///< Flag for forced turbulence (1 = enabled, 0 = disabled)
     file << "nVar " << _nVar << "\n";                  ///< Number of variables tracked in the simulation
-    file << "performReaction " << performReaction << "\n";  ///< Flag indicating whether chemical reactions are simulated
+    file << "performReaction " << _performReaction << "\n";  ///< Flag indicating whether chemical reactions are simulated
     file << "realization " << _realization << "\n";    ///< Current simulation realization (for multiple runs)
 
     // Write variable names

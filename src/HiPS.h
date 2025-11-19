@@ -65,7 +65,7 @@ private:
     bool _forceTurb;                                               ///< Forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
 
     bool _LScHips;                                                 ///< HiPS schmidt number
-    bool performReaction;                                          ///< Flag indicating whether chemical reactions are performed in the simulation
+    bool _performReaction;                                         ///< Flag indicating whether chemical reactions are performed in the simulation
         
     double time;                                                   ///< Current simulation time
     double eddyRate_total;                                         ///< Total rate of all eddies 0 through _nLevels-3
