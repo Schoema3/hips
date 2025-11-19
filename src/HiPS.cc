@@ -133,7 +133,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
 
     for (int i=0; i<_nLevels; i++) {
         levelLengths[i] = domainLength * pow(_Afac,i);
-       //levelLengths[i] = domainLength * pow(Anew,i);
+       //levelLengths[i] = domainLength * pow(_Anew,i);
 
         levelTaus[i] = tau0 * pow(levelLengths[i]/domainLength, 2.0/3.0) / _C_param;
         levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
@@ -208,7 +208,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
     } 
     else if (ReApproach == "dynamic_A") {
         baseLevel = round(baseLevelEstimate);                                                     // Round the base level to the nearest integer
-        Anew = exp(-log(_Re) / ((4.0 / 3.0) * baseLevel));                                         // Calculate the new value of parameter A
+        _Anew = exp(-log(_Re) / ((4.0 / 3.0) * baseLevel));                                         // Calculate the new value of parameter A
     } 
     else {
         throw std::invalid_argument("Invalid ReApproach specified");                                // Handle invalid approach case if needed
@@ -239,7 +239,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
     levelRates.resize(_nLevels);
 
     for (int i = 0; i < _nLevels; ++i) {
-        levelLengths[i] = domainLength * pow((ReApproach == "dynamic_A" ? Anew : _Afac), i);
+        levelLengths[i] = domainLength * pow((ReApproach == "dynamic_A" ? _Anew : _Afac), i);
 
         levelTaus[i] = tau0 * pow(levelLengths[i] / domainLength, 2.0 / 3.0) / _C_param;
         levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
