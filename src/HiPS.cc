@@ -451,7 +451,7 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
 
     // Apply default values if user hasn't set them
     if (!_useEddyBasedWriting && !_useTimeBasedWriting) {
-        _outputIntervalEddy = DEFAULT_EDDY_INTERVAL;
+        _outputIntervalEddy = _DEFAULT_EDDY_INTERVAL;
         _useEddyBasedWriting = true;  // Default to eddy-based writing
     }
 
