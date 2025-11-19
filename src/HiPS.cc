@@ -28,7 +28,7 @@ HiPS::HiPS(int nLevels,
            shared_ptr<void> vcantSol,
            int seed,
            int realization):
-    nLevels(nLevels),
+    _nLevels(nLevels),
     _domainLength(domainLength),
     _tau0(tau0),
     _C_param(C_param),
@@ -100,14 +100,14 @@ HiPS::HiPS(double C_param,
 
 void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
  
-    nLevels = nBaseLevels;
+    _nLevels = nBaseLevels;
     _domainLength = domainLength;
     _tau0 = tau0;
 
-    if (nLevels == -1)  
-        nLevels = nL; 
+    if (_nLevels == -1)
+        _nLevels = nL;
 
-    iEta = nLevels - 3;                                // Kolmogorov level; if nLevels = 7, then 0, 1, 2, 3, (4), 5, 6; iEta=4 is the lowest swap level: swap grandchildren of iEta=4 at level 6.
+    iEta = _nLevels - 3;                                // Kolmogorov level; if _nLevels = 7, then 0, 1, 2, 3, (4), 5, 6; iEta=4 is the lowest swap level: swap grandchildren of iEta=4 at level 6.
            
     int maxSc = 1.0;
 
@@ -115,11 +115,11 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
         maxSc = ScHips[i]>maxSc ? ScHips[i] : maxSc;
     
     if (maxSc > 1.0)
-        nLevels += ceil(log(maxSc)/log(4));            // Changing number of levels!
+        _nLevels += ceil(log(maxSc)/log(4));            // Changing number of levels!
     
-    Nm1 = nLevels - 1;
-    Nm2 = nLevels - 2;
-    Nm3 = nLevels - 3;
+    Nm1 = _nLevels - 1;
+    Nm2 = _nLevels - 2;
+    Nm3 = _nLevels - 3;
     
     // -------------------------- 
     
@@ -127,11 +127,11 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     parcelTimes.resize(_nparcels,0);
     i_batchelor.resize(nVar,0);
     
-    vector<double> levelLengths(nLevels);              // Including all levels, but last 2 don't count:
-    vector<double> levelTaus(nLevels);                 // Smallest scale is 2 levels up from bottom
-    levelRates   = vector<double>(nLevels);
+    vector<double> levelLengths(_nLevels);              // Including all levels, but last 2 don't count:
+    vector<double> levelTaus(_nLevels);                 // Smallest scale is 2 levels up from bottom
+    levelRates   = vector<double>(_nLevels);
 
-    for (int i=0; i<nLevels; i++) {
+    for (int i=0; i<_nLevels; i++) {
         levelLengths[i] = domainLength * pow(Afac,i);
        //levelLengths[i] = domainLength * pow(Anew,i);
 
@@ -141,7 +141,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
 
     LScHips = ScHips.size() > 0 ? true : false;
     if (LScHips) {                                     // Ccorrect levels for high Sc (levels > Kolmogorov)
-        for (int i=iEta+1; i<nLevels; i++) {
+        for (int i=iEta+1; i<_nLevels; i++) {
             levelTaus[i] = tau0 *
             pow(levelLengths[iEta]/domainLength, 2.0/3.0) / _C_param;
             levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
@@ -217,28 +217,28 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
     nL = baseLevel + 3;                                                                           // Set the number of levels for the binary tree structure
 
     //----------------------------------------------------------------------
-    nLevels = nL;
-    iEta = nLevels - 3;  // Kolmogorov level 
+    _nLevels = nL;
+    iEta = _nLevels - 3;  // Kolmogorov level
 
     int maxSc = 1;
     for (const auto &sc : ScHips)
         maxSc = std::max(maxSc, static_cast<int>(sc));
     if (maxSc > 1.0)
-        nLevels += ceil(log(maxSc) / log(4));                           
+        _nLevels += ceil(log(maxSc) / log(4));
 
-    Nm1 = nLevels - 1;
-    Nm2 = nLevels - 2;
-    Nm3 = nLevels - 3;
+    Nm1 = _nLevels - 1;
+    Nm2 = _nLevels - 2;
+    Nm3 = _nLevels - 3;
 
     _nparcels = static_cast<int>(pow(2, Nm1));
     parcelTimes.resize(_nparcels, 0);
     i_batchelor.resize(nVar, 0);
 
-    std::vector<double> levelLengths(nLevels);                                // Including all levels, but last 2 don't count
-    std::vector<double> levelTaus(nLevels);                                   // Smallest scale is 2 levels up from bottom
-    levelRates.resize(nLevels);
+    std::vector<double> levelLengths(_nLevels);                                // Including all levels, but last 2 don't count
+    std::vector<double> levelTaus(_nLevels);                                   // Smallest scale is 2 levels up from bottom
+    levelRates.resize(_nLevels);
 
-    for (int i = 0; i < nLevels; ++i) {
+    for (int i = 0; i < _nLevels; ++i) {
         levelLengths[i] = domainLength * pow((ReApproach == "dynamic_A" ? Anew : Afac), i);
 
         levelTaus[i] = tau0 * pow(levelLengths[i] / domainLength, 2.0 / 3.0) / _C_param;
@@ -256,7 +256,7 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
 
     LScHips = !ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)
     if (LScHips) {
-        for (int i = iEta + 1; i < nLevels; ++i) {
+        for (int i = iEta + 1; i < _nLevels; ++i) {
             levelTaus[i] = tau0 * pow(levelLengths[iEta] / domainLength, 2.0 / 3.0) / _C_param;
             levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
         }
@@ -634,7 +634,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
     int istart;
     int iend;
 
-    int nPmix = 1 << (nLevels - iLevel - 2);   // Number of parcels mixed together
+    int nPmix = 1 << (_nLevels - iLevel - 2);   // Number of parcels mixed together
     int ime;
 
     //---------- Mix left branch of iTree ----------
@@ -943,7 +943,7 @@ void HiPS::saveAllParameters(){
     }
 
     // Write user-defined input parameters
-    file << "nLevels " << nLevels << "\n";            ///< Number of hierarchical levels in the HiPS model
+    file << "nLevels " << _nLevels << "\n";            ///< Number of hierarchical levels in the HiPS model
     file << "domainLength " << _domainLength << "\n";  ///< Length of the computational domain
     file << "tau0 " << _tau0 << "\n";                  ///< Reference eddy turnover time
     file << "C_param " << _C_param << "\n";            ///< Model constant controlling turbulence behavior

@@ -54,12 +54,12 @@ private:
 
     int _nparcels;                                                 ///< Number of parcels
     int _currentIndex = 0;                                         ///< Member variable to keep track of current index of variables
-    int nLevels;                                                   ///< Number of tree levels
+    int _nLevels;                                                   ///< Number of tree levels
     int nVar;                                                      ///< Number of parcel variables (e.g., h, ysp)
     int nsp;                                                       ///< Number of species
-    int Nm1;                                                       ///< nLevels - 1 
-    int Nm2;                                                       ///< nLevels - 2                     
-    int Nm3;                                                       ///< nLevels - 3 
+    int Nm1;                                                       ///< _nLevels - 1
+    int Nm2;                                                       ///< _nLevels - 2
+    int Nm3;                                                       ///< _nLevels - 3
     int iEta;                                                      ///< Kolmogorov level (needed for variable Sc scalars)
     int nL;                                                        ///< Adjusted number of levels based on the Reynolds number
     bool forceTurb;                                                ///< Forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
@@ -68,7 +68,7 @@ private:
     bool performReaction;                                          ///< Flag indicating whether chemical reactions are performed in the simulation
         
     double time;                                                   ///< Current simulation time
-    double eddyRate_total;                                         ///< Total rate of all eddies 0 through nLevels-3
+    double eddyRate_total;                                         ///< Total rate of all eddies 0 through _nLevels-3
     double eddyRate_inertial;                                      ///< Total rate of all eddies 0 through iEta (= eddyRate_total if Sc=1)
     double Afac = 0.5;                                             ///< Level lengthscale reduction factor (0.5)
     double Re;                                                     ///< Reynolds number
