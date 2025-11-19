@@ -88,7 +88,7 @@ private:
     std::vector<double> _xc;                                       ///< Vector containing physical domain of flow particles
     std::vector<double> _xh;                                       ///< Vector containing physical domain of HiPS parcels
     
-    std::string  ReApproach;
+    std::string  _ReApproach;
     int outputIntervalEddy = 10;                                   ///< Default: write data every 10 eddy events
     double outputIntervalTime = 0.1;                               ///< Default: write data every 0.1s
     int eddyCounter = 0;                                           ///< Counter for eddy events
@@ -216,9 +216,9 @@ public:
     ///
     /// \param Re_              Reynolds number used to determine base tree level.
     /// \param domainLength     Domain length for spatial scaling.
-    /// \param tau0            Base time scale for the largest eddy.
+    /// \param tau0             Base time scale for the largest eddy.
     /// \param ScHips_          Vector of Schmidt numbers (one per variable).
-    /// \param ReApproach_      Strategy to convert continuous _Re to tree level:
+    /// \param ReApproach       Strategy to convert continuous _Re to tree level:
     ///                         - "rounding"     → Round to nearest discrete level
     ///                         - "probability"  → Use probabilistic interpolation between levels
     ///                         - "micromixing"  → Use fixed level with adjusted mixing rate
@@ -228,12 +228,12 @@ public:
     ///       with different _Re values. It supports runtime reconfiguration of
     ///       the tree without reinitializing the HiPS object.
     ///
-    /// \warning Ensure consistent `ReApproach_` handling across the simulation
+    /// \warning Ensure consistent `_ReApproach` handling across the simulation
     ///          to avoid inconsistencies.
     ///
     /// \see HiPS::set_tree(int, ...) for direct-level setup.
     ////////////////////////////////////////////////////////////////////////////
-    void set_tree(double Re_, double domainLength, double tau0, std::string ReApproach_ = "rounding");
+    void set_tree(double Re_, double domainLength, double tau0, std::string ReApproach = "rounding");
   
     ////////////////////////////////////////////////////////////////////////////
     /// \brief Assigns variables, their corresponding weights, and names to the

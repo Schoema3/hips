@@ -185,11 +185,11 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     _currentIndex = 0;
 } 
 
-void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReApproach_){
+void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReApproach){
     _Re = Re;
     _domainLength = domainLength;
     _tau0 = tau0;
-    ReApproach = ReApproach_;
+    _ReApproach = ReApproach;
 
     double baseLevelEstimate = (3.0 / 4) * log(1 / _Re) / log(_Afac);                               // Calculate the base tree level estimate (non-integer)
     int baseLevel;
