@@ -455,9 +455,9 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
         useEddyBasedWriting = true;  // Default to eddy-based writing
     }
 
-    sample_hips_eddy(_dtEE, iLevel);                               // Get first EE at _time 0+_dtEE
+    sample_hips_eddy(_dtEE, iLevel);                              // Get first EE at _time 0+_dtEE
     nEddies++;
-    eddyCounter = 0;                                              // Reset eddy counter at start
+    _eddyCounter = 0;                                             // Reset eddy counter at start
     lastOutputTime = 0.0;                                         // Reset last output time
 
     while (_time + _dtEE <= tRun) {
@@ -467,16 +467,16 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
 
         sample_hips_eddy(_dtEE, iLevel);
         nEddies++;
-        eddyCounter++;  
+        _eddyCounter++;
 
         //  Only check the selected mode (set in example code or by default)
-        bool writeByEddy = (useEddyBasedWriting && eddyCounter >= lastEddyOutput + _outputIntervalEddy);
+        bool writeByEddy = (useEddyBasedWriting && _eddyCounter >= lastEddyOutput + _outputIntervalEddy);
         bool writeByTime = (useTimeBasedWriting && _time - lastOutputTime >= _outputIntervalTime);
 
         if (shouldWriteData) {
             if (writeByEddy) {  //  Only write if using eddy-based writing
                 writeData(_realization, ++fileCounter, _time);
-                lastEddyOutput = eddyCounter;  //  Update last output event
+                lastEddyOutput = _eddyCounter;  //  Update last output event
             }
             else if (writeByTime) {  // Only write if using time-based writing
                  writeData(_realization, ++fileCounter, _time);
