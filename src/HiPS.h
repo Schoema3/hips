@@ -1,0 +1,1016 @@
+#pragma once
+
+#ifdef  REACTIONS_ENABLED
+#include "cantera/base/Solution.h"
+#include "cantera/thermo.h"
+#include "BatchReactor.h"
+#endif
+
+#include <iostream>
+#include <vector>
+#include <string>
+#include <vector>
+#include <memory>
+#include "RandomGenerator.h"
+
+
+/// \brief Implementation of the HiPS (Hierarchical Parcel Swapping) model.
+///
+/// This file contains the core implementation of the HiPS model, used for
+/// simulating turbulent mixing. It supports optional functionality for chemical
+/// reactions, which can be enabled by defining the `REACTIONS_ENABLED` macro.
+///
+/// Dependencies:
+/// - YAML-CPP: Used for reading and parsing configuration files.
+/// - Batch reactor classes (`BatchReactor_cvode.h`, `BatchReactor_cantera.h`):
+///   Included only when `REACTIONS_ENABLED` is defined, enabling reaction
+///   modeling.
+/// - Standard C++ libraries: Utilized for input/output, mathematical computations,
+///   and data handling.
+///
+/// \note Define `REACTIONS_ENABLED` at compile time to enable chemical reaction
+/// functionality.
+class HiPS {
+
+public:
+  
+    int _realization;                                              ///< Number of realizations
+    std::vector<std::shared_ptr<std::vector<double>>> _varData;    ///< Vector of pointers to vector
+    std::vector<double> _varRho;                                   ///< Density
+    std::vector<int>    _pLoc;                                     ///< Parcel index array for fast implementation of swaps
+    std::vector<double> _wPar;                                     ///< Parcel volume fractions
+
+
+#ifdef REACTIONS_ENABLED
+    std::shared_ptr<Cantera::ThermoPhase> _gas;                    ///< Shared pointer to a Cantera thermochemistry object
+    std::shared_ptr<BatchReactor> _bRxr;                           ///< Unique pointer to the integrator object
+#endif
+
+    double _domainLength;                                          ///< Length of domain (m)
+    double _tau0;                                                  ///< Integral timescale
+    double _C_param;                                               ///< Eddy frequency parameter
+    
+private:
+
+    int _nparcels;                                                 ///< Number of parcels
+    int _currentIndex = 0;                                         ///< Member variable to keep track of current index of variables
+    int _nLevels;                                                  ///< Number of tree levels
+    int _nVar;                                                     ///< Number of parcel variables (e.g., h, ysp)
+    int _nsp;                                                      ///< Number of species
+    int _Nm1;                                                      ///< _nLevels - 1
+    int _Nm2;                                                      ///< _nLevels - 2
+    int _Nm3;                                                      ///< _nLevels - 3
+    int _iEta;                                                     ///< Kolmogorov level (needed for variable Sc scalars)
+    int _nL;                                                       ///< Adjusted number of levels based on the Reynolds number
+    bool _forceTurb;                                               ///< Forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
+
+    bool _LScHips;                                                 ///< HiPS schmidt number
+    bool _performReaction;                                         ///< Flag indicating whether chemical reactions are performed in the simulation
+        
+    double _time;                                                  ///< Current simulation time
+    double _eddyRate_total;                                        ///< Total rate of all eddies 0 through _nLevels-3
+    double _eddyRate_inertial;                                     ///< Total rate of all eddies 0 through _iEta (= _eddyRate_total if Sc=1)
+    double _Afac = 0.5;                                            ///< Level lengthscale reduction factor (0.5)
+    double _Re;                                                    ///< Reynolds number
+    double _dtEE;                                                  ///< Time increment to next eddy event
+    double _probability;                                           ///< Probability value for probability-based solution
+    double _lStar;                                                 ///< Length of the level associated with the Reynolds number
+    double _Anew;                                                  ///< Adjusted level length scale reduction factor for dynamic adjustment of reduction factor
+
+    RandomGenerator rand;
+    
+    std::vector<int>   _i_plus;                                    ///< ceil(_i_batchelor)
+    std::vector<double> _ScHips;                                   ///< Vector containing Schmidt numbers related to each variable
+    std::vector<std::string> _varName;                             ///< Vector containing the names of parcel variables
+    std::vector<double> _parcelTimes;                              ///< Current times corresponding to the parcel states
+    std::vector<double> _levelRates;                               ///< List of eddy event rates at each level
+    std::vector<double> _i_batchelor;                              ///< Batchelor level for variable Sc scalars; NOTE: double, as in, between levels
+    std::vector<double> _xc;                                       ///< Vector containing physical domain of flow particles
+    std::vector<double> _xh;                                       ///< Vector containing physical domain of HiPS parcels
+    
+    std::string  _ReApproach;
+    int _outputIntervalEddy = 10;                                  ///< Default: write data every 10 eddy events
+    double _outputIntervalTime = 0.1;                              ///< Default: write data every 0.1s
+    int _eddyCounter = 0;                                          ///< Counter for eddy events
+    double _lastOutputTime = 0.0;                                  ///< Last time data was written
+    bool _useEddyBasedWriting = false;                             ///< Tracks if eddy writing is set
+    bool _useTimeBasedWriting = false;                             ///< Tracks if time writing is set
+    const int _DEFAULT_EDDY_INTERVAL = 1000;                       ///< Default: Write every 1000 eddies
+    const double _DEFAULT_TIME_INTERVAL = 0.1;                     ///< Default: Write every 0.1s
+
+public:
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Constructor for initializing a HiPS object without building the
+    /// tree immediately.
+    ///
+    /// This constructor is designed for simulations where the HiPS tree must be
+    /// configured dynamically, such as grid-based simulations with
+    /// cell-specific turbulence properties. The tree can be created or updated
+    /// later using one of the `set_tree` functions.
+    /// \param C_param          Eddy coefficient controlling mixing rate.
+    /// \param forceTurb        Flag to enforce turbulence activation.
+    /// \param nVar_            Number of transported variables.
+    /// \param performReaction_ Enables chemical reactions if set to true.
+    /// \param cantSol          Cantera solution object (required when
+    ///                         REACTIONS_ENABLED).
+    /// \param seed             Random seed (negative for random initialization).
+    /// \param realization      Realization index for ensemble or parallel runs.
+    ///
+    /// \note This constructor does not call any `set_tree()` function. The user
+    ///       is responsible for building the tree explicitly by calling either
+    ///       version of `set_tree(...)`.
+    ///
+    /// \note See the full constructor for chemical integrator behavior under
+    ///       `REACTIONS_ENABLED`.
+    ///
+    /// \see HiPS::set_tree() for deferred tree construction.
+    ////////////////////////////////////////////////////////////////////////////
+    HiPS(double C_param,
+         bool forceTurb,
+         int nVar_,
+         std::vector<double> &ScHips_,
+         bool performReaction,
+         std::shared_ptr<void> vcantSol = nullptr,
+         int seed = 10,
+         int realization = 1);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Constructor for initializing the full HiPS tree at the time of
+    /// object creation.
+    ///
+    /// This constructor is intended for simulations where the domain structure
+    /// and turbulence properties are fixed throughout the run (e.g., standalone
+    /// mixing or reacting cases). The HiPS tree is initialized immediately
+    /// using the provided parameters, and the structure remains constant
+    /// throughout the simulation.
+    ///
+    /// \param nLevels          Number of levels in the HiPS binary tree (can be
+    ///                         adjusted for high Sc).
+    /// \param domainLength     Domain length for defining spatial scales.
+    /// \param tau0             Characteristic time scale for the smallest eddy.
+    /// \param C_param          Eddy coefficient controlling mixing rate.
+    /// \param forceTurb        Flag to enforce turbulence activation.
+    /// \param nVar_            Number of transported variables.
+    /// \param ScHips_          Vector of Schmidt numbers (one per variable).
+    /// \param performReaction_ Enables chemical reactions if set to true.
+    /// \param cantSol          Cantera solution object (required when
+    ///                         REACTIONS_ENABLED).
+    /// \param seed             Random seed (negative for random initialization).
+    /// \param realization      Realization index for ensemble or parallel runs.
+    ///
+    /// \note This constructor calls `set_tree(nLevels, domainLength, tau0,
+    ///       ScHips)` internally to fully build the tree at initialization
+    ///       time. This setup is optimal for cases where tree reconfiguration
+    ///       is not needed during runtime.
+    ///
+    /// \note If `REACTIONS_ENABLED` is defined, the default chemical integrator
+    ///       is `BatchReactor_cvode`. To use `BatchReactor_cantera` instead,
+    ///       uncomment the corresponding line in the constructor code.
+    ///
+    /// \see HiPS::set_tree() for the internal tree setup logic.
+    ////////////////////////////////////////////////////////////////////////////
+    HiPS(int nLevels,
+         double domainLength,
+         double tau0,
+         double C_param,
+         bool forceTurb,
+         int nVar_,
+         std::vector<double> &ScHips_,
+         bool performReaction,
+         std::shared_ptr<void> vcantSol = nullptr,
+         int seed = 10,
+         int realization = 1);
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Sets up the HiPS tree using explicitly specified tree parameters.
+    ///
+    /// This method builds the binary HiPS tree using a user-defined number of
+    /// levels and physical parameters. It also automatically adjusts the number
+    /// of levels to account for high Schmidt numbers, ensuring that micromixing
+    /// is properly resolved.
+    ///
+    /// \param nLevels          Number of levels in the HiPS tree.
+    /// \param domainLength     Domain size for determining eddy length scales.
+    /// \param tau0            Time scale of the smallest eddy (Kolmogorov scale).
+    /// \param ScHips_          Vector of Schmidt numbers (one per variable).
+    ///
+    /// \note This function is used by the full constructor and can also be
+    ///       called manually after using the dynamic constructor.
+    ///
+    /// \warning The number of levels may be increased automatically for large
+    ///          Schmidt numbers to ensure accurate scalar mixing across scales.
+    ////////////////////////////////////////////////////////////////////////////
+    void set_tree(int nLevels, double domainLength, double tau0);
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Dynamically builds the HiPS tree based on Reynolds number and a
+    /// selected strategy.
+    ///
+    /// This method configures the HiPS tree using a continuous Reynolds number
+    /// and one of several initialization strategies. It is intended for
+    /// simulations where local turbulence conditions change over time or space,
+    /// requiring the tree to be updated dynamically.
+    ///
+    /// \param Re_              Reynolds number used to determine base tree level.
+    /// \param domainLength     Domain length for spatial scaling.
+    /// \param tau0             Base time scale for the largest eddy.
+    /// \param ScHips_          Vector of Schmidt numbers (one per variable).
+    /// \param ReApproach       Strategy to convert continuous _Re to tree level:
+    ///                         - "rounding"     → Round to nearest discrete level
+    ///                         - "probability"  → Use probabilistic interpolation between levels
+    ///                         - "micromixing"  → Use fixed level with adjusted mixing rate
+    ///                         - "dynamic_A"    → Adjust geometric scale factor A to fit _Re
+    ///
+    /// \note This method is ideal for Lagrangian simulations using grid cells
+    ///       with different _Re values. It supports runtime reconfiguration of
+    ///       the tree without reinitializing the HiPS object.
+    ///
+    /// \warning Ensure consistent `_ReApproach` handling across the simulation
+    ///          to avoid inconsistencies.
+    ///
+    /// \see HiPS::set_tree(int, ...) for direct-level setup.
+    ////////////////////////////////////////////////////////////////////////////
+    void set_tree(double Re_, double domainLength, double tau0, std::string ReApproach = "rounding");
+  
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Assigns variables, their corresponding weights, and names to the
+    /// parcels in the HiPS tree.
+    ///
+    /// This function projects the provided variables onto the parcels within
+    /// the HiPS tree structure, using their corresponding weights. It ensures
+    /// that each parcel in the tree is associated with the correct variable and
+    /// weight, along with a descriptive name for better identification.
+    ///
+    /// \param v        Vector of variables to be assigned to the parcels in the
+    ///                 HiPS tree.
+    /// \param w        Vector of weights corresponding to each variable or
+    ///                 parcel.
+    /// \param varN     String representing the name of the variable being
+    ///                 assigned.
+    ///
+    /// \note The size of `v` and `w` must match to ensure a one-to-one
+    ///       correspondence between variables and their weights. The function
+    ///       does not perform size validation internally.
+    ///
+    /// \warning Ensure that the weights in `w` are normalized or appropriately
+    ///          scaled, as they directly influence the projection and
+    ///          subsequent simulations.
+    ////////////////////////////////////////////////////////////////////////////
+    void set_varData(      std::vector<double> &v,
+                           std::vector<double> &w,
+                     const std::string &varN);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Assigns variables, weights, names, and densities to the parcels
+    /// in the HiPS tree.
+    ///
+    /// This overloaded function assigns the specified variables, along with
+    /// their associated weights, names, and densities, to the parcels within
+    /// the HiPS tree structure. The function incorporates particle density
+    /// during the projection process, ensuring a more accurate representation
+    /// of parcel properties in the simulation.
+    ///
+    /// \param v        Vector of variables to be assigned to the HiPS tree.
+    /// \param w        Vector of weights corresponding to each variable or
+    ///                 parcel.
+    /// \param varN     String representing the name of the variable being
+    ///                 assigned.
+    /// \param rho      Vector of densities corresponding to each flow particle.
+    ///
+    /// \note This function is specifically overloaded to account for particle
+    ///       density, which enhances the accuracy of the parcel projection.
+    ///       Ensure that the size of `v`, `w`, and `rho` are consistent.
+    ///
+    /// \warning The values in `rho` should be physically meaningful and
+    ///          consistent with the simulation's requirements. Improper density
+    ///          values may lead to inaccuracies or instabilities in the
+    ///          simulation.
+    ////////////////////////////////////////////////////////////////////////////
+    void set_varData(      std::vector<double> &v,
+                           std::vector<double> &w,
+                     const std::string &varN,
+                     const std::vector<double> &rho);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Retrieves the final data from the simulation.
+    ///
+    /// This function returns the final state of the simulation, packaged as a
+    /// vector of vectors. It is particularly useful when integrating HiPS as a
+    /// subgrid model in CFD simulations, enabling seamless transfer of data for
+    /// further analysis or post-processing.
+    ///
+    /// Projects data from HiPS _varData (size _nparcels) to number of CFD
+    /// particles corresponding to initial set_varData call
+    ///
+    /// \return A vector of vectors containing the final results, where:
+    ///         - Each inner vector represents a specific variable or property.
+    ///         - The outer vector contains all variables across parcels.
+    ///
+    /// \note
+    /// - This function is specifically designed for use when HiPS is employed
+    ///   as a subgrid model in CFD simulations.
+    /// - The structure of the returned data ensures compatibility with CFD
+    ///   solvers that require parcel-level data.
+    ///
+    /// \warning
+    /// - Ensure the simulation has reached completion before calling this
+    ///   function to avoid incomplete or inconsistent data.
+    /// - The returned data structure should be interpreted according to the
+    ///   simulation setup and variable ordering.
+    ////////////////////////////////////////////////////////////////////////////
+    std::vector<std::vector<double>> get_varData();
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Retrieves final simulation data, including both values and
+    /// densities.
+    ///
+    /// This function processes the HiPS data and projects both the values and
+    /// densities back onto the flow particles. It returns a vector of pairs,
+    /// where each pair contains the values and corresponding densities for a
+    /// specific variable. This function is designed to support HiPS as a
+    /// subgrid model in CFD simulations, ensuring compatibility with solvers
+    /// that require both values and density information.
+    ///
+    /// \return A vector of pairs:
+    ///         - Each pair consists of two vectors:
+    ///             - The first vector contains the final results for the values.
+    ///             - The second vector contains the corresponding density results.
+    ///
+    /// \note
+    /// - This function is tailored for integrating HiPS as a subgrid model in
+    ///   CFD simulations, providing both value and density data for accurate
+    ///   modeling.
+    /// - Ensure that all HiPS parcels are properly initialized and contain
+    ///   valid values and densities before invoking this function.
+    ////////////////////////////////////////////////////////////////////////////
+    std::pair< std::vector<std::vector<double>>, std::vector<double>>
+    get_varData_with_density();
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Sets the interval (in simulation time) for writing simulation
+    /// data.
+    ///
+    /// Calling this function enables time-based writing and disables eddy-based
+    /// writing. If the user does not call this function or
+    /// `setOutputIntervalEddy()`, the default behavior is eddy-based writing
+    /// every 1000 eddies.
+    ///
+    /// \param interval The time interval (in seconds) between data writes
+    ///                 (e.g., `0.1` writes data every 0.1s).
+    ///
+    /// \note Calling this function automatically disables eddy-based writing
+    ///       (`setOutputIntervalEddy()`). To revert to default settings, the
+    ///       user must explicitly set a new interval or avoid calling this
+    ///       function.
+    ////////////////////////////////////////////////////////////////////////////
+    void setOutputIntervalTime(double interval);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Sets the interval (in number of eddy events) for writing
+    /// simulation data.
+    ///
+    /// Calling this function enables eddy-based writing and disables time-based
+    /// writing. If the user does not call this function or
+    /// `setOutputIntervalTime()`, the default interval is set to 1000 eddy
+    /// events.
+    ///
+    /// \param interval The number of eddy events between data writes (e.g.,
+    ///                 `1000` writes data every 1000 eddies).
+    ///
+    /// \note Calling this function automatically disables time-based writing
+    ///       (`setOutputIntervalTime()`). To revert to default settings, the
+    ///       user must explicitly set a new interval or avoid calling this
+    ///       function.
+    ////////////////////////////////////////////////////////////////////////////
+    void setOutputIntervalEddy(int interval);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Writes simulation data to a file for a specific realization,
+    /// time, and file index.
+    ///
+    /// This function saves the current state of simulation data to a file,
+    /// organized by realization and time step. The output is stored in a
+    /// subdirectory corresponding to the realization index (e.g., `rlz_00000`,
+    /// `rlz_00001`), and the file is named sequentially (e.g.,
+    /// `Data_00001.dat`, `Data_00002.dat`) to maintain an ordered record of
+    /// outputs. The simulation time is also written into the file for
+    /// reference.
+    ///
+    /// ### Key Operations:
+    /// 1. Creates a subdirectory named `rlz_XXXXX` based on the realization
+    ///    index.
+    /// 2. Constructs the output filename using the sequential file index.
+    /// 3. Writes the simulation variables (e.g., temperature, species mass
+    ///    fractions) in scientific format with high precision.
+    ///
+    /// \param real        Realization index used to name the subdirectory
+    ///                    (`rlz_XXXXX`).
+    /// \param ifile       Sequential index for naming the output file within
+    ///                    the realization.
+    /// \param outputTime  Simulation time associated with the data, included in
+    ///                    the file header.
+    ///
+    /// \note
+    /// - The function ensures the output directory for the specified
+    ///   realization is created if it does not exist.
+    /// - It writes all data with high precision for accurate post-processing.
+    ///
+    /// \warning
+    /// - If the function fails to create the directory or open the output file,
+    ///   it may throw an error or silently fail. Ensure file system permissions
+    ///   and disk space are sufficient.
+    ////////////////////////////////////////////////////////////////////////////
+    void writeData(int real, const int ifile, const double outputTime);
+
+    int get_nparcels() const { return _nparcels; }
+    
+    const std::vector<int>& get_pLoc() const { return _pLoc; }
+    const std::vector<std::shared_ptr<std::vector<double>>>& get_HipsVarData_ptr() const { return _varData; } // internal HiPS varData, sized to _nparcels
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Runs the HiPS simulation, advancing the solution using eddy
+    /// events.
+    ///
+    /// This function performs the core HiPS loop: sampling eddy events,
+    /// performing subtree swaps, advancing parcels, and optionally triggering
+    /// reactions. It runs until the specified simulation time (`tRun`) is
+    /// reached and writes data periodically based on either eddy count or
+    /// elapsed simulation time.
+    ///
+    /// ### Key operations:
+    /// - Samples the next eddy event time (`_dtEE`)
+    /// - Selects and swaps subtrees at a given level
+    /// - Applies micromixing and reactions (if enabled)
+    /// - Writes output data either:
+    ///     - Every `_outputIntervalEddy` eddy events (if enabled), or
+    ///     - Every `_outputIntervalTime` seconds (if enabled)
+    /// - At the end of the simulation, calls `saveAllParameters()` to store
+    ///   input and configuration data in `../post/parameters.dat`.
+    ///
+    /// \param tRun              Total simulation run time (in seconds).
+    /// \param shouldWriteData   Flag to enable/disable periodic data writing.
+    ///
+    /// \note To control output frequency, use:
+    ///       - `setOutputIntervalEddy(int interval)`
+    ///       - `setOutputIntervalTime(double interval)`
+    ///       - If neither is called, the default behavior is writing every 1000
+    ///         eddy events.
+    ///
+    /// \note Output files are saved using `writeData(realization, ...)` and
+    ///       include the realization index.
+    ///
+    /// \note At the end of the run, `saveAllParameters()` is automatically
+    ///       called to document simulation settings.
+    ///
+    /// \warning Long simulations may generate many output files. Adjust output
+    ///          intervals or disable writing (`shouldWriteData = false`) to
+    ///          manage storage needs.
+    ///
+    /// \see HiPS::writeData(), HiPS::saveAllParameters()
+    ////////////////////////////////////////////////////////////////////////////
+    void calculateSolution(const double tRun, bool shouldWriteData =false);
+
+private:
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Projects values from flow particles onto HiPS parcels assuming
+    /// constant density.
+    ///
+    /// This function maps the values of flow particles onto HiPS parcels under
+    /// the assumption of constant density. The projection is performed using
+    /// the following equation:
+    /// \f[
+    /// \sum_{i=0}^{\text{Number of Flow Particles (FP)}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i} =
+    /// \sum_{j=0}^{\text{Number of HiPS Parcels (HP)}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j}
+    /// \f]
+    /// This ensures conservation of properties such as mass or concentration
+    /// during the projection.
+    ///
+    /// \param vcfd     Vector of variables from flow particles to be mapped to
+    ///                 HiPS parcels.
+    ///
+    /// \param weight   Vector of weights, with one weight assigned to each
+    ///                 flow particle.
+    ///
+    /// \return         Vector of projected values for HiPS parcels.
+    ///
+    /// \note The function assumes constant density throughout the domain. For
+    ///       cases with varying density, use an appropriate overloaded function
+    ///       or method.
+    ///
+    /// \warning Ensure that the `vcfd` and `weight` vectors have matching
+    ///          sizes, as any discrepancy may result in undefined behavior or
+    ///          incorrect projections.
+    ////////////////////////////////////////////////////////////////////////////
+    std::vector<double> projection(std::vector<double> &vcfd, std::vector<double> &weight);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Project values from CFD cells onto HiPS parcels, accounting for
+    /// cell density.
+    ///
+    /// Projects a CFD field onto HiPS parcels using density weighting so that
+    /// both the property (mass-weighted) and the density are conserved.
+    ///
+    /// \param vcfd     CFD cell values to project (aligned with CFD cells).
+    /// \param weight   CFD cell weights (e.g., widths) used to build the CFD
+    ///                 grid.
+    /// \param density  CFD cell densities aligned with \p vcfd.
+    ///
+    /// \return A pair {vh, rho_h} where:
+    ///         - \c vh     : parcel-averaged values on the HiPS parcels
+    ///         - \c rho_h  : parcel-averaged densities on the HiPS parcels
+    ///
+    /// \details Parcel averages are formed via geometric overlaps between CFD
+    ///     cells and HiPS parcels:
+    /// \f[
+    ///   \phi_h(i) =
+    ///   \frac{\sum_j \rho_c(j)\,\phi_c(j)\,\Delta x_{ij}}
+    ///        {\sum_j \rho_c(j)\,\Delta x_{ij}},\qquad
+    ///   \rho_h(i) =
+    ///   \frac{\sum_j \rho_c(j)\,\Delta x_{ij}}
+    ///        {\sum_j \Delta x_{ij}},
+    /// \f]
+    /// where \f$\Delta x_{ij}\f$ is the overlap length between CFD cell \f$j\f$
+    /// and parcel \f$i\f$.
+    ///
+    /// \par Consistency with parcel weights
+    /// The overlap is scaled by \f$w_{\mathrm{par}}(i)/\ell_i\f$ so
+    /// forward/backward projection remain consistent when \c _wPar changes
+    /// during chemistry. This preserves the mass-weighted integrals:
+    /// \f[
+    ///   \sum_i \rho_h(i)\, w_{\mathrm{par}}(i) \approx \sum_j \rho_c(j)\, w_c(j), \qquad
+    ///   \sum_i \rho_h(i)\,\phi_h(i)\, w_{\mathrm{par}}(i) \approx
+    ///   \sum_j \rho_c(j)\,\phi_c(j)\, w_c(j).
+    /// \f]
+    ///
+    /// \note This overload includes density in the computation. Ensure that \p
+    ///     vcfd, \p weight, and \p density have identical sizes. Weights are
+    ///     typically normalized (\f$\sum_j w_c(j)=1\f$), but only their
+    ///     relative magnitudes matter.
+    ///
+    /// \warning Size mismatches among \p vcfd, \p weight, and \p density will
+    ///          lead to incorrect projections. Verify inputs before calling.
+    ///          Non-positive parcel lengths or negative weights are invalid.
+    ///
+    /// \see set_varData(), get_varData_with_density(),
+    ///      projection_back_with_density().
+    ////////////////////////////////////////////////////////////////////////////
+    std::pair<std::vector<double>, std::vector<double>>
+    projection(      std::vector<double> &vcfd,
+                     std::vector<double> &weight,
+               const std::vector<double> &density);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Generates a physical domain for flow particles based on their
+    /// weights.
+    ///
+    /// This function creates a grid of positions for flow particles, where each
+    /// particle occupies a portion of the domain proportional to its weight.
+    /// The total length of the domain is assumed to be 1, and the sum of all
+    /// portions equals 1. The resulting vector represents the positions of
+    /// particles along the domain.
+    ///
+    /// \param w    Vector of weights, where each weight determines the
+    ///             portion of the domain occupied by a particle.
+    ///
+    /// \return     A vector of grid positions for the flow particles.
+    ///
+    /// \note The function assumes that the weights in `w` are normalized or
+    ///       properly scaled such that the total sum matches the domain length
+    ///       of 1. If the weights are not normalized, the resulting grid may
+    ///       not represent a valid physical domain.
+    ///
+    /// \warning Ensure that the input weight vector `w` is non-empty and
+    ///          contains positive values. Zero or negative weights may lead to
+    ///          undefined behavior or invalid domain generation.
+    ////////////////////////////////////////////////////////////////////////////
+    std::vector<double> setGridCfd(std::vector<double> &w);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Generates a physical domain for HiPS parcels.
+    ///
+    /// This function creates a grid of positions for HiPS parcels, where each
+    /// parcel occupies an equal portion of the physical domain. The total size
+    /// of the domain corresponds to the size specified in the `setGridCfd()`
+    /// function, ensuring consistency between the HiPS and flow particle
+    /// domains.
+    ///
+    /// \param N    The number of grid points for the HiPS parcels.
+    ///
+    /// \return     A vector representing the grid positions for the HiPS
+    ///             parcels.
+    ///
+    /// \note The function assumes that the physical domain is evenly divided
+    ///       among the parcels. Ensure that the number of grid points (`N`) is
+    ///       consistent with the physical domain size defined in the simulation
+    ///       setup.
+    ///
+    /// \warning If `N` is less than or equal to zero, the function may produce
+    ///          an empty or invalid grid. Validate the input to avoid
+    ///          unexpected behavior.
+    ////////////////////////////////////////////////////////////////////////////
+    std::vector<double> setGridHips(int N);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Samples stochastic eddy events on the HiPS tree, determining the
+    /// time increment and tree level.
+    ///
+    /// This function performs stochastic sampling to determine when (\f$\Delta
+    /// t_{EE}\f$) and at what level (\f$i_{Level}\f$) in the HiPS tree the next
+    /// eddy event will occur. The time to the next eddy event is sampled based
+    /// on the total eddy rate. The tree level of the event is chosen depending
+    /// on whether it occurs in the inertial or Batchelor region of turbulence.
+    ///
+    /// \param dt       Time increment to the next eddy event (\f$\Delta
+    ///                 t_{EE}\f$), sampled stochastically.
+    /// \param iLevel   Tree level (\f$i_{Level}\f$) at which the eddy event
+    ///                 occurs, determined probabilistically.
+    ///
+    /// \note The function distinguishes between events in the inertial and
+    ///       Batchelor regions based on turbulence properties. Ensure that the
+    ///       HiPS tree is correctly initialized before calling this function.
+    ///
+    /// \warning The stochastic nature of this function requires a properly
+    ///          seeded random generator to ensure reproducibility in
+    ///          simulations where determinism is necessary.
+    ////////////////////////////////////////////////////////////////////////////
+    void sample_hips_eddy(double &dt, int &iLevel);
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Performs eddy events by swapping parcels within the HiPS tree.
+    ///
+    /// This function executes parcel swaps by randomly selecting nodes at the
+    /// specified level of the HiPS tree. It identifies the starting indices of
+    /// subtrees to be swapped, calculates the number of parcels to swap, and
+    /// performs the swap operation efficiently using bitwise operations. The
+    /// process mimics the hierarchical structure of turbulent mixing.
+    ///
+    /// \param iLevel   Input level of the tree where the base of the swap occurs.
+    /// \param iTree    Output parameter indicating which subtree at the given
+    ///                 level is selected for swapping.
+    ///
+    /// The process is as follows:
+    /// (1) Randomly select a node on `iLevel`.
+    /// (2) Traverse two levels down to identify subtrees `Q` and `R`, where
+    ///     `Q` and `R` are random binary values (0 or 1).
+    /// (3) Determine the starting indices of the `Q-tree` and `R-tree` for the
+    ///     swap and compute the number of parcels.
+    /// (4) Swap the corresponding parcels between the subtrees Q and R.
+    ///
+    /// ### Example for a 6-level tree:
+    /// - Tree levels: 0, 1, 2, 3, 4, 5.
+    /// - If `iLevel == 1`:
+    ///   - Suppose the selected node `i` on the iLevel is `i = 01`.
+    ///   - Suppose the Subtrees for swapping are `Q = 00` and `R = 11`.
+    ///   - In binary terms, the swap is equivalent to exchanging `iQs`
+    ///     with `iRs`, where:
+    ///     - `i = 01`
+    ///     - `Q = 00`
+    ///     - `R = 11`
+    ///     - `s = **` (remaining bits).
+    ///   - Swapping parcels `0100**` with `0111**`
+    ///     respectively `(01|00|**)` with `(01|11|**)`.
+    ///
+    /// ### Implementation:
+    /// - Bitwise operations are used for efficient calculations of powers of 2.
+    /// - The swap operation is performed by flipping the bits for `Q` and `R`,
+    ///   which effectively swaps the subtrees.
+    ///
+    /// ### Visual Representation of Tree:
+    /// ```
+    /// Level 0:           *  (root)             ///
+    ///                  /         \             ///
+    /// Level 1:        *          (*)           ///
+    ///                / \        /   \          ///
+    /// Level 2:      *   *      *     *         ///
+    ///              /\   /\    / \   / \        ///
+    /// Level 3:    *         [*]  * *  [*]      ///
+    /// Level 4:   /|         / \       / \      ///
+    /// Level 4:  * *   ...  *   *     *   *     ///
+    /// Level 5: 00 01  ... 16...19   28...31    ///
+    /// ```
+    /// - Subtrees `Q` and `R` correspond to specific branches of the tree.
+    /// - Swapping occurs within highlighted [] sections of Level 3, identified
+    ///   by bit manipulation. Whereas leaf 16 swaps with 28,
+    ///   17 <-> 29, 18 <-> 30, and 19 <-> 31
+    ///
+    /// \warning Ensure that the input `iLevel` is within the valid range of
+    ///          tree levels and that the tree is properly initialized before
+    ///          invoking this function.
+    ////////////////////////////////////////////////////////////////////////////
+    void selectAndSwapTwoSubtrees(const int iLevel, int &iTree);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Projects HiPS parcel values back onto the flow particles.
+    ///
+    /// This function reverses the projection process, redistributing the values
+    /// stored in the HiPS parcels back to the flow particles. It ensures
+    /// conservation of properties such as mass or concentration by maintaining
+    /// consistency between the HiPS parcels and flow particles.
+    ///
+    /// ### Conservation Principle:
+    /// The projection follows the equation:
+    /// \f[
+    /// \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j} =
+    /// \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i}
+    /// \f]
+    /// where:
+    /// - \f$\phi_{\text{HP}}\f$: Values in HiPS parcels.
+    /// - \f$\mathrm{d}x_{\text{HP}}\f$: Differential volume elements for HiPS parcels.
+    /// - \f$\phi_{\text{FP}}\f$: Values in flow particles.
+    /// - \f$\mathrm{d}x_{\text{FP}}\f$: Differential volume elements for flow particles.
+    ///
+    /// \param vh   Vector of values from HiPS parcels to be projected back.
+    ///
+    /// \return     Vector of values redistributed onto the flow particles.
+    ///
+    /// \note
+    /// - This function is the reverse of the projection function, ensuring
+    ///   consistency in value transfers between HiPS parcels and flow
+    ///   particles.
+    /// - The input vector \p vh should be consistent with the HiPS parcel
+    ///   structure.
+    ///
+    /// \warning
+    /// - Ensure that the HiPS parcels have been properly populated with values
+    ///   before invoking this function.
+    /// - Mismatches in data sizes between HiPS parcels and flow particles may
+    ///   lead to unexpected results.
+    ///
+    /// \example:
+    ///     cfd:
+    ///     i=    0         1         2         3
+    ///      |    *    |    *    |    *    |    *    |
+    ///     HiPS:
+    ///      | * | * | * | * | * | * | * | * | * | * |
+    ///     j= 0   1   2   3   4   5   6   7   8   9
+    ////////////////////////////////////////////////////////////////////////////
+    std::vector<double> projection_back(std::vector<double> &vb);                       
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Projects HiPS parcel values and densities back onto the flow
+    /// particles (CFD cells).
+    ///
+    /// This function reverses the projection process, redistributing both the
+    /// values and densities stored in the HiPS parcels back to the flow
+    /// particles. It ensures conservation of both the property values and
+    /// densities, maintaining consistency between the HiPS parcels and flow
+    /// particles.
+    ///
+    /// ### Conservation Principle:
+    /// The projection follows the equation:
+    /// \f[
+    /// \sum_{j=0}^{\text{Number of HP}} (\phi_{\text{HP}} \, \rho_{\text{HP}} \, \mathrm{d}x_{\text{HP}})_{j} =
+    /// \sum_{i=0}^{\text{Number of FP}} (\phi_{\text{FP}} \, \rho_{\text{FP}} \, \mathrm{d}x_{\text{FP}})_{i}
+    /// \f]
+    /// where:
+    /// - \f$\phi_{\text{HP}}\f$: Values in HiPS parcels.
+    /// - \f$\rho_{\text{HP}}\f$: Densities in HiPS parcels.
+    /// - \f$\mathrm{d}x_{\text{HP}}\f$: Differential volume elements for HiPS parcels.
+    /// - \f$\phi_{\text{FP}}\f$: Values in flow particles.
+    /// - \f$\rho_{\text{FP}}\f$: Densities in flow particles.
+    /// - \f$\mathrm{d}x_{\text{FP}}\f$: Differential volume elements for flow particles.
+    ///
+    /// \note In the new implementation, geometric overlaps are scaled by
+    ///       \f$w_{\text{Par}}/\mathrm{d}x_{\text{HP}}\f$ so that mass is
+    ///       preserved when parcel volumes change during chemistry.
+    ///
+    /// \param vh       Vector of values from HiPS parcels to be projected back.
+    /// \param rho_h    Vector of density values from HiPS parcels.
+    /// \param rho_c    (output) Vector to receive the densities redistributed
+    ///                 to the flow particles.
+    ///
+    /// \return         A vector containing the values projected back onto the
+    ///                 flow particles.
+    ///
+    /// \note
+    ///     - This function is the reverse of the projection function that
+    ///       includes density.
+    ///     - The input vectors \p vh and \p rho_h should be consistent with the
+    ///       HiPS parcel structure and sizes.
+    ///
+    /// \warning
+    ///     - Ensure that the HiPS parcels are populated with valid values and
+    ///       densities before invoking this function.
+    ///     - Mismatches in data sizes between HiPS parcels and flow particles
+    ///       may lead to inaccurate results.
+    ///       //////////////////////////////////////////////////////////////////
+    std::vector<double> projection_back_with_density(std::vector<double> &vh,
+                                                     std::vector<double> &rho_h,
+                                                     std::vector<double> &rho_c);
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Advances the HiPS model by simulating micromixing and reactions
+    /// at a specific tree level.
+    ///
+    /// This function models the interaction of parcels within the HiPS tree
+    /// structure at a given level, simulating the effects of micromixing and
+    /// reactions. The process involves determining whether conditions for
+    /// micromixing are met and, if so, triggering reactions and mixing for
+    /// parcels under the specified node. The operation depends on turbulence
+    /// forcing and micromixing thresholds.
+    ///
+    /// \param iLevel   The level of the HiPS tree at which the eddy event
+    ///                 occurs.
+    /// \param iTree    The root node of the eddy event at the specified level.
+    ///
+    /// ### Key Operations:
+    /// - Identifies parcels within the specified tree level.
+    /// - Checks whether conditions for micromixing are satisfied.
+    /// - Applies turbulence forcing if enabled.
+    /// - Triggers reactions for the first variable that meets micromixing
+    ///   conditions.
+    /// - Applies mixing to subsequent variables without additional reactions.
+    ///
+    /// \note Reactions are only performed for the first variable that satisfies
+    ///       the micromixing conditions. For all subsequent variables, only
+    ///       mixing operations are performed.
+    ///
+    /// \warning Ensure that the HiPS tree structure is properly initialized and
+    ///          that `iLevel` and `iTree` correspond to valid levels and nodes
+    ///          within the tree to prevent undefined behavior.
+    ////////////////////////////////////////////////////////////////////////////
+    void advanceHips(const int iLevel, const int iTree);
+   
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Retrieves the index of a variable by its name in the `varName`
+    /// list.
+    ///
+    /// This function searches the `varName` list for the specified variable
+    /// name and determines its index. It uses `std::find` and `std::distance`
+    /// to locate the variable efficiently. If the variable name is not found,
+    /// the function throws a `std::runtime_error`. This functionality is
+    /// crucial for referencing variables dynamically within the HiPS model.
+    ///
+    /// \param varName The name of the variable to search for (e.g., "enthalpy").
+    ///
+    /// \return int The index of the variable in the `varName` list.
+    ///
+    /// \throws std::runtime_error If the variable name is not found in the
+    ///         `varName` list.
+    ///
+    /// ### Usage Example:
+    /// ```cpp
+    /// // Assume varName list is populated: {"temperature", "enthalpy", "density"}
+    /// int index = HiPS.get_varIndex("enthalpy");  // Returns 1
+    /// ```
+    ///
+    /// \note This function is case-sensitive and assumes that the `varName`
+    ///       list has been populated, typically via the `set_varData` method.
+    ///       Ensure that the variable names match exactly, including case, to
+    ///       avoid errors.
+    ///
+    /// \warning If the `varName` list is empty or not properly populated, the
+    ///          function may throw unexpected errors. Verify the list contents
+    ///          before invoking this method.
+    ///
+    /// \see set_varData
+    ////////////////////////////////////////////////////////////////////////////
+    int getVariableIndex(const std::string &varName) const;
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Simulates chemical reactions for parcels affected by a
+    /// micromixing event.
+    ///
+    /// This function performs chemical reactions for parcels involved in a
+    /// micromixing process at a specific level and tree node within the HiPS
+    /// structure. The reaction times are determined based on the last reaction
+    /// time stored in _parcelTimes. It dynamically retrieves the indices of
+    /// relevant variables such as enthalpy and species mass fractions for
+    /// accurate state updates.
+    ///
+    /// \param iLevel   The tree level where the eddy event occurred.
+    /// \param iTree    The root node of the eddy event at the specified level.
+    ///
+    /// \details
+    /// - getVariableIndex("enthalpy") is used to retrieve the index for
+    ///   enthalpy.
+    /// - Indices for species are dynamically retrieved using
+    ///   _gas->speciesName(i).
+    /// - The function updates parcel states, including enthalpy and species
+    ///   mass fractions, based on the reactions.
+    /// - The old parcel density is cached before chemistry, and the new density
+    ///   is retrieved from the reactor after the reaction step. Parcel weights
+    ///   (_wPar) are rescaled by (rho_old / rho_new) so that the per-parcel mass
+    ///   m = rho * _wPar remains constant even when density changes due to
+    ///   chemistry. Temperature is also written back for diagnostics.
+    ///
+    /// \note
+    /// - The varName list must be populated using set_varData before invoking
+    ///   this function.
+    /// - Reaction functionality is only available if REACTIONS_ENABLED is
+    ///   defined during compilation.
+    /// - This function relies on the HiPS model's proper initialization and an
+    ///   accurate setup of _parcelTimes.
+    ///
+    /// \warning Ensure that the necessary reaction data and variable names are
+    ///          correctly configured. Missing or incorrectly configured varName
+    ///          entries may lead to runtime errors.
+    ////////////////////////////////////////////////////////////////////////////
+    void reactParcels_LevelTree(const int iLevel, const int iTree);
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Mixes parcels at a specified level and subtree within
+    /// the HiPS model.
+    ///
+    /// This function performs mixing of parcels at a given level and subtree of
+    /// the HiPS tree. It can operate in two modes:
+    /// - **Uniform mixing**: Averages variable values directly (original
+    ///                       behavior).
+    /// - **Density-weighted mixing**: Computes a mass-weighted mean using each
+    ///                                parcel’s density (`_varRho`) and
+    ///                                statistical weight (`_wPar`), ensuring
+    ///                                conservation of the total mixed quantity
+    ///                                when densities differ. This function
+    ///                                performs uniform mixing of parcels based
+    ///                                on their average values at a specified
+    ///                                level and subtree of the HiPS tree.
+    ///
+    /// \param kVar     Index of the variable to be mixed (typically a transported
+    ///                 variable determined by the caller).
+    /// \param iLevel   The tree level whose grandchildren will be mixed.
+    /// \param iTree    The subtree at the given level where mixing will occur.
+    ///
+    /// ### Process Overview:
+    /// - At each level, the function mixes parcels in pairs or larger groups as
+    ///   determined by the tree structure.
+    /// - The level (\p iLevel) defines the size of the groups to mix:
+    ///   - Higher levels mix larger groups (e.g., groups of 4 parcels at Level 1).
+    ///   - Lower levels mix smaller groups (e.g., pairs of parcels at Level 2).
+    /// - Mixing is performed uniformly by averaging the variable values (\p
+    ///   kVar) of parcels.
+    ///
+    /// ### Example for a 5-Level Tree (Levels: 0 to 4):
+    /// - \p iLevel = 2:
+    ///   - If \p iTree = 0, parcels (0,1) and (2,3) will be mixed.
+    ///   - If \p iTree = 1, parcels (4,5) and (6,7) will be mixed.
+    ///   - If \p iTree = 2, parcels (8,9) and (10,11) will be mixed.
+    ///   - If \p iTree = 3, parcels (12,13) and (14,15) will be mixed.
+    /// - \p iLevel = 1:
+    ///   - If \p iTree = 0, parcels (0,1,2,3) and (4,5,6,7) will be mixed.
+    ///   - If \p iTree = 1, parcels (8,9,10,11) and (12,13,14,15) will be mixed.
+    ///
+    /// ### Notes:
+    /// - **Density Assumption**: The function assumes all parcels have the same
+    ///   density. Be cautious when mixing scalars like mass fractions, as the
+    ///   current implementation directly mixes \f$Y_i\f$.
+    /// - **Index Calculation**: The function uses bitwise left shift (\p <<) to
+    ///   calculate the starting and ending indices for parcel mixing.
+    ///
+    /// \warning Ensure that \p iLevel and \p iTree correspond to valid levels
+    ///and subtrees in the HiPS structure to prevent undefined behavior.
+    ////////////////////////////////////////////////////////////////////////////
+    void mixAcrossLevelTree(int kVar, const int iMixLevel, const int iTree);
+   
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Adjusts the HiPS profile to enforce statistical stationarity.
+    ///
+    /// This function modifies the parcel values in the HiPS profile to achieve
+    /// statistical stationarity. Specifically, it adjusts the average value of
+    /// parcels in the left half of the profile to 0 and the average value in
+    /// the right half to 1. This is particularly useful for simple scalar
+    /// variables, such as a mixture fraction ranging between 0 and 1.
+    ///
+    /// ### Process Overview:
+    /// - For each variable in the HiPS profile:
+    ///   1. Compute the average value of parcels in the left half.
+    ///   2. Compute the average value of parcels in the right half.
+    ///   3. Adjust the parcel values to enforce the desired averages (0 for the
+    ///      left half, 1 for the right half).
+    ///
+    /// \note
+    /// - This function directly modifies the parcel data in the HiPS profile.
+    /// - It assumes that variable values are bounded and appropriate for
+    ///   normalization (e.g., scalars between 0 and 1).
+    ///
+    /// \warning
+    /// - Ensure that the HiPS profile is properly initialized and contains
+    ///   valid data before calling this function.
+    /// - Unbounded or inappropriate variable values may lead to unexpected
+    ///   results.
+    ////////////////////////////////////////////////////////////////////////////
+    void forceProfile();
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /// \brief Saves all user-defined to a file.
+    ///
+    /// This function writes both input parameters (provided by the user) for
+    /// post-processing. The file is stored in the `post/` directory.
+    ///
+    /// The file includes:
+    /// - **User-defined input parameters**, such as grid levels, domain size,
+    ///   turbulence settings, and variable names.
+    ///
+    /// \note The parameters are saved to `../post/parameters.dat`. Ensure that
+    ///       the `post/` directory exists, or the function may fail to write
+    ///       the file.
+    ///
+    /// \warning If the file cannot be openedx, an error message is printed, and
+    /// no data is saved.
+    ////////////////////////////////////////////////////////////////////////////
+    void saveAllParameters();
+};

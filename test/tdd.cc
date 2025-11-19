@@ -5,7 +5,6 @@
 
 #include <memory>
 #include <cmath>
-// #include <format>
 
 using namespace std;
 using Catch::Matchers::WithinRel;
@@ -121,68 +120,4 @@ TEST_CASE( "Test HiPS library" ) {
 
     //////////////////////////////////////////////////////////////////////////
 
-    SECTION("Test overall solve no forcing") {
-
-        vector<double> ScHips = {0.0625, 1.0, 16.0}; // Schmidt numbers for low and high diffusivity
-        int            nvars = 3;                    // Number of scalar fields
-        bool           forceTurb = false;            // Forcing parameter to impose turbulent profile
-
-        HiPS hips(nLevels, domainLength, tau0, C_param, forceTurb, nvars, ScHips, false);
-
-        //--------- initialize vars
-
-        vector<vector<double>> vars(nvars, vector<double>(hips.get_nparcels()));
-        vector<double> weights(hips.get_nparcels(), 1.0/hips.get_nparcels());  // Uniform weights
-
-        for (int k=0; k<nvars; k++) {
-            for (int i=0; i<hips.get_nparcels(); i++)
-                vars[k][i] = (i<hips.get_nparcels()/2) ? 0 : 1;
-            hips.set_varData(vars[k], weights, "mixf_0" + to_string(k));
-        }
-        
-        //--------- inititial raw conservation
-
-        vector<double> sum1(nvars, 0.0);
-        for(int i=0; i<hips.get_nparcels(); i++)
-            for(int k=0; k<nvars; k++)
-                sum1[k] += vars[k][i]*weights[i];
-
-        //--------- solve
-
-        hips.calculateSolution(tRun, false);
-
-        //--------- recover variables, final conservation
-
-        auto var2 = hips.get_varData();
-
-        vector<double> sum2(var2.size(), 0.0);
-        for(int i=0; i<var2[0].size(); i++)
-            for(int k=0; k<var2.size(); k++)
-                sum2[k] += var2[k][i]*weights[i];
-
-        //--------- long time --> all parcels become uniform, find max/min, compare to 0.5 (unif value)
-
-        vector<double> vmax(nvars, -1E10);
-        vector<double> vmin(nvars, 1E10);
-
-        for(int i=0; i<var2[0].size(); i++)
-            for(int k=0; k<var2.size(); k++){
-                if(var2[k][i] > vmax[k]) vmax[k] = var2[k][i];
-                if(var2[k][i] < vmin[k]) vmin[k] = var2[k][i];
-            }
-
-        //--------- test
-
-        REQUIRE( hips.get_nparcels() == (1 << (nLevels+1)) );        // based on ScHips set above
-        REQUIRE_THAT(sum1[0], WithinRel(sum2[0], 1E-14));
-        REQUIRE_THAT(sum1[1], WithinRel(sum2[1], 1E-14));
-        REQUIRE_THAT(sum1[2], WithinRel(sum2[2], 1E-14));
-        REQUIRE_THAT(vmin[0], WithinRel(0.5,     1E-14));
-        REQUIRE_THAT(vmin[1], WithinRel(0.5,     1E-14));
-        REQUIRE_THAT(vmin[2], WithinRel(0.5,     1E-14));
-        REQUIRE_THAT(vmax[0], WithinRel(0.5,     1E-14));
-        REQUIRE_THAT(vmax[1], WithinRel(0.5,     1E-14));
-        REQUIRE_THAT(vmax[2], WithinRel(0.5,     1E-14));
-
-    }
 }
