@@ -74,7 +74,7 @@ private:
     double _Re;                                                    ///< Reynolds number
     double _dtEE;                                                  ///< Time increment to next eddy event
     double _probability;                                           ///< Probability value for probability-based solution
-    double lStar;                                                  ///< Length of the level associated with the Reynolds number
+    double _lStar;                                                  ///< Length of the level associated with the Reynolds number
     double Anew;                                                   ///< Adjusted level length scale reduction factor for dynamic adjustment of reduction factor
 
     RandomGenerator rand;

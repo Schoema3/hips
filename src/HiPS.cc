@@ -204,7 +204,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
     } 
     else if (ReApproach == "micromixing") {
         baseLevel = ceil(baseLevelEstimate);                                                      // Ceil the base level to the nearest integer
-        lStar = std::pow(_Re, -3.0 / 4);                                                           // Calculate lStar based on _Re
+        _lStar = std::pow(_Re, -3.0 / 4);                                                           // Calculate _lStar based on _Re
     } 
     else if (ReApproach == "dynamic_A") {
         baseLevel = round(baseLevelEstimate);                                                     // Round the base level to the nearest integer
@@ -246,7 +246,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
     }
 
     if (ReApproach == "micromixing") {                                          // Adjust rates for micromixing model
-        levelTaus[_Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / _C_param;
+        levelTaus[_Nm3] = tau0 * pow(_lStar / domainLength, 2.0 / 3.0) / _C_param;
         levelRates[_Nm3] = 1.0 / levelTaus[_Nm3] * pow(2.0, _Nm3);
     }
 
