@@ -200,7 +200,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
     else if (ReApproach == "probability") {
         baseLevel = ceil(baseLevelEstimate);                                                      // Ceil the base level to the nearest integer
         int previousLevel = baseLevel - 1;
-        Prob = baseLevelEstimate - previousLevel;                                                 // Calculate the probability
+        _probability = baseLevelEstimate - previousLevel;                                                 // Calculate the probability
     } 
     else if (ReApproach == "micromixing") {
         baseLevel = ceil(baseLevelEstimate);                                                      // Ceil the base level to the nearest integer
@@ -251,7 +251,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
     }
 
     if (ReApproach == "probability") {                                          // Adjust final mixing rate based on probability
-        levelRates[_Nm3] = levelRates[_nL - 3] * Prob;
+        levelRates[_Nm3] = levelRates[_nL - 3] * _probability;
     }
 
     _LScHips = !ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)

@@ -72,8 +72,8 @@ private:
     double _eddyRate_inertial;                                     ///< Total rate of all eddies 0 through _iEta (= _eddyRate_total if Sc=1)
     double _Afac = 0.5;                                            ///< Level lengthscale reduction factor (0.5)
     double _Re;                                                    ///< Reynolds number
-    double _dtEE;                                                   ///< Time increment to next eddy event
-    double Prob;                                                   ///< Probability value for probability-based solution
+    double _dtEE;                                                  ///< Time increment to next eddy event
+    double _probability;                                           ///< Probability value for probability-based solution
     double lStar;                                                  ///< Length of the level associated with the Reynolds number
     double Anew;                                                   ///< Adjusted level length scale reduction factor for dynamic adjustment of reduction factor
 
