@@ -79,7 +79,7 @@ private:
 
     RandomGenerator rand;
     
-    std::vector<int> _i_plus;                                      ///< ceil(_i_batchelor)
+    std::vector<int>   _i_plus;                                    ///< ceil(_i_batchelor)
     std::vector<double> _ScHips;                                   ///< Vector containing Schmidt numbers related to each variable
     std::vector<std::string> _varName;                             ///< Vector containing the names of parcel variables
     std::vector<double> _parcelTimes;                              ///< Current times corresponding to the parcel states
@@ -89,7 +89,7 @@ private:
     std::vector<double> _xh;                                       ///< Vector containing physical domain of HiPS parcels
     
     std::string  _ReApproach;
-    int outputIntervalEddy = 10;                                   ///< Default: write data every 10 eddy events
+    int _outputIntervalEddy = 10;                                  ///< Default: write data every 10 eddy events
     double outputIntervalTime = 0.1;                               ///< Default: write data every 0.1s
     int eddyCounter = 0;                                           ///< Counter for eddy events
     double lastOutputTime = 0.0;                                   ///< Last time data was written
@@ -445,7 +445,7 @@ public:
     /// - Selects and swaps subtrees at a given level
     /// - Applies micromixing and reactions (if enabled)
     /// - Writes output data either:
-    ///     - Every `outputIntervalEddy` eddy events (if enabled), or
+    ///     - Every `_outputIntervalEddy` eddy events (if enabled), or
     ///     - Every `outputIntervalTime` seconds (if enabled)
     /// - At the end of the simulation, calls `saveAllParameters()` to store
     ///   input and configuration data in `../post/parameters.dat`.
