@@ -160,7 +160,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     
     //-------------------
     
-    i_plus.resize(_nVar);
+    _i_plus.resize(_nVar);
     
     for (int k=0; k<_nVar; k++) {
         if (ScHips[k] < 1.0)
@@ -170,7 +170,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
         else
             i_batchelor[k] = _iEta;
 
-        i_plus[k] = ceil(i_batchelor[k]);
+        _i_plus[k] = ceil(i_batchelor[k]);
     }
     
     //------------------- Set the parcel addresses (index array)
@@ -274,7 +274,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
 
     //-----------------------------------------------------
 
-    i_plus.resize(_nVar);
+    _i_plus.resize(_nVar);
     for (int k = 0; k < _nVar; ++k) {
         if (ScHips[k] < 1.0)
             i_batchelor[k] = _iEta + 1.5 * log(ScHips[k]) / log(4);
@@ -282,7 +282,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
             i_batchelor[k] = _iEta + log(ScHips[k]) / log(4);
         else
             i_batchelor[k] = _iEta;
-        i_plus[k] = ceil(i_batchelor[k]);
+        _i_plus[k] = ceil(i_batchelor[k]);
     }
 
     //-----------------------------------------------------
@@ -552,8 +552,8 @@ void HiPS::advanceHips(const int iLevel, const int iTree){
     bool rxnDone = false;                                               // React all variables once
     for (int k = 0; k < _nVar; k++) {                                    // Upon finding first variable needing micromixing
         // Combined condition check with approach condition
-        if ((iLevel >= i_plus[k]) || 
-            (iLevel == i_plus[k] - 1 && rand.getRand() <= i_plus[k] - i_batchelor[k])) {
+        if ((iLevel >= _i_plus[k]) ||
+            (iLevel == _i_plus[k] - 1 && rand.getRand() <= _i_plus[k] - i_batchelor[k])) {
                 if (!rxnDone && _performReaction) {
                     reactParcels_LevelTree(iLevel, iTree);
                     rxnDone = true;
