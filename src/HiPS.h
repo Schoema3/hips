@@ -79,10 +79,10 @@ private:
 
     RandomGenerator rand;
     
-    std::vector<int> _i_plus;                                       ///< ceil(i_batchelor)
-    std::vector<double> _ScHips;                                    ///< Vector containing Schmidt numbers related to each variable
-    std::vector<std::string> varName;                              ///< Vector containing the names of parcel variables
-    std::vector<double> parcelTimes;                               ///< Current times corresponding to the parcel states
+    std::vector<int> _i_plus;                                      ///< ceil(i_batchelor)
+    std::vector<double> _ScHips;                                   ///< Vector containing Schmidt numbers related to each variable
+    std::vector<std::string> _varName;                             ///< Vector containing the names of parcel variables
+    std::vector<double> _parcelTimes;                              ///< Current times corresponding to the parcel states
     std::vector<double> levelRates;                                ///< List of eddy event rates at each level
     std::vector<double> i_batchelor;                               ///< Batchelor level for variable Sc scalars; NOTE: double, as in, between levels
     std::vector<double> xc;                                        ///< Vector containing physical domain of flow particles
@@ -879,7 +879,7 @@ private:
     /// This function performs chemical reactions for parcels involved in a
     /// micromixing process at a specific level and tree node within the HiPS
     /// structure. The reaction times are determined based on the last reaction
-    /// time stored in parcelTimes. It dynamically retrieves the indices of
+    /// time stored in _parcelTimes. It dynamically retrieves the indices of
     /// relevant variables such as enthalpy and species mass fractions for
     /// accurate state updates.
     ///
@@ -905,7 +905,7 @@ private:
     /// - Reaction functionality is only available if REACTIONS_ENABLED is
     ///   defined during compilation.
     /// - This function relies on the HiPS model's proper initialization and an
-    ///   accurate setup of parcelTimes.
+    ///   accurate setup of _parcelTimes.
     ///
     /// \warning Ensure that the necessary reaction data and variable names are
     ///          correctly configured. Missing or incorrectly configured varName
@@ -1009,7 +1009,8 @@ private:
     ///       the `post/` directory exists, or the function may fail to write
     ///       the file.
     ///
-    /// \warning If the file cannot be openedx, an error message is printed, and no data is saved.
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-    void saveAllParameters();                                                                       // Function to save ALL parameters
+    /// \warning If the file cannot be openedx, an error message is printed, and
+    /// no data is saved.
+    ////////////////////////////////////////////////////////////////////////////
+    void saveAllParameters();
 };

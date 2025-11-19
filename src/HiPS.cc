@@ -57,7 +57,7 @@ HiPS::HiPS(int nLevels,
 
     // Resize vectors to the number of variables
     _varData.resize(nVar);
-    varName.resize(nVar); 
+    _varName.resize(nVar);
 
     set_tree(nLevels, domainLength, tau0);
 }
@@ -95,7 +95,7 @@ HiPS::HiPS(double C_param,
 
     // Resize vectors to accommodate the number of variables.
     _varData.resize(nVar);
-    varName.resize(nVar);        
+    _varName.resize(nVar);
 }
 
 void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
@@ -124,7 +124,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     // -------------------------- 
     
     _nparcels = static_cast<int>(pow(2, _Nm1));
-    parcelTimes.resize(_nparcels,0);
+    _parcelTimes.resize(_nparcels,0);
     i_batchelor.resize(_nVar,0);
     
     vector<double> levelLengths(_nLevels);              // Including all levels, but last 2 don't count:
@@ -231,7 +231,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
     _Nm3 = _nLevels - 3;
 
     _nparcels = static_cast<int>(pow(2, _Nm1));
-    parcelTimes.resize(_nparcels, 0);
+    _parcelTimes.resize(_nparcels, 0);
     i_batchelor.resize(_nVar, 0);
 
     std::vector<double> levelLengths(_nLevels);                                // Including all levels, but last 2 don't count
@@ -299,7 +299,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
 void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std::string &varN){
     
     _varData[_currentIndex] = std::make_shared<std::vector<double>>(projection(v, w));
-    varName[_currentIndex] = varN;
+    _varName[_currentIndex] = varN;
 
     _currentIndex++;
 }
@@ -310,7 +310,7 @@ void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
     _varData[_currentIndex] = std::make_shared<std::vector<double>>(results.first);
     _varRho = results.second;
-    varName[_currentIndex] = varN;
+    _varName[_currentIndex] = varN;
  
     _currentIndex++;
 }
@@ -565,11 +565,11 @@ void HiPS::advanceHips(const int iLevel, const int iTree){
 
 int HiPS::getVariableIndex(const std::string &varName) const{
 
-    auto it = std::find(this->varName.begin(), this->varName.end(), varName);
-    if (it == this->varName.end()) {
+    auto it = std::find(_varName.begin(), _varName.end(), varName);
+    if (it == _varName.end()) {
         throw std::runtime_error("Error: Variable name '" + varName + "' not found.");
     }
-    return std::distance(this->varName.begin(), it);
+    return std::distance(_varName.begin(), it);
 }
 
 void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
@@ -590,7 +590,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
 
     for (int i = istart; i < iend; ++i) {
         const int ime = _pLoc[i];
-        const double dt = _time - parcelTimes[ime];
+        const double dt = _time - _parcelTimes[ime];
 
         // Pull current state
         double h = (*_varData[enthalpyIdx])[ime];
@@ -622,7 +622,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
             (*_varData[yIdx[k]])[ime] = y[k];
         }
 
-        parcelTimes[ime] = _time;
+        _parcelTimes[ime] = _time;
     }
 
  #endif
@@ -757,7 +757,7 @@ void HiPS::writeData(int real, const int ifile, const double outputTime){
     if(_performReaction)
         ofile << setw(19) << "# Temp";  // Include temperature column if reactions are enabled
 
-    for (const auto& varN : varName) {
+    for (const auto& varN : _varName) {
         ofile << setw(19) << "# " << varN;
     }
     ofile << endl;  // End of the header line
@@ -953,9 +953,9 @@ void HiPS::saveAllParameters(){
     file << "realization " << _realization << "\n";    ///< Current simulation realization (for multiple runs)
 
     // Write variable names
-    if (!varName.empty()) {
+    if (!_varName.empty()) {
         file << "varName ";
-        for (const std::string &name : varName) {
+        for (const std::string &name : _varName) {
             file << name << " ";  ///< Separate variable names by spaces
         }
         file << "\n";
