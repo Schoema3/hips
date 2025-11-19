@@ -21,7 +21,7 @@ HiPS::HiPS(int nLevels,
            double domainLength,
            double tau0,
            double C_param,
-           bool forceTurb_,
+           bool forceTurb,
            int nVar,
            vector<double> &ScHips_,
            bool performReaction_,
@@ -32,7 +32,7 @@ HiPS::HiPS(int nLevels,
     _domainLength(domainLength),
     _tau0(tau0),
     _C_param(C_param),
-    forceTurb(forceTurb_),       
+    _forceTurb(forceTurb),
     ScHips(ScHips_),   
     _nVar(nVar),
     rand(seed),
@@ -63,7 +63,7 @@ HiPS::HiPS(int nLevels,
 }
 
 HiPS::HiPS(double C_param,
-           bool forceTurb_,
+           bool forceTurb,
            int nVar,
            vector<double> &ScHips_,
            bool performReaction_,
@@ -71,7 +71,7 @@ HiPS::HiPS(double C_param,
            int seed,
            int realization):
     _C_param(C_param),
-    forceTurb(forceTurb_),       
+    _forceTurb(forceTurb),
     _nVar(nVar),
     ScHips(ScHips_),                 
     rand(seed),
@@ -139,8 +139,8 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
         levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
     }
 
-    LScHips = ScHips.size() > 0 ? true : false;
-    if (LScHips) {                                     // Ccorrect levels for high Sc (levels > Kolmogorov)
+    _LScHips = ScHips.size() > 0 ? true : false;
+    if (_LScHips) {                                     // Ccorrect levels for high Sc (levels > Kolmogorov)
         for (int i=_iEta+1; i<_nLevels; i++) {
             levelTaus[i] = tau0 *
             pow(levelLengths[_iEta]/domainLength, 2.0/3.0) / _C_param;
@@ -254,8 +254,8 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
         levelRates[_Nm3] = levelRates[_nL - 3] * Prob;
     }
 
-    LScHips = !ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)
-    if (LScHips) {
+    _LScHips = !ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)
+    if (_LScHips) {
         for (int i = _iEta + 1; i < _nLevels; ++i) {
             levelTaus[i] = tau0 * pow(levelLengths[_iEta] / domainLength, 2.0 / 3.0) / _C_param;
             levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
@@ -545,7 +545,7 @@ void HiPS::selectAndSwapTwoSubtrees(const int iLevel, int &iTree){
 
 void HiPS::advanceHips(const int iLevel, const int iTree){
 
-    if (forceTurb && iLevel == 0) {
+    if (_forceTurb && iLevel == 0) {
         forceProfile();                                                  // Forcing for statistically stationary
     }
 
@@ -947,7 +947,7 @@ void HiPS::saveAllParameters(){
     file << "domainLength " << _domainLength << "\n";  ///< Length of the computational domain
     file << "tau0 " << _tau0 << "\n";                  ///< Reference eddy turnover time
     file << "C_param " << _C_param << "\n";            ///< Model constant controlling turbulence behavior
-    file << "forceTurb " << forceTurb << "\n";        ///< Flag for forced turbulence (1 = enabled, 0 = disabled)
+    file << "forceTurb " << _forceTurb << "\n";        ///< Flag for forced turbulence (1 = enabled, 0 = disabled)
     file << "nVar " << _nVar << "\n";                  ///< Number of variables tracked in the simulation
     file << "performReaction " << performReaction << "\n";  ///< Flag indicating whether chemical reactions are simulated
     file << "realization " << _realization << "\n";    ///< Current simulation realization (for multiple runs)

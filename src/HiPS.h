@@ -62,9 +62,9 @@ private:
     int _Nm3;                                                      ///< _nLevels - 3
     int _iEta;                                                     ///< Kolmogorov level (needed for variable Sc scalars)
     int _nL;                                                       ///< Adjusted number of levels based on the Reynolds number
-    bool forceTurb;                                                ///< Forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
+    bool _forceTurb;                                               ///< Forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
 
-    bool LScHips;                                                  ///< HiPS schmidt number
+    bool _LScHips;                                                 ///< HiPS schmidt number
     bool performReaction;                                          ///< Flag indicating whether chemical reactions are performed in the simulation
         
     double time;                                                   ///< Current simulation time
@@ -109,7 +109,7 @@ public:
     /// cell-specific turbulence properties. The tree can be created or updated
     /// later using one of the `set_tree` functions.
     /// \param C_param          Eddy coefficient controlling mixing rate.
-    /// \param forceTurb_       Flag to enforce turbulence activation.
+    /// \param forceTurb        Flag to enforce turbulence activation.
     /// \param nVar_            Number of transported variables.
     /// \param performReaction_ Enables chemical reactions if set to true.
     /// \param cantSol          Cantera solution object (required when
@@ -127,7 +127,7 @@ public:
     /// \see HiPS::set_tree() for deferred tree construction.
     ////////////////////////////////////////////////////////////////////////////
     HiPS(double C_param,
-         bool forceTurb_,
+         bool forceTurb,
          int nVar_,
          std::vector<double> &ScHips_,
          bool performReaction,
@@ -150,7 +150,7 @@ public:
     /// \param domainLength     Domain length for defining spatial scales.
     /// \param tau0             Characteristic time scale for the smallest eddy.
     /// \param C_param          Eddy coefficient controlling mixing rate.
-    /// \param forceTurb_       Flag to enforce turbulence activation.
+    /// \param forceTurb        Flag to enforce turbulence activation.
     /// \param nVar_            Number of transported variables.
     /// \param ScHips_          Vector of Schmidt numbers (one per variable).
     /// \param performReaction_ Enables chemical reactions if set to true.
@@ -174,7 +174,7 @@ public:
          double domainLength,
          double tau0,
          double C_param,
-         bool forceTurb_,
+         bool forceTurb,
          int nVar_,
          std::vector<double> &ScHips_,
          bool performReaction,
