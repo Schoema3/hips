@@ -90,7 +90,7 @@ private:
     
     std::string  _ReApproach;
     int _outputIntervalEddy = 10;                                  ///< Default: write data every 10 eddy events
-    double outputIntervalTime = 0.1;                               ///< Default: write data every 0.1s
+    double _outputIntervalTime = 0.1;                              ///< Default: write data every 0.1s
     int eddyCounter = 0;                                           ///< Counter for eddy events
     double lastOutputTime = 0.0;                                   ///< Last time data was written
     bool useEddyBasedWriting = false;                              ///< Tracks if eddy writing is set
@@ -446,7 +446,7 @@ public:
     /// - Applies micromixing and reactions (if enabled)
     /// - Writes output data either:
     ///     - Every `_outputIntervalEddy` eddy events (if enabled), or
-    ///     - Every `outputIntervalTime` seconds (if enabled)
+    ///     - Every `_outputIntervalTime` seconds (if enabled)
     /// - At the end of the simulation, calls `saveAllParameters()` to store
     ///   input and configuration data in `../post/parameters.dat`.
     ///
