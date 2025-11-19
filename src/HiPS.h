@@ -79,12 +79,12 @@ private:
 
     RandomGenerator rand;
     
-    std::vector<int> _i_plus;                                      ///< ceil(i_batchelor)
+    std::vector<int> _i_plus;                                      ///< ceil(_i_batchelor)
     std::vector<double> _ScHips;                                   ///< Vector containing Schmidt numbers related to each variable
     std::vector<std::string> _varName;                             ///< Vector containing the names of parcel variables
     std::vector<double> _parcelTimes;                              ///< Current times corresponding to the parcel states
-    std::vector<double> _levelRates;                                ///< List of eddy event rates at each level
-    std::vector<double> i_batchelor;                               ///< Batchelor level for variable Sc scalars; NOTE: double, as in, between levels
+    std::vector<double> _levelRates;                               ///< List of eddy event rates at each level
+    std::vector<double> _i_batchelor;                              ///< Batchelor level for variable Sc scalars; NOTE: double, as in, between levels
     std::vector<double> xc;                                        ///< Vector containing physical domain of flow particles
     std::vector<double> xh;                                        ///< Vector containing physical domain of HiPS parcels
     

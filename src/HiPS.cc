@@ -125,7 +125,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     
     _nparcels = static_cast<int>(pow(2, _Nm1));
     _parcelTimes.resize(_nparcels,0);
-    i_batchelor.resize(_nVar,0);
+    _i_batchelor.resize(_nVar,0);
     
     vector<double> levelLengths(_nLevels);              // Including all levels, but last 2 don't count:
     vector<double> levelTaus(_nLevels);                 // Smallest scale is 2 levels up from bottom
@@ -164,13 +164,13 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     
     for (int k=0; k<_nVar; k++) {
         if (_ScHips[k] < 1.0)
-            i_batchelor[k] = _iEta + 1.5*log(_ScHips[k])/log(4);
+            _i_batchelor[k] = _iEta + 1.5*log(_ScHips[k])/log(4);
         else if (_ScHips[k] > 1.0)
-            i_batchelor[k] = _iEta + log(_ScHips[k])/log(4);
+            _i_batchelor[k] = _iEta + log(_ScHips[k])/log(4);
         else
-            i_batchelor[k] = _iEta;
+            _i_batchelor[k] = _iEta;
 
-        _i_plus[k] = ceil(i_batchelor[k]);
+        _i_plus[k] = ceil(_i_batchelor[k]);
     }
     
     //------------------- Set the parcel addresses (index array)
@@ -232,7 +232,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
 
     _nparcels = static_cast<int>(pow(2, _Nm1));
     _parcelTimes.resize(_nparcels, 0);
-    i_batchelor.resize(_nVar, 0);
+    _i_batchelor.resize(_nVar, 0);
 
     std::vector<double> levelLengths(_nLevels);                                // Including all levels, but last 2 don't count
     std::vector<double> levelTaus(_nLevels);                                   // Smallest scale is 2 levels up from bottom
@@ -277,12 +277,12 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
     _i_plus.resize(_nVar);
     for (int k = 0; k < _nVar; ++k) {
         if (_ScHips[k] < 1.0)
-            i_batchelor[k] = _iEta + 1.5 * log(_ScHips[k]) / log(4);
+            _i_batchelor[k] = _iEta + 1.5 * log(_ScHips[k]) / log(4);
         else if (_ScHips[k] > 1.0)
-            i_batchelor[k] = _iEta + log(_ScHips[k]) / log(4);
+            _i_batchelor[k] = _iEta + log(_ScHips[k]) / log(4);
         else
-            i_batchelor[k] = _iEta;
-        _i_plus[k] = ceil(i_batchelor[k]);
+            _i_batchelor[k] = _iEta;
+        _i_plus[k] = ceil(_i_batchelor[k]);
     }
 
     //-----------------------------------------------------
@@ -553,7 +553,7 @@ void HiPS::advanceHips(const int iLevel, const int iTree){
     for (int k = 0; k < _nVar; k++) {                                    // Upon finding first variable needing micromixing
         // Combined condition check with approach condition
         if ((iLevel >= _i_plus[k]) ||
-            (iLevel == _i_plus[k] - 1 && rand.getRand() <= _i_plus[k] - i_batchelor[k])) {
+            (iLevel == _i_plus[k] - 1 && rand.getRand() <= _i_plus[k] - _i_batchelor[k])) {
                 if (!rxnDone && _performReaction) {
                     reactParcels_LevelTree(iLevel, iTree);
                     rxnDone = true;
@@ -963,10 +963,10 @@ void HiPS::saveAllParameters(){
         file << "varName (undefined)\n";
     }
 
-    // Write i_batchelor vector if it exists and has the correct size
-    if (!i_batchelor.empty() && i_batchelor.size() == _nVar) {
+    // Write _i_batchelor vector if it exists and has the correct size
+    if (!_i_batchelor.empty() && _i_batchelor.size() == _nVar) {
         file << "i_batchelor ";
-        for (const auto &val : i_batchelor) {
+        for (const auto &val : _i_batchelor) {
             file << val << " ";  ///< Print each element separated by space
         }
         file << "\n";
