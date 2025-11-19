@@ -86,7 +86,7 @@ private:
     std::vector<double> _levelRates;                               ///< List of eddy event rates at each level
     std::vector<double> _i_batchelor;                              ///< Batchelor level for variable Sc scalars; NOTE: double, as in, between levels
     std::vector<double> _xc;                                       ///< Vector containing physical domain of flow particles
-    std::vector<double> xh;                                        ///< Vector containing physical domain of HiPS parcels
+    std::vector<double> _xh;                                       ///< Vector containing physical domain of HiPS parcels
     
     std::string  ReApproach;
     int outputIntervalEddy = 10;                                   ///< Default: write data every 10 eddy events
