@@ -93,7 +93,7 @@ private:
     double _outputIntervalTime = 0.1;                              ///< Default: write data every 0.1s
     int _eddyCounter = 0;                                          ///< Counter for eddy events
     double _lastOutputTime = 0.0;                                  ///< Last time data was written
-    bool useEddyBasedWriting = false;                              ///< Tracks if eddy writing is set
+    bool _useEddyBasedWriting = false;                              ///< Tracks if eddy writing is set
     bool useTimeBasedWriting = false;                              ///< Tracks if time writing is set
     const int DEFAULT_EDDY_INTERVAL = 1000;                        ///< Default: Write every 1000 eddies
     const double DEFAULT_TIME_INTERVAL = 0.1;                      ///< Default: Write every 0.1s
