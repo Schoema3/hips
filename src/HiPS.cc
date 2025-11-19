@@ -23,7 +23,7 @@ HiPS::HiPS(int nLevels,
            double C_param,
            bool forceTurb,
            int nVar,
-           vector<double> &ScHips_,
+           vector<double> &ScHips,
            bool performReaction,
            shared_ptr<void> vcantSol,
            int seed,
@@ -33,7 +33,7 @@ HiPS::HiPS(int nLevels,
     _tau0(tau0),
     _C_param(C_param),
     _forceTurb(forceTurb),
-    ScHips(ScHips_),   
+    _ScHips(ScHips),
     _nVar(nVar),
     rand(seed),
     _performReaction(performReaction),
@@ -65,7 +65,7 @@ HiPS::HiPS(int nLevels,
 HiPS::HiPS(double C_param,
            bool forceTurb,
            int nVar,
-           vector<double> &ScHips_,
+           vector<double> &ScHips,
            bool performReaction,
            shared_ptr<void> vcantSol,
            int seed,
@@ -73,7 +73,7 @@ HiPS::HiPS(double C_param,
     _C_param(C_param),
     _forceTurb(forceTurb),
     _nVar(nVar),
-    ScHips(ScHips_),                 
+    _ScHips(ScHips),
     rand(seed),
     _performReaction(performReaction),
     _realization(realization){
@@ -111,8 +111,8 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
            
     int maxSc = 1.0;
 
-    for (int i=0; i<ScHips.size(); i++)
-        maxSc = ScHips[i]>maxSc ? ScHips[i] : maxSc;
+    for (int i=0; i<_ScHips.size(); i++)
+        maxSc = _ScHips[i]>maxSc ? _ScHips[i] : maxSc;
     
     if (maxSc > 1.0)
         _nLevels += ceil(log(maxSc)/log(4));            // Changing number of levels!
@@ -139,7 +139,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
         levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
     }
 
-    _LScHips = ScHips.size() > 0 ? true : false;
+    _LScHips = _ScHips.size() > 0 ? true : false;
     if (_LScHips) {                                     // Ccorrect levels for high Sc (levels > Kolmogorov)
         for (int i=_iEta+1; i<_nLevels; i++) {
             levelTaus[i] = tau0 *
@@ -163,10 +163,10 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     _i_plus.resize(_nVar);
     
     for (int k=0; k<_nVar; k++) {
-        if (ScHips[k] < 1.0)
-            i_batchelor[k] = _iEta + 1.5*log(ScHips[k])/log(4);
-        else if (ScHips[k] > 1.0)
-            i_batchelor[k] = _iEta + log(ScHips[k])/log(4);
+        if (_ScHips[k] < 1.0)
+            i_batchelor[k] = _iEta + 1.5*log(_ScHips[k])/log(4);
+        else if (_ScHips[k] > 1.0)
+            i_batchelor[k] = _iEta + log(_ScHips[k])/log(4);
         else
             i_batchelor[k] = _iEta;
 
@@ -221,7 +221,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
     _iEta = _nLevels - 3;  // Kolmogorov level
 
     int maxSc = 1;
-    for (const auto &sc : ScHips)
+    for (const auto &sc : _ScHips)
         maxSc = std::max(maxSc, static_cast<int>(sc));
     if (maxSc > 1.0)
         _nLevels += ceil(log(maxSc) / log(4));
@@ -254,7 +254,7 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
         levelRates[_Nm3] = levelRates[_nL - 3] * _probability;
     }
 
-    _LScHips = !ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)
+    _LScHips = !_ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)
     if (_LScHips) {
         for (int i = _iEta + 1; i < _nLevels; ++i) {
             levelTaus[i] = tau0 * pow(levelLengths[_iEta] / domainLength, 2.0 / 3.0) / _C_param;
@@ -276,10 +276,10 @@ void HiPS::set_tree(double Re, double domainLength, double tau0, std::string ReA
 
     _i_plus.resize(_nVar);
     for (int k = 0; k < _nVar; ++k) {
-        if (ScHips[k] < 1.0)
-            i_batchelor[k] = _iEta + 1.5 * log(ScHips[k]) / log(4);
-        else if (ScHips[k] > 1.0)
-            i_batchelor[k] = _iEta + log(ScHips[k]) / log(4);
+        if (_ScHips[k] < 1.0)
+            i_batchelor[k] = _iEta + 1.5 * log(_ScHips[k]) / log(4);
+        else if (_ScHips[k] > 1.0)
+            i_batchelor[k] = _iEta + log(_ScHips[k]) / log(4);
         else
             i_batchelor[k] = _iEta;
         _i_plus[k] = ceil(i_batchelor[k]);

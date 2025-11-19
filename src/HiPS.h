@@ -80,7 +80,7 @@ private:
     RandomGenerator rand;
     
     std::vector<int> _i_plus;                                       ///< ceil(i_batchelor)
-    std::vector<double> ScHips;                                    ///< Vector containing Schmidt numbers related to each variable
+    std::vector<double> _ScHips;                                    ///< Vector containing Schmidt numbers related to each variable
     std::vector<std::string> varName;                              ///< Vector containing the names of parcel variables
     std::vector<double> parcelTimes;                               ///< Current times corresponding to the parcel states
     std::vector<double> levelRates;                                ///< List of eddy event rates at each level
