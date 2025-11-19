@@ -317,10 +317,10 @@ void HiPS::set_varData(std::vector<double> &v, std::vector<double> &w, const std
 
 std::vector<double> HiPS::projection(std::vector<double> &vcfd, std::vector<double> &weight){
     
-    xc = setGridCfd(weight);                               // Populate the physical domain for flow particles
+    _xc = setGridCfd(weight);                               // Populate the physical domain for flow particles
     xh = setGridHips(_nparcels);                            // Populate the physical domain for HiPS parcels
 
-    int nc = xc.size() - 1;                 
+    int nc = _xc.size() - 1;
     int nh = xh.size() - 1; 
 
     std::vector<double> vh(nh, 0.0);
@@ -328,9 +328,9 @@ std::vector<double> HiPS::projection(std::vector<double> &vcfd, std::vector<doub
 
     for(int i = 0; i < nh; i++) {
         for(int j = jprev + 1; j <= nc; ++j) {
-            if(xc[j] <= xh[i + 1]) {
-                double d1 = xc[j] - xc[j - 1];
-                double d2 = xc[j] - xh[i];
+            if(_xc[j] <= xh[i + 1]) {
+                double d1 = _xc[j] - _xc[j - 1];
+                double d2 = _xc[j] - xh[i];
                 // calculation of shortest distance
                 // handling if distance is zero but substarction gives comutational error
                 double d  = std::min(d1, d2) < 1E-15 ? 0 : std::min(d1, d2);
@@ -338,7 +338,7 @@ std::vector<double> HiPS::projection(std::vector<double> &vcfd, std::vector<doub
                 vh[i] += vcfd[j - 1] * d;
             } 
             else {
-                double d1 = xh[i + 1] - xc[j - 1];
+                double d1 = xh[i + 1] - _xc[j - 1];
                 double d2 = xh[i + 1] - xh[i];
                 // calculation of shortest distance
                 // handling if distance is zero but substarction gives comutational error
@@ -359,10 +359,10 @@ HiPS::projection(      std::vector<double> &vcfd,
                        std::vector<double> &weight,
                  const std::vector<double> &density){
     // Build CFD and HiPS grids
-    xc = setGridCfd(weight);
+    _xc = setGridCfd(weight);
     xh = setGridHips(_nparcels);
 
-    int nc = xc.size() - 1; // CFD cell count
+    int nc = _xc.size() - 1; // CFD cell count
     int nh = xh.size() - 1; // HiPS parcel count
 
     std::vector<double> vh(nh, 0.0);     // parcel-averaged phi
@@ -380,8 +380,8 @@ HiPS::projection(      std::vector<double> &vcfd,
         for (int j = jprev + 1; j <= nc; ++j) 
         {
             // Find geometric overlap between CFD cell and HiPS parcel
-            double overlap_start = std::max(xh[i], xc[j - 1]);
-            double overlap_end   = std::min(xh[i + 1], xc[j]);
+            double overlap_start = std::max(xh[i], _xc[j - 1]);
+            double overlap_end   = std::min(xh[i + 1], _xc[j]);
 
             double overlap_len = overlap_end - overlap_start;
             if (overlap_len <= 0.0) continue;
@@ -396,7 +396,7 @@ HiPS::projection(      std::vector<double> &vcfd,
             Mphi += rho * phi * effective_len;
 
             // If CFD cell ends after parcel end  move to next parcel
-            if (xc[j] >= xh[i + 1]) {
+            if (_xc[j] >= xh[i + 1]) {
                 jprev = j - 1;
                 break;
             }
@@ -794,24 +794,24 @@ void HiPS::writeData(int real, const int ifile, const double outputTime){
 std::vector<double> HiPS::projection_back(std::vector<double> &vh) {
 
     int nh = xh.size() - 1;
-    int nc = xc.size() - 1;
+    int nc = _xc.size() - 1;
 
     std::vector<double> vc(nc, 0.0);
     int jprev = 0;
 
     for (int i = 0; i < nc; ++i) {
         for (int j = jprev + 1; j <= nh; ++j) {
-            if (xh[j] <= xc[i + 1]) {
+            if (xh[j] <= _xc[i + 1]) {
                 double d1 = xh[j] - xh[j - 1];
-                double d2 = xh[j] - xc[i];
+                double d2 = xh[j] - _xc[i];
                 // calculation of shortest distance
                 // handling if distance is zero but substarction gives comutational error
                 double d  = std::min(d1, d2) < 1E-15 ? 0 : std::min(d1, d2);
 
                 vc[i] += vh[j - 1] * d;
             } else {
-                double d1 = xc[i + 1] - xh[j - 1];
-                double d2 = xc[i + 1] - xc[i];
+                double d1 = _xc[i + 1] - xh[j - 1];
+                double d2 = _xc[i + 1] - _xc[i];
                 // calculation of shortest distance
                 // handling if distance is zero but substarction gives comutational error
                 double d  = std::min(d1, d2) < 1E-15 ? 0 : std::min(d1, d2);
@@ -822,7 +822,7 @@ std::vector<double> HiPS::projection_back(std::vector<double> &vh) {
                 break;
             }
         }
-        vc[i] /= (xc[i + 1] - xc[i]);
+        vc[i] /= (_xc[i + 1] - _xc[i]);
     }
     return vc;
 }
@@ -833,7 +833,7 @@ std::vector<double> HiPS::projection_back_with_density(std::vector<double> &vh,
                                                        std::vector<double> &rho_h,
                                                        std::vector<double> &rho_c){
     const int nh = static_cast<int>(xh.size()) - 1;  // # HiPS parcels
-    const int nc = static_cast<int>(xc.size()) - 1;  // # CFD cells
+    const int nc = static_cast<int>(_xc.size()) - 1;  // # CFD cells
 
     std::vector<double> phi_c(nc, 0.0);   // CFD-side variable (output)
     std::vector<double> M_cfd(nc, 0.0);   // mass in each CFD cell
@@ -841,13 +841,13 @@ std::vector<double> HiPS::projection_back_with_density(std::vector<double> &vh,
 
     int jprev = 0;
     for (int i = 0; i < nc; ++i) {
-        // cell geometry (normalized length, since xc is 0..1)
-        const double cell_len = xc[i + 1] - xc[i];
+        // cell geometry (normalized length, since _xc is 0..1)
+        const double cell_len = _xc[i + 1] - _xc[i];
 
         for (int j = jprev + 1; j <= nh; ++j) {
             // geometric overlap between parcel j-1 and CFD cell i
-            const double overlap_start = std::max(xh[j - 1], xc[i]);
-            const double overlap_end   = std::min(xh[j],     xc[i + 1]);
+            const double overlap_start = std::max(xh[j - 1], _xc[i]);
+            const double overlap_end   = std::min(xh[j],     _xc[i + 1]);
             const double overlap_len   = overlap_end - overlap_start;
             if (overlap_len <= 0.0) continue;
 
@@ -862,7 +862,7 @@ std::vector<double> HiPS::projection_back_with_density(std::vector<double> &vh,
             Mphi_cfd[i] += rhoP * phiP * effective_len;
 
             // advance parcel index if we reached end of this CFD cell
-            if (xc[i + 1] <= xh[j]) { jprev = j - 1; break; }
+            if (_xc[i + 1] <= xh[j]) { jprev = j - 1; break; }
         }
 
         // recover CFD density and variable
