@@ -60,8 +60,8 @@ private:
     int _Nm1;                                                      ///< _nLevels - 1
     int _Nm2;                                                      ///< _nLevels - 2
     int _Nm3;                                                      ///< _nLevels - 3
-    int _iEta;                                                      ///< Kolmogorov level (needed for variable Sc scalars)
-    int nL;                                                        ///< Adjusted number of levels based on the Reynolds number
+    int _iEta;                                                     ///< Kolmogorov level (needed for variable Sc scalars)
+    int _nL;                                                       ///< Adjusted number of levels based on the Reynolds number
     bool forceTurb;                                                ///< Forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
 
     bool LScHips;                                                  ///< HiPS schmidt number

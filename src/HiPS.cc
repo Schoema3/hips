@@ -105,7 +105,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     _tau0 = tau0;
 
     if (_nLevels == -1)
-        _nLevels = nL;
+        _nLevels = _nL;
 
     _iEta = _nLevels - 3;                                // Kolmogorov level; if _nLevels = 7, then 0, 1, 2, 3, (4), 5, 6; _iEta=4 is the lowest swap level: swap grandchildren of _iEta=4 at level 6.
            
@@ -214,10 +214,10 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
         throw std::invalid_argument("Invalid ReApproach specified");                                // Handle invalid approach case if needed
     }
 
-    nL = baseLevel + 3;                                                                           // Set the number of levels for the binary tree structure
+    _nL = baseLevel + 3;                                                                           // Set the number of levels for the binary tree structure
 
     //----------------------------------------------------------------------
-    _nLevels = nL;
+    _nLevels = _nL;
     _iEta = _nLevels - 3;  // Kolmogorov level
 
     int maxSc = 1;
@@ -251,7 +251,7 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
     }
 
     if (ReApproach == "probability") {                                          // Adjust final mixing rate based on probability
-        levelRates[_Nm3] = levelRates[nL - 3] * Prob;
+        levelRates[_Nm3] = levelRates[_nL - 3] * Prob;
     }
 
     LScHips = !ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)
