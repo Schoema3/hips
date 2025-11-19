@@ -43,7 +43,7 @@ HiPS::HiPS(int nLevels,
     if(performReaction) {
         shared_ptr<Cantera::Solution> cantSol = static_pointer_cast<Cantera::Solution>(vcantSol);
         _gas = cantSol->thermo();
-        nsp = _gas->nSpecies();
+        _nsp =    _gas->nSpecies();
 
         _bRxr = make_shared<BatchReactor_cvode>(cantSol);                                // By default, use BatchReactor_cvode
 
@@ -83,7 +83,7 @@ HiPS::HiPS(double C_param,
     if(performReaction) {
         shared_ptr<Cantera::Solution> cantSol = static_pointer_cast<Cantera::Solution>(vcantSol);
         _gas = cantSol->thermo();
-        nsp = _gas->nSpecies();
+        _nsp =    _gas->nSpecies();
 
         // Set up the default batch reactor (cvode).
        // _bRxr = make_shared<BatchReactor_cvode>(cantSol);
@@ -577,8 +577,8 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
   #ifdef REACTIONS_ENABLED
     // ---- cache indices once
     const int enthalpyIdx = getVariableIndex("enthalpy");
-    std::vector<int> yIdx(nsp);
-    for (int k = 0; k < nsp; ++k) {
+    std::vector<int> yIdx(_nsp);
+    for (int k = 0; k < _nsp; ++k) {
         yIdx[k] = getVariableIndex(_gas->speciesName(k)); // map species name -> var index
     }
 
@@ -586,7 +586,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
     const int istart = iTree * nP;
     const int iend   = istart + nP;
 
-    std::vector<double> y(nsp);
+    std::vector<double> y(_nsp);
 
     for (int i = istart; i < iend; ++i) {
         const int ime = _pLoc[i];
@@ -594,7 +594,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
 
         // Pull current state
         double h = (*_varData[enthalpyIdx])[ime];
-        for (int k = 0; k < nsp; ++k) {
+        for (int k = 0; k < _nsp; ++k) {
             y[k] = (*_varData[yIdx[k]])[ime];
         }
 
@@ -618,7 +618,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
 
         // Write back enthalpy and species (post-reaction)
         (*_varData[enthalpyIdx])[ime] = h;
-        for (int k = 0; k < nsp; ++k) {
+        for (int k = 0; k < _nsp; ++k) {
             (*_varData[yIdx[k]])[ime] = y[k];
         }
 
@@ -771,8 +771,8 @@ void HiPS::writeData(int real, const int ifile, const double outputTime){
         // Write temperature first if reactions are enabled
         #ifdef REACTIONS_ENABLED
         if(performReaction) {
-            vector<double> yy(nsp);
-            for(int k=0; k<nsp; k++)
+            vector<double> yy(_nsp);
+            for(int k=0; k<_nsp; k++)
                 yy[k] = (*_varData[k+1])[_pLoc[i]];
             _gas->setMassFractions(yy.data());
             _gas->setState_HP((*_varData[0])[_pLoc[i]], _gas->pressure());
