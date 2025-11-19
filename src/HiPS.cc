@@ -22,7 +22,7 @@ HiPS::HiPS(int nLevels,
            double tau0,
            double C_param,
            bool forceTurb_,
-           int nVar_,
+           int nVar,
            vector<double> &ScHips_,
            bool performReaction_,
            shared_ptr<void> vcantSol,
@@ -34,7 +34,7 @@ HiPS::HiPS(int nLevels,
     _C_param(C_param),
     forceTurb(forceTurb_),       
     ScHips(ScHips_),   
-    nVar(nVar_),                                     
+    _nVar(nVar),
     rand(seed),
     performReaction(performReaction_),
     _realization(realization){
@@ -64,7 +64,7 @@ HiPS::HiPS(int nLevels,
 
 HiPS::HiPS(double C_param,
            bool forceTurb_,
-           int nVar_,
+           int nVar,
            vector<double> &ScHips_,
            bool performReaction_,
            shared_ptr<void> vcantSol,
@@ -72,7 +72,7 @@ HiPS::HiPS(double C_param,
            int realization):
     _C_param(C_param),
     forceTurb(forceTurb_),       
-    nVar(nVar_),                       
+    _nVar(nVar),
     ScHips(ScHips_),                 
     rand(seed),
     performReaction(performReaction_),
@@ -125,7 +125,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     
     _nparcels = static_cast<int>(pow(2, Nm1));
     parcelTimes.resize(_nparcels,0);
-    i_batchelor.resize(nVar,0);
+    i_batchelor.resize(_nVar,0);
     
     vector<double> levelLengths(_nLevels);              // Including all levels, but last 2 don't count:
     vector<double> levelTaus(_nLevels);                 // Smallest scale is 2 levels up from bottom
@@ -160,9 +160,9 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     
     //-------------------
     
-    i_plus.resize(nVar);
+    i_plus.resize(_nVar);
     
-    for (int k=0; k<nVar; k++) {
+    for (int k=0; k<_nVar; k++) {
         if (ScHips[k] < 1.0)
             i_batchelor[k] = iEta + 1.5*log(ScHips[k])/log(4);
         else if (ScHips[k] > 1.0)
@@ -232,7 +232,7 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
 
     _nparcels = static_cast<int>(pow(2, Nm1));
     parcelTimes.resize(_nparcels, 0);
-    i_batchelor.resize(nVar, 0);
+    i_batchelor.resize(_nVar, 0);
 
     std::vector<double> levelLengths(_nLevels);                                // Including all levels, but last 2 don't count
     std::vector<double> levelTaus(_nLevels);                                   // Smallest scale is 2 levels up from bottom
@@ -274,8 +274,8 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
 
     //-----------------------------------------------------
 
-    i_plus.resize(nVar);
-    for (int k = 0; k < nVar; ++k) {
+    i_plus.resize(_nVar);
+    for (int k = 0; k < _nVar; ++k) {
         if (ScHips[k] < 1.0)
             i_batchelor[k] = iEta + 1.5 * log(ScHips[k]) / log(4);
         else if (ScHips[k] > 1.0)
@@ -550,7 +550,7 @@ void HiPS::advanceHips(const int iLevel, const int iTree){
     }
 
     bool rxnDone = false;                                               // React all variables once
-    for (int k = 0; k < nVar; k++) {                                    // Upon finding first variable needing micromixing
+    for (int k = 0; k < _nVar; k++) {                                    // Upon finding first variable needing micromixing
         // Combined condition check with approach condition
         if ((iLevel >= i_plus[k]) || 
             (iLevel == i_plus[k] - 1 && rand.getRand() <= i_plus[k] - i_batchelor[k])) {
@@ -781,7 +781,7 @@ void HiPS::writeData(int real, const int ifile, const double outputTime){
         #endif
 
         // Write variables
-        for (int k = 0; k < nVar; k++) {
+        for (int k = 0; k < _nVar; k++) {
             ofile << setw(19) << (*_varData[k])[_pLoc[i]];
         }
         ofile << endl;
@@ -948,7 +948,7 @@ void HiPS::saveAllParameters(){
     file << "tau0 " << _tau0 << "\n";                  ///< Reference eddy turnover time
     file << "C_param " << _C_param << "\n";            ///< Model constant controlling turbulence behavior
     file << "forceTurb " << forceTurb << "\n";        ///< Flag for forced turbulence (1 = enabled, 0 = disabled)
-    file << "nVar " << nVar << "\n";                  ///< Number of variables tracked in the simulation
+    file << "nVar " << _nVar << "\n";                  ///< Number of variables tracked in the simulation
     file << "performReaction " << performReaction << "\n";  ///< Flag indicating whether chemical reactions are simulated
     file << "realization " << _realization << "\n";    ///< Current simulation realization (for multiple runs)
 
@@ -964,7 +964,7 @@ void HiPS::saveAllParameters(){
     }
 
     // Write i_batchelor vector if it exists and has the correct size
-    if (!i_batchelor.empty() && i_batchelor.size() == nVar) {
+    if (!i_batchelor.empty() && i_batchelor.size() == _nVar) {
         file << "i_batchelor ";
         for (const auto &val : i_batchelor) {
             file << val << " ";  ///< Print each element separated by space
