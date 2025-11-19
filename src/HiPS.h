@@ -69,9 +69,9 @@ private:
         
     double _time;                                                  ///< Current simulation time
     double _eddyRate_total;                                        ///< Total rate of all eddies 0 through _nLevels-3
-    double _eddyRate_inertial;                                      ///< Total rate of all eddies 0 through _iEta (= _eddyRate_total if Sc=1)
-    double Afac = 0.5;                                             ///< Level lengthscale reduction factor (0.5)
-    double Re;                                                     ///< Reynolds number
+    double _eddyRate_inertial;                                     ///< Total rate of all eddies 0 through _iEta (= _eddyRate_total if Sc=1)
+    double _Afac = 0.5;                                            ///< Level lengthscale reduction factor (0.5)
+    double _Re;                                                    ///< Reynolds number
     double dtEE;                                                   ///< Time increment to next eddy event
     double Prob;                                                   ///< Probability value for probability-based solution
     double lStar;                                                  ///< Length of the level associated with the Reynolds number
@@ -218,14 +218,14 @@ public:
     /// \param domainLength     Domain length for spatial scaling.
     /// \param tau0            Base time scale for the largest eddy.
     /// \param ScHips_          Vector of Schmidt numbers (one per variable).
-    /// \param ReApproach_      Strategy to convert continuous Re to tree level:
+    /// \param ReApproach_      Strategy to convert continuous _Re to tree level:
     ///                         - "rounding"     → Round to nearest discrete level
     ///                         - "probability"  → Use probabilistic interpolation between levels
     ///                         - "micromixing"  → Use fixed level with adjusted mixing rate
-    ///                         - "dynamic_A"    → Adjust geometric scale factor A to fit Re
+    ///                         - "dynamic_A"    → Adjust geometric scale factor A to fit _Re
     ///
     /// \note This method is ideal for Lagrangian simulations using grid cells
-    ///       with different Re values. It supports runtime reconfiguration of
+    ///       with different _Re values. It supports runtime reconfiguration of
     ///       the tree without reinitializing the HiPS object.
     ///
     /// \warning Ensure consistent `ReApproach_` handling across the simulation
