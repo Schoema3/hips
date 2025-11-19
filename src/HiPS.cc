@@ -107,7 +107,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     if (_nLevels == -1)
         _nLevels = nL;
 
-    iEta = _nLevels - 3;                                // Kolmogorov level; if _nLevels = 7, then 0, 1, 2, 3, (4), 5, 6; iEta=4 is the lowest swap level: swap grandchildren of iEta=4 at level 6.
+    _iEta = _nLevels - 3;                                // Kolmogorov level; if _nLevels = 7, then 0, 1, 2, 3, (4), 5, 6; _iEta=4 is the lowest swap level: swap grandchildren of _iEta=4 at level 6.
            
     int maxSc = 1.0;
 
@@ -141,9 +141,9 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
 
     LScHips = ScHips.size() > 0 ? true : false;
     if (LScHips) {                                     // Ccorrect levels for high Sc (levels > Kolmogorov)
-        for (int i=iEta+1; i<_nLevels; i++) {
+        for (int i=_iEta+1; i<_nLevels; i++) {
             levelTaus[i] = tau0 *
-            pow(levelLengths[iEta]/domainLength, 2.0/3.0) / _C_param;
+            pow(levelLengths[_iEta]/domainLength, 2.0/3.0) / _C_param;
             levelRates[i] = 1.0/levelTaus[i] * pow(2.0,i);
         }
     }
@@ -155,7 +155,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
         eddyRate_total += levelRates[i];
     
     eddyRate_inertial = 0.0;
-    for (int i=0; i<=iEta; i++)
+    for (int i=0; i<=_iEta; i++)
         eddyRate_inertial += levelRates[i];
     
     //-------------------
@@ -164,11 +164,11 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     
     for (int k=0; k<_nVar; k++) {
         if (ScHips[k] < 1.0)
-            i_batchelor[k] = iEta + 1.5*log(ScHips[k])/log(4);
+            i_batchelor[k] = _iEta + 1.5*log(ScHips[k])/log(4);
         else if (ScHips[k] > 1.0)
-            i_batchelor[k] = iEta + log(ScHips[k])/log(4);
+            i_batchelor[k] = _iEta + log(ScHips[k])/log(4);
         else
-            i_batchelor[k] = iEta;
+            i_batchelor[k] = _iEta;
 
         i_plus[k] = ceil(i_batchelor[k]);
     }
@@ -218,7 +218,7 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
 
     //----------------------------------------------------------------------
     _nLevels = nL;
-    iEta = _nLevels - 3;  // Kolmogorov level
+    _iEta = _nLevels - 3;  // Kolmogorov level
 
     int maxSc = 1;
     for (const auto &sc : ScHips)
@@ -256,8 +256,8 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
 
     LScHips = !ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)
     if (LScHips) {
-        for (int i = iEta + 1; i < _nLevels; ++i) {
-            levelTaus[i] = tau0 * pow(levelLengths[iEta] / domainLength, 2.0 / 3.0) / _C_param;
+        for (int i = _iEta + 1; i < _nLevels; ++i) {
+            levelTaus[i] = tau0 * pow(levelLengths[_iEta] / domainLength, 2.0 / 3.0) / _C_param;
             levelRates[i] = 1.0 / levelTaus[i] * pow(2.0, i);
         }
     }
@@ -269,7 +269,7 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
         eddyRate_total += levelRates[i];
 
     eddyRate_inertial = 0.0;
-    for (int i = 0; i <= iEta; ++i)
+    for (int i = 0; i <= _iEta; ++i)
         eddyRate_inertial += levelRates[i];
 
     //-----------------------------------------------------
@@ -277,11 +277,11 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
     i_plus.resize(_nVar);
     for (int k = 0; k < _nVar; ++k) {
         if (ScHips[k] < 1.0)
-            i_batchelor[k] = iEta + 1.5 * log(ScHips[k]) / log(4);
+            i_batchelor[k] = _iEta + 1.5 * log(ScHips[k]) / log(4);
         else if (ScHips[k] > 1.0)
-            i_batchelor[k] = iEta + log(ScHips[k]) / log(4);
+            i_batchelor[k] = _iEta + log(ScHips[k]) / log(4);
         else
-            i_batchelor[k] = iEta;
+            i_batchelor[k] = _iEta;
         i_plus[k] = ceil(i_batchelor[k]);
     }
 
@@ -497,9 +497,9 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
 
 void HiPS::sample_hips_eddy(double &dtEE, int &iLevel) {
 
-    static double c1 = 1.0 - pow(2.0, 5.0/3.0*(iEta+1));
-    static double c2 = pow(2.0, _Nm2) - pow(2.0, iEta+1);
-    static double c3 = pow(2.0, iEta+1);
+    static double c1 = 1.0 - pow(2.0, 5.0/3.0*(_iEta+1));
+    static double c2 = pow(2.0, _Nm2) - pow(2.0, _iEta+1);
+    static double c3 = pow(2.0, _iEta+1);
 
     //--------------- time to next eddy
 
@@ -514,13 +514,13 @@ void HiPS::sample_hips_eddy(double &dtEE, int &iLevel) {
         r = rand.getRand();
         iLevel = ceil(3.0/5.0*log2(1.0-r*c1) - 1.0);
         if (iLevel < 0)    iLevel = 0;
-        if (iLevel > iEta) iLevel = iEta;
+        if (iLevel > _iEta) iLevel = _iEta;
     }
 
     else {                                            // "Batchelor" region
         r = rand.getRand();
         iLevel = ceil(log2(r*c2 + c3) - 1.0);
-        if (iLevel < iEta+1) iLevel = iEta+1;
+        if (iLevel < _iEta+1) iLevel = _iEta+1;
         if (iLevel > _Nm3) iLevel = _Nm3;
     }
     return;

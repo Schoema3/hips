@@ -60,7 +60,7 @@ private:
     int _Nm1;                                                      ///< _nLevels - 1
     int _Nm2;                                                      ///< _nLevels - 2
     int _Nm3;                                                      ///< _nLevels - 3
-    int iEta;                                                      ///< Kolmogorov level (needed for variable Sc scalars)
+    int _iEta;                                                      ///< Kolmogorov level (needed for variable Sc scalars)
     int nL;                                                        ///< Adjusted number of levels based on the Reynolds number
     bool forceTurb;                                                ///< Forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
 
@@ -69,7 +69,7 @@ private:
         
     double time;                                                   ///< Current simulation time
     double eddyRate_total;                                         ///< Total rate of all eddies 0 through _nLevels-3
-    double eddyRate_inertial;                                      ///< Total rate of all eddies 0 through iEta (= eddyRate_total if Sc=1)
+    double eddyRate_inertial;                                      ///< Total rate of all eddies 0 through _iEta (= eddyRate_total if Sc=1)
     double Afac = 0.5;                                             ///< Level lengthscale reduction factor (0.5)
     double Re;                                                     ///< Reynolds number
     double dtEE;                                                   ///< Time increment to next eddy event
