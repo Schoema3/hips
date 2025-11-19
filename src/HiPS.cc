@@ -455,17 +455,17 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
         useEddyBasedWriting = true;  // Default to eddy-based writing
     }
 
-    sample_hips_eddy(dtEE, iLevel);                               // Get first EE at _time 0+dtEE
+    sample_hips_eddy(_dtEE, iLevel);                               // Get first EE at _time 0+_dtEE
     nEddies++;
     eddyCounter = 0;                                              // Reset eddy counter at start
     lastOutputTime = 0.0;                                         // Reset last output time
 
-    while (_time + dtEE <= tRun) {
-        _time += dtEE;
+    while (_time + _dtEE <= tRun) {
+        _time += _dtEE;
         selectAndSwapTwoSubtrees(iLevel, iTree);
         advanceHips(iLevel, iTree);                              // Reaction and micromixing (if needed) to t=_time
 
-        sample_hips_eddy(dtEE, iLevel);
+        sample_hips_eddy(_dtEE, iLevel);
         nEddies++;
         eddyCounter++;  
 
@@ -495,7 +495,7 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
     saveAllParameters();
 }
 
-void HiPS::sample_hips_eddy(double &dtEE, int &iLevel) {
+void HiPS::sample_hips_eddy(double &_dtEE, int &iLevel) {
 
     static double c1 = 1.0 - pow(2.0, 5.0/3.0*(_iEta+1));
     static double c2 = pow(2.0, _Nm2) - pow(2.0, _iEta+1);
@@ -504,7 +504,7 @@ void HiPS::sample_hips_eddy(double &dtEE, int &iLevel) {
     //--------------- time to next eddy
 
     double r = rand.getRand();
-    dtEE = -log(r)/_eddyRate_total;
+    _dtEE = -log(r)/_eddyRate_total;
 
     //----------------- get eddy level
 

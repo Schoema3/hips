@@ -72,7 +72,7 @@ private:
     double _eddyRate_inertial;                                     ///< Total rate of all eddies 0 through _iEta (= _eddyRate_total if Sc=1)
     double _Afac = 0.5;                                            ///< Level lengthscale reduction factor (0.5)
     double _Re;                                                    ///< Reynolds number
-    double dtEE;                                                   ///< Time increment to next eddy event
+    double _dtEE;                                                   ///< Time increment to next eddy event
     double Prob;                                                   ///< Probability value for probability-based solution
     double lStar;                                                  ///< Length of the level associated with the Reynolds number
     double Anew;                                                   ///< Adjusted level length scale reduction factor for dynamic adjustment of reduction factor
@@ -441,7 +441,7 @@ public:
     /// elapsed simulation time.
     ///
     /// ### Key operations:
-    /// - Samples the next eddy event time (`dtEE`)
+    /// - Samples the next eddy event time (`_dtEE`)
     /// - Selects and swaps subtrees at a given level
     /// - Applies micromixing and reactions (if enabled)
     /// - Writes output data either:
@@ -624,7 +624,7 @@ private:
     /// on the total eddy rate. The tree level of the event is chosen depending
     /// on whether it occurs in the inertial or Batchelor region of turbulence.
     ///
-    /// \param dtEE     Time increment to the next eddy event (\f$\Delta
+    /// \param dt       Time increment to the next eddy event (\f$\Delta
     ///                 t_{EE}\f$), sampled stochastically.
     /// \param iLevel   Tree level (\f$i_{Level}\f$) at which the eddy event
     ///                 occurs, determined probabilistically.
