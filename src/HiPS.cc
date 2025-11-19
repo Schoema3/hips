@@ -446,7 +446,7 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
     int fileCounter = 0;                                          // Number of data files written
     int iLevel;                                                   // Tree level of EE with top at iLevel=0
     int iTree;                                                    // One of two subtrees involved in swap at iLevel                                           
-    time = 0.0;                                                   // Initialize simulation time
+    _time = 0.0;                                                  // Initialize simulation time
     int lastEddyOutput = 0;                                       // Track last eddy-based output event
 
     // Apply default values if user hasn't set them
@@ -455,15 +455,15 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
         useEddyBasedWriting = true;  // Default to eddy-based writing
     }
 
-    sample_hips_eddy(dtEE, iLevel);                               // Get first EE at time 0+dtEE
+    sample_hips_eddy(dtEE, iLevel);                               // Get first EE at _time 0+dtEE
     nEddies++;
     eddyCounter = 0;                                              // Reset eddy counter at start
     lastOutputTime = 0.0;                                         // Reset last output time
 
-    while (time + dtEE <= tRun) {
-        time += dtEE;
+    while (_time + dtEE <= tRun) {
+        _time += dtEE;
         selectAndSwapTwoSubtrees(iLevel, iTree);
-        advanceHips(iLevel, iTree);                              // Reaction and micromixing (if needed) to t=time
+        advanceHips(iLevel, iTree);                              // Reaction and micromixing (if needed) to t=_time
 
         sample_hips_eddy(dtEE, iLevel);
         nEddies++;
@@ -471,22 +471,22 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
 
         //  Only check the selected mode (set in example code or by default)
         bool writeByEddy = (useEddyBasedWriting && eddyCounter >= lastEddyOutput + outputIntervalEddy);
-        bool writeByTime = (useTimeBasedWriting && time - lastOutputTime >= outputIntervalTime);
+        bool writeByTime = (useTimeBasedWriting && _time - lastOutputTime >= outputIntervalTime);
 
         if (shouldWriteData) {
             if (writeByEddy) {  //  Only write if using eddy-based writing
-                writeData(_realization, ++fileCounter, time);
+                writeData(_realization, ++fileCounter, _time);
                 lastEddyOutput = eddyCounter;  //  Update last output event
             }
             else if (writeByTime) {  // Only write if using time-based writing
-                 writeData(_realization, ++fileCounter, time);
-                lastOutputTime = time;
+                 writeData(_realization, ++fileCounter, _time);
+                lastOutputTime = _time;
             }
         }
     }
 
     // Ensure the final time step completes
-    time = tRun;
+    _time = tRun;
     iLevel = 0; 
     iTree = 0;
 
@@ -590,7 +590,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
 
     for (int i = istart; i < iend; ++i) {
         const int ime = _pLoc[i];
-        const double dt = time - parcelTimes[ime];
+        const double dt = _time - parcelTimes[ime];
 
         // Pull current state
         double h = (*_varData[enthalpyIdx])[ime];
@@ -622,7 +622,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
             (*_varData[yIdx[k]])[ime] = y[k];
         }
 
-        parcelTimes[ime] = time;
+        parcelTimes[ime] = _time;
     }
 
  #endif
