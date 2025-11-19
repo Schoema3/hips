@@ -117,13 +117,13 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     if (maxSc > 1.0)
         _nLevels += ceil(log(maxSc)/log(4));            // Changing number of levels!
     
-    Nm1 = _nLevels - 1;
-    Nm2 = _nLevels - 2;
-    Nm3 = _nLevels - 3;
+    _Nm1 = _nLevels - 1;
+    _Nm2 = _nLevels - 2;
+    _Nm3 = _nLevels - 3;
     
     // -------------------------- 
     
-    _nparcels = static_cast<int>(pow(2, Nm1));
+    _nparcels = static_cast<int>(pow(2, _Nm1));
     parcelTimes.resize(_nparcels,0);
     i_batchelor.resize(_nVar,0);
     
@@ -151,7 +151,7 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
     //-------------------------------------------------
 
     eddyRate_total = 0.0;
-    for (int i=0; i<=Nm3; i++)
+    for (int i=0; i<=_Nm3; i++)
         eddyRate_total += levelRates[i];
     
     eddyRate_inertial = 0.0;
@@ -226,11 +226,11 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
     if (maxSc > 1.0)
         _nLevels += ceil(log(maxSc) / log(4));
 
-    Nm1 = _nLevels - 1;
-    Nm2 = _nLevels - 2;
-    Nm3 = _nLevels - 3;
+    _Nm1 = _nLevels - 1;
+    _Nm2 = _nLevels - 2;
+    _Nm3 = _nLevels - 3;
 
-    _nparcels = static_cast<int>(pow(2, Nm1));
+    _nparcels = static_cast<int>(pow(2, _Nm1));
     parcelTimes.resize(_nparcels, 0);
     i_batchelor.resize(_nVar, 0);
 
@@ -246,12 +246,12 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
     }
 
     if (ReApproach == "micromixing") {                                          // Adjust rates for micromixing model
-        levelTaus[Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / _C_param;
-        levelRates[Nm3] = 1.0 / levelTaus[Nm3] * pow(2.0, Nm3);
+        levelTaus[_Nm3] = tau0 * pow(lStar / domainLength, 2.0 / 3.0) / _C_param;
+        levelRates[_Nm3] = 1.0 / levelTaus[_Nm3] * pow(2.0, _Nm3);
     }
 
     if (ReApproach == "probability") {                                          // Adjust final mixing rate based on probability
-        levelRates[Nm3] = levelRates[nL - 3] * Prob;
+        levelRates[_Nm3] = levelRates[nL - 3] * Prob;
     }
 
     LScHips = !ScHips.empty();                                               // Correct levels for high Sc (levels > Kolmogorov)
@@ -265,7 +265,7 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
     //-----------------------------------------------------
 
     eddyRate_total = 0.0;
-    for (int i = 0; i <= Nm3; ++i)
+    for (int i = 0; i <= _Nm3; ++i)
         eddyRate_total += levelRates[i];
 
     eddyRate_inertial = 0.0;
@@ -498,7 +498,7 @@ void HiPS::calculateSolution(const double tRun, bool shouldWriteData) {
 void HiPS::sample_hips_eddy(double &dtEE, int &iLevel) {
 
     static double c1 = 1.0 - pow(2.0, 5.0/3.0*(iEta+1));
-    static double c2 = pow(2.0, Nm2) - pow(2.0, iEta+1);
+    static double c2 = pow(2.0, _Nm2) - pow(2.0, iEta+1);
     static double c3 = pow(2.0, iEta+1);
 
     //--------------- time to next eddy
@@ -521,7 +521,7 @@ void HiPS::sample_hips_eddy(double &dtEE, int &iLevel) {
         r = rand.getRand();
         iLevel = ceil(log2(r*c2 + c3) - 1.0);
         if (iLevel < iEta+1) iLevel = iEta+1;
-        if (iLevel > Nm3) iLevel = Nm3;
+        if (iLevel > _Nm3) iLevel = _Nm3;
     }
     return;
 }
@@ -532,9 +532,9 @@ void HiPS::selectAndSwapTwoSubtrees(const int iLevel, int &iTree){
     int zero_q = rand.getRandInt(1);                                    // 0q where q is 0 or 1
     int one_r  = 2 + rand.getRandInt(1);                                // 1r where r is 0 or 1
 
-    int Qstart = (zero_q << (Nm3-iLevel)) + (iTree << (Nm1-iLevel));     // starting index of Q parcels
-    int Rstart = (one_r  << (Nm3-iLevel)) + (iTree << (Nm1-iLevel));     // starting index of R parcels
-    int nPswap = 1 << (Nm3-iLevel);                                      // number of parcels that will be swapped
+    int Qstart = (zero_q << (_Nm3-iLevel)) + (iTree << (_Nm1-iLevel));     // starting index of Q parcels
+    int Rstart = (one_r  << (_Nm3-iLevel)) + (iTree << (_Nm1-iLevel));     // starting index of R parcels
+    int nPswap = 1 << (_Nm3-iLevel);                                      // number of parcels that will be swapped
 
     int Qend = Qstart + nPswap;                                          // inclusive indices are Qstart to Qend-1
     int Rend = Rstart + nPswap;                                          // inclusive indices are Rstart to Rend-1
@@ -582,7 +582,7 @@ void HiPS::reactParcels_LevelTree(const int iLevel, const int iTree){
         yIdx[k] = getVariableIndex(_gas->speciesName(k)); // map species name -> var index
     }
 
-    const int nP     = 1 << (Nm1 - iLevel);
+    const int nP     = 1 << (_Nm1 - iLevel);
     const int istart = iTree * nP;
     const int iend   = istart + nP;
 
@@ -638,7 +638,7 @@ void HiPS::mixAcrossLevelTree(int kVar, const int iLevel, const int iTree){
     int ime;
 
     //---------- Mix left branch of iTree ----------
-    istart = iTree << (Nm1 - iLevel);  
+    istart = iTree << (_Nm1 - iLevel);
     iend   = istart + nPmix;
 
     double s    = 0.0;  // sum (value or value*mass)

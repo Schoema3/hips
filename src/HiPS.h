@@ -56,10 +56,10 @@ private:
     int _currentIndex = 0;                                         ///< Member variable to keep track of current index of variables
     int _nLevels;                                                  ///< Number of tree levels
     int _nVar;                                                     ///< Number of parcel variables (e.g., h, ysp)
-    int _nsp;                                                       ///< Number of species
-    int Nm1;                                                       ///< _nLevels - 1
-    int Nm2;                                                       ///< _nLevels - 2
-    int Nm3;                                                       ///< _nLevels - 3
+    int _nsp;                                                      ///< Number of species
+    int _Nm1;                                                      ///< _nLevels - 1
+    int _Nm2;                                                      ///< _nLevels - 2
+    int _Nm3;                                                      ///< _nLevels - 3
     int iEta;                                                      ///< Kolmogorov level (needed for variable Sc scalars)
     int nL;                                                        ///< Adjusted number of levels based on the Reynolds number
     bool forceTurb;                                                ///< Forcing function for statistically stationary: -1 = none, 1 = source term, 2 = dir
