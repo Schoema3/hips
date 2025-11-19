@@ -67,9 +67,9 @@ private:
     bool _LScHips;                                                 ///< HiPS schmidt number
     bool _performReaction;                                         ///< Flag indicating whether chemical reactions are performed in the simulation
         
-    double _time;                                                   ///< Current simulation time
-    double eddyRate_total;                                         ///< Total rate of all eddies 0 through _nLevels-3
-    double eddyRate_inertial;                                      ///< Total rate of all eddies 0 through _iEta (= eddyRate_total if Sc=1)
+    double _time;                                                  ///< Current simulation time
+    double _eddyRate_total;                                        ///< Total rate of all eddies 0 through _nLevels-3
+    double eddyRate_inertial;                                      ///< Total rate of all eddies 0 through _iEta (= _eddyRate_total if Sc=1)
     double Afac = 0.5;                                             ///< Level lengthscale reduction factor (0.5)
     double Re;                                                     ///< Reynolds number
     double dtEE;                                                   ///< Time increment to next eddy event

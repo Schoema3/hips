@@ -150,9 +150,9 @@ void HiPS::set_tree(int nBaseLevels, double domainLength, double tau0){
 
     //-------------------------------------------------
 
-    eddyRate_total = 0.0;
+    _eddyRate_total = 0.0;
     for (int i=0; i<=_Nm3; i++)
-        eddyRate_total += levelRates[i];
+        _eddyRate_total += levelRates[i];
     
     eddyRate_inertial = 0.0;
     for (int i=0; i<=_iEta; i++)
@@ -264,9 +264,9 @@ void HiPS::set_tree(double Re_, double domainLength, double tau0, std::string Re
 
     //-----------------------------------------------------
 
-    eddyRate_total = 0.0;
+    _eddyRate_total = 0.0;
     for (int i = 0; i <= _Nm3; ++i)
-        eddyRate_total += levelRates[i];
+        _eddyRate_total += levelRates[i];
 
     eddyRate_inertial = 0.0;
     for (int i = 0; i <= _iEta; ++i)
@@ -504,13 +504,13 @@ void HiPS::sample_hips_eddy(double &dtEE, int &iLevel) {
     //--------------- time to next eddy
 
     double r = rand.getRand();
-    dtEE = -log(r)/eddyRate_total;
+    dtEE = -log(r)/_eddyRate_total;
 
     //----------------- get eddy level
 
     r = rand.getRand();
 
-    if ( r <= eddyRate_inertial/eddyRate_total) {     // Inertial region
+    if ( r <= eddyRate_inertial/_eddyRate_total) {     // Inertial region
         r = rand.getRand();
         iLevel = ceil(3.0/5.0*log2(1.0-r*c1) - 1.0);
         if (iLevel < 0)    iLevel = 0;
